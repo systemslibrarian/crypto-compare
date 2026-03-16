@@ -16,6 +16,8 @@ A browser-based tool for exploring, comparing, and understanding cryptographic p
 - **55+ algorithms** from 16+ countries (USA, Korea, Japan, China, Russia, Ukraine, Belgium, France, Israel, Germany, Estonia, Denmark, Switzerland, Canada, UK, Luxembourg)
 - **Beginner / Advanced toggle** — high-level overview or deep technical detail
 - **Side-by-side comparison** — select any algorithms within a category and compare key sizes, security levels, attack complexity, performance, and more
+- **Search + filter + deep-link state** — query by term, origin, standards status, PQ posture, and share URL state
+- **Per-entry source traceability scaffold** — selected algorithms show source links and review date when available
 - **Per-category project links** — each category shows which of my repos demonstrate that crypto type
 - **PQ-safe focus** — all KEM, signature, and advanced categories feature quantum-resistant algorithms
 - **Honest sourcing** — data from NIST FIPS, IETF RFCs, KPQC submissions, CRYPTREC, GB/T, GOST, DSTU, ISO, and published research
@@ -89,9 +91,12 @@ crypto-compare/
 │   ├── data/
 │   │   ├── algorithms.ts           # 55+ algorithm definitions
 │   │   ├── categories.ts           # 12 category definitions + explainers
-│   │   └── projects.ts             # Portfolio project links per category
+│   │   └── provenance.ts           # Source links + review dates by algorithm id
+│   ├── types/
+│   │   └── crypto.ts               # Strict TypeScript data model
 │   └── lib/
-│       └── comparison.ts           # Row-building logic per category
+│       ├── comparison.tsx          # Row-building logic per category
+│       └── validation.ts           # Runtime data validation checks
 ├── docs/
 │   └── data-sources.md             # Where the algorithm data comes from
 ├── .github/workflows/ci.yml
