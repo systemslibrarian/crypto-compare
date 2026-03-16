@@ -904,7 +904,7 @@ const STATUS_COLORS = {
 
 function Badge({ status, label }) {
   const s = STATUS_COLORS[status] || STATUS_COLORS.standard;
-  return <span style={{ background:s.bg, color:s.text, border:`1px solid ${s.border}`, padding:"2px 8px", borderRadius:"4px", fontSize:"11px", fontWeight:700, letterSpacing:"0.4px", textTransform:"uppercase", whiteSpace:"nowrap" }}>{label}</span>;
+  return <span style={{ background:s.bg, color:s.text, border:`1px solid ${s.border}`, padding:"3px 10px", borderRadius:"4px", fontSize:"13px", fontWeight:700, letterSpacing:"0.4px", textTransform:"uppercase", whiteSpace:"nowrap" }}>{label}</span>;
 }
 
 function SecurityMeter({ bits, max=256, label }) {
@@ -915,7 +915,7 @@ function SecurityMeter({ bits, max=256, label }) {
   const fullLabel = label === "C" ? "Classical" : label === "PQ" ? "Post-Quantum" : (label || "Security");
   return (
     <div style={{display:"flex",alignItems:"center",gap:"6px"}}>
-      {label && <span aria-hidden="true" style={{fontSize:"12px",color:"#7f8ea3",minWidth:"24px",fontWeight:700}}>{label}</span>}
+      {label && <span aria-hidden="true" style={{fontSize:"14px",color:"#93a4bb",minWidth:"28px",fontWeight:700}}>{label}</span>}
       <div
         role="meter"
         aria-label={`${fullLabel} security: ${bits} bits (${levelLabel})`}
@@ -926,7 +926,7 @@ function SecurityMeter({ bits, max=256, label }) {
       >
         <div style={{width:`${pct}%`,height:"100%",background:c,borderRadius:"2px",transition:"width 0.4s"}} />
       </div>
-      <span aria-hidden="true" style={{color:c,fontSize:"13px",fontFamily:"'JetBrains Mono',monospace",fontWeight:700,minWidth:"34px"}}>{bits}</span>
+      <span aria-hidden="true" style={{color:c,fontSize:"15px",fontFamily:"'JetBrains Mono',monospace",fontWeight:700,minWidth:"38px"}}>{bits}</span>
     </div>
   );
 }
@@ -943,7 +943,7 @@ function CategoryExplainer({ category, expanded, onToggle }) {
       background:"linear-gradient(135deg, #0c1222 0%, #0e1628 100%)",
       border:"1px solid #1a2540",
       borderRadius:"10px",
-      padding: expanded ? "20px 22px" : "14px 18px",
+      padding: expanded ? "24px 28px" : "18px 22px",
       marginBottom:"16px",
       transition:"all 0.2s",
       cursor: expanded ? "default" : "pointer",
@@ -957,10 +957,10 @@ function CategoryExplainer({ category, expanded, onToggle }) {
       {/* Collapsed view */}
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:"12px"}}>
         <div style={{flex:1}}>
-          <div style={{fontSize:"18px",fontWeight:700,color:"#f8fafc",marginBottom:"5px",fontFamily:"'JetBrains Mono',monospace"}}>
+          <div style={{fontSize:"22px",fontWeight:700,color:"#f8fafc",marginBottom:"6px",fontFamily:"'JetBrains Mono',monospace"}}>
             {info.title}
           </div>
-          <div style={{fontSize:"15px",color:"#c7d2e1",lineHeight:"1.6",fontStyle:"italic"}}>
+          <div style={{fontSize:"16px",color:"#d1dae6",lineHeight:"1.7",fontStyle:"italic"}}>
             {info.oneLiner}
           </div>
         </div>
@@ -973,10 +973,10 @@ function CategoryExplainer({ category, expanded, onToggle }) {
             background: expanded ? "#1a2540" : "#111d33",
             color: expanded ? "#7dd3fc" : "#93a4bb",
             border:`1px solid ${expanded ? "#1e3a5f" : "#1a2540"}`,
-            padding:"8px 14px",
+            padding:"10px 16px",
             borderRadius:"5px",
             cursor:"pointer",
-            fontSize:"13px",
+            fontSize:"14px",
             fontWeight:700,
             fontFamily:"'JetBrains Mono',monospace",
             whiteSpace:"nowrap",
@@ -994,12 +994,12 @@ function CategoryExplainer({ category, expanded, onToggle }) {
           {/* What it does */}
           <div>
             <div style={{
-              fontSize:"12px",fontWeight:700,color:"#3b82f6",textTransform:"uppercase",
-              letterSpacing:"1.2px",marginBottom:"8px",fontFamily:"'JetBrains Mono',monospace"
+              fontSize:"13px",fontWeight:700,color:"#60a5fa",textTransform:"uppercase",
+              letterSpacing:"1.2px",marginBottom:"10px",fontFamily:"'JetBrains Mono',monospace"
             }}>
               What it does
             </div>
-            <div style={{fontSize:"15px",color:"#d6dfeb",lineHeight:"1.8"}}>
+            <div style={{fontSize:"16px",color:"#e2e8f0",lineHeight:"1.85"}}>
               {info.explanation}
             </div>
           </div>
@@ -1012,12 +1012,12 @@ function CategoryExplainer({ category, expanded, onToggle }) {
             borderLeft:"3px solid #3b82f6",
           }}>
             <div style={{
-              fontSize:"12px",fontWeight:700,color:"#38bdf8",textTransform:"uppercase",
-              letterSpacing:"1.2px",marginBottom:"8px",fontFamily:"'JetBrains Mono',monospace"
+              fontSize:"13px",fontWeight:700,color:"#7dd3fc",textTransform:"uppercase",
+              letterSpacing:"1.2px",marginBottom:"10px",fontFamily:"'JetBrains Mono',monospace"
             }}>
               Where you see it in the real world
             </div>
-            <div style={{fontSize:"15px",color:"#c7d2e1",lineHeight:"1.8"}}>
+            <div style={{fontSize:"16px",color:"#d1dae6",lineHeight:"1.85"}}>
               {info.realWorld}
             </div>
           </div>
@@ -1030,12 +1030,12 @@ function CategoryExplainer({ category, expanded, onToggle }) {
             borderLeft:"3px solid #f59e0b",
           }}>
             <div style={{
-              fontSize:"12px",fontWeight:700,color:"#fbbf24",textTransform:"uppercase",
-              letterSpacing:"1.2px",marginBottom:"8px",fontFamily:"'JetBrains Mono',monospace"
+              fontSize:"13px",fontWeight:700,color:"#fcd34d",textTransform:"uppercase",
+              letterSpacing:"1.2px",marginBottom:"10px",fontFamily:"'JetBrains Mono',monospace"
             }}>
               Why it matters
             </div>
-            <div style={{fontSize:"15px",color:"#f2d38a",lineHeight:"1.8",fontWeight:600}}>
+            <div style={{fontSize:"16px",color:"#fde68a",lineHeight:"1.85",fontWeight:600}}>
               {info.whyItMatters}
             </div>
           </div>
@@ -1048,8 +1048,8 @@ function CategoryExplainer({ category, expanded, onToggle }) {
             borderLeft: info.projects && info.projects.length > 0 ? "3px solid #34d399" : "3px solid #f87171",
           }}>
             <div style={{
-              fontSize:"12px",fontWeight:700,
-              color: info.projects && info.projects.length > 0 ? "#34d399" : "#f87171",
+              fontSize:"13px",fontWeight:700,
+              color: info.projects && info.projects.length > 0 ? "#6ee7b7" : "#fca5a5",
               textTransform:"uppercase",
               letterSpacing:"1.2px",marginBottom:"10px",fontFamily:"'JetBrains Mono',monospace",
               display:"flex",alignItems:"center",gap:"8px"
@@ -1058,7 +1058,7 @@ function CategoryExplainer({ category, expanded, onToggle }) {
               {info.projects && info.projects.length > 0 && (
                 <span style={{
                   background:"#0d3320", color:"#34d399", border:"1px solid #065f46",
-                  padding:"2px 7px", borderRadius:"3px", fontSize:"12px"
+                  padding:"3px 8px", borderRadius:"3px", fontSize:"13px"
                 }}>{info.projects.length} {info.projects.length === 1 ? "repo" : "repos"}</span>
               )}
             </div>
@@ -1101,13 +1101,13 @@ function CategoryExplainer({ category, expanded, onToggle }) {
                           background: p.public ? "#0d3320" : "#312e2a",
                           color: p.public ? "#34d399" : "#fbbf24",
                           border:`1px solid ${p.public ? "#065f46" : "#78350f"}`,
-                          padding:"2px 6px", borderRadius:"3px", fontSize:"12px", fontWeight:700
+                          padding:"3px 8px", borderRadius:"4px", fontSize:"13px", fontWeight:700
                         }}>
                           {p.public ? "PUBLIC" : "PRIVATE"}
                         </span>
                       </div>
-                      <div style={{fontSize:"13px",color:"#94a3b8",marginTop:"4px"}}>{p.tech}</div>
-                      {p.note && <div style={{fontSize:"12px",color:"#7f8ea3",marginTop:"4px",fontStyle:"italic"}}>{p.note}</div>}
+                      <div style={{fontSize:"14px",color:"#b4c1d2",marginTop:"4px"}}>{p.tech}</div>
+                      {p.note && <div style={{fontSize:"13px",color:"#93a4bb",marginTop:"4px",fontStyle:"italic"}}>{p.note}</div>}
                     </div>
                   </div>
                 ))}
@@ -1119,10 +1119,10 @@ function CategoryExplainer({ category, expanded, onToggle }) {
                     padding:"10px 12px", background:"#0c1422", borderRadius:"6px",
                     border:"1px dashed #2a1a1a"
                   }}>
-                    <div style={{fontSize:"12px",color:"#f87171",fontWeight:700,marginBottom:"6px",fontFamily:"'JetBrains Mono',monospace"}}>
+                    <div style={{fontSize:"13px",color:"#fca5a5",fontWeight:700,marginBottom:"8px",fontFamily:"'JetBrains Mono',monospace"}}>
                       Project idea
                     </div>
-                    <div style={{fontSize:"14px",color:"#d6a0a0",lineHeight:"1.7"}}>
+                    <div style={{fontSize:"15px",color:"#e8b4b4",lineHeight:"1.75"}}>
                       {info.projectIdea}
                     </div>
                   </div>
@@ -1153,26 +1153,26 @@ function AlgoCard({ algo, advanced, selected, onToggle }) {
     className="focusRing algoCard"
     style={{
       background: selected ? "#0e1628" : "#0b0f17",
-      border: `1.5px solid ${selected ? "#3b82f6" : "#141c2b"}`,
-      borderRadius:"8px", padding:"16px 18px", cursor:"pointer", transition:"all 0.15s", position:"relative",
+      border: `1.5px solid ${selected ? "#3b82f6" : "#1e293b"}`,
+      borderRadius:"10px", padding:"20px 22px", cursor:"pointer", transition:"all 0.15s", position:"relative",
     }}
     onMouseEnter={e => { if(!selected) e.currentTarget.style.borderColor="#1e2b40"; }}
     onMouseLeave={e => { if(!selected) e.currentTarget.style.borderColor="#141c2b"; }}
     >
       {selected && <div aria-hidden="true" style={{position:"absolute",top:"8px",right:"10px",width:"18px",height:"18px",borderRadius:"50%",background:"#1d4ed8",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"11px",color:"#fff",fontWeight:700}}>✓</div>}
-      <div style={{display:"flex",alignItems:"center",gap:"5px",marginBottom:"4px",flexWrap:"wrap"}}>
-        <span style={{fontSize:"16px",fontWeight:700,color:"#f8fafc",fontFamily:"'JetBrains Mono',monospace"}}>{algo.name}</span>
+      <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"6px",flexWrap:"wrap"}}>
+        <span style={{fontSize:"18px",fontWeight:700,color:"#f8fafc",fontFamily:"'JetBrains Mono',monospace"}}>{algo.name}</span>
         <Badge status={algo.status} label={algo.statusLabel} />
       </div>
-      <div style={{fontSize:"13px",color:"#b1bfd2",marginBottom:"8px"}}>{algo.origin}</div>
-      <p style={{fontSize:"14px",color:"#c6d2e0",lineHeight:"1.65",margin:"0 0 10px"}}>{algo.useCases}</p>
+      <div style={{fontSize:"15px",color:"#c4d1e3",marginBottom:"10px"}}>{algo.origin}</div>
+      <p style={{fontSize:"15px",color:"#d4deea",lineHeight:"1.7",margin:"0 0 12px"}}>{algo.useCases}</p>
       <SecurityMeter bits={algo.securityBits} label="C" />
       <div style={{height:"6px"}} />
       <SecurityMeter bits={algo.pqSecurityBits} label="PQ" />
       {advanced && (
-        <div style={{marginTop:"10px",paddingTop:"10px",borderTop:"1px solid #141c2b",fontSize:"12px",color:"#bac6d7",lineHeight:"1.65"}}>
-          <div><span style={{color:"#7f8ea3",fontWeight:700}}>Attack:</span> {algo.bestAttack}</div>
-          <div style={{marginTop:"4px"}}><span style={{color:"#7f8ea3",fontWeight:700}}>Perf:</span> {algo.performance}</div>
+        <div style={{marginTop:"12px",paddingTop:"12px",borderTop:"1px solid #1e293b",fontSize:"14px",color:"#d4deea",lineHeight:"1.7"}}>
+          <div><span style={{color:"#93a4bb",fontWeight:700}}>Attack:</span> {algo.bestAttack}</div>
+          <div style={{marginTop:"6px"}}><span style={{color:"#93a4bb",fontWeight:700}}>Perf:</span> {algo.performance}</div>
         </div>
       )}
     </div>
@@ -1246,24 +1246,24 @@ function buildRows(category, advanced) {
 function CompTable({ algos, rows }) {
   return (
     <div style={{overflowX:"auto",borderRadius:"8px",border:"1px solid #141c2b"}}>
-      <table style={{width:"100%",borderCollapse:"collapse",fontSize:"14px"}}>
-        <caption style={{textAlign:"left",padding:"12px 14px",color:"#b7c4d6",fontSize:"14px",captionSide:"top"}}>
+      <table style={{width:"100%",borderCollapse:"collapse",fontSize:"15px"}}>
+        <caption style={{textAlign:"left",padding:"14px 16px",color:"#d1dae6",fontSize:"15px",captionSide:"top"}}>
           Side-by-side comparison of the selected algorithms.
         </caption>
         <thead>
           <tr>
-            <th scope="col" style={{textAlign:"left",padding:"12px 12px",borderBottom:"2px solid #1a2540",color:"#93a4bb",fontWeight:700,position:"sticky",left:0,background:"#070b12",zIndex:2,minWidth:"110px",fontSize:"12px",textTransform:"uppercase",letterSpacing:"0.5px"}}>Metric</th>
+            <th scope="col" style={{textAlign:"left",padding:"14px 14px",borderBottom:"2px solid #1a2540",color:"#b4c1d2",fontWeight:700,position:"sticky",left:0,background:"#070b12",zIndex:2,minWidth:"120px",fontSize:"13px",textTransform:"uppercase",letterSpacing:"0.5px"}}>Metric</th>
             {algos.map(a => (
-              <th scope="col" key={a.id} style={{textAlign:"left",padding:"12px 12px",borderBottom:"2px solid #1a2540",color:"#f8fafc",fontWeight:700,fontFamily:"'JetBrains Mono',monospace",fontSize:"15px",minWidth:"190px",background:"#070b12"}}>{a.name}</th>
+              <th scope="col" key={a.id} style={{textAlign:"left",padding:"14px 14px",borderBottom:"2px solid #1a2540",color:"#f8fafc",fontWeight:700,fontFamily:"'JetBrains Mono',monospace",fontSize:"16px",minWidth:"200px",background:"#070b12"}}>{a.name}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {rows.map((row,i) => (
             <tr key={i}>
-              <th scope="row" style={{padding:"10px 12px",borderBottom:"1px solid #0d1320",color:"#93a4bb",fontWeight:700,position:"sticky",left:0,background:i%2===0?"#070b12":"#090e18",zIndex:1,fontSize:"12px",textTransform:"uppercase",letterSpacing:"0.4px",verticalAlign:"top"}}>{row.label}</th>
+              <th scope="row" style={{padding:"12px 14px",borderBottom:"1px solid #0d1320",color:"#b4c1d2",fontWeight:700,position:"sticky",left:0,background:i%2===0?"#070b12":"#090e18",zIndex:1,fontSize:"13px",textTransform:"uppercase",letterSpacing:"0.4px",verticalAlign:"top"}}>{row.label}</th>
               {algos.map(a => (
-                <td key={a.id} style={{padding:"10px 12px",borderBottom:"1px solid #0d1320",color:"#d4deea",verticalAlign:"top",background:i%2===0?"transparent":"rgba(255,255,255,0.008)",maxWidth:"280px",lineHeight:"1.65"}}>
+                <td key={a.id} style={{padding:"12px 14px",borderBottom:"1px solid #0d1320",color:"#e2e8f0",verticalAlign:"top",background:i%2===0?"transparent":"rgba(255,255,255,0.015)",maxWidth:"300px",lineHeight:"1.7"}}>
                   {typeof row.render(a) === "string" ? <span>{row.render(a)}</span> : row.render(a)}
                 </td>
               ))}
@@ -1299,14 +1299,14 @@ export default function CryptoCompare() {
             <h1 style={{margin:0,fontSize:"28px",fontWeight:700,fontFamily:"'JetBrains Mono',monospace",letterSpacing:"-0.5px"}}>
               <span style={{color:"#3b82f6"}}>crypto</span>::compare
             </h1>
-            <p style={{margin:"6px 0 0",fontSize:"15px",color:"#b4c1d2"}}>International cryptographic algorithm reference across 12 categories.</p>
+            <p style={{margin:"6px 0 0",fontSize:"16px",color:"#c4d1e3"}}>International cryptographic algorithm reference across 12 categories.</p>
           </div>
           <div style={{display:"flex",gap:"8px",alignItems:"center"}}>
-            <span style={{fontSize:"12px",color:"#b4c1d2",fontFamily:"'JetBrains Mono',monospace"}}>C = Classical, PQ = Post-Quantum</span>
+            <span style={{fontSize:"14px",color:"#c4d1e3",fontFamily:"'JetBrains Mono',monospace"}}>C = Classical, PQ = Post-Quantum</span>
             <button onClick={() => setAdv(!adv)} aria-pressed={adv} className="focusRing" style={{
-              background:adv?"#11203a":"#0e1420", color:adv?"#7dd3fc":"#c4d1e0",
-              border:`1px solid ${adv?"#163052":"#2a3547"}`, padding:"8px 14px", borderRadius:"5px",
-              cursor:"pointer", fontSize:"13px", fontWeight:700, fontFamily:"'JetBrains Mono',monospace"
+              background:adv?"#11203a":"#0e1420", color:adv?"#7dd3fc":"#d4deea",
+              border:`1px solid ${adv?"#163052":"#334155"}`, padding:"10px 16px", borderRadius:"6px",
+              cursor:"pointer", fontSize:"14px", fontWeight:700, fontFamily:"'JetBrains Mono',monospace"
             }}>
               {adv ? "◆ Advanced" : "○ Beginner"}
             </button>
@@ -1320,7 +1320,7 @@ export default function CryptoCompare() {
           <button key={c.id} onClick={() => switchCat(c.id)} role="tab" aria-selected={cat===c.id} className="focusRing" style={{
             background:"transparent", color:cat===c.id?"#f8fafc":"#b1bfd2", border:"none",
             borderBottom:cat===c.id?"2px solid #3b82f6":"2px solid transparent",
-            padding:"14px 16px", cursor:"pointer", fontSize:"14px", fontWeight:cat===c.id?700:600, whiteSpace:"nowrap", flexShrink:0
+            padding:"14px 18px", cursor:"pointer", fontSize:"15px", fontWeight:cat===c.id?700:600, whiteSpace:"nowrap", flexShrink:0
           }}>
             <span aria-hidden="true" style={{marginRight:"4px"}}>{c.icon}</span>{c.label}
           </button>
@@ -1336,7 +1336,7 @@ export default function CryptoCompare() {
         />
 
         {!explainerOpen && (
-          <p style={{color:"#c7d2e1",fontSize:"14px",margin:"0 0 16px"}}>Select cards to compare algorithms side by side.</p>
+          <p style={{color:"#d4deea",fontSize:"15px",margin:"0 0 18px"}}>Select cards to compare algorithms side by side.</p>
         )}
 
         <section aria-label={`${CATEGORIES.find(c => c.id === cat)?.label || cat} algorithms`} className="algoGrid" style={{marginBottom:"18px"}}>
@@ -1346,21 +1346,21 @@ export default function CryptoCompare() {
         {selAlgos.length >= 2 && !cmp && (
           <div style={{textAlign:"center",margin:"10px 0"}}>
             <button onClick={() => setCmp(true)} className="focusRing" style={{
-              background:"#1d4ed8",color:"#fff",border:"none",padding:"9px 24px",borderRadius:"6px",
-              fontSize:"15px",fontWeight:700,cursor:"pointer",fontFamily:"'JetBrains Mono',monospace"
+              background:"#1d4ed8",color:"#fff",border:"none",padding:"12px 28px",borderRadius:"8px",
+              fontSize:"16px",fontWeight:700,cursor:"pointer",fontFamily:"'JetBrains Mono',monospace"
             }}>Compare {selAlgos.length} →</button>
           </div>
         )}
 
-        {selAlgos.length === 1 && <p style={{textAlign:"center",color:"#b4c1d2",fontSize:"14px"}}>Select one more algorithm to compare.</p>}
+        {selAlgos.length === 1 && <p style={{textAlign:"center",color:"#d4deea",fontSize:"15px"}}>Select one more algorithm to compare.</p>}
 
         {cmp && selAlgos.length >= 2 && (
           <section aria-label="Comparison table">
             <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"8px"}}>
-              <h2 style={{margin:0,fontSize:"20px",fontWeight:700,fontFamily:"'JetBrains Mono',monospace"}}>Comparison</h2>
+              <h2 style={{margin:0,fontSize:"22px",fontWeight:700,fontFamily:"'JetBrains Mono',monospace"}}>Comparison</h2>
               <button onClick={() => {setSel([]);setCmp(false);}} className="focusRing" style={{
-                background:"#0e1420",color:"#d1d9e5",border:"1px solid #2a3547",padding:"8px 12px",
-                borderRadius:"5px",cursor:"pointer",fontSize:"13px",fontWeight:700
+                background:"#0e1420",color:"#e2e8f0",border:"1px solid #334155",padding:"10px 14px",
+                borderRadius:"6px",cursor:"pointer",fontSize:"14px",fontWeight:700
               }}>Clear selection</button>
             </div>
             <CompTable algos={selAlgos} rows={rows} />
@@ -1368,7 +1368,7 @@ export default function CryptoCompare() {
         )}
       </main>
 
-      <footer style={{borderTop:"1px solid #111827",padding:"16px 0 24px",fontSize:"12px",color:"#8fa0b6",fontFamily:"'JetBrains Mono',monospace"}}>
+      <footer style={{borderTop:"1px solid #1e293b",padding:"20px 0 28px",fontSize:"14px",color:"#b4c1d2",fontFamily:"'JetBrains Mono',monospace",lineHeight:"1.7"}}>
         Sources: NIST FIPS, IETF RFCs, KPQC, CRYPTREC, GB/T, GOST, DSTU, ISO, Eurocrypt/CRYPTO proceedings. Security estimates reflect known attacks as of 2025. Reference tool — not a certification.
       </footer>
       </div>
@@ -1382,7 +1382,7 @@ export default function CryptoCompare() {
         .algoGrid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 14px;
+          gap: 18px;
           align-items: stretch;
         }
 

@@ -2,6 +2,8 @@
 
 **Interactive cryptographic algorithm reference — 12 categories, 55+ algorithms, international.**
 
+🌐 **[Live Site →](https://systemslibrarian.github.io/crypto-compare/)**
+
 A browser-based tool for exploring, comparing, and understanding cryptographic primitives across symmetric encryption, key encapsulation, digital signatures, hashing, key derivation, MACs, password hashing, secret sharing, homomorphic encryption, zero-knowledge proofs, secure multi-party computation, and oblivious transfer / PIR.
 
 > *So whether you eat or drink or whatever you do, do it all for the glory of God.* — 1 Corinthians 10:31
