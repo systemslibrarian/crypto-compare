@@ -67,7 +67,7 @@ export default function AlgoCard({ algo, advanced, selected, onToggle }: AlgoCar
         </div>
       )}
       <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px", flexWrap: "wrap" }}>
-        <span style={{ fontSize: "18px", fontWeight: 700, color: "#f8fafc", fontFamily: "'JetBrains Mono',monospace" }}>{algo.name}</span>
+        <span style={{ fontSize: "18px", fontWeight: 700, color: "#f8fafc", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>{algo.name}</span>
         <Badge status={algo.status} label={algo.statusLabel} />
       </div>
       <div style={{ fontSize: "15px", color: "#c4d1e3", marginBottom: "10px" }}>{algo.origin}</div>

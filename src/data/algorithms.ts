@@ -752,4 +752,4 @@ export const ALGORITHMS: Algorithm[] = [
     performance:"Requires 2+ non-colluding servers. Communication overhead depends on construction.",
     notes:"Perfect privacy but requires trust assumption: servers must not collude. If they collude, privacy breaks completely. PQ-safe by nature."
   },
-];;
+];

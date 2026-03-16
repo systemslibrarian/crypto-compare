@@ -13,7 +13,7 @@ export const CATEGORIES: CategoryDefinition[] = [
   { id:"zkp", label:"ZKP", icon:"🎭" },
   { id:"mpc", label:"MPC", icon:"🤖" },
   { id:"ot_pir", label:"OT / PIR", icon:"👁️" },
-];;
+];
 
 export const CATEGORY_INFO: CategoryInfoMap = {
   symmetric:{
@@ -138,4 +138,4 @@ export const CATEGORY_INFO: CategoryInfoMap = {
     realWorld:"Apple's iCloud Private Relay uses PIR-like techniques so Apple's servers help route your traffic without knowing which websites you visit. Signal uses Private Contact Discovery — you can check which of your phone contacts are on Signal without Signal learning your contact list. Certificate Transparency systems are exploring PIR so browsers can check if a certificate has been revoked without telling the CA which sites they're visiting (which would leak browsing history). Password breach checking services (like Have I Been Pwned's k-anonymity API and 1Password's implementation) use PIR-adjacent techniques so you can check if your password was breached without sending the password. Chrome's SafeBrowsing is exploring PIR to check URLs against malware databases without Google learning which URLs you visit.",
     whyItMatters:"The metadata problem: even when data is encrypted, the access pattern reveals information. If a medical database can see you looked up \"oncology treatment protocols,\" the query itself leaks your health situation. OT and PIR protect the access pattern — not just the data, but the fact that you accessed it. As surveillance concerns grow and privacy regulations tighten, hiding what you access becomes as important as encrypting what you send."
   },
-};;
+};

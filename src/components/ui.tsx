@@ -56,7 +56,7 @@ export function SecurityMeter({ bits, max = 256, label }: { bits: number | null 
       </div>
       <span
         aria-hidden="true"
-        style={{ color: c, fontSize: "15px", fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, minWidth: "38px" }}
+        style={{ color: c, fontSize: "15px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", fontWeight: 700, minWidth: "38px" }}
       >
         {bits}
       </span>

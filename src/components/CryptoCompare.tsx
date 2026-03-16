@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import AlgoCard from "@/components/AlgoCard";
 import CategoryExplainer from "@/components/CategoryExplainer";
 import ComparisonTable from "@/components/ComparisonTable";
+import DecisionFlowchart from "@/components/DecisionFlowchart";
 import { ALGORITHMS } from "@/data/algorithms";
 import { CATEGORIES } from "@/data/categories";
 import { ALGORITHM_PROVENANCE } from "@/data/provenance";
 import { buildRows } from "@/lib/comparison";
+import { useKeyboardShortcuts } from "@/lib/useKeyboardShortcuts";
 import { validateAlgorithms } from "@/lib/validation";
 import type { Algorithm, AlgorithmCategory } from "@/types/crypto";
 
@@ -63,6 +65,7 @@ function withProvenance(algorithms: Algorithm[]): Algorithm[] {
 
 export default function CryptoCompare() {
   const dataset = useMemo(() => withProvenance(ALGORITHMS), []);
+  const searchRef = useRef<HTMLInputElement>(null);
 
   const [cat, setCat] = useState<AlgorithmCategory>("symmetric");
   const [adv, setAdv] = useState(false);
@@ -179,8 +182,78 @@ export default function CryptoCompare() {
     }
   };
 
+  const kbHandlers = useMemo(
+    () => ({
+      onFocusSearch: () => searchRef.current?.focus(),
+      onToggleAdvanced: () => setAdv((v) => !v),
+      onToggleMethodology: () => setShowMethodology((v) => !v),
+      onEscape: () => {
+        setShowMethodology(false);
+        setCmp(false);
+      },
+      onNextCategory: () => {
+        const idx = CATEGORIES.findIndex((c) => c.id === cat);
+        if (idx < CATEGORIES.length - 1) switchCat(CATEGORIES[idx + 1].id);
+      },
+      onPrevCategory: () => {
+        const idx = CATEGORIES.findIndex((c) => c.id === cat);
+        if (idx > 0) switchCat(CATEGORIES[idx - 1].id);
+      },
+    }),
+    [cat],
+  );
+  useKeyboardShortcuts(kbHandlers);
+
+  const handleFlowchartNavigate = useCallback(
+    (category: AlgorithmCategory, algoId: string) => {
+      switchCat(category);
+      setSel([algoId]);
+    },
+    [],
+  );
+
+  const exportComparison = useCallback(
+    (format: "csv" | "markdown") => {
+      if (selAlgos.length < 2) return;
+      const algoNames = selAlgos.map((a) => a.name);
+
+      const renderToText = (row: (typeof rows)[number], algo: Algorithm): string => {
+        const val = row.render(algo);
+        if (typeof val === "string") return val;
+        if (typeof val === "number") return String(val);
+        return String(val ?? "");
+      };
+
+      if (format === "csv") {
+        const csvRows = [["Property", ...algoNames].join(",")];
+        for (const row of rows) {
+          csvRows.push([row.label, ...selAlgos.map((a) => `"${renderToText(row, a).replace(/"/g, '""')}"`)] .join(","));
+        }
+        downloadText(csvRows.join("\n"), "comparison.csv", "text/csv");
+      } else {
+        const mdRows = [
+          `| Property | ${algoNames.join(" | ")} |`,
+          `| --- | ${algoNames.map(() => "---").join(" | ")} |`,
+          ...rows.map((r) => `| ${r.label} | ${selAlgos.map((a) => renderToText(r, a)).join(" | ")} |`),
+        ];
+        downloadText(mdRows.join("\n"), "comparison.md", "text/markdown");
+      }
+    },
+    [selAlgos, rows],
+  );
+
+  function downloadText(content: string, filename: string, mime: string) {
+    const blob = new Blob([content], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
-    <div style={{ background: "#070b12", color: "#e2e8f0", minHeight: "100vh", fontFamily: "'IBM Plex Sans',-apple-system,sans-serif", lineHeight: 1.6 }}>
+    <div style={{ background: "#070b12", color: "#e2e8f0", minHeight: "100vh", fontFamily: "var(--font-ibm-plex-sans), 'IBM Plex Sans', -apple-system, sans-serif", lineHeight: 1.6 }}>
       <a href="#main-content" className="skipLink">
         Skip to main content
       </a>
@@ -188,13 +261,13 @@ export default function CryptoCompare() {
         <header style={{ borderBottom: "1px solid #111827", padding: "22px 0" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px" }}>
             <div>
-              <h1 style={{ margin: 0, fontSize: "28px", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", letterSpacing: "-0.5px" }}>
+              <h1 style={{ margin: 0, fontSize: "28px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", letterSpacing: "-0.5px" }}>
                 <span style={{ color: "#3b82f6" }}>crypto</span>::compare
               </h1>
               <p style={{ margin: "6px 0 0", fontSize: "16px", color: "#c4d1e3" }}>International cryptographic algorithm reference across 12 categories.</p>
             </div>
             <div style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
-              <span style={{ fontSize: "14px", color: "#c4d1e3", fontFamily: "'JetBrains Mono',monospace" }}>C = Classical, PQ = Post-Quantum</span>
+              <span style={{ fontSize: "14px", color: "#c4d1e3", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>C = Classical, PQ = Post-Quantum</span>
               <button
                 onClick={() => setAdv(!adv)}
                 aria-pressed={adv}
@@ -208,7 +281,7 @@ export default function CryptoCompare() {
                   cursor: "pointer",
                   fontSize: "14px",
                   fontWeight: 700,
-                  fontFamily: "'JetBrains Mono',monospace",
+                  fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
                 }}
               >
                 {adv ? "Advanced" : "Beginner"}
@@ -249,6 +322,7 @@ export default function CryptoCompare() {
         <main id="main-content" style={{ padding: "20px 0 28px" }}>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "12px" }}>
             <input
+              ref={searchRef}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={`Search within ${selectedCategoryLabel}`}
@@ -298,8 +372,8 @@ export default function CryptoCompare() {
           </div>
 
           {showMethodology && (
-            <section style={{ marginBottom: "14px", border: "1px solid #1e293b", borderRadius: "10px", padding: "14px", background: "#0c1220" }}>
-              <h2 style={{ marginTop: 0, marginBottom: "8px", fontSize: "18px", fontFamily: "'JetBrains Mono',monospace" }}>Methodology</h2>
+            <section className="panel-inner" style={{ marginBottom: "14px" }}>
+              <h2 className="panel-heading">Methodology</h2>
               <ul style={{ margin: 0, paddingLeft: "18px", color: "#c4d1e3" }}>
                 <li>Classical security bits approximate attack cost against known public cryptanalysis.</li>
                 <li>PQ security bits indicate expected security under quantum search assumptions where applicable.</li>
@@ -313,7 +387,9 @@ export default function CryptoCompare() {
 
           <CategoryExplainer category={cat} expanded={explainerOpen} onToggle={() => setExplainerOpen(!explainerOpen)} />
 
-          {!explainerOpen && <p style={{ color: "#d4deea", fontSize: "15px", margin: "0 0 18px" }}>Select cards to compare algorithms side by side.</p>}
+          <DecisionFlowchart onNavigate={handleFlowchartNavigate} />
+
+          {!explainerOpen && <p className="text-body" style={{ fontSize: "15px", margin: "0 0 18px" }}>Select cards to compare algorithms side by side.</p>}
 
           <section aria-label={`${selectedCategoryLabel} algorithms`} className="algoGrid" style={{ marginBottom: "18px" }}>
             {filtered.map((a) => (
@@ -337,7 +413,7 @@ export default function CryptoCompare() {
                   fontSize: "16px",
                   fontWeight: 700,
                   cursor: "pointer",
-                  fontFamily: "'JetBrains Mono',monospace",
+                  fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
                 }}
               >
                 Compare {selAlgos.length}
@@ -353,7 +429,7 @@ export default function CryptoCompare() {
           {cmp && selAlgos.length >= 2 && (
             <section aria-label="Comparison table" style={{ marginBottom: "16px" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px", gap: "10px", flexWrap: "wrap" }}>
-                <h2 style={{ margin: 0, fontSize: "22px", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>Comparison</h2>
+                <h2 style={{ margin: 0, fontSize: "22px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>Comparison</h2>
                 <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                   <button
                     onClick={() => {
@@ -367,6 +443,12 @@ export default function CryptoCompare() {
                   <button className="focusRing controlBtn" onClick={copyComparisonLink}>
                     Copy link
                   </button>
+                  <button className="focusRing controlBtn" onClick={() => exportComparison("csv")}>
+                    Export CSV
+                  </button>
+                  <button className="focusRing controlBtn" onClick={() => exportComparison("markdown")}>
+                    Export Markdown
+                  </button>
                 </div>
               </div>
               <ComparisonTable algos={selAlgos} rows={rows} />
@@ -374,8 +456,8 @@ export default function CryptoCompare() {
           )}
 
           {selAlgos.length > 0 && (
-            <section style={{ border: "1px solid #1e293b", borderRadius: "10px", padding: "14px", background: "#0a0f1a" }}>
-              <h2 style={{ margin: "0 0 8px", fontSize: "18px", fontFamily: "'JetBrains Mono',monospace" }}>Selected algorithm sources</h2>
+            <section className="panel">
+              <h2 className="panel-heading">Selected algorithm sources</h2>
               {selAlgos.map((algo) => (
                 <div key={`src-${algo.id}`} style={{ padding: "10px 0", borderTop: "1px solid #111827" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px", flexWrap: "wrap" }}>
@@ -404,7 +486,28 @@ export default function CryptoCompare() {
           )}
         </main>
 
-        <footer style={{ borderTop: "1px solid #1e293b", padding: "20px 0 28px", fontSize: "14px", color: "#b4c1d2", fontFamily: "'JetBrains Mono',monospace", lineHeight: "1.7" }}>
+        <footer className="site-footer">
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "12px",
+              marginBottom: "12px",
+              fontSize: "12px",
+              color: "#7d8a9e",
+            }}
+            aria-label="Keyboard shortcuts"
+          >
+            <span><kbd className="kbd">/</kbd> Search</span>
+            <span><kbd className="kbd">A</kbd> Toggle Advanced</span>
+            <span><kbd className="kbd">← →</kbd> Switch Category</span>
+            <span><kbd className="kbd">?</kbd> Methodology</span>
+            <span><kbd className="kbd">Esc</kbd> Close</span>
+          </div>
+          <div style={{ marginBottom: "8px" }}>
+            <span className="text-accent" style={{ fontWeight: 700 }}>Dataset reviewed:</span>{" "}
+            <time dateTime="2026-03-16">March 16, 2026</time>
+          </div>
           Sources: NIST FIPS, IETF RFCs, KPQC, CRYPTREC, GB/T, GOST, DSTU, ISO, Eurocrypt/CRYPTO proceedings. Security estimates reflect known attacks and public literature, and should be treated as continuously updated guidance, not certification.
         </footer>
       </div>

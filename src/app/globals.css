@@ -6,3 +6,60 @@ body {
   background: #070b12;
   color: #e2e8f0;
 }
+
+@layer components {
+  /* Section panels (methodology, sources, etc.) */
+  .panel {
+    @apply border border-slate-800 rounded-xl p-4 mb-4;
+    background: #0a0f1a;
+  }
+
+  .panel-inner {
+    @apply border border-slate-800 rounded-xl p-4;
+    background: #0c1220;
+  }
+
+  /* Headings inside panels */
+  .panel-heading {
+    @apply mt-0 mb-2 text-lg font-bold;
+    font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  }
+
+  /* Footer area */
+  .site-footer {
+    @apply border-t border-slate-800 text-sm leading-relaxed;
+    padding: 20px 0 28px;
+    color: #b4c1d2;
+    font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  }
+
+  /* Keyboard shortcut key */
+  .kbd {
+    @apply inline-block text-xs rounded px-1.5 py-0.5;
+    background: #11182b;
+    border: 1px solid #1e293b;
+    color: #7d8a9e;
+  }
+
+  /* Primary action button (blue) */
+  .btn-primary {
+    @apply text-white font-bold rounded-lg cursor-pointer border-none;
+    background: #1d4ed8;
+    padding: 12px 28px;
+    font-size: 16px;
+    font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  }
+
+  /* Muted text styles */
+  .text-muted {
+    color: #93a4bb;
+  }
+
+  .text-body {
+    color: #d4deea;
+  }
+
+  .text-accent {
+    color: #60a5fa;
+  }
+}

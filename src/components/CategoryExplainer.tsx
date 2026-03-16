@@ -41,7 +41,7 @@ export default function CategoryExplainer({ category, expanded, onToggle }: Cate
     >
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px" }}>
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: "22px", fontWeight: 700, color: "#f8fafc", marginBottom: "6px", fontFamily: "'JetBrains Mono',monospace" }}>
+          <div style={{ fontSize: "22px", fontWeight: 700, color: "#f8fafc", marginBottom: "6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
             {info.title}
           </div>
           <div style={{ fontSize: "16px", color: "#d1dae6", lineHeight: "1.7", fontStyle: "italic" }}>{info.oneLiner}</div>
@@ -63,7 +63,7 @@ export default function CategoryExplainer({ category, expanded, onToggle }: Cate
             cursor: "pointer",
             fontSize: "14px",
             fontWeight: 700,
-            fontFamily: "'JetBrains Mono',monospace",
+            fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
             whiteSpace: "nowrap",
             flexShrink: 0,
             transition: "all 0.15s",
@@ -84,7 +84,7 @@ export default function CategoryExplainer({ category, expanded, onToggle }: Cate
                 textTransform: "uppercase",
                 letterSpacing: "1.2px",
                 marginBottom: "10px",
-                fontFamily: "'JetBrains Mono',monospace",
+                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
               }}
             >
               What it does
@@ -101,7 +101,7 @@ export default function CategoryExplainer({ category, expanded, onToggle }: Cate
                 textTransform: "uppercase",
                 letterSpacing: "1.2px",
                 marginBottom: "10px",
-                fontFamily: "'JetBrains Mono',monospace",
+                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
               }}
             >
               Where you see it in the real world
@@ -125,7 +125,7 @@ export default function CategoryExplainer({ category, expanded, onToggle }: Cate
                 textTransform: "uppercase",
                 letterSpacing: "1.2px",
                 marginBottom: "10px",
-                fontFamily: "'JetBrains Mono',monospace",
+                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
               }}
             >
               Why it matters
@@ -149,7 +149,7 @@ export default function CategoryExplainer({ category, expanded, onToggle }: Cate
                 textTransform: "uppercase",
                 letterSpacing: "1.2px",
                 marginBottom: "10px",
-                fontFamily: "'JetBrains Mono',monospace",
+                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
                 display: "flex",
                 alignItems: "center",
                 gap: "8px",
@@ -190,7 +190,7 @@ export default function CategoryExplainer({ category, expanded, onToggle }: Cate
                             href={project.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            style={{ color: "#38bdf8", fontSize: "13px", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", textDecoration: "none" }}
+                            style={{ color: "#38bdf8", fontSize: "13px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", textDecoration: "none" }}
                             onMouseEnter={(e) => {
                               e.currentTarget.style.textDecoration = "underline";
                             }}
@@ -204,7 +204,7 @@ export default function CategoryExplainer({ category, expanded, onToggle }: Cate
                             {project.name}
                           </a>
                         ) : (
-                          <span style={{ color: "#94a3b8", fontSize: "13px", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>
+                          <span style={{ color: "#94a3b8", fontSize: "13px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
                             {project.name}
                           </span>
                         )}
@@ -232,7 +232,7 @@ export default function CategoryExplainer({ category, expanded, onToggle }: Cate
               <div>
                 {info.projectIdea && (
                   <div style={{ padding: "10px 12px", background: "#0c1422", borderRadius: "6px", border: "1px dashed #2a1a1a" }}>
-                    <div style={{ fontSize: "13px", color: "#fca5a5", fontWeight: 700, marginBottom: "8px", fontFamily: "'JetBrains Mono',monospace" }}>
+                    <div style={{ fontSize: "13px", color: "#fca5a5", fontWeight: 700, marginBottom: "8px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
                       Project idea
                     </div>
                     <div style={{ fontSize: "15px", color: "#e8b4b4", lineHeight: "1.75" }}>{info.projectIdea}</div>

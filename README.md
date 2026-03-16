@@ -1,62 +1,136 @@
 # crypto::compare 🔐
 
-**Interactive cryptographic algorithm reference — 12 categories, 55+ algorithms, international.**
+**Interactive cryptographic algorithm reference — 12 categories, 64 algorithms, 16+ countries.**
 
-🌐 **[Live Site →](https://systemslibrarian.github.io/crypto-compare/)**
-
-A browser-based tool for exploring, comparing, and understanding cryptographic primitives across symmetric encryption, key encapsulation, digital signatures, hashing, key derivation, MACs, password hashing, secret sharing, homomorphic encryption, zero-knowledge proofs, secure multi-party computation, and oblivious transfer / PIR.
+🌐 **[Live Site → systemslibrarian.github.io/crypto-compare](https://systemslibrarian.github.io/crypto-compare/)**
 
 > *So whether you eat or drink or whatever you do, do it all for the glory of God.* — 1 Corinthians 10:31
 
 ---
 
-## Features
+## What This Is
 
-- **12 cryptographic categories** with rich educational explainers
-- **55+ algorithms** from 16+ countries (USA, Korea, Japan, China, Russia, Ukraine, Belgium, France, Israel, Germany, Estonia, Denmark, Switzerland, Canada, UK, Luxembourg)
-- **Beginner / Advanced toggle** — high-level overview or deep technical detail
-- **Side-by-side comparison** — select any algorithms within a category and compare key sizes, security levels, attack complexity, performance, and more
-- **Search + filter + deep-link state** — query by term, origin, standards status, PQ posture, and share URL state
-- **Per-entry source traceability scaffold** — selected algorithms show source links and review date when available
-- **Per-category project links** — each category shows which of my repos demonstrate that crypto type
-- **PQ-safe focus** — all KEM, signature, and advanced categories feature quantum-resistant algorithms
-- **Honest sourcing** — data from NIST FIPS, IETF RFCs, KPQC submissions, CRYPTREC, GB/T, GOST, DSTU, ISO, and published research
+A browser-based reference tool for exploring, comparing, and choosing cryptographic algorithms. No backend, no accounts, no tracking — open it and start comparing.
 
-## Categories
+**It is not:**
+- A cryptographic library or implementation
+- A certification authority or compliance checker
+- An interactive playground for running crypto operations
+- A substitute for professional cryptographic engineering review
 
-| Category | What It Does | Algorithms |
-|----------|-------------|------------|
-| Symmetric Encryption | Encrypt data with a shared key | AES-256-GCM, ChaCha20-Poly1305, Camellia, ARIA, SM4, Kuznyechik |
-| Key Encapsulation | Establish shared secrets (PQ-safe) | ML-KEM, SMAUG-T, HQC, Classic McEliece, FrodoKEM, BIKE |
-| Digital Signatures | Prove authenticity | ML-DSA, HAETAE, FALCON, SLH-DSA, XMSS |
-| Hash Functions | Fixed-size fingerprints | SHA-2, SHA-3, BLAKE2/3, SM3, Streebog, Kupyna |
-| Key Derivation | Derive multiple keys from one secret | HKDF, Argon2, scrypt, PBKDF2, Balloon |
-| MACs | Message authentication | HMAC, CMAC, KMAC, Poly1305, SipHash |
-| Password Hashing | Crack-resistant credential storage | Argon2id, bcrypt, scrypt, PBKDF2, Balloon |
-| Secret Sharing | Split secrets into threshold shares | Shamir, Blakley, Feldman VSS, Pedersen VSS, Additive |
-| Homomorphic Encryption | Compute on encrypted data | TFHE, BGV, BFV, CKKS |
-| Zero-Knowledge Proofs | Prove without revealing | Groth16, PLONK, zk-STARK, Bulletproofs |
-| Multi-Party Computation | Joint computation, zero sharing | SPDZ, ABY, Yao's GC, Sharemind |
-| OT / PIR | Private data retrieval | Base OT, OT Extension, Computational PIR, IT-PIR |
+**It is:**
+- An algorithm-level reference with real data from published standards and peer-reviewed research
+- A comparison tool for evaluating primitives across key sizes, security bits, attack complexity, and performance
+- A decision helper for answering "which algorithm should I use?"
+- A learning resource with educational explainers for each category
 
-## Category Explainers
+---
 
-Each category includes a full educational panel with four sections:
+## What You Can Do
 
-- **One-liner** — what it does in plain language
+### Browse 64 Algorithms Across 12 Categories
+
+| Category | Algorithms |
+|----------|------------|
+| Symmetric Encryption | AES-256-GCM, ChaCha20-Poly1305, XChaCha20-Poly1305, Camellia-256, ARIA-256, SM4, Kuznyechik |
+| Key Encapsulation (KEM) | ML-KEM-768, ML-KEM-1024, SMAUG-T, HQC, Classic McEliece, FrodoKEM-976, BIKE |
+| Digital Signatures | ML-DSA-44, ML-DSA-65, HAETAE, FALCON-512, SLH-DSA, XMSS |
+| Hash Functions | SHA-256, SHA-512, SHA-3-256, BLAKE2b, BLAKE3, SM3, Streebog, Kupyna-256 |
+| Key Derivation (KDF) | HKDF, Argon2 (KDF), scrypt, PBKDF2, Balloon Hashing |
+| MACs | HMAC-SHA-256, CMAC-AES-256, KMAC256, Poly1305, SipHash |
+| Password Hashing | Argon2id, bcrypt, scrypt, PBKDF2, Balloon Hashing |
+| Secret Sharing | Shamir, Blakley, Feldman VSS, Pedersen VSS, Additive Sharing |
+| Homomorphic Encryption | TFHE, BGV, BFV, CKKS |
+| Zero-Knowledge Proofs | Groth16, PLONK, zk-STARK, Bulletproofs |
+| Multi-Party Computation | SPDZ, ABY, Yao's Garbled Circuits, Sharemind |
+| OT / PIR | Base OT, OT Extension, Computational PIR, IT-PIR |
+
+Each algorithm shows: origin country, use cases, classical security bits, post-quantum security bits (with visual meters), best known attack, reduction quality, performance summary, and standardization status.
+
+### Compare Side by Side
+
+Select any 2+ algorithms within a category → compare them in a structured table showing every relevant metric. The comparison table adapts to your category (symmetric shows key/nonce/block sizes; KEM shows public key/ciphertext/shared secret sizes; etc.).
+
+**Export comparisons** as CSV or Markdown. **Copy a deep link** to share your exact comparison with someone else.
+
+### "What Should I Use?" Decision Flowchart
+
+An interactive step-by-step wizard that asks what you need to accomplish and recommends a specific algorithm with reasoning. Covers all 12 categories with 2–3 narrowing questions per path.
+
+### Search, Filter, Sort
+
+- **Text search** within any category
+- **Filter by**: PQ-safe only, standards only, NIST only, widely deployed, recommended defaults
+- **Filter by origin**: Korea, USA, Europe, Japan, China, Russia, Ukraine
+- **Sort by**: name, classical security, PQ security, public key size, signature size
+- **Beginner / Advanced toggle**: beginner shows essentials; advanced reveals attack vectors and performance details
+
+All filter state is persisted in the URL. Copy-paste the address bar to share any filtered view.
+
+### Educational Explainers
+
+Every category includes a collapsible panel with:
 - **What it does** — technical explanation accessible to non-cryptographers
-- **Where you see it in the real world** — 5-8 named, concrete real-world deployments
-- **Why it matters** — the stakes if this category of crypto fails
-- **Your projects** — links to repos that demonstrate each crypto type
+- **Where you see it** — named, specific real-world deployments (Chrome/Firefox hybrid TLS, WireGuard, BitLocker, ICANN ceremonies, Zcash, etc.)
+- **Why it matters** — what breaks if this category of crypto fails
+- **Related projects** — links to repos that demonstrate each crypto type
+
+### Keyboard Shortcuts
+
+| Key | Action |
+|-----|--------|
+| `/` or `Ctrl+K` | Focus search |
+| `A` | Toggle beginner/advanced |
+| `← →` | Switch category |
+| `?` | Toggle methodology panel |
+| `Esc` | Close panels, blur search |
+
+### Source Provenance
+
+Every algorithm has linked source references (NIST FIPS, IETF RFCs, academic papers) and a last-reviewed date. Select any algorithm to see its sources in a panel below the cards.
+
+---
+
+## Limitations
+
+This tool has real constraints worth knowing:
+
+- **No executable crypto**: You cannot encrypt, hash, sign, or run algorithms here. This is a reference, not a playground.
+- **No formal verification status tracking**: Whether an algorithm has formally verified implementations is not captured.
+- **No hybrid scheme entries**: PQ + classical hybrid combinations (e.g., ML-KEM + X25519 as used in Chrome) aren't modeled as distinct entries.
+- **No side-channel resistance ratings**: The data tracks whether password hashing functions are side-channel resistant, but not general-purpose primitives.
+- **Static data**: Algorithm data is embedded in TypeScript files. Updates require code changes and redeployment. There's no API or database.
+- **Security estimates are time-bound**: Data reflects published cryptanalysis as of the review date shown in the footer. New attacks can change the picture.
+- **Solo project**: One maintainer. No institutional backing, no external auditors, no guaranteed update cadence.
+
+---
+
+## Data Sources
+
+Security parameters and algorithm properties are drawn from:
+
+- **NIST**: FIPS 180-4, 197, 198-1, 202, 203, 204, 205; SP 800-38B, 800-38D, 800-132, 800-185, 800-208
+- **IETF**: RFCs 2104, 5794, 5869, 7693, 7801, 7914, 8018, 8391, 8439, 8998, 9106
+- **National standards**: KPQC (Korea), CRYPTREC (Japan), GB/T (China), GOST (Russia), DSTU (Ukraine), KS (Korea)
+- **ISO**: ISO/IEC 10118-3, 18033-3
+- **Academic**: Eurocrypt, CRYPTO, ACM CCS, IEEE S&P, NDSS proceedings — original papers for Groth16, PLONK, zk-STARK, Bulletproofs, TFHE, BGV, BFV, CKKS, Shamir, Feldman, SPDZ, ABY, and others
+
+Full per-algorithm source links are in the app's provenance panel and in [`src/data/provenance.ts`](src/data/provenance.ts).
 
 ---
 
 ## Tech Stack
 
-- **Next.js 14** / TypeScript / React
-- **Tailwind CSS** with custom color system
-- **No backend** — runs entirely in the browser
-- **No external API calls** — all data is embedded
+| Layer | Technology |
+|-------|-----------|
+| Framework | Next.js 14 (static export) |
+| Language | TypeScript (strict mode) |
+| Styling | Tailwind CSS + CSS variables |
+| Deployment | GitHub Pages via Actions |
+| Testing | Vitest + Testing Library |
+| CI | Type-check → Test → Lint → Build |
+
+No backend. No external API calls. No cookies. No analytics.
 
 ---
 
@@ -71,55 +145,48 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+### Commands
+
+| Command | Purpose |
+|---------|---------|
+| `npm run dev` | Start development server |
+| `npm run build` | Static export to `out/` |
+| `npm run test` | Run vitest test suite |
+| `npm run type-check` | TypeScript strict check |
+| `npm run lint` | ESLint |
+
 ---
 
 ## Project Structure
 
 ```
-crypto-compare/
-├── src/
-│   ├── app/
-│   │   ├── layout.tsx
-│   │   ├── page.tsx
-│   │   └── globals.css
-│   ├── components/
-│   │   ├── CryptoCompare.tsx      # Main shell with tabs
-│   │   ├── CategoryExplainer.tsx   # Educational panels + project links
-│   │   ├── AlgoCard.tsx            # Algorithm selection cards
-│   │   ├── ComparisonTable.tsx     # Side-by-side comparison
-│   │   └── ui.tsx                  # Badge, SecurityMeter
-│   ├── data/
-│   │   ├── algorithms.ts           # 55+ algorithm definitions
-│   │   ├── categories.ts           # 12 category definitions + explainers
-│   │   └── provenance.ts           # Source links + review dates by algorithm id
-│   ├── types/
-│   │   └── crypto.ts               # Strict TypeScript data model
-│   └── lib/
-│       ├── comparison.tsx          # Row-building logic per category
-│       └── validation.ts           # Runtime data validation checks
-├── docs/
-│   └── data-sources.md             # Where the algorithm data comes from
-├── .github/workflows/ci.yml
-├── package.json
-├── tailwind.config.ts
-├── tsconfig.json
-└── README.md
+src/
+├── app/
+│   ├── layout.tsx              # Root layout, fonts, SEO metadata, JSON-LD
+│   ├── page.tsx                # Entry point (wraps CryptoCompare in ErrorBoundary)
+│   └── globals.css             # Tailwind layers + component classes
+├── components/
+│   ├── CryptoCompare.tsx       # Main shell: tabs, search, filters, comparison, export
+│   ├── CategoryExplainer.tsx   # Educational panels + project links per category
+│   ├── AlgoCard.tsx            # Algorithm selection cards with SecurityMeters
+│   ├── ComparisonTable.tsx     # Side-by-side table (desktop) + stacked cards (mobile)
+│   ├── DecisionFlowchart.tsx   # "What should I use?" interactive wizard
+│   ├── ErrorBoundary.tsx       # React error boundary with reload
+│   └── ui.tsx                  # Badge, SecurityMeter, formatBytes
+├── data/
+│   ├── algorithms.ts           # 64 algorithm definitions (12–18 fields each)
+│   ├── categories.ts           # 12 category definitions + explainers
+│   └── provenance.ts           # Per-algorithm source links + review dates
+├── lib/
+│   ├── comparison.tsx          # Row-building logic per category for comparison table
+│   ├── validation.ts           # Runtime data validation
+│   └── useKeyboardShortcuts.ts # Keyboard shortcut hook
+├── types/
+│   └── crypto.ts               # Strict TypeScript types for all data models
+└── __tests__/
+    ├── setup.ts                # Vitest + testing-library setup
+    └── dataset.test.ts         # Dataset validation + provenance coverage tests
 ```
-
----
-
-## Data Sources
-
-Algorithm data is sourced from published standards and peer-reviewed research:
-
-- NIST FIPS 180-4, 198-1, 202, 203, 204, 205
-- IETF RFCs 2104, 5869, 7693, 7748, 7914, 8032, 8391, 8439, 9106
-- KPQC Competition Round 2 submissions
-- CRYPTREC (Japan), GB/T (China), GOST (Russia), DSTU (Ukraine), KS (Korea)
-- ISO/IEC 10118-3, 18033-3
-- Eurocrypt, CRYPTO, and ACM CCS proceedings
-
-Security estimates reflect known attacks as of 2025. This is a reference tool, not a certification.
 
 ---
 
@@ -129,9 +196,13 @@ Security estimates reflect known attacks as of 2025. This is a reference tool, n
 |---------|------------------|
 | [Quantum Vault KPQC](https://github.com/systemslibrarian/quantum-vault-kpqc) | Symmetric, KEM, Signatures, KDF, MAC, Secret Sharing |
 | [meow-decoder](https://github.com/systemslibrarian/meow-decoder) | Symmetric, Hash, Steganography |
-| [Scripture Journey](https://github.com/systemslibrarian/scripture-journey) | — |
 | [Scripture Cloak](https://github.com/systemslibrarian/scripture-cloak) | ZKP concepts, Hash, PIR concept |
-| **crypto::compare** (this repo) | Reference tool for all 12 categories |
+
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ---
 
