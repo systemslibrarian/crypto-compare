@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { AlgorithmCategory } from "@/types/crypto";
+import type { Algorithm, AlgorithmCategory, AlgorithmSource } from "@/types/crypto";
 
 type DecisionNode = {
   question: string;
@@ -165,9 +165,112 @@ const DECISION_TREE: Record<string, DecisionNode> = {
 
 type DecisionFlowchartProps = {
   onNavigate: (category: AlgorithmCategory, algoId: string) => void;
+  algorithms: Algorithm[];
+  provenance: Record<string, { sources: AlgorithmSource[]; lastReviewed: string }>;
 };
 
-export default function DecisionFlowchart({ onNavigate }: DecisionFlowchartProps) {
+function formatReviewDate(iso: string | undefined): string {
+  if (!iso) return "Not reviewed";
+  const [y, m] = iso.split("-");
+  const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  return `${months[parseInt(m, 10) - 1]} ${y}`;
+}
+
+function buildJustificationReport(
+  result: { algo: string; id: string; reason: string; category: AlgorithmCategory },
+  history: string[],
+  algorithms: Algorithm[],
+  provenance: Record<string, { sources: AlgorithmSource[]; lastReviewed: string }>,
+  tree: Record<string, DecisionNode>,
+): string {
+  const algo = algorithms.find((a) => a.id === result.id);
+  const prov = provenance[result.id];
+  const lines: string[] = [];
+
+  lines.push("# Cryptographic Algorithm Justification Report");
+  lines.push("");
+  lines.push(`**Generated**: ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`);
+  lines.push(`**Tool**: crypto::compare (https://systemslibrarian.github.io/crypto-compare/)`);
+  lines.push("");
+
+  // Decision path
+  lines.push("## Decision Path");
+  lines.push("");
+  let nodeId = "start";
+  for (const nextId of history) {
+    const node = tree[nodeId];
+    if (node) {
+      const chosen = node.options.find((o) => o.next === nextId);
+      lines.push(`- **Q**: ${node.question}`);
+      lines.push(`  - **A**: ${chosen?.label ?? "—"}`);
+    }
+    nodeId = nextId;
+  }
+  // Final node → answer
+  const finalNode = tree[nodeId];
+  if (finalNode) {
+    const chosen = finalNode.options.find((o) => o.answer?.id === result.id);
+    lines.push(`- **Q**: ${finalNode.question}`);
+    lines.push(`  - **A**: ${chosen?.label ?? "—"}`);
+  }
+  lines.push("");
+
+  lines.push("## Recommendation");
+  lines.push("");
+  lines.push(`**Algorithm**: ${result.algo}`);
+  lines.push(`**Category**: ${result.category}`);
+  lines.push(`**Wizard Reasoning**: ${result.reason}`);
+  lines.push("");
+
+  if (algo) {
+    lines.push("## Algorithm Details");
+    lines.push("");
+    lines.push(`| Field | Value |`);
+    lines.push(`| --- | --- |`);
+    lines.push(`| Recommendation Level | ${algo.recommendation} |`);
+    lines.push(`| Rationale | ${algo.recommendationRationale} |`);
+    lines.push(`| Changes When | ${algo.recommendationChangesWhen} |`);
+    lines.push(`| Why Not This? | ${algo.whyNotThis} |`);
+    lines.push(`| Classical Security | ${algo.securityBits} bits |`);
+    lines.push(`| PQ Security | ${algo.pqSecurityBits} bits |`);
+    lines.push(`| Best Known Attack | ${algo.bestAttack} |`);
+    lines.push(`| Performance | ${algo.performance} |`);
+    lines.push(`| Status | ${algo.statusLabel} |`);
+    lines.push("");
+
+    lines.push("## Security Assumptions");
+    lines.push("");
+    lines.push(algo.assumptions);
+    lines.push("");
+
+    lines.push("## Estimation Methodology");
+    lines.push("");
+    lines.push(`- **Classical**: ${algo.estimationMethodology.classicalBasis} — ${algo.estimationMethodology.classicalNote}`);
+    lines.push(`- **Quantum**: ${algo.estimationMethodology.quantumBasis} — ${algo.estimationMethodology.quantumNote}`);
+    lines.push("");
+  }
+
+  if (prov) {
+    lines.push("## Sources");
+    lines.push("");
+    for (const s of prov.sources) {
+      lines.push(`- **${s.label}** (${s.kind}): ${s.note}`);
+      lines.push(`  ${s.url}`);
+    }
+    lines.push("");
+    lines.push(`**Last Reviewed**: ${formatReviewDate(prov.lastReviewed)}`);
+    lines.push("");
+  }
+
+  lines.push("## Disclaimer");
+  lines.push("");
+  lines.push("This report is generated from static data and reflects published cryptanalysis as of the review date above. It is not a substitute for professional cryptographic engineering review. Security estimates are time-bound and may change with new research.");
+  lines.push("");
+
+  return lines.join("\n");
+}
+
+export default function DecisionFlowchart({ onNavigate, algorithms, provenance }: DecisionFlowchartProps) {
   const [currentNode, setCurrentNode] = useState("start");
   const [history, setHistory] = useState<string[]>([]);
   const [result, setResult] = useState<{
@@ -338,21 +441,47 @@ export default function DecisionFlowchart({ onNavigate }: DecisionFlowchartProps
             <div style={{ fontSize: "15px", color: "#d4deea", lineHeight: 1.75, marginBottom: "14px" }}>
               {result.reason}
             </div>
-            <button
-              onClick={() => onNavigate(result.category, result.id)}
-              style={{
-                background: "#1d4ed8",
-                color: "#fff",
-                border: "none",
-                padding: "10px 20px",
-                borderRadius: "6px",
-                fontSize: "14px",
-                fontWeight: 700,
-                cursor: "pointer",
-              }}
-            >
-              View {result.algo} details →
-            </button>
+            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+              <button
+                onClick={() => onNavigate(result.category, result.id)}
+                style={{
+                  background: "#1d4ed8",
+                  color: "#fff",
+                  border: "none",
+                  padding: "10px 20px",
+                  borderRadius: "6px",
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                View {result.algo} details →
+              </button>
+              <button
+                onClick={() => {
+                  const report = buildJustificationReport(result, history, algorithms, provenance, DECISION_TREE);
+                  const blob = new Blob([report], { type: "text/markdown" });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = `justification-${result.id}.md`;
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}
+                style={{
+                  background: "#0e1420",
+                  color: "#d4deea",
+                  border: "1px solid #334155",
+                  padding: "10px 20px",
+                  borderRadius: "6px",
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                ↓ Download Justification Report
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -456,6 +456,12 @@ export default function CryptoCompare() {
                     <div><span style={{ color: "#64748b" }}>Classical:</span> {p.classical}</div>
                     <div><span style={{ color: "#64748b" }}>Post-Quantum:</span> {p.postQuantum}</div>
                     <div><span style={{ color: "#64748b" }}>Method:</span> {p.combinationMethod}</div>
+                    <pre style={{
+                      background: "#0a0e17", border: "1px solid #1e293b", borderRadius: "6px",
+                      padding: "10px 14px", margin: "6px 0", fontSize: "11px", lineHeight: 1.5,
+                      color: "#93c5fd", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+                      overflowX: "auto", whiteSpace: "pre",
+                    }}>{p.diagram}</pre>
                     <div><span style={{ color: "#64748b" }}>Deployed in:</span> {p.deployedIn.join(", ")}</div>
                     <div style={{ marginTop: "4px" }}><span style={{ color: "#64748b" }}>Rationale:</span> {p.rationale}</div>
                     <div><span style={{ color: "#64748b" }}>Limitations:</span> {p.limitations}</div>
@@ -465,7 +471,7 @@ export default function CryptoCompare() {
             </section>
           )}
 
-          <DecisionFlowchart onNavigate={handleFlowchartNavigate} />
+          <DecisionFlowchart onNavigate={handleFlowchartNavigate} algorithms={dataset} provenance={ALGORITHM_PROVENANCE} />
 
           <section aria-label="Important limitations" style={{
             background: "#1a1207", border: "1px solid #78350f", borderRadius: "6px",

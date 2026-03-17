@@ -57,6 +57,8 @@ Select any 2+ algorithms within a category → compare them in a structured tabl
 
 An interactive step-by-step wizard that asks what you need to accomplish and recommends a specific algorithm with reasoning. Covers all 12 categories with 2–3 narrowing questions per path.
 
+**Download Justification Report**: After the wizard recommends an algorithm, click "Download Justification Report" to get a full Markdown report containing: your decision path (questions + answers), recommendation rationale, security assumptions, estimation methodology, "why not this?" tradeoffs, "changes when" conditions, sources with URLs, and a disclaimer. Designed to be defensible in a security review or architecture meeting.
+
 ### Search, Filter, Sort
 
 - **Text search** within any category
@@ -91,7 +93,7 @@ Every algorithm has linked source references (NIST FIPS, IETF RFCs, academic pap
 
 ### Hybrid Cryptography Patterns
 
-A dedicated section covers 6 real-world hybrid constructions that combine classical and post-quantum algorithms:
+A dedicated section covers 8 real-world hybrid constructions that combine classical and post-quantum algorithms, each with an ASCII flow diagram:
 
 | Pattern | Category | Recommendation |
 |---------|----------|----------------|
@@ -101,8 +103,10 @@ A dedicated section covers 6 real-world hybrid constructions that combine classi
 | AES-256-GCM then ChaCha20-Poly1305 | Encryption | 🔬 Research |
 | Ed25519 + SLH-DSA-128s | Hash-and-Sign | 🟡 Acceptable |
 | Hybrid TLS 1.3 Key Exchange | Key Exchange | ✅ Recommended |
+| P-256 + ML-KEM-1024 (High-Security) | Key Exchange | 🟡 Acceptable |
+| ML-DSA-65 + FALCON-512 (Diverse PQ) | Signature | 🔬 Research |
 
-Each pattern includes: classical and PQ components, combination method, real-world deployments, rationale, limitations, and recommendation level.
+Each pattern includes: classical and PQ components, combination method, ASCII flow diagram, real-world deployments, rationale, limitations, and recommendation level.
 
 ### Trust Hardening (Audit-Ready Data)
 
