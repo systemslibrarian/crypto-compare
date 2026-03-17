@@ -7,6 +7,16 @@ This project follows [Keep a Changelog](https://keepachangelog.com/) conventions
 ## [Unreleased]
 
 ### Added
+- **Tier 1 Trust Hardening** — 8-task audit-readiness overhaul:
+  - **5-level recommendation system**: Every algorithm labeled Recommended / Acceptable / Legacy / Research / Avoid with rationale, conditions for change
+  - **"Why not this?"**: Per-algorithm tradeoff explanations (64 algorithms)
+  - **Estimation methodology**: Classical and quantum security basis (exact / conservative / estimated / speculative) with notes per algorithm
+  - **Assumptions field**: Security assumptions documented for all 64 algorithms
+  - **Hybrid cryptography patterns**: 6 real-world hybrid constructions (X25519+ML-KEM-768, ECDSA+ML-DSA-44, Hybrid TLS 1.3, etc.) with combination methods, deployments, rationale, and limitations
+  - **Limitations banner**: Always-visible amber section on live site listing tool constraints
+  - **Hardened exports**: CSV/Markdown now include Justification, Changes When, Why Not This?, Sources (labeled), Last Reviewed (Month Year), Assumptions, Classical Basis, Quantum Basis rows
+  - **Build-time validation**: `scripts/validate-data.ts` validates all algorithms, provenance, and hybrid patterns with Zod schema + cross-field rules
+- **144 tests** (up from 113): Trust hardening fields, hybrid patterns, new export rows, legacy migration guidance validation
 - **Decision flowchart**: Interactive "What should I use?" wizard covering all 12 categories with multi-step narrowing questions and algorithm recommendations
 - **Comparison export**: Download side-by-side comparisons as CSV or Markdown
 - **Keyboard shortcuts**: `/` search, `A` advanced, `← →` categories, `?` methodology, `Esc` close — with hint bar in footer

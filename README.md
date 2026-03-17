@@ -45,7 +45,7 @@ A browser-based reference tool for exploring, comparing, and choosing cryptograp
 | Multi-Party Computation | SPDZ, ABY, Yao's Garbled Circuits, Sharemind |
 | OT / PIR | Base OT, OT Extension, Computational PIR, IT-PIR |
 
-Each algorithm shows: origin country, use cases, classical security bits, post-quantum security bits (with visual meters), best known attack, reduction quality, performance summary, and standardization status.
+Each algorithm shows: origin country, use cases, classical security bits, post-quantum security bits (with visual meters), best known attack, reduction quality, performance summary, standardization status, **recommendation level** (✅ Recommended / 🟡 Acceptable / ⚠️ Legacy / 🔬 Research / ❌ Avoid), **recommendation rationale** (why this level), **when it changes** (conditions that would shift the recommendation), **"Why not this?"** tradeoffs, **assumptions**, and **estimation methodology** (how classical/quantum security levels were derived, with basis and notes).
 
 ### Compare Side by Side
 
@@ -89,6 +89,31 @@ Every category includes a collapsible panel with:
 
 Every algorithm has linked source references (NIST FIPS, IETF RFCs, academic papers) and a last-reviewed date. Select any algorithm to see its sources in a panel below the cards.
 
+### Hybrid Cryptography Patterns
+
+A dedicated section covers 6 real-world hybrid constructions that combine classical and post-quantum algorithms:
+
+| Pattern | Category | Recommendation |
+|---------|----------|----------------|
+| X25519 + ML-KEM-768 | Key Exchange | ✅ Recommended |
+| ECDSA P-256 + ML-DSA-44 | Signature | 🟡 Acceptable |
+| X25519 + Classic McEliece | Key Exchange | 🔬 Research |
+| AES-256-GCM then ChaCha20-Poly1305 | Encryption | 🔬 Research |
+| Ed25519 + SLH-DSA-128s | Hash-and-Sign | 🟡 Acceptable |
+| Hybrid TLS 1.3 Key Exchange | Key Exchange | ✅ Recommended |
+
+Each pattern includes: classical and PQ components, combination method, real-world deployments, rationale, limitations, and recommendation level.
+
+### Trust Hardening (Audit-Ready Data)
+
+Every algorithm includes fields designed for defensibility in security reviews:
+
+- **5-level recommendation**: Recommended default / Acceptable / Legacy / Research / Avoid — with rationale and conditions for change
+- **"Why not this?"**: Explicit tradeoffs and reasons you might choose something else
+- **Estimation methodology**: How each security level was derived (exact, conservative, estimated, or speculative) with notes for both classical and quantum
+- **Assumptions**: Security assumptions underlying each algorithm's claims
+- **Limitations banner**: Always-visible section on the site listing what this tool does and does not cover
+
 ---
 
 ## Limitations
@@ -97,7 +122,7 @@ This tool has real constraints worth knowing:
 
 - **No executable crypto**: You cannot encrypt, hash, sign, or run algorithms here. This is a reference, not a playground.
 - **No formal verification status tracking**: Whether an algorithm has formally verified implementations is not captured.
-- **No hybrid scheme entries**: PQ + classical hybrid combinations (e.g., ML-KEM + X25519 as used in Chrome) aren't modeled as distinct entries.
+- **No implementation-level guidance yet**: Library comparisons (libsodium vs BoringSSL vs PQClean), audit status, and CVE tracking are not included.
 - **No side-channel resistance ratings**: The data tracks whether password hashing functions are side-channel resistant, but not general-purpose primitives.
 - **Static data**: Algorithm data is embedded in TypeScript files. Updates require code changes and redeployment. There's no API or database.
 - **Security estimates are time-bound**: Data reflects published cryptanalysis as of the review date shown in the footer. New attacks can change the picture.
@@ -174,8 +199,9 @@ src/
 │   ├── ErrorBoundary.tsx       # React error boundary with reload
 │   └── ui.tsx                  # Badge, SecurityMeter, formatBytes
 ├── data/
-│   ├── algorithms.ts           # 64 algorithm definitions (12–18 fields each)
+│   ├── algorithms.ts           # 64 algorithm definitions (20+ fields each, audit-hardened)
 │   ├── categories.ts           # 12 category definitions + explainers
+│   ├── hybridPatterns.ts       # 6 hybrid cryptography patterns (classical + PQ)
 │   └── provenance.ts           # Per-algorithm source links + review dates
 ├── lib/
 │   ├── comparison.tsx          # Row-building logic per category for comparison table
@@ -185,7 +211,8 @@ src/
 │   └── crypto.ts               # Strict TypeScript types for all data models
 └── __tests__/
     ├── setup.ts                # Vitest + testing-library setup
-    └── dataset.test.ts         # Dataset validation + provenance coverage tests
+    ├── dataset.test.ts         # Dataset validation + provenance + trust hardening tests
+    └── comprehensive.test.tsx  # 119 behavioral tests: exports, recommendations, filters, URL state
 ```
 
 ---
