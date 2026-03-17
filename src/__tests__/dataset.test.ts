@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { ALGORITHMS } from "@/data/algorithms";
 import { CATEGORIES } from "@/data/categories";
 import { ALGORITHM_PROVENANCE } from "@/data/provenance";
+import { HYBRID_PATTERNS } from "@/data/hybridPatterns";
 import { validateAlgorithms } from "@/lib/validation";
 import type { AlgorithmCategory } from "@/types/crypto";
 
@@ -95,5 +96,88 @@ describe("Provenance", () => {
         expect(["standard", "analysis", "deployment", "benchmark"]).toContain(source.kind);
       }
     }
+  });
+});
+
+describe("Trust Hardening Fields", () => {
+  const ESTIMATION_BASES = ["exact", "conservative", "estimated", "speculative"];
+
+  it("every algorithm has recommendationRationale (≥10 chars)", () => {
+    for (const algo of ALGORITHMS) {
+      expect(algo.recommendationRationale.length, `${algo.id}: rationale too short`).toBeGreaterThanOrEqual(10);
+    }
+  });
+
+  it("every algorithm has recommendationChangesWhen (≥10 chars)", () => {
+    for (const algo of ALGORITHMS) {
+      expect(algo.recommendationChangesWhen.length, `${algo.id}: changesWhen too short`).toBeGreaterThanOrEqual(10);
+    }
+  });
+
+  it("every algorithm has whyNotThis (≥10 chars)", () => {
+    for (const algo of ALGORITHMS) {
+      expect(algo.whyNotThis.length, `${algo.id}: whyNotThis too short`).toBeGreaterThanOrEqual(10);
+    }
+  });
+
+  it("every algorithm has assumptions (≥10 chars)", () => {
+    for (const algo of ALGORITHMS) {
+      expect(algo.assumptions.length, `${algo.id}: assumptions too short`).toBeGreaterThanOrEqual(10);
+    }
+  });
+
+  it("every algorithm has valid estimationMethodology", () => {
+    for (const algo of ALGORITHMS) {
+      const m = algo.estimationMethodology;
+      expect(ESTIMATION_BASES, `${algo.id}: invalid classicalBasis`).toContain(m.classicalBasis);
+      expect(ESTIMATION_BASES, `${algo.id}: invalid quantumBasis`).toContain(m.quantumBasis);
+      expect(m.classicalNote.length, `${algo.id}: classicalNote empty`).toBeGreaterThan(0);
+      expect(m.quantumNote.length, `${algo.id}: quantumNote empty`).toBeGreaterThan(0);
+    }
+  });
+
+  it("legacy/avoid algorithms mention migration in rationale", () => {
+    const legacyAvoid = ALGORITHMS.filter((a) => a.recommendation === "legacy" || a.recommendation === "avoid");
+    expect(legacyAvoid.length).toBeGreaterThan(0);
+    for (const algo of legacyAvoid) {
+      const r = algo.recommendationRationale.toLowerCase();
+      const hasMigration = r.includes("migrat") || r.includes("replac") || r.includes("backward compat") || r.includes("retained only");
+      expect(hasMigration, `${algo.id}: legacy/avoid rationale should mention migration`).toBe(true);
+    }
+  });
+});
+
+describe("Hybrid Patterns", () => {
+  it("has at least 5 patterns", () => {
+    expect(HYBRID_PATTERNS.length).toBeGreaterThanOrEqual(5);
+  });
+
+  it("has unique pattern IDs", () => {
+    const ids = HYBRID_PATTERNS.map((p) => p.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it("every pattern has required fields", () => {
+    for (const p of HYBRID_PATTERNS) {
+      expect(p.name.length).toBeGreaterThan(0);
+      expect(["key-exchange", "signature", "encryption", "hash-and-sign"]).toContain(p.category);
+      expect(p.classical.length).toBeGreaterThan(0);
+      expect(p.postQuantum.length).toBeGreaterThan(0);
+      expect(p.combinationMethod.length).toBeGreaterThan(0);
+      expect(p.rationale.length).toBeGreaterThan(0);
+      expect(p.limitations.length).toBeGreaterThan(0);
+      expect(["recommended", "acceptable", "research"]).toContain(p.recommendation);
+    }
+  });
+
+  it("every pattern has at least one deployment reference", () => {
+    for (const p of HYBRID_PATTERNS) {
+      expect(p.deployedIn.length, `${p.id}: should have at least one deployedIn entry`).toBeGreaterThan(0);
+    }
+  });
+
+  it("has at least one recommended pattern", () => {
+    const recommended = HYBRID_PATTERNS.filter((p) => p.recommendation === "recommended");
+    expect(recommended.length).toBeGreaterThanOrEqual(1);
   });
 });

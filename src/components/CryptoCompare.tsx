@@ -8,6 +8,7 @@ import DecisionFlowchart from "@/components/DecisionFlowchart";
 import { ALGORITHMS } from "@/data/algorithms";
 import { CATEGORIES, CATEGORY_ACCENT } from "@/data/categories";
 import { ALGORITHM_PROVENANCE } from "@/data/provenance";
+import { HYBRID_PATTERNS } from "@/data/hybridPatterns";
 import { buildRows, exportToCSV, exportToMarkdown } from "@/lib/comparison";
 import { useKeyboardShortcuts } from "@/lib/useKeyboardShortcuts";
 import { validateAlgorithms } from "@/lib/validation";
@@ -81,6 +82,7 @@ export default function CryptoCompare() {
   const [country, setCountry] = useState<CountryFilter>("all");
   const [sortBy, setSortBy] = useState<SortOption>("name");
   const [showMethodology, setShowMethodology] = useState(false);
+  const [showHybrid, setShowHybrid] = useState(false);
   const [showDefaults, setShowDefaults] = useState(false);
 
   useEffect(() => {
@@ -429,7 +431,56 @@ export default function CryptoCompare() {
 
           <CategoryExplainer category={cat} expanded={explainerOpen} onToggle={() => setExplainerOpen(!explainerOpen)} />
 
+          <button className="focusRing controlBtn" onClick={() => setShowHybrid(!showHybrid)} aria-expanded={showHybrid} style={{ marginBottom: showHybrid ? "0" : "12px" }}>
+            {showHybrid ? "▾" : "▸"} Hybrid Cryptography Patterns
+          </button>
+          {showHybrid && (
+            <section className="panel" aria-label="Hybrid cryptography patterns" style={{ marginBottom: "18px" }}>
+              <h2 className="panel-heading">Hybrid Cryptography Patterns</h2>
+              <p style={{ color: "#93a4bb", fontSize: "13px", lineHeight: 1.6, margin: "0 0 12px" }}>
+                Hybrid constructions combine classical and post-quantum algorithms so that security holds if either assumption remains valid.
+              </p>
+              {HYBRID_PATTERNS.map((p) => (
+                <div key={p.id} style={{ borderTop: "1px solid #1e293b", padding: "10px 0" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+                    <strong style={{ color: "#e2e8f0", fontSize: "14px" }}>{p.name}</strong>
+                    <span style={{
+                      fontSize: "11px", fontWeight: 700, padding: "2px 6px", borderRadius: "3px",
+                      background: p.recommendation === "recommended" ? "#0d3320" : p.recommendation === "acceptable" ? "#312e2a" : "#1e1633",
+                      color: p.recommendation === "recommended" ? "#34d399" : p.recommendation === "acceptable" ? "#fbbf24" : "#a78bfa",
+                      border: `1px solid ${p.recommendation === "recommended" ? "#065f46" : p.recommendation === "acceptable" ? "#78350f" : "#4c1d95"}`,
+                    }}>{p.recommendation}</span>
+                    <span style={{ fontSize: "11px", color: "#64748b" }}>({p.category})</span>
+                  </div>
+                  <div style={{ fontSize: "13px", color: "#c4d1e3", lineHeight: 1.7 }}>
+                    <div><span style={{ color: "#64748b" }}>Classical:</span> {p.classical}</div>
+                    <div><span style={{ color: "#64748b" }}>Post-Quantum:</span> {p.postQuantum}</div>
+                    <div><span style={{ color: "#64748b" }}>Method:</span> {p.combinationMethod}</div>
+                    <div><span style={{ color: "#64748b" }}>Deployed in:</span> {p.deployedIn.join(", ")}</div>
+                    <div style={{ marginTop: "4px" }}><span style={{ color: "#64748b" }}>Rationale:</span> {p.rationale}</div>
+                    <div><span style={{ color: "#64748b" }}>Limitations:</span> {p.limitations}</div>
+                  </div>
+                </div>
+              ))}
+            </section>
+          )}
+
           <DecisionFlowchart onNavigate={handleFlowchartNavigate} />
+
+          <section aria-label="Important limitations" style={{
+            background: "#1a1207", border: "1px solid #78350f", borderRadius: "6px",
+            padding: "12px 16px", marginBottom: "18px", fontSize: "13px", color: "#fbbf24", lineHeight: 1.7,
+          }}>
+            <strong style={{ display: "block", marginBottom: "6px", fontSize: "14px" }}>⚠ Limitations</strong>
+            <ul style={{ margin: 0, paddingLeft: "18px", color: "#e2c97e" }}>
+              <li><strong>Not a certification.</strong> Validate all guidance against your specific threat model, compliance requirements, and operational constraints.</li>
+              <li><strong>Primitive selection is necessary but not sufficient.</strong> Implementation quality, side-channel resistance, key management, and protocol design matter more.</li>
+              <li><strong>Security estimates reflect current public knowledge</strong> as of March 2026. Cryptanalysis is ongoing; estimates may change as new attacks are discovered.</li>
+              <li><strong>Performance data is approximate.</strong> Values are from published benchmarks, not your hardware. Production decisions require application-specific measurement.</li>
+              <li><strong>Post-quantum security estimates are conservative.</strong> Lattice-based estimates rely on BKZ cost models that may shift as quantum algorithms improve.</li>
+              <li><strong>No &quot;avoid&quot;-rated algorithms are currently listed.</strong> If we add one, it will be clearly labeled with migration guidance.</li>
+            </ul>
+          </section>
 
           {!explainerOpen && <p className="text-body" style={{ fontSize: "15px", margin: "0 0 18px" }}>Select cards to compare algorithms side by side.</p>}
 

@@ -12,11 +12,20 @@ const RECOMMENDATION_LEVELS = ["recommended", "acceptable", "legacy", "research"
 
 const SOURCE_KINDS = ["standard", "analysis", "deployment", "benchmark"] as const;
 
+const ESTIMATION_BASES = ["exact", "conservative", "estimated", "speculative"] as const;
+
 const AlgorithmSourceSchema = z.object({
   label: z.string().min(1),
   url: z.string().url(),
   note: z.string().min(1),
   kind: z.enum(SOURCE_KINDS),
+});
+
+const SecurityEstimationSchema = z.object({
+  classicalBasis: z.enum(ESTIMATION_BASES),
+  quantumBasis: z.enum(ESTIMATION_BASES),
+  classicalNote: z.string().min(1),
+  quantumNote: z.string().min(1),
 });
 
 const AlgorithmBaseSchema = z.object({
@@ -30,12 +39,17 @@ const AlgorithmBaseSchema = z.object({
   status: z.enum(ALGORITHM_STATUSES),
   statusLabel: z.string().min(1),
   recommendation: z.enum(RECOMMENDATION_LEVELS),
+  recommendationRationale: z.string().min(10, "Recommendation rationale must be at least 10 characters"),
+  recommendationChangesWhen: z.string().min(10, "Must describe when recommendation would change"),
+  whyNotThis: z.string().min(10, "Must explain tradeoffs or reasons not to choose this algorithm"),
+  assumptions: z.string().min(10, "Assumptions must be at least 10 characters"),
   securityBits: z.number().int().min(0).max(512),
   pqSecurityBits: z.number().int().min(0).max(512),
   bestAttack: z.string().min(1),
   reductionQuality: z.string().min(1),
   performance: z.string().min(1),
   notes: z.string().min(1),
+  estimationMethodology: SecurityEstimationSchema,
   standardized: z.boolean().optional(),
   nistStandardized: z.boolean().optional(),
   widelyDeployed: z.boolean().optional(),
@@ -170,6 +184,15 @@ function crossFieldRules(algo: Algorithm): string[] {
   // Security bits sanity: securityBits should be > 0 for all algorithms
   if (algo.securityBits <= 0) {
     errors.push(`${algo.id}: securityBits must be positive`);
+  }
+
+  // Legacy/avoid algorithms should mention migration or replacement in rationale
+  if (algo.recommendation === "legacy" || algo.recommendation === "avoid") {
+    const rationale = algo.recommendationRationale.toLowerCase();
+    const hasMigrationGuidance = rationale.includes("migrat") || rationale.includes("replac") || rationale.includes("backward compat") || rationale.includes("retained only");
+    if (!hasMigrationGuidance) {
+      errors.push(`${algo.id}: legacy/avoid recommendation rationale should mention migration path or replacement`);
+    }
   }
 
   return errors;

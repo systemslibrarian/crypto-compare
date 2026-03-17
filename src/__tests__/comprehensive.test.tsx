@@ -269,6 +269,51 @@ describe("Exact Export Content", () => {
       expect(csv).toContain("cycles/byte");
     });
   });
+
+  describe("New Trust Hardening Export Rows", () => {
+    const rows = buildRows("symmetric", true);
+
+    it("CSV contains Changes When row for AES-256-GCM", () => {
+      const csv = exportToCSV(rows, [aes]);
+      expect(csv).toContain("Changes When");
+      expect(csv).toContain(aes.recommendationChangesWhen);
+    });
+
+    it("CSV contains Why Not This? row for AES-256-GCM", () => {
+      const csv = exportToCSV(rows, [aes]);
+      expect(csv).toContain("Why Not This?");
+      expect(csv).toContain(aes.whyNotThis);
+    });
+
+    it("CSV contains Classical Basis row in advanced mode", () => {
+      const csv = exportToCSV(rows, [aes]);
+      expect(csv).toContain("Classical Basis");
+      const basis = aes.estimationMethodology.classicalBasis;
+      const note = aes.estimationMethodology.classicalNote;
+      expect(csv).toContain(`${basis}: ${note}`);
+    });
+
+    it("CSV contains Quantum Basis row in advanced mode", () => {
+      const csv = exportToCSV(rows, [aes]);
+      expect(csv).toContain("Quantum Basis");
+      const basis = aes.estimationMethodology.quantumBasis;
+      const note = aes.estimationMethodology.quantumNote;
+      expect(csv).toContain(`${basis}: ${note}`);
+    });
+
+    it("Markdown contains Changes When and Why Not This?", () => {
+      const md = exportToMarkdown(rows, [aes]);
+      expect(md).toContain("| Changes When |");
+      expect(md).toContain("| Why Not This? |");
+    });
+
+    it("non-advanced mode still includes Changes When and Why Not This?", () => {
+      const basicRows = buildRows("symmetric", false);
+      const csv = exportToCSV(basicRows, [aes]);
+      expect(csv).toContain("Changes When");
+      expect(csv).toContain("Why Not This?");
+    });
+  });
 });
 
 // ─── Recommendation Labels ─────────────────────────────────────

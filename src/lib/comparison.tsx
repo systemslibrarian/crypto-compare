@@ -78,6 +78,8 @@ export function buildRows(category: AlgorithmCategory, advanced: boolean): Compa
   rows.push({ label: "Status", render: (a) => <Badge status={a.status} label={a.statusLabel} />, exportText: (a) => a.statusLabel });
   rows.push({ label: "Recommendation", render: (a) => <RecommendationBadge level={a.recommendation} />, exportText: (a) => recommendationText(a.recommendation) });
   rows.push({ label: "Justification", render: (a) => a.recommendationRationale ?? "—", exportText: (a) => a.recommendationRationale ?? "" });
+  rows.push({ label: "Changes When", render: (a) => a.recommendationChangesWhen, exportText: (a) => a.recommendationChangesWhen });
+  rows.push({ label: "Why Not This?", render: (a) => a.whyNotThis, exportText: (a) => a.whyNotThis });
   rows.push({ label: "Classical", render: (a) => <SecurityMeter bits={a.securityBits} />, exportText: (a) => a.securityBits != null ? `${a.securityBits} bits` : "TBD" });
   rows.push({ label: "PQ", render: (a) => <SecurityMeter bits={a.pqSecurityBits} />, exportText: (a) => a.pqSecurityBits != null ? `${a.pqSecurityBits} bits` : "TBD" });
 
@@ -147,8 +149,18 @@ export function buildRows(category: AlgorithmCategory, advanced: boolean): Compa
   });
   rows.push({
     label: "Assumptions",
-    render: (a) => a.assumptions ?? "—",
-    exportText: (a) => a.assumptions ?? "",
+    render: (a) => a.assumptions,
+    exportText: (a) => a.assumptions,
+  });
+  rows.push({
+    label: "Classical Basis",
+    render: (a) => `${a.estimationMethodology.classicalBasis}: ${a.estimationMethodology.classicalNote}`,
+    exportText: (a) => `${a.estimationMethodology.classicalBasis}: ${a.estimationMethodology.classicalNote}`,
+  });
+  rows.push({
+    label: "Quantum Basis",
+    render: (a) => `${a.estimationMethodology.quantumBasis}: ${a.estimationMethodology.quantumNote}`,
+    exportText: (a) => `${a.estimationMethodology.quantumBasis}: ${a.estimationMethodology.quantumNote}`,
   });
 
   if (advanced) {

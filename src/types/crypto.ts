@@ -32,6 +32,15 @@ export type AlgorithmSource = {
   kind: SourceKind;
 };
 
+export type EstimationBasis = "exact" | "conservative" | "estimated" | "speculative";
+
+export type SecurityEstimation = {
+  classicalBasis: EstimationBasis;
+  quantumBasis: EstimationBasis;
+  classicalNote: string;
+  quantumNote: string;
+};
+
 export type CategoryProject = {
   name: string;
   tech: string;
@@ -70,14 +79,17 @@ export type AlgorithmBase = {
   status: AlgorithmStatus;
   statusLabel: string;
   recommendation: RecommendationLevel;
-  recommendationRationale?: string;
-  assumptions?: string;
+  recommendationRationale: string;
+  recommendationChangesWhen: string;
+  whyNotThis: string;
+  assumptions: string;
   securityBits: number;
   pqSecurityBits: number;
   bestAttack: string;
   reductionQuality: string;
   performance: string;
   notes: string;
+  estimationMethodology: SecurityEstimation;
   standardized?: boolean;
   nistStandardized?: boolean;
   widelyDeployed?: boolean;
