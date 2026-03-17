@@ -1,4 +1,4 @@
-import type { AlgorithmStatus } from "@/types/crypto";
+import type { AlgorithmStatus, RecommendationLevel, SourceKind } from "@/types/crypto";
 
 const STATUS_COLORS: Record<AlgorithmStatus, { bg: string; text: string; border: string }> = {
   standard: { bg: "#0d3320", text: "#34d399", border: "#065f46" },
@@ -72,4 +72,79 @@ export function formatBytes(b: number | null | undefined): string {
     return `${(b / 1024).toFixed(1)} KB`;
   }
   return `${b} B`;
+}
+
+const RECOMMENDATION_CONFIG: Record<RecommendationLevel, { icon: string; label: string; color: string; bg: string; border: string }> = {
+  recommended: { icon: "✅", label: "Recommended default", color: "#34d399", bg: "#0d3320", border: "#065f46" },
+  acceptable: { icon: "⚠️", label: "Acceptable (constrained)", color: "#fbbf24", bg: "#312e2a", border: "#78350f" },
+  legacy: { icon: "🔄", label: "Legacy / compatibility only", color: "#f97316", bg: "#2d1f0e", border: "#7c3a0a" },
+  research: { icon: "🔬", label: "Research / niche", color: "#a78bfa", bg: "#1e1633", border: "#4c1d95" },
+  avoid: { icon: "❌", label: "Do not use in new systems", color: "#f87171", bg: "#2d1215", border: "#7f1d1d" },
+};
+
+export function RecommendationBadge({ level }: { level: RecommendationLevel }) {
+  const cfg = RECOMMENDATION_CONFIG[level];
+  return (
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "5px",
+        background: cfg.bg,
+        color: cfg.color,
+        border: `1px solid ${cfg.border}`,
+        padding: "3px 10px",
+        borderRadius: "4px",
+        fontSize: "12px",
+        fontWeight: 700,
+        letterSpacing: "0.3px",
+        whiteSpace: "nowrap",
+      }}
+      title={cfg.label}
+    >
+      <span aria-hidden="true">{cfg.icon}</span>
+      <span>{cfg.label}</span>
+    </span>
+  );
+}
+
+export function recommendationText(level: RecommendationLevel): string {
+  return RECOMMENDATION_CONFIG[level].label;
+}
+
+const SOURCE_KIND_CONFIG: Record<SourceKind, { icon: string; label: string; color: string; bg: string; border: string }> = {
+  standard: { icon: "📜", label: "Standard", color: "#34d399", bg: "#0d3320", border: "#065f46" },
+  analysis: { icon: "🔍", label: "Analysis", color: "#38bdf8", bg: "#0c2d4a", border: "#0e4f82" },
+  deployment: { icon: "🚀", label: "Deployment", color: "#a78bfa", bg: "#1e1633", border: "#4c1d95" },
+  benchmark: { icon: "⏱️", label: "Benchmark", color: "#fbbf24", bg: "#312e2a", border: "#78350f" },
+};
+
+export function SourceKindBadge({ kind }: { kind: SourceKind }) {
+  const cfg = SOURCE_KIND_CONFIG[kind];
+  return (
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "4px",
+        background: cfg.bg,
+        color: cfg.color,
+        border: `1px solid ${cfg.border}`,
+        padding: "2px 8px",
+        borderRadius: "4px",
+        fontSize: "11px",
+        fontWeight: 700,
+        letterSpacing: "0.3px",
+        whiteSpace: "nowrap",
+      }}
+      title={cfg.label}
+    >
+      <span aria-hidden="true">{cfg.icon}</span>
+      {cfg.label}
+    </span>
+  );
+}
+
+export function sourceKindLabel(kind: SourceKind): string {
+  return SOURCE_KIND_CONFIG[kind].label;
 }

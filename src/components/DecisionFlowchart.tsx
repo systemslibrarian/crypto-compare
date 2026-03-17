@@ -22,6 +22,8 @@ const DECISION_TREE: Record<string, DecisionNode> = {
       { label: "Split a secret among multiple parties", next: "sharing" },
       { label: "Compute on encrypted data", next: "he" },
       { label: "Prove something without revealing it", next: "zkp" },
+      { label: "Jointly compute without revealing inputs", next: "mpc" },
+      { label: "Fetch data without revealing which item", next: "ot_pir" },
     ],
   },
   symmetric: {
@@ -123,6 +125,42 @@ const DECISION_TREE: Record<string, DecisionNode> = {
       { label: "Universal setup (reusable across circuits)", answer: { algo: "PLONK (zk-SNARK)", id: "plonk", reason: "Universal and updatable trusted setup. Foundation for many L2 rollups. NOT PQ-safe.", category: "zkp" } },
     ],
   },
+  mpc: {
+    question: "What's the threat model?",
+    options: [
+      { label: "Malicious adversaries (strongest security)", answer: { algo: "SPDZ", id: "spdz", reason: "Active security against dishonest majority. Preprocessing-based. Used in production privacy-preserving analytics.", category: "mpc" } },
+      { label: "Semi-honest (honest-but-curious parties)", next: "mpc_semi" },
+    ],
+  },
+  mpc_semi: {
+    question: "How many parties?",
+    options: [
+      { label: "Two parties", answer: { algo: "ABY", id: "aby", reason: "Two-party framework mixing Arithmetic, Boolean, and Yao sharing. TU Darmstadt. Efficient for ML inference.", category: "mpc" } },
+      { label: "Three or more parties", answer: { algo: "Sharemind", id: "sharemind", reason: "Three-party additive sharing. Proven in production (Cybernetica). Good for statistics and aggregation.", category: "mpc" } },
+      { label: "General-purpose / any number", answer: { algo: "Garbled Circuits", id: "garbled_circuits", reason: "Yao's protocol (1986). Foundation of two-party computation. Widely implemented. Constant-round.", category: "mpc" } },
+    ],
+  },
+  ot_pir: {
+    question: "What's the interaction model?",
+    options: [
+      { label: "Sender has items, receiver picks one secretly (OT)", next: "ot" },
+      { label: "Server has a database, client queries privately (PIR)", next: "pir" },
+    ],
+  },
+  ot: {
+    question: "How many transfers?",
+    options: [
+      { label: "A few (base protocol)", answer: { algo: "Base OT", id: "ot_base", reason: "Foundation of all OT. Public-key based. ~1ms per transfer. Use when transfer count is small.", category: "ot_pir" } },
+      { label: "Millions (bulk transfer)", answer: { algo: "OT Extension (IKNP)", id: "ot_extension", reason: "Extends a few base OTs into millions using only symmetric crypto. IKNP 2003. Essential for garbled circuits.", category: "ot_pir" } },
+    ],
+  },
+  pir: {
+    question: "What's the server trust model?",
+    options: [
+      { label: "Single server (computational PIR)", answer: { algo: "Computational PIR", id: "cpir", reason: "One server. Privacy based on computational hardness (lattice/LWE). Higher server cost but simpler deployment.", category: "ot_pir" } },
+      { label: "Multiple non-colluding servers", answer: { algo: "Information-Theoretic PIR", id: "it_pir", reason: "Perfect privacy if servers don't collude. Lower per-query cost but requires trust in server separation.", category: "ot_pir" } },
+    ],
+  },
 };
 
 type DecisionFlowchartProps = {
@@ -179,6 +217,8 @@ export default function DecisionFlowchart({ onNavigate }: DecisionFlowchartProps
         background: "linear-gradient(135deg, #0c1222 0%, #0e1628 100%)",
         marginBottom: "18px",
       }}
+      role="region"
+      aria-label="Algorithm decision flowchart"
     >
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px", gap: "10px", flexWrap: "wrap" }}>
         <h2
@@ -196,6 +236,7 @@ export default function DecisionFlowchart({ onNavigate }: DecisionFlowchartProps
           {(history.length > 0 || result) && (
             <button
               onClick={goBack}
+              aria-label={result ? "Back to previous question" : "Back to previous step"}
               style={{
                 background: "#0e1420",
                 color: "#d4deea",
@@ -213,6 +254,7 @@ export default function DecisionFlowchart({ onNavigate }: DecisionFlowchartProps
           {(history.length > 0 || result) && (
             <button
               onClick={reset}
+              aria-label="Start the decision flowchart over from the beginning"
               style={{
                 background: "#0e1420",
                 color: "#d4deea",
@@ -231,14 +273,14 @@ export default function DecisionFlowchart({ onNavigate }: DecisionFlowchartProps
       </div>
 
       {!result && node && (
-        <div>
+        <div role="group" aria-label={`Step ${step}: ${node.question}`}>
           <div style={{ fontSize: "13px", color: "#60a5fa", fontWeight: 700, marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
             Step {step}
           </div>
-          <div style={{ fontSize: "17px", color: "#e2e8f0", fontWeight: 600, marginBottom: "14px", lineHeight: 1.6 }}>
+          <div id="flowchart-question" style={{ fontSize: "17px", color: "#e2e8f0", fontWeight: 600, marginBottom: "14px", lineHeight: 1.6 }}>
             {node.question}
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }} role="list" aria-labelledby="flowchart-question">
             {node.options.map((option) => (
               <button
                 key={option.label}
@@ -270,7 +312,7 @@ export default function DecisionFlowchart({ onNavigate }: DecisionFlowchartProps
       )}
 
       {result && (
-        <div>
+        <div role="alert" aria-live="assertive">
           <div style={{ fontSize: "13px", color: "#34d399", fontWeight: 700, marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
             Recommendation
           </div>

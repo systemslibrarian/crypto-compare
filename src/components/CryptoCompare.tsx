@@ -6,12 +6,13 @@ import CategoryExplainer from "@/components/CategoryExplainer";
 import ComparisonTable from "@/components/ComparisonTable";
 import DecisionFlowchart from "@/components/DecisionFlowchart";
 import { ALGORITHMS } from "@/data/algorithms";
-import { CATEGORIES } from "@/data/categories";
+import { CATEGORIES, CATEGORY_ACCENT } from "@/data/categories";
 import { ALGORITHM_PROVENANCE } from "@/data/provenance";
-import { buildRows } from "@/lib/comparison";
+import { buildRows, exportToCSV, exportToMarkdown } from "@/lib/comparison";
 import { useKeyboardShortcuts } from "@/lib/useKeyboardShortcuts";
 import { validateAlgorithms } from "@/lib/validation";
 import type { Algorithm, AlgorithmCategory } from "@/types/crypto";
+import { SourceKindBadge } from "@/components/ui";
 
 const SORT_OPTIONS = [
   { id: "name", label: "Name" },
@@ -215,28 +216,10 @@ export default function CryptoCompare() {
   const exportComparison = useCallback(
     (format: "csv" | "markdown") => {
       if (selAlgos.length < 2) return;
-      const algoNames = selAlgos.map((a) => a.name);
-
-      const renderToText = (row: (typeof rows)[number], algo: Algorithm): string => {
-        const val = row.render(algo);
-        if (typeof val === "string") return val;
-        if (typeof val === "number") return String(val);
-        return String(val ?? "");
-      };
-
       if (format === "csv") {
-        const csvRows = [["Property", ...algoNames].join(",")];
-        for (const row of rows) {
-          csvRows.push([row.label, ...selAlgos.map((a) => `"${renderToText(row, a).replace(/"/g, '""')}"`)] .join(","));
-        }
-        downloadText(csvRows.join("\n"), "comparison.csv", "text/csv");
+        downloadText(exportToCSV(rows, selAlgos), "comparison.csv", "text/csv");
       } else {
-        const mdRows = [
-          `| Property | ${algoNames.join(" | ")} |`,
-          `| --- | ${algoNames.map(() => "---").join(" | ")} |`,
-          ...rows.map((r) => `| ${r.label} | ${selAlgos.map((a) => renderToText(r, a)).join(" | ")} |`),
-        ];
-        downloadText(mdRows.join("\n"), "comparison.md", "text/markdown");
+        downloadText(exportToMarkdown(rows, selAlgos), "comparison.md", "text/markdown");
       }
     },
     [selAlgos, rows],
@@ -257,12 +240,14 @@ export default function CryptoCompare() {
       <a href="#main-content" className="skipLink">
         Skip to main content
       </a>
+      <div className="headerGradientBar" aria-hidden="true" />
       <div className="pageShell">
         <header style={{ borderBottom: "1px solid #111827", padding: "22px 0" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px" }}>
             <div>
-              <h1 style={{ margin: 0, fontSize: "28px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", letterSpacing: "-0.5px" }}>
-                <span style={{ color: "#3b82f6" }}>crypto</span>::compare
+              <h1 style={{ margin: 0, fontSize: "28px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", letterSpacing: "-0.5px", display: "flex", alignItems: "center", gap: "10px" }}>
+                <span className="brandMark" aria-hidden="true">◈</span>
+                <span><span style={{ color: "#3b82f6" }}>crypto</span>::compare</span>
               </h1>
               <p style={{ margin: "6px 0 0", fontSize: "16px", color: "#c4d1e3" }}>International cryptographic algorithm reference across 12 categories.</p>
             </div>
@@ -291,35 +276,39 @@ export default function CryptoCompare() {
         </header>
 
         <nav aria-label="Cryptography categories" role="tablist" style={{ display: "flex", gap: 0, borderBottom: "1px solid #111827", overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
-          {CATEGORIES.map((c) => (
-            <button
-              key={c.id}
-              onClick={() => switchCat(c.id)}
-              role="tab"
-              aria-selected={cat === c.id}
-              className="focusRing"
-              style={{
-                background: "transparent",
-                color: cat === c.id ? "#f8fafc" : "#b1bfd2",
-                border: "none",
-                borderBottom: cat === c.id ? "2px solid #3b82f6" : "2px solid transparent",
-                padding: "14px 18px",
-                cursor: "pointer",
-                fontSize: "15px",
-                fontWeight: cat === c.id ? 700 : 600,
-                whiteSpace: "nowrap",
-                flexShrink: 0,
-              }}
-            >
-              <span aria-hidden="true" style={{ marginRight: "4px" }}>
-                {c.icon}
-              </span>
-              {c.label}
-            </button>
-          ))}
+          {CATEGORIES.map((c) => {
+            const accent = CATEGORY_ACCENT[c.id];
+            return (
+              <button
+                key={c.id}
+                onClick={() => switchCat(c.id)}
+                role="tab"
+                aria-selected={cat === c.id}
+                className="focusRing categoryTab"
+                style={{
+                  background: "transparent",
+                  color: cat === c.id ? "#f8fafc" : "#b1bfd2",
+                  border: "none",
+                  borderBottom: cat === c.id ? `2px solid ${accent}` : "2px solid transparent",
+                  padding: "14px 18px",
+                  cursor: "pointer",
+                  fontSize: "15px",
+                  fontWeight: cat === c.id ? 700 : 600,
+                  whiteSpace: "nowrap",
+                  flexShrink: 0,
+                  transition: "color 0.15s, border-color 0.15s",
+                }}
+              >
+                <span aria-hidden="true" style={{ marginRight: "4px" }}>
+                  {c.icon}
+                </span>
+                {c.label}
+              </button>
+            );
+          })}
         </nav>
 
-        <main id="main-content" style={{ padding: "20px 0 28px" }}>
+        <main id="main-content" role="tabpanel" aria-label={`${selectedCategoryLabel} algorithms`} style={{ padding: "20px 0 28px" }}>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "12px" }}>
             <input
               ref={searchRef}
@@ -351,19 +340,19 @@ export default function CryptoCompare() {
                 </option>
               ))}
             </select>
-            <button className="focusRing controlBtn" onClick={() => setPqOnly(!pqOnly)} aria-pressed={pqOnly}>
+            <button className="focusRing controlBtn" onClick={() => setPqOnly(!pqOnly)} aria-pressed={pqOnly} aria-label={pqOnly ? "PQ-safe filter active — click to show all" : "Show only PQ-safe algorithms"}>
               PQ-safe only
             </button>
-            <button className="focusRing controlBtn" onClick={() => setStandardOnly(!standardOnly)} aria-pressed={standardOnly}>
+            <button className="focusRing controlBtn" onClick={() => setStandardOnly(!standardOnly)} aria-pressed={standardOnly} aria-label={standardOnly ? "Standards filter active — click to show all" : "Show only standardized algorithms"}>
               Standards only
             </button>
-            <button className="focusRing controlBtn" onClick={() => setNistOnly(!nistOnly)} aria-pressed={nistOnly}>
+            <button className="focusRing controlBtn" onClick={() => setNistOnly(!nistOnly)} aria-pressed={nistOnly} aria-label={nistOnly ? "NIST filter active — click to show all" : "Show only NIST-standardized algorithms"}>
               NIST only
             </button>
-            <button className="focusRing controlBtn" onClick={() => setDeployedOnly(!deployedOnly)} aria-pressed={deployedOnly}>
+            <button className="focusRing controlBtn" onClick={() => setDeployedOnly(!deployedOnly)} aria-pressed={deployedOnly} aria-label={deployedOnly ? "Deployed filter active — click to show all" : "Show only widely deployed algorithms"}>
               Widely deployed
             </button>
-            <button className="focusRing controlBtn" onClick={() => setShowDefaults(!showDefaults)} aria-pressed={showDefaults}>
+            <button className="focusRing controlBtn" onClick={() => setShowDefaults(!showDefaults)} aria-pressed={showDefaults} aria-label={showDefaults ? "Showing recommended defaults — click to show all" : "Show only recommended default algorithms"}>
               Recommended defaults
             </button>
             <button className="focusRing controlBtn" onClick={() => setShowMethodology(!showMethodology)} aria-expanded={showMethodology}>
@@ -373,15 +362,68 @@ export default function CryptoCompare() {
 
           {showMethodology && (
             <section className="panel-inner" style={{ marginBottom: "14px" }}>
-              <h2 className="panel-heading">Methodology</h2>
-              <ul style={{ margin: 0, paddingLeft: "18px", color: "#c4d1e3" }}>
-                <li>Classical security bits approximate attack cost against known public cryptanalysis.</li>
-                <li>PQ security bits indicate expected security under quantum search assumptions where applicable.</li>
-                <li>Best attack fields summarize strongest currently published attack paths, not guarantees.</li>
-                <li>Performance values are approximate and implementation-dependent.</li>
-                <li>Status labels distinguish deployed standards from candidates under active analysis.</li>
-                <li>Implementation quality, side-channel safety, and key management usually matter more than primitive selection alone.</li>
-              </ul>
+              <h2 className="panel-heading">Methodology &amp; Trust Model</h2>
+
+              <div style={{ marginBottom: "16px" }}>
+                <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#60a5fa", margin: "12px 0 6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
+                  Reading Security Values
+                </h3>
+                <ul style={{ margin: 0, paddingLeft: "18px", color: "#c4d1e3", lineHeight: 1.8 }}>
+                  <li><strong>Classical security (C):</strong> Approximate attack cost in bits against known public cryptanalysis. 128-bit = infeasible with classical compute. 256-bit = maximum conventional strength.</li>
+                  <li><strong>Post-quantum security (PQ):</strong> Expected security under quantum algorithms (Grover, Shor). 0 = fully broken by Shor&apos;s. Lattice/hash schemes retain estimated PQ security levels.</li>
+                  <li><strong>Best attack:</strong> Strongest published attack path. These are continuously updated as cryptanalysis evolves — not guarantees, but current best knowledge.</li>
+                  <li><strong>Performance:</strong> Approximate throughput/latency values. Highly implementation- and platform-dependent; treat as relative ordering, not absolute benchmarks.</li>
+                </ul>
+              </div>
+
+              <div style={{ marginBottom: "16px" }}>
+                <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#60a5fa", margin: "0 0 6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
+                  Data Sourcing
+                </h3>
+                <ul style={{ margin: 0, paddingLeft: "18px", color: "#c4d1e3", lineHeight: 1.8 }}>
+                  <li>Primary sources: NIST FIPS/SP publications, IETF RFCs, ISO standards, national cryptographic standards (KPQC, CRYPTREC, GB/T, GOST, DSTU).</li>
+                  <li>Analysis sources: Eurocrypt, CRYPTO, and ASIACRYPT proceedings; ePrint archive; peer-reviewed security proofs and cryptanalysis papers.</li>
+                  <li>Deployment sources: Official implementation documentation, adoption reports, real-world usage telemetry where public.</li>
+                  <li>Each algorithm entry cites its specific sources in the &quot;Source citations&quot; panel — click any algorithm to see them.</li>
+                </ul>
+              </div>
+
+              <div style={{ marginBottom: "16px" }}>
+                <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#60a5fa", margin: "0 0 6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
+                  Recommendation Labels
+                </h3>
+                <ul style={{ margin: 0, paddingLeft: "18px", color: "#c4d1e3", lineHeight: 1.8 }}>
+                  <li><strong>Recommended:</strong> The default choice for new systems. Well-analyzed, widely deployed, strong security margins.</li>
+                  <li><strong>Acceptable:</strong> Safe for use in constrained environments or where a specific property is needed. Not the default pick.</li>
+                  <li><strong>Legacy:</strong> Should only be used for backward compatibility with existing systems. Plan migration.</li>
+                  <li><strong>Research:</strong> Promising but not yet sufficiently analyzed or deployed for production. Watch and evaluate.</li>
+                  <li><strong>Avoid:</strong> Known weaknesses or obsolete. Do not use in new systems.</li>
+                </ul>
+              </div>
+
+              <div style={{ marginBottom: "16px" }}>
+                <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#60a5fa", margin: "0 0 6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
+                  Review Process
+                </h3>
+                <ul style={{ margin: 0, paddingLeft: "18px", color: "#c4d1e3", lineHeight: 1.8 }}>
+                  <li>All entries undergo Zod schema validation at build time, ensuring type correctness, range bounds, and cross-field consistency.</li>
+                  <li>Provenance coverage is verified: every algorithm must have at least one cited source and a review date.</li>
+                  <li>Security estimates are checked for internal consistency (e.g., PQ-safe algorithms must have non-zero PQ security bits).</li>
+                  <li>The dataset undergoes periodic review. Last full review: <strong>March 16, 2026</strong>.</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#60a5fa", margin: "0 0 6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
+                  Limitations
+                </h3>
+                <ul style={{ margin: 0, paddingLeft: "18px", color: "#c4d1e3", lineHeight: 1.8 }}>
+                  <li>This is a reference tool, not a certification. Security guidance should be validated against your specific threat model and compliance requirements.</li>
+                  <li>Implementation quality, side-channel resistance, and key management matter more than primitive selection alone.</li>
+                  <li>Cryptanalysis is an active field. Security estimates reflect current public knowledge and may change as new attacks are discovered.</li>
+                  <li>Performance data is approximate. Production decisions should rely on application-specific benchmarks.</li>
+                </ul>
+              </div>
             </section>
           )}
 
@@ -397,7 +439,11 @@ export default function CryptoCompare() {
             ))}
           </section>
 
-          {filtered.length === 0 && <p style={{ color: "#93a4bb" }}>No algorithms match the current filters.</p>}
+          {filtered.length === 0 && <p role="status" style={{ color: "#93a4bb" }}>No algorithms match the current filters.</p>}
+
+          <div aria-live="polite" aria-atomic="true" className="sr-only" style={{ position: "absolute", width: "1px", height: "1px", overflow: "hidden", clip: "rect(0,0,0,0)" }}>
+            {filtered.length} algorithm{filtered.length !== 1 ? "s" : ""} shown
+          </div>
 
           {selAlgos.length >= 2 && !cmp && (
             <div style={{ textAlign: "center", margin: "10px 0", display: "flex", justifyContent: "center", gap: "10px", flexWrap: "wrap" }}>
@@ -429,7 +475,9 @@ export default function CryptoCompare() {
           {cmp && selAlgos.length >= 2 && (
             <section aria-label="Comparison table" style={{ marginBottom: "16px" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px", gap: "10px", flexWrap: "wrap" }}>
-                <h2 style={{ margin: 0, fontSize: "22px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>Comparison</h2>
+                <h2 style={{ margin: 0, fontSize: "22px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", display: "flex", alignItems: "center", gap: "8px" }}>
+                  <span style={{ color: CATEGORY_ACCENT[cat] }}>▍</span>Comparison
+                </h2>
                 <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                   <button
                     onClick={() => {
@@ -456,24 +504,32 @@ export default function CryptoCompare() {
           )}
 
           {selAlgos.length > 0 && (
-            <section className="panel">
-              <h2 className="panel-heading">Selected algorithm sources</h2>
+            <section className="panel" aria-label="Source citations">
+              <h2 className="panel-heading">Source citations</h2>
               {selAlgos.map((algo) => (
                 <div key={`src-${algo.id}`} style={{ padding: "10px 0", borderTop: "1px solid #111827" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px", flexWrap: "wrap" }}>
                     <strong>{algo.name}</strong>
-                    <span style={{ color: "#93a4bb", fontSize: "13px" }}>
-                      {algo.lastReviewed ? `Last review: ${algo.lastReviewed}` : "Source review pending"}
-                    </span>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      {algo.sources && (
+                        <span style={{ color: "#7dd3fc", fontSize: "13px", fontWeight: 600 }}>
+                          {algo.sources.length} source{algo.sources.length !== 1 ? "s" : ""}
+                        </span>
+                      )}
+                      <span style={{ color: "#93a4bb", fontSize: "13px" }}>
+                        {algo.lastReviewed ? `Reviewed ${algo.lastReviewed}` : "Review pending"}
+                      </span>
+                    </div>
                   </div>
                   {algo.sources && algo.sources.length > 0 ? (
-                    <ul style={{ margin: "8px 0 0", paddingLeft: "18px", color: "#c4d1e3" }}>
+                    <ul style={{ margin: "8px 0 0", paddingLeft: "18px", color: "#c4d1e3", listStyle: "none" }}>
                       {algo.sources.map((source) => (
-                        <li key={`${algo.id}-${source.label}`}>
+                        <li key={`${algo.id}-${source.label}`} style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px", flexWrap: "wrap" }}>
+                          <SourceKindBadge kind={source.kind} />
                           <a href={source.url} target="_blank" rel="noopener noreferrer" style={{ color: "#7dd3fc" }}>
                             {source.label}
-                          </a>{" "}
-                          - {source.note}
+                          </a>
+                          <span style={{ color: "#93a4bb" }}>— {source.note}</span>
                         </li>
                       ))}
                     </ul>
@@ -486,6 +542,7 @@ export default function CryptoCompare() {
           )}
         </main>
 
+        <div className="footerGradientBar" aria-hidden="true" />
         <footer className="site-footer">
           <div
             style={{
@@ -513,6 +570,52 @@ export default function CryptoCompare() {
       </div>
 
       <style jsx>{`
+        .headerGradientBar {
+          height: 3px;
+          background: linear-gradient(
+            90deg,
+            #3b82f6 0%,
+            #06b6d4 12%,
+            #8b5cf6 24%,
+            #f59e0b 36%,
+            #10b981 48%,
+            #ec4899 60%,
+            #ef4444 72%,
+            #6366f1 84%,
+            #3b82f6 100%
+          );
+          background-size: 200% 100%;
+          animation: gradientShift 12s linear infinite;
+        }
+
+        .footerGradientBar {
+          height: 1px;
+          margin: 8px 0 0;
+          background: linear-gradient(
+            90deg,
+            transparent 0%,
+            #3b82f640 20%,
+            #8b5cf640 50%,
+            #06b6d440 80%,
+            transparent 100%
+          );
+        }
+
+        .brandMark {
+          font-size: 24px;
+          color: #3b82f6;
+          filter: drop-shadow(0 0 6px #3b82f640);
+        }
+
+        @keyframes gradientShift {
+          0% { background-position: 0% 0; }
+          100% { background-position: 200% 0; }
+        }
+
+        .categoryTab:hover {
+          color: #f8fafc !important;
+        }
+
         .pageShell {
           max-width: 1280px;
           margin: 0 auto;
@@ -544,6 +647,12 @@ export default function CryptoCompare() {
           padding: 9px 12px;
           font-size: 14px;
           font-weight: 600;
+          transition: border-color 0.15s, background 0.15s;
+        }
+
+        .controlBtn:hover {
+          border-color: #475569;
+          background: #111827;
         }
 
         .controlBtn {
@@ -580,8 +689,14 @@ export default function CryptoCompare() {
 
         @media (prefers-reduced-motion: reduce) {
           .algoCard,
-          .focusRing {
+          .focusRing,
+          .controlBtn,
+          .controlSelect {
             transition: none !important;
+          }
+
+          .headerGradientBar {
+            animation: none;
           }
         }
       `}</style>

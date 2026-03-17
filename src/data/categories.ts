@@ -1,4 +1,4 @@
-import type { CategoryDefinition, CategoryInfoMap } from "@/types/crypto";
+import type { AlgorithmCategory, CategoryDefinition, CategoryInfoMap } from "@/types/crypto";
 
 export const CATEGORIES: CategoryDefinition[] = [
   { id:"symmetric", label:"Symmetric", icon:"🔐" },
@@ -14,6 +14,22 @@ export const CATEGORIES: CategoryDefinition[] = [
   { id:"mpc", label:"MPC", icon:"🤖" },
   { id:"ot_pir", label:"OT / PIR", icon:"👁️" },
 ];
+
+/** Each category has a unique accent color used for card borders, tab highlights, and glows. */
+export const CATEGORY_ACCENT: Record<AlgorithmCategory, string> = {
+  symmetric: "#3b82f6",   // blue
+  kem: "#06b6d4",         // cyan
+  signature: "#8b5cf6",   // violet
+  hash: "#f59e0b",        // amber
+  kdf: "#10b981",         // emerald
+  mac: "#ec4899",         // pink
+  password: "#ef4444",    // red
+  sharing: "#14b8a6",     // teal
+  he: "#a78bfa",          // purple
+  zkp: "#f97316",         // orange
+  mpc: "#6366f1",         // indigo
+  ot_pir: "#84cc16",      // lime
+};
 
 export const CATEGORY_INFO: CategoryInfoMap = {
   symmetric:{

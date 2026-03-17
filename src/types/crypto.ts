@@ -16,6 +16,13 @@ export type AlgorithmCategory =
 
 export type AlgorithmStatus = "standard" | "candidate";
 
+export type RecommendationLevel =
+  | "recommended"
+  | "acceptable"
+  | "legacy"
+  | "research"
+  | "avoid";
+
 export type SourceKind = "standard" | "analysis" | "deployment" | "benchmark";
 
 export type AlgorithmSource = {
@@ -62,6 +69,9 @@ export type AlgorithmBase = {
   useCases: string;
   status: AlgorithmStatus;
   statusLabel: string;
+  recommendation: RecommendationLevel;
+  recommendationRationale?: string;
+  assumptions?: string;
   securityBits: number;
   pqSecurityBits: number;
   bestAttack: string;
@@ -176,4 +186,5 @@ export type Algorithm =
 export type ComparisonRow = {
   label: string;
   render: (algo: Algorithm) => ReactNode;
+  exportText: (algo: Algorithm) => string;
 };

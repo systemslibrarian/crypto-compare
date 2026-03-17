@@ -1,37 +1,179 @@
+import { z } from "zod";
 import type { Algorithm, AlgorithmCategory } from "@/types/crypto";
 
-const REQUIRED_BY_CATEGORY: Record<AlgorithmCategory, string[]> = {
-  symmetric: ["keySize", "nonceSize", "blockSize"],
-  kem: ["publicKeySize", "ciphertextSize", "sharedSecretSize"],
-  signature: ["publicKeySize", "signatureSize"],
-  hash: ["outputSize", "blockSize", "stateSize"],
-  kdf: ["inputType", "outputType"],
-  mac: ["keySize", "tagSize"],
-  password: ["memoryHard", "gpuResistant", "sidechannelResistant"],
-  sharing: ["threshold", "verifiable", "proactive", "informationTheoretic"],
-  he: ["heType", "bootstrappingSpeed"],
-  zkp: ["proofSize", "verificationTime", "trustedSetup", "transparent", "pqSafe"],
-  mpc: ["adversaryModel", "numParties", "preprocessingNeeded"],
-  ot_pir: ["otType", "computationalModel"],
-};
+const ALGORITHM_CATEGORIES = [
+  "symmetric", "kem", "signature", "hash", "kdf", "mac",
+  "password", "sharing", "he", "zkp", "mpc", "ot_pir",
+] as const;
 
-const BASE_REQUIRED: string[] = [
-  "id",
-  "name",
-  "category",
-  "family",
-  "origin",
-  "originDetail",
-  "useCases",
-  "status",
-  "statusLabel",
-  "securityBits",
-  "pqSecurityBits",
-  "bestAttack",
-  "reductionQuality",
-  "performance",
-  "notes",
-];
+const ALGORITHM_STATUSES = ["standard", "candidate"] as const;
+
+const RECOMMENDATION_LEVELS = ["recommended", "acceptable", "legacy", "research", "avoid"] as const;
+
+const SOURCE_KINDS = ["standard", "analysis", "deployment", "benchmark"] as const;
+
+const AlgorithmSourceSchema = z.object({
+  label: z.string().min(1),
+  url: z.string().url(),
+  note: z.string().min(1),
+  kind: z.enum(SOURCE_KINDS),
+});
+
+const AlgorithmBaseSchema = z.object({
+  id: z.string().min(1).regex(/^[a-z0-9_]+$/, "ID must be lowercase alphanumeric with underscores"),
+  name: z.string().min(1),
+  category: z.enum(ALGORITHM_CATEGORIES),
+  family: z.string().min(1),
+  origin: z.string().min(1),
+  originDetail: z.string().min(1),
+  useCases: z.string().min(1),
+  status: z.enum(ALGORITHM_STATUSES),
+  statusLabel: z.string().min(1),
+  recommendation: z.enum(RECOMMENDATION_LEVELS),
+  securityBits: z.number().int().min(0).max(512),
+  pqSecurityBits: z.number().int().min(0).max(512),
+  bestAttack: z.string().min(1),
+  reductionQuality: z.string().min(1),
+  performance: z.string().min(1),
+  notes: z.string().min(1),
+  standardized: z.boolean().optional(),
+  nistStandardized: z.boolean().optional(),
+  widelyDeployed: z.boolean().optional(),
+  countryTag: z.string().optional(),
+  sources: z.array(AlgorithmSourceSchema).optional(),
+  lastReviewed: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Must be YYYY-MM-DD format").optional(),
+});
+
+const SymmetricSchema = AlgorithmBaseSchema.extend({
+  category: z.literal("symmetric"),
+  keySize: z.number().int().min(64).max(512),
+  nonceSize: z.number().int().min(0).max(512),
+  tagSize: z.number().int().min(0).nullable(),
+  blockSize: z.number().int().min(0).nullable(),
+});
+
+const KEMSchema = AlgorithmBaseSchema.extend({
+  category: z.literal("kem"),
+  publicKeySize: z.number().int().min(0).nullable(),
+  ciphertextSize: z.number().int().min(0).nullable(),
+  sharedSecretSize: z.number().int().min(0),
+});
+
+const SignatureSchema = AlgorithmBaseSchema.extend({
+  category: z.literal("signature"),
+  publicKeySize: z.number().int().min(0).nullable(),
+  signatureSize: z.number().int().min(0).nullable(),
+});
+
+const HashSchema = AlgorithmBaseSchema.extend({
+  category: z.literal("hash"),
+  outputSize: z.number().int().min(0),
+  blockSize: z.number().int().min(0),
+  stateSize: z.number().int().min(0),
+});
+
+const KDFSchema = AlgorithmBaseSchema.extend({
+  category: z.literal("kdf"),
+  inputType: z.string().min(1),
+  outputType: z.string().min(1),
+});
+
+const MACSchema = AlgorithmBaseSchema.extend({
+  category: z.literal("mac"),
+  keySize: z.number().int().min(0),
+  tagSize: z.number().int().min(0),
+});
+
+const PasswordSchema = AlgorithmBaseSchema.extend({
+  category: z.literal("password"),
+  memoryHard: z.boolean(),
+  gpuResistant: z.boolean(),
+  sidechannelResistant: z.boolean(),
+});
+
+const SharingSchema = AlgorithmBaseSchema.extend({
+  category: z.literal("sharing"),
+  threshold: z.boolean(),
+  verifiable: z.boolean(),
+  proactive: z.boolean(),
+  informationTheoretic: z.boolean(),
+});
+
+const HESchema = AlgorithmBaseSchema.extend({
+  category: z.literal("he"),
+  heType: z.string().min(1),
+  bootstrappingSpeed: z.string().min(1),
+});
+
+const ZKPSchema = AlgorithmBaseSchema.extend({
+  category: z.literal("zkp"),
+  proofSize: z.string().min(1),
+  verificationTime: z.string().min(1),
+  trustedSetup: z.boolean(),
+  transparent: z.boolean(),
+  pqSafe: z.boolean(),
+});
+
+const MPCSchema = AlgorithmBaseSchema.extend({
+  category: z.literal("mpc"),
+  adversaryModel: z.string().min(1),
+  numParties: z.string().min(1),
+  preprocessingNeeded: z.boolean(),
+});
+
+const OTPIRSchema = AlgorithmBaseSchema.extend({
+  category: z.literal("ot_pir"),
+  otType: z.string().min(1),
+  computationalModel: z.string().min(1),
+});
+
+const AlgorithmSchema = z.discriminatedUnion("category", [
+  SymmetricSchema,
+  KEMSchema,
+  SignatureSchema,
+  HashSchema,
+  KDFSchema,
+  MACSchema,
+  PasswordSchema,
+  SharingSchema,
+  HESchema,
+  ZKPSchema,
+  MPCSchema,
+  OTPIRSchema,
+]);
+
+function crossFieldRules(algo: Algorithm): string[] {
+  const errors: string[] = [];
+
+  // Non-PQ algorithms (securityBits based on classical only) should not claim PQ security > securityBits
+  // unless they are genuinely PQ-safe (lattice, code-based, hash-based, IT-secure)
+  const PQ_SAFE_FAMILIES = [
+    "lattice", "code-based", "hash", "sponge", "keccak", "chacha", "aes",
+    "oblivious transfer", "private information retrieval", "additive",
+    "shamir", "secret sharing", "argon2", "bcrypt", "scrypt",
+  ];
+  const familyLower = algo.family.toLowerCase();
+  const isPQSafeFamily = PQ_SAFE_FAMILIES.some((f) => familyLower.includes(f));
+
+  if (!isPQSafeFamily && algo.pqSecurityBits > algo.securityBits) {
+    errors.push(`${algo.id}: PQ security (${algo.pqSecurityBits}) exceeds classical security (${algo.securityBits}) for non-PQ family "${algo.family}"`);
+  }
+
+  // Signature algorithms require a signatureSize (or explicit null for pending specs)
+  if (algo.category === "signature") {
+    const sig = algo as { signatureSize: number | null };
+    if (sig.signatureSize === undefined) {
+      errors.push(`${algo.id}: signature algorithm must define signatureSize (use null for pending)`);
+    }
+  }
+
+  // Security bits sanity: securityBits should be > 0 for all algorithms
+  if (algo.securityBits <= 0) {
+    errors.push(`${algo.id}: securityBits must be positive`);
+  }
+
+  return errors;
+}
 
 export function validateAlgorithms(algorithms: Algorithm[]): string[] {
   const errors: string[] = [];
@@ -43,26 +185,21 @@ export function validateAlgorithms(algorithms: Algorithm[]): string[] {
     }
     ids.add(algo.id);
 
-    for (const key of BASE_REQUIRED) {
-      const value = (algo as Record<string, unknown>)[key];
-      if (value === undefined || value === null || value === "") {
-        errors.push(`${algo.id}: missing required field '${String(key)}'`);
+    const result = AlgorithmSchema.safeParse(algo);
+    if (!result.success) {
+      for (const issue of result.error.issues) {
+        errors.push(`${algo.id}: ${issue.path.join(".")}: ${issue.message}`);
       }
     }
 
-    const categoryRequired = REQUIRED_BY_CATEGORY[algo.category];
-    for (const key of categoryRequired) {
-      if (!(key in algo)) {
-        errors.push(`${algo.id}: missing category field '${String(key)}' for ${algo.category}`);
-      }
-    }
+    errors.push(...crossFieldRules(algo));
+  }
 
-    if (algo.securityBits < 0 || algo.pqSecurityBits < 0) {
-      errors.push(`${algo.id}: security bits must be non-negative`);
-    }
-
-    if (algo.lastReviewed && Number.isNaN(Date.parse(algo.lastReviewed))) {
-      errors.push(`${algo.id}: invalid lastReviewed date format`);
+  // Verify all categories are covered
+  const coveredCategories = new Set(algorithms.map((a) => a.category));
+  for (const cat of ALGORITHM_CATEGORIES) {
+    if (!coveredCategories.has(cat as AlgorithmCategory)) {
+      errors.push(`Missing algorithms for category: ${cat}`);
     }
   }
 

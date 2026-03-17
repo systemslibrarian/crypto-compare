@@ -206,9 +206,6 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ---
 
-## Author
-
-**Paul** — Library systems engineer, Tallahassee, Florida. Building at the intersection of cryptography, faith, and public service.
 
 [GitHub: systemslibrarian](https://github.com/systemslibrarian)
 

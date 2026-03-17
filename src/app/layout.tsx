@@ -18,18 +18,30 @@ export const metadata: Metadata = {
   title: "crypto::compare — Cryptographic Algorithm Reference",
   description:
     "Interactive reference tool for 64 cryptographic algorithms across 12 categories. Compare security levels, key sizes, performance, and attack complexity.",
-  keywords: ["cryptography", "post-quantum", "NIST", "ML-KEM", "ML-DSA", "AES", "ChaCha20", "SHA-3", "Argon2", "algorithm comparison", "PQC"],
+  keywords: ["cryptography", "post-quantum", "NIST", "ML-KEM", "ML-DSA", "AES", "ChaCha20", "SHA-3", "Argon2", "algorithm comparison", "PQC", "lattice", "hash-based", "KEM", "digital signatures"],
   robots: { index: true, follow: true },
+  authors: [{ name: "crypto::compare contributors" }],
+  creator: "crypto::compare",
+  metadataBase: new URL("https://systemslibrarian.github.io"),
+  alternates: { canonical: "/crypto-compare" },
   openGraph: {
     title: "crypto::compare — Cryptographic Algorithm Reference",
     description: "Interactive reference for 64 cryptographic algorithms — 12 categories, post-quantum, international standards. Compare side by side.",
     type: "website",
     siteName: "crypto::compare",
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
     title: "crypto::compare",
     description: "Interactive cryptographic algorithm reference — 12 categories, 64 algorithms, PQ-safe recommendations.",
+  },
+  icons: {
+    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◈</text></svg>",
+  },
+  other: {
+    "theme-color": "#070b12",
+    "color-scheme": "dark",
   },
 };
 
@@ -55,6 +67,18 @@ export default function RootLayout({
               operatingSystem: "Any",
               browserRequirements: "Requires JavaScript",
               keywords: "cryptography, post-quantum, NIST, ML-KEM, ML-DSA, AES, algorithm comparison",
+              inLanguage: "en",
+              isAccessibleForFree: true,
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "USD",
+              },
+              about: {
+                "@type": "Thing",
+                name: "Cryptographic Algorithms",
+                description: "Symmetric encryption, key encapsulation, digital signatures, hash functions, and more.",
+              },
             }),
           }}
         />
