@@ -269,22 +269,13 @@ export default function CryptoCompare() {
           </div>
         </header>
 
-        {/* ── HERO: crypto-structure-comparison ── */}
+        {/* ── HERO: encryption-performance-comparison ── */}
         <section className="visual-section visual-section--hero">
+          <h2 className="visual-section__heading">Encryption Performance Comparison</h2>
           <img
-            src="/images/crypto-structure-comparison.png"
-            alt="Overview of cryptographic algorithm categories: symmetric, asymmetric, hash functions, and post-quantum"
+            src="/images/encryption-performance-comparison.png"
+            alt="Performance comparison of symmetric and asymmetric encryption algorithms across speed, key size, and security tradeoffs"
             className="visual-img visual-img--hero"
-          />
-        </section>
-
-        {/* ── PERFORMANCE CHART ── */}
-        <section className="visual-section">
-          <h2 className="visual-section__heading">Modern Cryptography Comparison</h2>
-          <img
-            src="/images/crypto-performance-chart.png"
-            alt="Performance comparison chart showing speed, key size, and security tradeoffs across cryptographic algorithm families"
-            className="visual-img visual-img--chart"
           />
         </section>
 
@@ -643,39 +634,6 @@ export default function CryptoCompare() {
             </section>
           )}
         </main>
-
-        {/* ── HOW ENCRYPTION WORKS ── */}
-        <section className="visual-section">
-          <h2 className="visual-section__heading">How Encryption Actually Works</h2>
-          <p className="visual-section__desc">Modern systems combine symmetric and asymmetric encryption to achieve both speed and security.</p>
-          <img
-            src="/images/hybrid-encryption.png"
-            alt="Diagram showing hybrid encryption: asymmetric key exchange combined with symmetric bulk encryption"
-            className="visual-img"
-          />
-        </section>
-
-        {/* ── BLOCK VS STREAM ── */}
-        <section className="visual-section">
-          <h2 className="visual-section__heading">Block vs Stream Ciphers</h2>
-          <p className="visual-section__desc">Different encryption models process data in distinct ways.</p>
-          <img
-            src="/images/block-vs-stream.png"
-            alt="Side-by-side comparison of block cipher and stream cipher modes of operation"
-            className="visual-img"
-          />
-        </section>
-
-        {/* ── HASHING ── */}
-        <section className="visual-section">
-          <h2 className="visual-section__heading">Why Hashing Matters</h2>
-          <p className="visual-section__desc">Hash functions are critical for integrity, authentication, and modern systems like blockchain.</p>
-          <img
-            src="/images/hash-use-cases.png"
-            alt="Real-world use cases for cryptographic hash functions including digital signatures, password storage, and blockchain"
-            className="visual-img"
-          />
-        </section>
 
         {/* ── TIMELINE ── */}
         <section className="visual-section visual-section--timeline">
