@@ -8,6 +8,8 @@ import ComparisonTable from "@/components/ComparisonTable";
 import { ALGORITHMS } from "@/data/algorithms";
 import { CATEGORIES, CATEGORY_ACCENT } from "@/data/categories";
 import { ALGORITHM_PROVENANCE } from "@/data/provenance";
+
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 import { HYBRID_PATTERNS } from "@/data/hybridPatterns";
 import { buildRows, exportToCSV, exportToMarkdown } from "@/lib/comparison";
 import { useKeyboardShortcuts } from "@/lib/useKeyboardShortcuts";
@@ -273,7 +275,7 @@ export default function CryptoCompare() {
         <section className="visual-section visual-section--hero">
           <h2 className="visual-section__heading">Encryption Performance Comparison</h2>
           <img
-            src="/images/encryption-performance-comparison.png"
+            src={`${BASE_PATH}/images/encryption-performance-comparison.png`}
             alt="Performance comparison of symmetric and asymmetric encryption algorithms across speed, key size, and security tradeoffs"
             className="visual-img visual-img--hero"
           />
@@ -640,7 +642,7 @@ export default function CryptoCompare() {
           <h2 className="visual-section__heading">Hashing vs Encryption vs Encoding</h2>
           <p className="visual-section__desc">Three concepts that are frequently confused — each serves a distinct purpose in modern systems.</p>
           <img
-            src="/images/hashing-vs-encryption-vs-encoding.png"
+            src={`${BASE_PATH}/images/hashing-vs-encryption-vs-encoding.png`}
             alt="Side-by-side comparison of hashing, encryption, and encoding: their properties, reversibility, and use cases"
             className="visual-img"
           />
@@ -651,7 +653,7 @@ export default function CryptoCompare() {
           <h2 className="visual-section__heading">How TLS & HTTPS Work</h2>
           <p className="visual-section__desc">Cryptography in action — how the algorithms on this site combine to secure every HTTPS connection.</p>
           <img
-            src="/images/tls-https-data-flow.png"
+            src={`${BASE_PATH}/images/tls-https-data-flow.png`}
             alt="Diagram of TLS handshake and HTTPS data flow showing key exchange, authentication, and symmetric encryption in sequence"
             className="visual-img"
           />
@@ -661,7 +663,7 @@ export default function CryptoCompare() {
         <section className="visual-section visual-section--timeline">
           <h2 className="visual-section__heading">Evolution of Cryptography</h2>
           <img
-            src="/images/crypto-timeline.png"
+            src={`${BASE_PATH}/images/crypto-timeline.png`}
             alt="Timeline of major cryptographic milestones from classical ciphers to post-quantum algorithms"
             className="visual-img visual-img--timeline"
           />
