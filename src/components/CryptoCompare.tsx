@@ -1,10 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import AlgoCard from "@/components/AlgoCard";
 import CategoryExplainer from "@/components/CategoryExplainer";
 import ComparisonTable from "@/components/ComparisonTable";
-import DecisionFlowchart from "@/components/DecisionFlowchart";
 import { ALGORITHMS } from "@/data/algorithms";
 import { CATEGORIES, CATEGORY_ACCENT } from "@/data/categories";
 import { ALGORITHM_PROVENANCE } from "@/data/provenance";
@@ -206,14 +206,6 @@ export default function CryptoCompare() {
     [cat],
   );
   useKeyboardShortcuts(kbHandlers);
-
-  const handleFlowchartNavigate = useCallback(
-    (category: AlgorithmCategory, algoId: string) => {
-      switchCat(category);
-      setSel([algoId]);
-    },
-    [],
-  );
 
   const exportComparison = useCallback(
     (format: "csv" | "markdown") => {
@@ -490,7 +482,56 @@ export default function CryptoCompare() {
             </section>
           )}
 
-          <DecisionFlowchart onNavigate={handleFlowchartNavigate} algorithms={dataset} provenance={ALGORITHM_PROVENANCE} />
+          {/* ── Algorithm Advisor CTA ── */}
+          <div style={{ margin: "0 0 18px" }}>
+            <Link
+              href="/advisor"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "16px",
+                background: "linear-gradient(135deg, #0c1222 0%, #0e1628 100%)",
+                border: "1px solid #1e293b",
+                borderRadius: "10px",
+                padding: "20px 24px",
+                textDecoration: "none",
+                flexWrap: "wrap",
+              }}
+            >
+              <div>
+                <div
+                  style={{
+                    fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+                    fontSize: "19px",
+                    fontWeight: 700,
+                    color: "#f8fafc",
+                    marginBottom: "6px",
+                  }}
+                >
+                  What should I use?
+                </div>
+                <div style={{ fontSize: "14px", color: "#93a4bb", lineHeight: 1.5 }}>
+                  Answer a few questions to get a specific algorithm recommendation with a downloadable justification report.
+                </div>
+              </div>
+              <span
+                style={{
+                  background: "#1d4ed8",
+                  color: "#fff",
+                  borderRadius: "7px",
+                  padding: "10px 20px",
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+                  whiteSpace: "nowrap",
+                  flexShrink: 0,
+                }}
+              >
+                Open advisor →
+              </span>
+            </Link>
+          </div>
 
           <section aria-label="Important limitations" style={{
             background: "#1a1207", border: "1px solid #78350f", borderRadius: "6px",
