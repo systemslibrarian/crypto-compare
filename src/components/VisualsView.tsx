@@ -121,46 +121,34 @@ export default function VisualsView() {
             <section
               key={v.heading}
               style={{
-                marginBottom: "72px",
+                marginBottom: "48px",
                 textAlign: "center",
               }}
             >
-              <h2
-                style={{
-                  margin: "0 0 10px",
-                  fontSize: "21px",
-                  fontWeight: 700,
-                  fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-                  color: "#f8fafc",
-                  letterSpacing: "-0.3px",
-                }}
-              >
-                {v.heading}
-              </h2>
-              <p
-                style={{
-                  margin: "0 auto 24px",
-                  maxWidth: "640px",
-                  fontSize: "15px",
-                  color: "#93a4bb",
-                  lineHeight: 1.7,
-                }}
-              >
-                {v.desc}
-              </p>
               <img
                 src={v.src}
                 alt={v.alt}
                 style={{
                   display: "block",
                   width: "100%",
-                  maxWidth: "960px",
+                  maxWidth: "720px",
                   height: "auto",
                   margin: "0 auto",
                   borderRadius: "10px",
                   boxShadow: "0 4px 32px rgba(0,0,0,0.55), 0 1px 6px rgba(0,0,0,0.35)",
                 }}
               />
+              <p
+                style={{
+                  margin: "10px auto 0",
+                  maxWidth: "560px",
+                  fontSize: "13px",
+                  color: "#64748b",
+                  lineHeight: 1.6,
+                }}
+              >
+                {v.desc}
+              </p>
             </section>
           ))}
         </main>
