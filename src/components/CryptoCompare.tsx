@@ -533,21 +533,6 @@ export default function CryptoCompare() {
             </Link>
           </div>
 
-          <section aria-label="Important limitations" style={{
-            background: "#1a1207", border: "1px solid #78350f", borderRadius: "6px",
-            padding: "12px 16px", marginBottom: "18px", fontSize: "13px", color: "#fbbf24", lineHeight: 1.7,
-          }}>
-            <strong style={{ display: "block", marginBottom: "6px", fontSize: "14px" }}>⚠ Limitations</strong>
-            <ul style={{ margin: 0, paddingLeft: "18px", color: "#e2c97e" }}>
-              <li><strong>Not a certification.</strong> Validate all guidance against your specific threat model, compliance requirements, and operational constraints.</li>
-              <li><strong>Primitive selection is necessary but not sufficient.</strong> Implementation quality, side-channel resistance, key management, and protocol design matter more.</li>
-              <li><strong>Security estimates reflect current public knowledge</strong> as of March 2026. Cryptanalysis is ongoing; estimates may change as new attacks are discovered.</li>
-              <li><strong>Performance data is approximate.</strong> Values are from published benchmarks, not your hardware. Production decisions require application-specific measurement.</li>
-              <li><strong>Post-quantum security estimates are conservative.</strong> Lattice-based estimates rely on BKZ cost models that may shift as quantum algorithms improve.</li>
-              <li><strong>No &quot;avoid&quot;-rated algorithms are currently listed.</strong> If we add one, it will be clearly labeled with migration guidance.</li>
-            </ul>
-          </section>
-
           {!explainerOpen && <p className="text-body" style={{ fontSize: "15px", margin: "0 0 18px" }}>Select cards to compare algorithms side by side.</p>}
 
           <section aria-label={`${selectedCategoryLabel} algorithms`} className="algoGrid" style={{ marginBottom: "18px" }}>
