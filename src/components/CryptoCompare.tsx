@@ -277,6 +277,25 @@ export default function CryptoCompare() {
           </div>
         </header>
 
+        {/* ── HERO: crypto-structure-comparison ── */}
+        <section className="visual-section visual-section--hero">
+          <img
+            src="/images/crypto-structure-comparison.png"
+            alt="Overview of cryptographic algorithm categories: symmetric, asymmetric, hash functions, and post-quantum"
+            className="visual-img visual-img--hero"
+          />
+        </section>
+
+        {/* ── PERFORMANCE CHART ── */}
+        <section className="visual-section">
+          <h2 className="visual-section__heading">Modern Cryptography Comparison</h2>
+          <img
+            src="/images/crypto-performance-chart.png"
+            alt="Performance comparison chart showing speed, key size, and security tradeoffs across cryptographic algorithm families"
+            className="visual-img visual-img--chart"
+          />
+        </section>
+
         <nav aria-label="Cryptography categories" role="tablist" style={{ display: "flex", gap: 0, borderBottom: "1px solid #111827", overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
           {CATEGORIES.map((c) => {
             const accent = CATEGORY_ACCENT[c.id];
@@ -599,6 +618,49 @@ export default function CryptoCompare() {
           )}
         </main>
 
+        {/* ── HOW ENCRYPTION WORKS ── */}
+        <section className="visual-section">
+          <h2 className="visual-section__heading">How Encryption Actually Works</h2>
+          <p className="visual-section__desc">Modern systems combine symmetric and asymmetric encryption to achieve both speed and security.</p>
+          <img
+            src="/images/hybrid-encryption.png"
+            alt="Diagram showing hybrid encryption: asymmetric key exchange combined with symmetric bulk encryption"
+            className="visual-img"
+          />
+        </section>
+
+        {/* ── BLOCK VS STREAM ── */}
+        <section className="visual-section">
+          <h2 className="visual-section__heading">Block vs Stream Ciphers</h2>
+          <p className="visual-section__desc">Different encryption models process data in distinct ways.</p>
+          <img
+            src="/images/block-vs-stream.png"
+            alt="Side-by-side comparison of block cipher and stream cipher modes of operation"
+            className="visual-img"
+          />
+        </section>
+
+        {/* ── HASHING ── */}
+        <section className="visual-section">
+          <h2 className="visual-section__heading">Why Hashing Matters</h2>
+          <p className="visual-section__desc">Hash functions are critical for integrity, authentication, and modern systems like blockchain.</p>
+          <img
+            src="/images/hash-use-cases.png"
+            alt="Real-world use cases for cryptographic hash functions including digital signatures, password storage, and blockchain"
+            className="visual-img"
+          />
+        </section>
+
+        {/* ── TIMELINE ── */}
+        <section className="visual-section visual-section--timeline">
+          <h2 className="visual-section__heading">Evolution of Cryptography</h2>
+          <img
+            src="/images/crypto-timeline.png"
+            alt="Timeline of major cryptographic milestones from classical ciphers to post-quantum algorithms"
+            className="visual-img visual-img--timeline"
+          />
+        </section>
+
         <div className="footerGradientBar" aria-hidden="true" />
         <footer className="site-footer">
           <div
@@ -754,6 +816,82 @@ export default function CryptoCompare() {
 
           .headerGradientBar {
             animation: none;
+          }
+        }
+
+        /* ─── Visual infographic sections ─── */
+        .visual-section {
+          padding: 56px 0;
+          text-align: center;
+          border-top: 1px solid #111827;
+        }
+
+        .visual-section--hero {
+          padding: 40px 0 0;
+          border-top: none;
+        }
+
+        .visual-section--timeline {
+          padding-bottom: 64px;
+        }
+
+        .visual-section__heading {
+          margin: 0 0 12px;
+          font-size: 22px;
+          font-weight: 700;
+          color: #e2e8f0;
+          font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+          letter-spacing: -0.3px;
+        }
+
+        .visual-section__desc {
+          max-width: 680px;
+          margin: 0 auto 28px;
+          font-size: 15px;
+          color: #93a4bb;
+          line-height: 1.7;
+        }
+
+        .visual-img {
+          display: block;
+          width: 100%;
+          max-width: 900px;
+          height: auto;
+          margin: 0 auto;
+          border-radius: 10px;
+          box-shadow: 0 4px 32px rgba(0, 0, 0, 0.55), 0 1px 6px rgba(0, 0, 0, 0.35);
+        }
+
+        .visual-img--hero {
+          max-width: 1100px;
+        }
+
+        .visual-img--chart {
+          max-width: 960px;
+        }
+
+        .visual-img--timeline {
+          max-width: 1100px;
+        }
+
+        @media (max-width: 900px) {
+          .visual-section {
+            padding: 36px 0;
+          }
+
+          .visual-section--hero {
+            padding: 28px 0 0;
+          }
+
+          .visual-section__heading {
+            font-size: 19px;
+          }
+
+          .visual-img,
+          .visual-img--hero,
+          .visual-img--chart,
+          .visual-img--timeline {
+            border-radius: 7px;
           }
         }
       `}</style>
