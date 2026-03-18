@@ -249,6 +249,22 @@ export default function CryptoCompare() {
             </div>
             <div style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
               <span style={{ fontSize: "14px", color: "#c4d1e3", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>C = Classical, PQ = Post-Quantum</span>
+              <Link
+                href="/visuals"
+                style={{
+                  background: "#0e1420",
+                  color: "#d4deea",
+                  border: "1px solid #334155",
+                  borderRadius: "6px",
+                  padding: "10px 16px",
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+                  textDecoration: "none",
+                }}
+              >
+                Visual Guide
+              </Link>
               <button
                 onClick={() => setAdv(!adv)}
                 aria-pressed={adv}
@@ -270,16 +286,6 @@ export default function CryptoCompare() {
             </div>
           </div>
         </header>
-
-        {/* ── HERO: encryption-performance-comparison ── */}
-        <section className="visual-section visual-section--hero">
-          <h2 className="visual-section__heading">Encryption Performance Comparison</h2>
-          <img
-            src={`${BASE_PATH}/images/encryption-performance-comparison.png`}
-            alt="Performance comparison of symmetric and asymmetric encryption algorithms across speed, key size, and security tradeoffs"
-            className="visual-img visual-img--hero"
-          />
-        </section>
 
         <nav aria-label="Cryptography categories" role="tablist" style={{ display: "flex", gap: 0, borderBottom: "1px solid #111827", overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
           {CATEGORIES.map((c) => {
@@ -637,38 +643,6 @@ export default function CryptoCompare() {
           )}
         </main>
 
-        {/* ── HASHING VS ENCRYPTION VS ENCODING ── */}
-        <section className="visual-section">
-          <h2 className="visual-section__heading">Hashing vs Encryption vs Encoding</h2>
-          <p className="visual-section__desc">Three concepts that are frequently confused — each serves a distinct purpose in modern systems.</p>
-          <img
-            src={`${BASE_PATH}/images/hashing-vs-encryption-vs-encoding.png`}
-            alt="Side-by-side comparison of hashing, encryption, and encoding: their properties, reversibility, and use cases"
-            className="visual-img"
-          />
-        </section>
-
-        {/* ── TLS / HTTPS DATA FLOW ── */}
-        <section className="visual-section">
-          <h2 className="visual-section__heading">How TLS & HTTPS Work</h2>
-          <p className="visual-section__desc">Cryptography in action — how the algorithms on this site combine to secure every HTTPS connection.</p>
-          <img
-            src={`${BASE_PATH}/images/tls-https-data-flow.png`}
-            alt="Diagram of TLS handshake and HTTPS data flow showing key exchange, authentication, and symmetric encryption in sequence"
-            className="visual-img"
-          />
-        </section>
-
-        {/* ── TIMELINE ── */}
-        <section className="visual-section visual-section--timeline">
-          <h2 className="visual-section__heading">Evolution of Cryptography</h2>
-          <img
-            src={`${BASE_PATH}/images/crypto-timeline.png`}
-            alt="Timeline of major cryptographic milestones from classical ciphers to post-quantum algorithms"
-            className="visual-img visual-img--timeline"
-          />
-        </section>
-
         <div className="footerGradientBar" aria-hidden="true" />
         <footer className="site-footer">
           <div
@@ -824,82 +798,6 @@ export default function CryptoCompare() {
 
           .headerGradientBar {
             animation: none;
-          }
-        }
-
-        /* ─── Visual infographic sections ─── */
-        .visual-section {
-          padding: 56px 0;
-          text-align: center;
-          border-top: 1px solid #111827;
-        }
-
-        .visual-section--hero {
-          padding: 40px 0 0;
-          border-top: none;
-        }
-
-        .visual-section--timeline {
-          padding-bottom: 64px;
-        }
-
-        .visual-section__heading {
-          margin: 0 0 12px;
-          font-size: 22px;
-          font-weight: 700;
-          color: #e2e8f0;
-          font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-          letter-spacing: -0.3px;
-        }
-
-        .visual-section__desc {
-          max-width: 680px;
-          margin: 0 auto 28px;
-          font-size: 15px;
-          color: #93a4bb;
-          line-height: 1.7;
-        }
-
-        .visual-img {
-          display: block;
-          width: 100%;
-          max-width: 900px;
-          height: auto;
-          margin: 0 auto;
-          border-radius: 10px;
-          box-shadow: 0 4px 32px rgba(0, 0, 0, 0.55), 0 1px 6px rgba(0, 0, 0, 0.35);
-        }
-
-        .visual-img--hero {
-          max-width: 1100px;
-        }
-
-        .visual-img--chart {
-          max-width: 960px;
-        }
-
-        .visual-img--timeline {
-          max-width: 1100px;
-        }
-
-        @media (max-width: 900px) {
-          .visual-section {
-            padding: 36px 0;
-          }
-
-          .visual-section--hero {
-            padding: 28px 0 0;
-          }
-
-          .visual-section__heading {
-            font-size: 19px;
-          }
-
-          .visual-img,
-          .visual-img--hero,
-          .visual-img--chart,
-          .visual-img--timeline {
-            border-radius: 7px;
           }
         }
       `}</style>
