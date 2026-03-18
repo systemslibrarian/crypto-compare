@@ -635,6 +635,28 @@ export default function CryptoCompare() {
           )}
         </main>
 
+        {/* ── HASHING VS ENCRYPTION VS ENCODING ── */}
+        <section className="visual-section">
+          <h2 className="visual-section__heading">Hashing vs Encryption vs Encoding</h2>
+          <p className="visual-section__desc">Three concepts that are frequently confused — each serves a distinct purpose in modern systems.</p>
+          <img
+            src="/images/hashing-vs-encryption-vs-encoding.png"
+            alt="Side-by-side comparison of hashing, encryption, and encoding: their properties, reversibility, and use cases"
+            className="visual-img"
+          />
+        </section>
+
+        {/* ── TLS / HTTPS DATA FLOW ── */}
+        <section className="visual-section">
+          <h2 className="visual-section__heading">How TLS & HTTPS Work</h2>
+          <p className="visual-section__desc">Cryptography in action — how the algorithms on this site combine to secure every HTTPS connection.</p>
+          <img
+            src="/images/tls-https-data-flow.png"
+            alt="Diagram of TLS handshake and HTTPS data flow showing key exchange, authentication, and symmetric encryption in sequence"
+            className="visual-img"
+          />
+        </section>
+
         {/* ── TIMELINE ── */}
         <section className="visual-section visual-section--timeline">
           <h2 className="visual-section__heading">Evolution of Cryptography</h2>
