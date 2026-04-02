@@ -1004,28 +1004,29 @@ export default function CryptoCompare() {
             display: block;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.4);
             z-index: 9;
+            backdrop-filter: blur(2px);
           }
 
           .categoryNav {
             display: none !important;
             flex-direction: column;
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: calc(100vw - 32px);
-            max-width: 400px;
-            background: #0a0f1a;
-            border: 1px solid #1e293b;
-            border-radius: 12px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            max-width: 100%;
+            background: #111827;
+            border-top: 2px solid #3b82f6;
+            border-radius: 16px 16px 0 0;
             margin: 0;
-            max-height: 80vh;
+            max-height: 60vh;
             overflow-y: auto;
             z-index: 20;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-            padding: 8px 0;
+            box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.5);
+            padding: 12px 0 env(safe-area-inset-bottom, 16px);
           }
 
           .categoryNav.mobileNavOpen {
@@ -1034,17 +1035,22 @@ export default function CryptoCompare() {
 
           .categoryNav .categoryTab {
             text-align: left;
-            padding: 16px 20px !important;
-            min-height: 52px;
-            font-size: 16px !important;
+            padding: 14px 20px !important;
+            min-height: 48px;
+            font-size: 15px !important;
+            border-bottom: 1px solid #1e293b !important;
+            border-left: none;
+            color: #e2e8f0 !important;
+          }
+
+          .categoryNav .categoryTab:last-child {
             border-bottom: none !important;
-            border-left: 4px solid transparent;
           }
 
           .categoryNav .categoryTab[aria-selected="true"] {
-            border-left-color: #3b82f6;
-            background: #0e1628;
+            background: #1e3a5f;
             color: #7dd3fc !important;
+            font-weight: 800 !important;
           }
 
           .searchInput {
