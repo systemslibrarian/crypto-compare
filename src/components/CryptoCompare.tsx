@@ -87,6 +87,11 @@ export default function CryptoCompare() {
   const [showHybrid, setShowHybrid] = useState(false);
   const [showDefaults, setShowDefaults] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [globalSearch, setGlobalSearch] = useState(false);
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [favOnly, setFavOnly] = useState(false);
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => {
     const validationErrors = validateAlgorithms(dataset);
@@ -94,6 +99,60 @@ export default function CryptoCompare() {
       console.warn("Algorithm validation issues", validationErrors);
     }
   }, [dataset]);
+
+  // Load favorites from localStorage
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("crypto-compare-favorites");
+      if (stored) setFavorites(JSON.parse(stored));
+    } catch { /* ignore */ }
+  }, []);
+
+  // Load theme from localStorage
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("crypto-compare-theme") as "dark" | "light" | null;
+      if (stored === "light" || stored === "dark") setTheme(stored);
+    } catch { /* ignore */ }
+  }, []);
+
+  // Persist favorites
+  useEffect(() => {
+    try { localStorage.setItem("crypto-compare-favorites", JSON.stringify(favorites)); } catch { /* ignore */ }
+  }, [favorites]);
+
+  // Persist theme
+  useEffect(() => {
+    try { localStorage.setItem("crypto-compare-theme", theme); } catch { /* ignore */ }
+  }, [theme]);
+
+  const toggleFavorite = (id: string) => {
+    setFavorites((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]);
+  };
+
+  const toggleTheme = () => setTheme((t) => t === "dark" ? "light" : "dark");
+
+  const isDark = theme === "dark";
+  const colors = {
+    bg: isDark ? "#070b12" : "#f8fafc",
+    text: isDark ? "#e2e8f0" : "#1e293b",
+    textMuted: isDark ? "#c4d1e3" : "#64748b",
+    textSecondary: isDark ? "#93a4bb" : "#94a3b8",
+    cardBg: isDark ? "#0b0f17" : "#ffffff",
+    cardSelectedBg: isDark ? "#0e1628" : "#eff6ff",
+    panelBg: isDark ? "#0a0f1a" : "#f1f5f9",
+    inputBg: isDark ? "#0c1422" : "#ffffff",
+    border: isDark ? "#1e293b" : "#e2e8f0",
+    borderLight: isDark ? "#111827" : "#f1f5f9",
+    headerBtnBg: isDark ? "#0e1420" : "#f1f5f9",
+    headerBtnText: isDark ? "#d4deea" : "#475569",
+    headerBtnBorder: isDark ? "#334155" : "#cbd5e1",
+    controlBg: isDark ? "#0e1420" : "#f1f5f9",
+    controlText: isDark ? "#d4deea" : "#475569",
+    controlBorder: isDark ? "#334155" : "#cbd5e1",
+    navBg: isDark ? "#070b12" : "#f8fafc",
+    highlight: isDark ? "#f8fafc" : "#0f172a",
+  };
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -113,6 +172,22 @@ export default function CryptoCompare() {
     if (params.get("dep") === "1") setDeployedOnly(true);
     if (countryParam && COUNTRY_OPTIONS.includes(countryParam)) setCountry(countryParam);
     if (sortParam && SORT_OPTIONS.some((opt) => opt.id === sortParam)) setSortBy(sortParam);
+    if (params.get("defaults") === "1") setShowDefaults(true);
+    if (params.get("fav") === "1") setFavOnly(true);
+
+    // Algorithm permalink — auto-navigate to correct category and select
+    const algoParam = params.get("algo");
+    if (algoParam) {
+      const algo = ALGORITHMS.find((a) => a.id === algoParam);
+      if (algo) {
+        setCat(algo.category);
+        setSel([algo.id]);
+        setTimeout(() => {
+          const el = document.getElementById(`algo-${algo.id}`);
+          el?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 300);
+      }
+    }
   }, []);
 
   useEffect(() => {
@@ -128,20 +203,26 @@ export default function CryptoCompare() {
     if (deployedOnly) params.set("dep", "1");
     if (country !== "all") params.set("country", country);
     if (sortBy !== "name") params.set("sort", sortBy);
+    if (showDefaults) params.set("defaults", "1");
+    if (favOnly) params.set("fav", "1");
     window.history.replaceState({}, "", `?${params.toString()}`);
-  }, [cat, adv, cmp, sel, search, pqOnly, standardOnly, nistOnly, deployedOnly, country, sortBy]);
+  }, [cat, adv, cmp, sel, search, pqOnly, standardOnly, nistOnly, deployedOnly, country, sortBy, showDefaults, favOnly]);
 
   const filtered = useMemo(() => {
-    let items = dataset.filter((a) => a.category === cat);
+    let items = globalSearch ? [...dataset] : dataset.filter((a) => a.category === cat);
 
     if (showDefaults) {
       const recommended = new Set(["xchacha20poly", "aes256gcm", "mlkem768", "mldsa65", "argon2id", "hmac_sha256", "kmac256"]);
       items = items.filter((a) => recommended.has(a.id));
     }
 
+    if (favOnly && favorites.length > 0) {
+      items = items.filter((a) => favorites.includes(a.id));
+    }
+
     if (search.trim()) {
       const q = search.trim().toLowerCase();
-      items = items.filter((a) => `${a.name} ${a.family} ${a.useCases} ${a.origin} ${a.statusLabel}`.toLowerCase().includes(q));
+      items = items.filter((a) => `${a.name} ${a.family} ${a.useCases} ${a.origin} ${a.statusLabel} ${a.category}`.toLowerCase().includes(q));
     }
 
     if (pqOnly) items = items.filter((a) => a.pqSecurityBits >= 128);
@@ -160,7 +241,7 @@ export default function CryptoCompare() {
     });
 
     return sorted;
-  }, [dataset, cat, search, pqOnly, standardOnly, nistOnly, deployedOnly, country, sortBy, showDefaults]);
+  }, [dataset, cat, search, pqOnly, standardOnly, nistOnly, deployedOnly, country, sortBy, showDefaults, globalSearch, favOnly, favorites]);
 
   const selAlgos = useMemo(() => filtered.filter((a) => sel.includes(a.id)), [filtered, sel]);
   const rows = useMemo(() => buildRows(cat, adv), [cat, adv]);
@@ -239,6 +320,9 @@ export default function CryptoCompare() {
     setShowHybrid(false);
     setShowDefaults(false);
     setShowFilters(false);
+    setGlobalSearch(false);
+    setFavOnly(false);
+    setMobileNavOpen(false);
     window.history.replaceState({}, "", window.location.pathname);
   };
 
@@ -253,13 +337,13 @@ export default function CryptoCompare() {
   }
 
   return (
-    <div style={{ background: "#070b12", color: "#e2e8f0", minHeight: "100vh", fontFamily: "var(--font-ibm-plex-sans), 'IBM Plex Sans', -apple-system, sans-serif", lineHeight: 1.6 }}>
+    <div style={{ background: colors.bg, color: colors.text, minHeight: "100vh", fontFamily: "var(--font-ibm-plex-sans), 'IBM Plex Sans', -apple-system, sans-serif", lineHeight: 1.6, transition: "background 0.3s, color 0.3s" }}>
       <a href="#main-content" className="skipLink">
         Skip to main content
       </a>
       <div className="headerGradientBar" aria-hidden="true" />
       <div className="pageShell">
-        <header style={{ borderBottom: "1px solid #111827", padding: "22px 0" }}>
+        <header style={{ borderBottom: `1px solid ${colors.borderLight}`, padding: "22px 0" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px" }}>
             <div>
               <h1 style={{ margin: 0, fontSize: "28px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", letterSpacing: "-0.5px", display: "flex", alignItems: "center", gap: "10px" }}>
@@ -286,16 +370,35 @@ export default function CryptoCompare() {
                   <span><span style={{ color: "#3b82f6" }}>crypto</span>::compare</span>
                 </button>
               </h1>
-              <p style={{ margin: "6px 0 0", fontSize: "16px", color: "#c4d1e3" }}>International cryptographic algorithm reference across 12 categories.</p>
+              <p className="headerSubtitle" style={{ margin: "6px 0 0", fontSize: "16px", color: colors.textMuted }}>International cryptographic algorithm reference across 12 categories.</p>
             </div>
-            <div style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
-              <span style={{ fontSize: "14px", color: "#c4d1e3", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>C = Classical, PQ = Post-Quantum</span>
+            <div className="headerActions" style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
+              <span className="headerLegend" style={{ fontSize: "14px", color: colors.textMuted, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>C = Classical, PQ = Post-Quantum</span>
+              <button
+                onClick={toggleTheme}
+                className="focusRing"
+                aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
+                style={{
+                  background: colors.headerBtnBg,
+                  color: colors.headerBtnText,
+                  border: `1px solid ${colors.headerBtnBorder}`,
+                  borderRadius: "6px",
+                  padding: "10px 14px",
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+                }}
+              >
+                {isDark ? "☀ Light" : "🌙 Dark"}
+              </button>
               <Link
                 href="/visuals"
+                className="headerBtn"
                 style={{
-                  background: "#0e1420",
-                  color: "#d4deea",
-                  border: "1px solid #334155",
+                  background: colors.headerBtnBg,
+                  color: colors.headerBtnText,
+                  border: `1px solid ${colors.headerBtnBorder}`,
                   borderRadius: "6px",
                   padding: "10px 16px",
                   fontSize: "14px",
@@ -309,11 +412,11 @@ export default function CryptoCompare() {
               <button
                 onClick={() => setAdv(!adv)}
                 aria-pressed={adv}
-                className="focusRing"
+                className="focusRing headerBtn"
                 style={{
-                  background: adv ? "#11203a" : "#0e1420",
-                  color: adv ? "#7dd3fc" : "#d4deea",
-                  border: `1px solid ${adv ? "#163052" : "#334155"}`,
+                  background: adv ? (isDark ? "#11203a" : "#dbeafe") : colors.headerBtnBg,
+                  color: adv ? (isDark ? "#7dd3fc" : "#1d4ed8") : colors.headerBtnText,
+                  border: `1px solid ${adv ? (isDark ? "#163052" : "#93c5fd") : colors.headerBtnBorder}`,
                   padding: "10px 16px",
                   borderRadius: "6px",
                   cursor: "pointer",
@@ -324,23 +427,41 @@ export default function CryptoCompare() {
               >
                 {adv ? "Advanced" : "Beginner"}
               </button>
+              <button
+                className="focusRing mobileMenuBtn"
+                onClick={() => setMobileNavOpen(!mobileNavOpen)}
+                aria-label="Toggle category menu"
+                aria-expanded={mobileNavOpen}
+                style={{
+                  display: "none",
+                  background: colors.headerBtnBg,
+                  color: colors.headerBtnText,
+                  border: `1px solid ${colors.headerBtnBorder}`,
+                  borderRadius: "6px",
+                  padding: "10px 14px",
+                  fontSize: "18px",
+                  cursor: "pointer",
+                }}
+              >
+                {mobileNavOpen ? "✕" : "☰"}
+              </button>
             </div>
           </div>
         </header>
 
-        <nav aria-label="Cryptography categories" role="tablist" style={{ display: "flex", gap: 0, borderBottom: "1px solid #111827", overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
+        <nav aria-label="Cryptography categories" role="tablist" className={`categoryNav ${mobileNavOpen ? "mobileNavOpen" : ""}`} style={{ display: "flex", gap: 0, borderBottom: `1px solid ${colors.borderLight}`, overflowX: "auto", WebkitOverflowScrolling: "touch", position: "sticky", top: 0, zIndex: 10, background: colors.navBg }}>
           {CATEGORIES.map((c) => {
             const accent = CATEGORY_ACCENT[c.id];
             return (
               <button
                 key={c.id}
-                onClick={() => switchCat(c.id)}
+                onClick={() => { switchCat(c.id); setMobileNavOpen(false); setGlobalSearch(false); }}
                 role="tab"
                 aria-selected={cat === c.id}
                 className="focusRing categoryTab"
                 style={{
                   background: "transparent",
-                  color: cat === c.id ? "#f8fafc" : "#b1bfd2",
+                  color: cat === c.id ? colors.highlight : colors.textMuted,
                   border: "none",
                   borderBottom: cat === c.id ? `2px solid ${accent}` : "2px solid transparent",
                   padding: "14px 18px",
@@ -361,24 +482,33 @@ export default function CryptoCompare() {
           })}
         </nav>
 
-        <main id="main-content" role="tabpanel" aria-label={`${selectedCategoryLabel} algorithms`} style={{ padding: "20px 0 28px" }}>
+        <main id="main-content" role="tabpanel" aria-label={`${globalSearch ? "All categories" : selectedCategoryLabel} algorithms`} style={{ padding: "20px 0 28px" }}>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: showFilters ? "8px" : "12px" }}>
             <input
               ref={searchRef}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder={`Search within ${selectedCategoryLabel}`}
+              placeholder={globalSearch ? "Search all categories…" : `Search within ${selectedCategoryLabel}`}
               aria-label="Search algorithms"
               className="focusRing"
               style={{
-                background: "#0c1422",
-                color: "#e2e8f0",
-                border: "1px solid #1e293b",
+                background: colors.inputBg,
+                color: colors.text,
+                border: `1px solid ${colors.border}`,
                 borderRadius: "8px",
                 padding: "10px 12px",
                 minWidth: "220px",
+                flex: "1 1 220px",
               }}
             />
+            <button
+              className={`focusRing controlBtn ${globalSearch ? "controlBtnActive" : ""}`}
+              onClick={() => setGlobalSearch(!globalSearch)}
+              aria-pressed={globalSearch}
+              title="Search across all categories"
+            >
+              {globalSearch ? "🌐 All" : "🌐"}
+            </button>
             <select value={sortBy} onChange={(e) => setSortBy(e.target.value as SortOption)} className="focusRing controlSelect" aria-label="Sort algorithms">
               {SORT_OPTIONS.map((option) => (
                 <option key={option.id} value={option.id}>
@@ -387,7 +517,7 @@ export default function CryptoCompare() {
               ))}
             </select>
             <button className="focusRing controlBtn" onClick={() => setShowFilters(!showFilters)} aria-expanded={showFilters}>
-              {showFilters ? "▾" : "▸"} Filters{(pqOnly || standardOnly || nistOnly || deployedOnly || showDefaults || country !== "all") ? " ●" : ""}
+              {showFilters ? "▾" : "▸"} Filters{(pqOnly || standardOnly || nistOnly || deployedOnly || showDefaults || country !== "all" || favOnly) ? " ●" : ""}
             </button>
             <button className="focusRing controlBtn" onClick={() => setShowMethodology(!showMethodology)} aria-expanded={showMethodology}>
               How to read this site
@@ -403,20 +533,23 @@ export default function CryptoCompare() {
                   </option>
                 ))}
               </select>
-              <button className="focusRing controlBtn" onClick={() => setPqOnly(!pqOnly)} aria-pressed={pqOnly} aria-label={pqOnly ? "PQ-safe filter active — click to show all" : "Show only PQ-safe algorithms"}>
+              <button className={`focusRing controlBtn ${pqOnly ? "controlBtnActive" : ""}`} onClick={() => setPqOnly(!pqOnly)} aria-pressed={pqOnly} aria-label={pqOnly ? "PQ-safe filter active — click to show all" : "Show only PQ-safe algorithms"}>
                 PQ-safe only
               </button>
-              <button className="focusRing controlBtn" onClick={() => setStandardOnly(!standardOnly)} aria-pressed={standardOnly} aria-label={standardOnly ? "Standards filter active — click to show all" : "Show only standardized algorithms"}>
+              <button className={`focusRing controlBtn ${standardOnly ? "controlBtnActive" : ""}`} onClick={() => setStandardOnly(!standardOnly)} aria-pressed={standardOnly} aria-label={standardOnly ? "Standards filter active — click to show all" : "Show only standardized algorithms"}>
                 Standards only
               </button>
-              <button className="focusRing controlBtn" onClick={() => setNistOnly(!nistOnly)} aria-pressed={nistOnly} aria-label={nistOnly ? "NIST filter active — click to show all" : "Show only NIST-standardized algorithms"}>
+              <button className={`focusRing controlBtn ${nistOnly ? "controlBtnActive" : ""}`} onClick={() => setNistOnly(!nistOnly)} aria-pressed={nistOnly} aria-label={nistOnly ? "NIST filter active — click to show all" : "Show only NIST-standardized algorithms"}>
                 NIST only
               </button>
-              <button className="focusRing controlBtn" onClick={() => setDeployedOnly(!deployedOnly)} aria-pressed={deployedOnly} aria-label={deployedOnly ? "Deployed filter active — click to show all" : "Show only widely deployed algorithms"}>
+              <button className={`focusRing controlBtn ${deployedOnly ? "controlBtnActive" : ""}`} onClick={() => setDeployedOnly(!deployedOnly)} aria-pressed={deployedOnly} aria-label={deployedOnly ? "Deployed filter active — click to show all" : "Show only widely deployed algorithms"}>
                 Widely deployed
               </button>
-              <button className="focusRing controlBtn" onClick={() => setShowDefaults(!showDefaults)} aria-pressed={showDefaults} aria-label={showDefaults ? "Showing recommended defaults — click to show all" : "Show only recommended default algorithms"}>
+              <button className={`focusRing controlBtn ${showDefaults ? "controlBtnActive" : ""}`} onClick={() => setShowDefaults(!showDefaults)} aria-pressed={showDefaults} aria-label={showDefaults ? "Showing recommended defaults — click to show all" : "Show only recommended default algorithms"}>
                 Recommended defaults
+              </button>
+              <button className={`focusRing controlBtn ${favOnly ? "controlBtnActive" : ""}`} onClick={() => setFavOnly(!favOnly)} aria-pressed={favOnly} aria-label={favOnly ? "Showing favorites only — click to show all" : "Show only favorited algorithms"}>
+                ★ Favorites{favorites.length > 0 ? ` (${favorites.length})` : ""}
               </button>
             </div>
           )}
@@ -583,9 +716,9 @@ export default function CryptoCompare() {
 
           {!explainerOpen && <p className="text-body" style={{ fontSize: "15px", margin: "0 0 18px" }}>Select cards to compare algorithms side by side.</p>}
 
-          <section aria-label={`${selectedCategoryLabel} algorithms`} className="algoGrid" style={{ marginBottom: "18px" }}>
+          <section aria-label={`${globalSearch ? "All categories" : selectedCategoryLabel} algorithms`} className="algoGrid" style={{ marginBottom: "18px" }}>
             {filtered.map((a) => (
-              <AlgoCard key={a.id} algo={a} advanced={adv} selected={sel.includes(a.id)} onToggle={() => toggle(a.id)} />
+              <AlgoCard key={a.id} algo={a} advanced={adv} selected={sel.includes(a.id)} onToggle={() => toggle(a.id)} favorited={favorites.includes(a.id)} onToggleFavorite={() => toggleFavorite(a.id)} theme={theme} />
             ))}
           </section>
 
@@ -763,7 +896,7 @@ export default function CryptoCompare() {
         }
 
         .categoryTab:hover {
-          color: #f8fafc !important;
+          color: ${colors.highlight} !important;
         }
 
         .pageShell {
@@ -790,9 +923,9 @@ export default function CryptoCompare() {
 
         .controlBtn,
         .controlSelect {
-          background: #0e1420;
-          color: #d4deea;
-          border: 1px solid #334155;
+          background: ${colors.controlBg};
+          color: ${colors.controlText};
+          border: 1px solid ${colors.controlBorder};
           border-radius: 7px;
           padding: 9px 12px;
           font-size: 14px;
@@ -801,12 +934,23 @@ export default function CryptoCompare() {
         }
 
         .controlBtn:hover {
-          border-color: #475569;
-          background: #111827;
+          border-color: ${isDark ? "#475569" : "#94a3b8"};
+          background: ${isDark ? "#111827" : "#e2e8f0"};
         }
 
         .controlBtn {
           cursor: pointer;
+        }
+
+        .controlBtnActive {
+          background: ${isDark ? "#11203a" : "#dbeafe"} !important;
+          color: ${isDark ? "#7dd3fc" : "#1d4ed8"} !important;
+          border-color: ${isDark ? "#163052" : "#93c5fd"} !important;
+        }
+
+        .controlSelect {
+          background: ${colors.controlBg};
+          color: ${colors.controlText};
         }
 
         .skipLink {
@@ -827,6 +971,11 @@ export default function CryptoCompare() {
           top: 12px;
         }
 
+        /* Mobile hamburger button - hidden by default, shown on mobile */
+        .mobileMenuBtn {
+          display: none !important;
+        }
+
         @media (max-width: 900px) {
           .pageShell {
             padding: 0 16px;
@@ -834,6 +983,49 @@ export default function CryptoCompare() {
 
           .algoGrid {
             grid-template-columns: 1fr;
+          }
+
+          .headerLegend {
+            display: none;
+          }
+
+          .headerSubtitle {
+            font-size: 14px !important;
+          }
+
+          .headerBtn {
+            padding: 8px 12px !important;
+            font-size: 13px !important;
+          }
+
+          .mobileMenuBtn {
+            display: flex !important;
+          }
+
+          .categoryNav {
+            display: none !important;
+            flex-direction: column;
+            position: static;
+          }
+
+          .categoryNav.mobileNavOpen {
+            display: flex !important;
+          }
+
+          .categoryNav .categoryTab {
+            text-align: left;
+            padding: 12px 18px !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .headerActions {
+            gap: 6px !important;
+          }
+
+          .headerBtn {
+            padding: 7px 10px !important;
+            font-size: 12px !important;
           }
         }
 

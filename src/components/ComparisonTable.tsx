@@ -5,6 +5,15 @@ type ComparisonTableProps = {
   rows: ComparisonRow[];
 };
 
+function cellsHaveDifferences(algos: Algorithm[], row: ComparisonRow): boolean {
+  if (algos.length < 2) return false;
+  const values = algos.map((a) => {
+    const v = row.render(a);
+    return typeof v === "string" ? v : "complex";
+  });
+  return values.some((v) => v !== values[0]);
+}
+
 export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
   return (
     <>
@@ -12,7 +21,7 @@ export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
       <div className="comparison-desktop" style={{ overflowX: "auto", borderRadius: "8px", border: "1px solid #141c2b", position: "relative" }}>
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "15px", minWidth: "760px" }}>
           <caption style={{ textAlign: "left", padding: "14px 16px", color: "#d1dae6", fontSize: "15px", captionSide: "top" }}>
-            Side-by-side comparison of the selected algorithms.
+            Side-by-side comparison of the selected algorithms. Rows with differences are highlighted.
           </caption>
           <thead>
             <tr>
@@ -58,14 +67,16 @@ export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
             </tr>
           </thead>
           <tbody>
-            {rows.map((row, i) => (
+            {rows.map((row, i) => {
+              const hasDiff = cellsHaveDifferences(algos, row);
+              return (
               <tr key={row.label}>
                 <th
                   scope="row"
                   style={{
                     padding: "12px 14px",
                     borderBottom: "1px solid #0d1320",
-                    color: "#b4c1d2",
+                    color: hasDiff ? "#fbbf24" : "#b4c1d2",
                     fontWeight: 700,
                     position: "sticky",
                     left: 0,
@@ -75,9 +86,10 @@ export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
                     textTransform: "uppercase",
                     letterSpacing: "0.4px",
                     verticalAlign: "top",
+                    borderLeft: hasDiff ? "3px solid #f59e0b44" : "3px solid transparent",
                   }}
                 >
-                  {row.label}
+                  {row.label}{hasDiff && <span style={{ marginLeft: "4px", fontSize: "10px", opacity: 0.7 }}>≠</span>}
                 </th>
                 {algos.map((a) => {
                   const value = row.render(a);
@@ -89,7 +101,9 @@ export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
                         borderBottom: "1px solid #0d1320",
                         color: "#e2e8f0",
                         verticalAlign: "top",
-                        background: i % 2 === 0 ? "transparent" : "rgba(255,255,255,0.015)",
+                        background: hasDiff
+                          ? (i % 2 === 0 ? "rgba(245,158,11,0.04)" : "rgba(245,158,11,0.06)")
+                          : (i % 2 === 0 ? "transparent" : "rgba(255,255,255,0.015)"),
                         maxWidth: "320px",
                         lineHeight: "1.7",
                       }}
@@ -99,7 +113,8 @@ export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
                   );
                 })}
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       </div>
