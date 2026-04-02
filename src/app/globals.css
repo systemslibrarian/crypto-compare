@@ -5,7 +5,6 @@
 body {
   background: #070b12;
   color: #e2e8f0;
-  transition: background 0.3s, color 0.3s;
 }
 
 @layer components {

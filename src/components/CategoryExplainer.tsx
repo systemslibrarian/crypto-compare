@@ -58,7 +58,7 @@ export default function CategoryExplainer({ category, expanded, onToggle }: Cate
             background: expanded ? "#1a2540" : "#111d33",
             color: expanded ? "#7dd3fc" : "#93a4bb",
             border: `1px solid ${expanded ? "#1e3a5f" : "#1a2540"}`,
-            padding: "10px 16px",
+            padding: "12px 16px",
             borderRadius: "5px",
             cursor: "pointer",
             fontSize: "14px",
@@ -67,6 +67,7 @@ export default function CategoryExplainer({ category, expanded, onToggle }: Cate
             whiteSpace: "nowrap",
             flexShrink: 0,
             transition: "all 0.15s",
+            minHeight: "44px",
           }}
         >
           {expanded ? "v Less" : "> Learn more"}

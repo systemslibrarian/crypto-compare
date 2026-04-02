@@ -90,7 +90,6 @@ export default function CryptoCompare() {
   const [globalSearch, setGlobalSearch] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [favOnly, setFavOnly] = useState(false);
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => {
@@ -108,51 +107,20 @@ export default function CryptoCompare() {
     } catch { /* ignore */ }
   }, []);
 
-  // Load theme from localStorage
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem("crypto-compare-theme") as "dark" | "light" | null;
-      if (stored === "light" || stored === "dark") setTheme(stored);
-    } catch { /* ignore */ }
-  }, []);
+
 
   // Persist favorites
   useEffect(() => {
     try { localStorage.setItem("crypto-compare-favorites", JSON.stringify(favorites)); } catch { /* ignore */ }
   }, [favorites]);
 
-  // Persist theme
-  useEffect(() => {
-    try { localStorage.setItem("crypto-compare-theme", theme); } catch { /* ignore */ }
-  }, [theme]);
+
 
   const toggleFavorite = (id: string) => {
     setFavorites((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]);
   };
 
-  const toggleTheme = () => setTheme((t) => t === "dark" ? "light" : "dark");
 
-  const isDark = theme === "dark";
-  const colors = {
-    bg: isDark ? "#070b12" : "#f8fafc",
-    text: isDark ? "#e2e8f0" : "#1e293b",
-    textMuted: isDark ? "#c4d1e3" : "#64748b",
-    textSecondary: isDark ? "#93a4bb" : "#94a3b8",
-    cardBg: isDark ? "#0b0f17" : "#ffffff",
-    cardSelectedBg: isDark ? "#0e1628" : "#eff6ff",
-    panelBg: isDark ? "#0a0f1a" : "#f1f5f9",
-    inputBg: isDark ? "#0c1422" : "#ffffff",
-    border: isDark ? "#1e293b" : "#e2e8f0",
-    borderLight: isDark ? "#111827" : "#f1f5f9",
-    headerBtnBg: isDark ? "#0e1420" : "#f1f5f9",
-    headerBtnText: isDark ? "#d4deea" : "#475569",
-    headerBtnBorder: isDark ? "#334155" : "#cbd5e1",
-    controlBg: isDark ? "#0e1420" : "#f1f5f9",
-    controlText: isDark ? "#d4deea" : "#475569",
-    controlBorder: isDark ? "#334155" : "#cbd5e1",
-    navBg: isDark ? "#070b12" : "#f8fafc",
-    highlight: isDark ? "#f8fafc" : "#0f172a",
-  };
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -337,13 +305,13 @@ export default function CryptoCompare() {
   }
 
   return (
-    <div style={{ background: colors.bg, color: colors.text, minHeight: "100vh", fontFamily: "var(--font-ibm-plex-sans), 'IBM Plex Sans', -apple-system, sans-serif", lineHeight: 1.6, transition: "background 0.3s, color 0.3s" }}>
+    <div style={{ background: "#070b12", color: "#e2e8f0", minHeight: "100vh", fontFamily: "var(--font-ibm-plex-sans), 'IBM Plex Sans', -apple-system, sans-serif", lineHeight: 1.6 }}>
       <a href="#main-content" className="skipLink">
         Skip to main content
       </a>
       <div className="headerGradientBar" aria-hidden="true" />
       <div className="pageShell">
-        <header style={{ borderBottom: `1px solid ${colors.borderLight}`, padding: "22px 0" }}>
+        <header style={{ borderBottom: "1px solid #111827", padding: "22px 0" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px" }}>
             <div>
               <h1 style={{ margin: 0, fontSize: "28px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", letterSpacing: "-0.5px", display: "flex", alignItems: "center", gap: "10px" }}>
@@ -370,35 +338,17 @@ export default function CryptoCompare() {
                   <span><span style={{ color: "#3b82f6" }}>crypto</span>::compare</span>
                 </button>
               </h1>
-              <p className="headerSubtitle" style={{ margin: "6px 0 0", fontSize: "16px", color: colors.textMuted }}>International cryptographic algorithm reference across 12 categories.</p>
+              <p className="headerSubtitle" style={{ margin: "6px 0 0", fontSize: "16px", color: "#c4d1e3" }}>International cryptographic algorithm reference across 12 categories.</p>
             </div>
             <div className="headerActions" style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
-              <span className="headerLegend" style={{ fontSize: "14px", color: colors.textMuted, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>C = Classical, PQ = Post-Quantum</span>
-              <button
-                onClick={toggleTheme}
-                className="focusRing"
-                aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
-                style={{
-                  background: colors.headerBtnBg,
-                  color: colors.headerBtnText,
-                  border: `1px solid ${colors.headerBtnBorder}`,
-                  borderRadius: "6px",
-                  padding: "10px 14px",
-                  fontSize: "14px",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-                }}
-              >
-                {isDark ? "☀ Light" : "🌙 Dark"}
-              </button>
+              <span className="headerLegend" style={{ fontSize: "14px", color: "#c4d1e3", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>C = Classical, PQ = Post-Quantum</span>
               <Link
                 href="/visuals"
-                className="headerBtn"
+                className="headerBtn focusRing"
                 style={{
-                  background: colors.headerBtnBg,
-                  color: colors.headerBtnText,
-                  border: `1px solid ${colors.headerBtnBorder}`,
+                  background: "#0e1420",
+                  color: "#d4deea",
+                  border: "1px solid #334155",
                   borderRadius: "6px",
                   padding: "10px 16px",
                   fontSize: "14px",
@@ -414,9 +364,9 @@ export default function CryptoCompare() {
                 aria-pressed={adv}
                 className="focusRing headerBtn"
                 style={{
-                  background: adv ? (isDark ? "#11203a" : "#dbeafe") : colors.headerBtnBg,
-                  color: adv ? (isDark ? "#7dd3fc" : "#1d4ed8") : colors.headerBtnText,
-                  border: `1px solid ${adv ? (isDark ? "#163052" : "#93c5fd") : colors.headerBtnBorder}`,
+                  background: adv ? "#11203a" : "#0e1420",
+                  color: adv ? "#7dd3fc" : "#d4deea",
+                  border: `1px solid ${adv ? "#163052" : "#334155"}`,
                   padding: "10px 16px",
                   borderRadius: "6px",
                   cursor: "pointer",
@@ -434,13 +384,15 @@ export default function CryptoCompare() {
                 aria-expanded={mobileNavOpen}
                 style={{
                   display: "none",
-                  background: colors.headerBtnBg,
-                  color: colors.headerBtnText,
-                  border: `1px solid ${colors.headerBtnBorder}`,
+                  background: "#0e1420",
+                  color: "#d4deea",
+                  border: "1px solid #334155",
                   borderRadius: "6px",
                   padding: "10px 14px",
                   fontSize: "18px",
                   cursor: "pointer",
+                  minWidth: "44px",
+                  minHeight: "44px",
                 }}
               >
                 {mobileNavOpen ? "✕" : "☰"}
@@ -449,7 +401,7 @@ export default function CryptoCompare() {
           </div>
         </header>
 
-        <nav aria-label="Cryptography categories" role="tablist" className={`categoryNav ${mobileNavOpen ? "mobileNavOpen" : ""}`} style={{ display: "flex", gap: 0, borderBottom: `1px solid ${colors.borderLight}`, overflowX: "auto", WebkitOverflowScrolling: "touch", position: "sticky", top: 0, zIndex: 10, background: colors.navBg }}>
+        <nav aria-label="Cryptography categories" role="tablist" className={`categoryNav ${mobileNavOpen ? "mobileNavOpen" : ""}`} style={{ display: "flex", gap: 0, borderBottom: "1px solid #111827", overflowX: "auto", WebkitOverflowScrolling: "touch", position: "sticky", top: 0, zIndex: 10, background: "#070b12" }}>
           {CATEGORIES.map((c) => {
             const accent = CATEGORY_ACCENT[c.id];
             return (
@@ -461,7 +413,7 @@ export default function CryptoCompare() {
                 className="focusRing categoryTab"
                 style={{
                   background: "transparent",
-                  color: cat === c.id ? colors.highlight : colors.textMuted,
+                  color: cat === c.id ? "#f8fafc" : "#c4d1e3",
                   border: "none",
                   borderBottom: cat === c.id ? `2px solid ${accent}` : "2px solid transparent",
                   padding: "14px 18px",
@@ -482,23 +434,25 @@ export default function CryptoCompare() {
           })}
         </nav>
 
-        <main id="main-content" role="tabpanel" aria-label={`${globalSearch ? "All categories" : selectedCategoryLabel} algorithms`} style={{ padding: "20px 0 28px" }}>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: showFilters ? "8px" : "12px" }}>
+        <main id="main-content" aria-label={`${globalSearch ? "All categories" : selectedCategoryLabel} algorithms`} style={{ padding: "20px 0 28px" }}>
+          <div role="search" aria-label="Filter and search algorithms" style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: showFilters ? "8px" : "12px" }}>
             <input
               ref={searchRef}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={globalSearch ? "Search all categories…" : `Search within ${selectedCategoryLabel}`}
               aria-label="Search algorithms"
-              className="focusRing"
+              className="focusRing searchInput"
               style={{
-                background: colors.inputBg,
-                color: colors.text,
-                border: `1px solid ${colors.border}`,
+                background: "#0c1422",
+                color: "#e2e8f0",
+                border: "1px solid #1e293b",
                 borderRadius: "8px",
-                padding: "10px 12px",
+                padding: "12px 14px",
                 minWidth: "220px",
                 flex: "1 1 220px",
+                fontSize: "16px",
+                minHeight: "44px",
               }}
             />
             <button
@@ -516,10 +470,10 @@ export default function CryptoCompare() {
                 </option>
               ))}
             </select>
-            <button className="focusRing controlBtn" onClick={() => setShowFilters(!showFilters)} aria-expanded={showFilters}>
+            <button className="focusRing controlBtn" onClick={() => setShowFilters(!showFilters)} aria-expanded={showFilters} aria-label={`${showFilters ? "Hide" : "Show"} filter options${(pqOnly || standardOnly || nistOnly || deployedOnly || showDefaults || country !== "all" || favOnly) ? " (active)" : ""}`}>
               {showFilters ? "▾" : "▸"} Filters{(pqOnly || standardOnly || nistOnly || deployedOnly || showDefaults || country !== "all" || favOnly) ? " ●" : ""}
             </button>
-            <button className="focusRing controlBtn" onClick={() => setShowMethodology(!showMethodology)} aria-expanded={showMethodology}>
+            <button className="focusRing controlBtn" onClick={() => setShowMethodology(!showMethodology)} aria-expanded={showMethodology} aria-label={`${showMethodology ? "Hide" : "Show"} methodology and trust model`}>
               How to read this site
             </button>
           </div>
@@ -623,7 +577,7 @@ export default function CryptoCompare() {
 
           <CategoryExplainer category={cat} expanded={explainerOpen} onToggle={() => setExplainerOpen(!explainerOpen)} />
 
-          <button className="focusRing controlBtn" onClick={() => setShowHybrid(!showHybrid)} aria-expanded={showHybrid} style={{ marginBottom: showHybrid ? "0" : "12px" }}>
+          <button className="focusRing controlBtn" onClick={() => setShowHybrid(!showHybrid)} aria-expanded={showHybrid} aria-label={`${showHybrid ? "Hide" : "Show"} hybrid cryptography patterns`} style={{ marginBottom: showHybrid ? "0" : "12px" }}>
             {showHybrid ? "▾" : "▸"} Hybrid Cryptography Patterns
           </button>
           {showHybrid && (
@@ -697,16 +651,22 @@ export default function CryptoCompare() {
                 </div>
               </div>
               <span
+                className="advisorCta"
                 style={{
                   background: "#1d4ed8",
                   color: "#fff",
                   borderRadius: "7px",
-                  padding: "10px 20px",
+                  padding: "12px 20px",
                   fontSize: "14px",
                   fontWeight: 700,
                   fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
                   whiteSpace: "nowrap",
                   flexShrink: 0,
+                  textAlign: "center",
+                  minHeight: "44px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 Open advisor →
@@ -718,7 +678,7 @@ export default function CryptoCompare() {
 
           <section aria-label={`${globalSearch ? "All categories" : selectedCategoryLabel} algorithms`} className="algoGrid" style={{ marginBottom: "18px" }}>
             {filtered.map((a) => (
-              <AlgoCard key={a.id} algo={a} advanced={adv} selected={sel.includes(a.id)} onToggle={() => toggle(a.id)} favorited={favorites.includes(a.id)} onToggleFavorite={() => toggleFavorite(a.id)} theme={theme} />
+              <AlgoCard key={a.id} algo={a} advanced={adv} selected={sel.includes(a.id)} onToggle={() => toggle(a.id)} favorited={favorites.includes(a.id)} onToggleFavorite={() => toggleFavorite(a.id)} />
             ))}
           </section>
 
@@ -733,6 +693,7 @@ export default function CryptoCompare() {
               <button
                 onClick={() => setCmp(true)}
                 className="focusRing"
+                aria-label={`Compare ${selAlgos.length} selected algorithms`}
                 style={{
                   background: "#1d4ed8",
                   color: "#fff",
@@ -896,7 +857,7 @@ export default function CryptoCompare() {
         }
 
         .categoryTab:hover {
-          color: ${colors.highlight} !important;
+          color: #f8fafc !important;
         }
 
         .pageShell {
@@ -923,19 +884,20 @@ export default function CryptoCompare() {
 
         .controlBtn,
         .controlSelect {
-          background: ${colors.controlBg};
-          color: ${colors.controlText};
-          border: 1px solid ${colors.controlBorder};
+          background: #0e1420;
+          color: #d4deea;
+          border: 1px solid #334155;
           border-radius: 7px;
-          padding: 9px 12px;
+          padding: 10px 14px;
           font-size: 14px;
           font-weight: 600;
           transition: border-color 0.15s, background 0.15s;
+          min-height: 44px;
         }
 
         .controlBtn:hover {
-          border-color: ${isDark ? "#475569" : "#94a3b8"};
-          background: ${isDark ? "#111827" : "#e2e8f0"};
+          border-color: #475569;
+          background: #111827;
         }
 
         .controlBtn {
@@ -943,14 +905,14 @@ export default function CryptoCompare() {
         }
 
         .controlBtnActive {
-          background: ${isDark ? "#11203a" : "#dbeafe"} !important;
-          color: ${isDark ? "#7dd3fc" : "#1d4ed8"} !important;
-          border-color: ${isDark ? "#163052" : "#93c5fd"} !important;
+          background: #11203a !important;
+          color: #7dd3fc !important;
+          border-color: #163052 !important;
         }
 
         .controlSelect {
-          background: ${colors.controlBg};
-          color: ${colors.controlText};
+          background: #0e1420;
+          color: #d4deea;
         }
 
         .skipLink {
@@ -976,6 +938,7 @@ export default function CryptoCompare() {
           display: none !important;
         }
 
+        /* ── Mobile: tablets and smaller ── */
         @media (max-width: 900px) {
           .pageShell {
             padding: 0 16px;
@@ -983,6 +946,7 @@ export default function CryptoCompare() {
 
           .algoGrid {
             grid-template-columns: 1fr;
+            gap: 14px;
           }
 
           .headerLegend {
@@ -994,18 +958,27 @@ export default function CryptoCompare() {
           }
 
           .headerBtn {
-            padding: 8px 12px !important;
+            padding: 10px 14px !important;
             font-size: 13px !important;
+            min-height: 44px;
           }
 
           .mobileMenuBtn {
             display: flex !important;
+            align-items: center;
+            justify-content: center;
           }
 
           .categoryNav {
             display: none !important;
             flex-direction: column;
             position: static;
+            background: #0a0f1a;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            margin: 8px 0;
+            max-height: 70vh;
+            overflow-y: auto;
           }
 
           .categoryNav.mobileNavOpen {
@@ -1014,18 +987,57 @@ export default function CryptoCompare() {
 
           .categoryNav .categoryTab {
             text-align: left;
-            padding: 12px 18px !important;
+            padding: 14px 18px !important;
+            min-height: 48px;
+            font-size: 15px !important;
+            border-bottom: none !important;
+            border-left: 3px solid transparent;
+          }
+
+          .categoryNav .categoryTab[aria-selected="true"] {
+            border-left-color: #3b82f6;
+            background: #0e1628;
+          }
+
+          .searchInput {
+            min-width: 0 !important;
+            flex: 1 1 100% !important;
+            font-size: 16px !important;
+          }
+
+          .advisorCta {
+            flex: 1 1 100%;
           }
         }
 
+        /* ── Mobile: phones ── */
         @media (max-width: 480px) {
+          .pageShell {
+            padding: 0 12px;
+          }
+
           .headerActions {
             gap: 6px !important;
+            width: 100%;
+            justify-content: flex-end;
           }
 
           .headerBtn {
-            padding: 7px 10px !important;
+            padding: 10px 12px !important;
             font-size: 12px !important;
+            min-height: 44px;
+          }
+
+          .controlBtn,
+          .controlSelect {
+            font-size: 13px;
+            padding: 10px 12px;
+            min-height: 44px;
+            flex: 1 1 auto;
+          }
+
+          .algoGrid {
+            gap: 12px;
           }
         }
 

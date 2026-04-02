@@ -345,10 +345,11 @@ export default function DecisionFlowchart({ onNavigate, algorithms, provenance }
                 color: "#d4deea",
                 border: "1px solid #334155",
                 borderRadius: "6px",
-                padding: "6px 14px",
+                padding: "10px 14px",
                 fontSize: "13px",
                 fontWeight: 600,
                 cursor: "pointer",
+                minHeight: "44px",
               }}
             >
               ← Back
@@ -363,10 +364,11 @@ export default function DecisionFlowchart({ onNavigate, algorithms, provenance }
                 color: "#d4deea",
                 border: "1px solid #334155",
                 borderRadius: "6px",
-                padding: "6px 14px",
+                padding: "10px 14px",
                 fontSize: "13px",
                 fontWeight: 600,
                 cursor: "pointer",
+                minHeight: "44px",
               }}
             >
               Start over
@@ -448,11 +450,12 @@ export default function DecisionFlowchart({ onNavigate, algorithms, provenance }
                   background: "#1d4ed8",
                   color: "#fff",
                   border: "none",
-                  padding: "10px 20px",
+                  padding: "12px 20px",
                   borderRadius: "6px",
                   fontSize: "14px",
                   fontWeight: 700,
                   cursor: "pointer",
+                  minHeight: "44px",
                 }}
               >
                 View {result.algo} details →
@@ -472,11 +475,12 @@ export default function DecisionFlowchart({ onNavigate, algorithms, provenance }
                   background: "#0e1420",
                   color: "#d4deea",
                   border: "1px solid #334155",
-                  padding: "10px 20px",
+                  padding: "12px 20px",
                   borderRadius: "6px",
                   fontSize: "14px",
                   fontWeight: 700,
                   cursor: "pointer",
+                  minHeight: "44px",
                 }}
               >
                 ↓ Download Justification Report

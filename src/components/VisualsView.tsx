@@ -86,11 +86,14 @@ export default function VisualsView() {
                 color: "#d4deea",
                 border: "1px solid #334155",
                 borderRadius: "7px",
-                padding: "8px 14px",
+                padding: "10px 14px",
                 fontSize: "13px",
                 fontWeight: 600,
                 textDecoration: "none",
                 fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+                minHeight: "44px",
+                display: "inline-flex",
+                alignItems: "center",
               }}
             >
               ← Algorithm Reference
