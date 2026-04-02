@@ -86,6 +86,7 @@ export default function CryptoCompare() {
   const [showMethodology, setShowMethodology] = useState(false);
   const [showHybrid, setShowHybrid] = useState(false);
   const [showDefaults, setShowDefaults] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     const validationErrors = validateAlgorithms(dataset);
@@ -237,6 +238,7 @@ export default function CryptoCompare() {
     setShowMethodology(false);
     setShowHybrid(false);
     setShowDefaults(false);
+    setShowFilters(false);
     window.history.replaceState({}, "", window.location.pathname);
   };
 
@@ -360,7 +362,7 @@ export default function CryptoCompare() {
         </nav>
 
         <main id="main-content" role="tabpanel" aria-label={`${selectedCategoryLabel} algorithms`} style={{ padding: "20px 0 28px" }}>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "12px" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: showFilters ? "8px" : "12px" }}>
             <input
               ref={searchRef}
               value={search}
@@ -384,32 +386,40 @@ export default function CryptoCompare() {
                 </option>
               ))}
             </select>
-            <select value={country} onChange={(e) => setCountry(e.target.value as CountryFilter)} className="focusRing controlSelect" aria-label="Filter by origin region">
-              {COUNTRY_OPTIONS.map((option) => (
-                <option key={option} value={option}>
-                  Origin: {option}
-                </option>
-              ))}
-            </select>
-            <button className="focusRing controlBtn" onClick={() => setPqOnly(!pqOnly)} aria-pressed={pqOnly} aria-label={pqOnly ? "PQ-safe filter active — click to show all" : "Show only PQ-safe algorithms"}>
-              PQ-safe only
-            </button>
-            <button className="focusRing controlBtn" onClick={() => setStandardOnly(!standardOnly)} aria-pressed={standardOnly} aria-label={standardOnly ? "Standards filter active — click to show all" : "Show only standardized algorithms"}>
-              Standards only
-            </button>
-            <button className="focusRing controlBtn" onClick={() => setNistOnly(!nistOnly)} aria-pressed={nistOnly} aria-label={nistOnly ? "NIST filter active — click to show all" : "Show only NIST-standardized algorithms"}>
-              NIST only
-            </button>
-            <button className="focusRing controlBtn" onClick={() => setDeployedOnly(!deployedOnly)} aria-pressed={deployedOnly} aria-label={deployedOnly ? "Deployed filter active — click to show all" : "Show only widely deployed algorithms"}>
-              Widely deployed
-            </button>
-            <button className="focusRing controlBtn" onClick={() => setShowDefaults(!showDefaults)} aria-pressed={showDefaults} aria-label={showDefaults ? "Showing recommended defaults — click to show all" : "Show only recommended default algorithms"}>
-              Recommended defaults
+            <button className="focusRing controlBtn" onClick={() => setShowFilters(!showFilters)} aria-expanded={showFilters}>
+              {showFilters ? "▾" : "▸"} Filters{(pqOnly || standardOnly || nistOnly || deployedOnly || showDefaults || country !== "all") ? " ●" : ""}
             </button>
             <button className="focusRing controlBtn" onClick={() => setShowMethodology(!showMethodology)} aria-expanded={showMethodology}>
               How to read this site
             </button>
           </div>
+
+          {showFilters && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "12px" }}>
+              <select value={country} onChange={(e) => setCountry(e.target.value as CountryFilter)} className="focusRing controlSelect" aria-label="Filter by origin region">
+                {COUNTRY_OPTIONS.map((option) => (
+                  <option key={option} value={option}>
+                    Origin: {option}
+                  </option>
+                ))}
+              </select>
+              <button className="focusRing controlBtn" onClick={() => setPqOnly(!pqOnly)} aria-pressed={pqOnly} aria-label={pqOnly ? "PQ-safe filter active — click to show all" : "Show only PQ-safe algorithms"}>
+                PQ-safe only
+              </button>
+              <button className="focusRing controlBtn" onClick={() => setStandardOnly(!standardOnly)} aria-pressed={standardOnly} aria-label={standardOnly ? "Standards filter active — click to show all" : "Show only standardized algorithms"}>
+                Standards only
+              </button>
+              <button className="focusRing controlBtn" onClick={() => setNistOnly(!nistOnly)} aria-pressed={nistOnly} aria-label={nistOnly ? "NIST filter active — click to show all" : "Show only NIST-standardized algorithms"}>
+                NIST only
+              </button>
+              <button className="focusRing controlBtn" onClick={() => setDeployedOnly(!deployedOnly)} aria-pressed={deployedOnly} aria-label={deployedOnly ? "Deployed filter active — click to show all" : "Show only widely deployed algorithms"}>
+                Widely deployed
+              </button>
+              <button className="focusRing controlBtn" onClick={() => setShowDefaults(!showDefaults)} aria-pressed={showDefaults} aria-label={showDefaults ? "Showing recommended defaults — click to show all" : "Show only recommended default algorithms"}>
+                Recommended defaults
+              </button>
+            </div>
+          )}
 
           {showMethodology && (
             <section className="panel-inner" style={{ marginBottom: "14px" }}>
