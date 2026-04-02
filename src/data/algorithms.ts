@@ -123,6 +123,23 @@ export const ALGORITHMS: Algorithm[] = [
     performance:"~5-8 cycles/byte software",
     notes:"Undisclosed S-box derivation is controversial internationally. Functionally sound but opaque design."
   },
+  { id:"snow_v", name:"SNOW-V", category:"symmetric", family:"SNOW", origin:"🇸🇪 Sweden",
+    originDetail:"Thomas Johansson & Jing Yang (Lund University, 2021). Successor to SNOW 2.0/3G (Ekdahl & Johansson, 2002).",
+    useCases:"5G confidentiality and integrity (3GPP). High-throughput stream encryption. Successor to SNOW 3G used in 4G/LTE.",
+    status:"standard", statusLabel:"3GPP / ISO/IEC 18033-4",
+    recommendation:"acceptable",
+    recommendationRationale:"SNOW 2.0 is ISO/IEC 18033-4 standardized and SNOW 3G is the 3GPP stream cipher for 4G/LTE. SNOW-V is the 256-bit successor designed for 5G throughput. Proven LFSR + FSM construction with 20+ years of cryptanalysis on the family.",
+    recommendationChangesWhen:"Upgrade to recommended if SNOW-V is formally adopted by 3GPP for 5G NR. Downgrade if algebraic attacks on the LFSR structure improve beyond current margins.",
+    whyNotThis:"Stream cipher — no built-in authentication (must pair with a MAC). Less ecosystem support outside telecom. Not a drop-in replacement for AES-GCM in general-purpose AEAD.",
+    assumptions:"Security assumes algebraic immunity of the LFSR feedback polynomials and nonlinearity of the FSM. SNOW 2.0 has withstood 20+ years of cryptanalysis. SNOW-V doubles key/IV size to 256-bit for 5G. No built-in authentication — requires separate integrity mechanism.",
+    estimationMethodology:{classicalBasis:"exact",quantumBasis:"exact",classicalNote:"256-bit key, no practical attacks on full SNOW-V",quantumNote:"Grover's algorithm halves effective key length"},
+    keySize:256, nonceSize:128, tagSize:null, blockSize:null,
+    securityBits:256, pqSecurityBits:128,
+    bestAttack:"No practical attack on full SNOW 2.0 or SNOW-V. Algebraic attacks remain exponential.",
+    reductionQuality:"LFSR + FSM with AES round function; heuristic security",
+    performance:"~1 cycle/byte on modern x86 (AES-NI + SIMD)",
+    notes:"SNOW family powers 4G/LTE globally (SNOW 3G). SNOW-V targets 5G with 256-bit security. Stream cipher — no built-in auth."
+  },
 
   // ═══════════════════════════════════════
   // KEY ENCAPSULATION / KEY EXCHANGE

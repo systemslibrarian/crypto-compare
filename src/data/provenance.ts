@@ -50,6 +50,15 @@ export const ALGORITHM_PROVENANCE: Record<string, { sources: AlgorithmSource[]; 
       { label: "RFC 7801", url: "https://www.rfc-editor.org/rfc/rfc7801", note: "GOST R 34.12-2015 block cipher (Kuznyechik).", kind: "standard" },
     ],
   },
+  snow_v: {
+    lastReviewed: "2026-04-02",
+    sources: [
+      { label: "ISO/IEC 18033-4", url: "https://www.iso.org/standard/54531.html", note: "International standard for stream ciphers including SNOW 2.0.", kind: "standard" },
+      { label: "SNOW-V specification", url: "https://eprint.iacr.org/2018/1143", note: "Johansson & Yang, 2021. SNOW-V design for 5G.", kind: "analysis" },
+      { label: "3GPP TS 35.216", url: "https://www.3gpp.org/specifications", note: "SNOW 3G specification for 4G/LTE confidentiality.", kind: "standard" },
+      { label: "snow2 (demo)", url: "https://github.com/systemslibrarian/snow2", note: "Modern Rust steganography tool using SNOW-inspired naming with XChaCha20-Poly1305.", kind: "deployment" },
+    ],
+  },
   // ─── KEM ─────────────────────────────────────────────────────────
   mlkem768: {
     lastReviewed: "2026-03-16",
