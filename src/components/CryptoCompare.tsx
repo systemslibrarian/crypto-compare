@@ -221,6 +221,25 @@ export default function CryptoCompare() {
     [selAlgos, rows],
   );
 
+  const resetToMainMenu = () => {
+    setCat("symmetric");
+    setAdv(false);
+    setSel([]);
+    setCmp(false);
+    setExplainerOpen(true);
+    setSearch("");
+    setPqOnly(false);
+    setStandardOnly(false);
+    setNistOnly(false);
+    setDeployedOnly(false);
+    setCountry("all");
+    setSortBy("name");
+    setShowMethodology(false);
+    setShowHybrid(false);
+    setShowDefaults(false);
+    window.history.replaceState({}, "", window.location.pathname);
+  };
+
   function downloadText(content: string, filename: string, mime: string) {
     const blob = new Blob([content], { type: mime });
     const url = URL.createObjectURL(blob);
@@ -242,8 +261,28 @@ export default function CryptoCompare() {
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px" }}>
             <div>
               <h1 style={{ margin: 0, fontSize: "28px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", letterSpacing: "-0.5px", display: "flex", alignItems: "center", gap: "10px" }}>
-                <span className="brandMark" aria-hidden="true">◈</span>
-                <span><span style={{ color: "#3b82f6" }}>crypto</span>::compare</span>
+                <button
+                  type="button"
+                  onClick={resetToMainMenu}
+                  className="focusRing"
+                  aria-label="Back to main menu"
+                  style={{
+                    margin: 0,
+                    padding: 0,
+                    background: "transparent",
+                    border: "none",
+                    color: "inherit",
+                    font: "inherit",
+                    letterSpacing: "inherit",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    cursor: "pointer",
+                  }}
+                >
+                  <span className="brandMark" aria-hidden="true">◈</span>
+                  <span><span style={{ color: "#3b82f6" }}>crypto</span>::compare</span>
+                </button>
               </h1>
               <p style={{ margin: "6px 0 0", fontSize: "16px", color: "#c4d1e3" }}>International cryptographic algorithm reference across 12 categories.</p>
             </div>
