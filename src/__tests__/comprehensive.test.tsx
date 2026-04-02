@@ -664,7 +664,8 @@ describe("Keyboard Shortcuts", () => {
   it("'a' toggles advanced mode", async () => {
     const CryptoCompare = (await import("@/components/CryptoCompare")).default;
     const { unmount } = render(<CryptoCompare />);
-    const advButton = screen.getByText(/Beginner/i);
+    const advButtons = screen.getAllByText(/Beginner/i);
+    const advButton = advButtons.find((el) => el.hasAttribute("aria-pressed"))!;
     expect(advButton).toHaveAttribute("aria-pressed", "false");
     fireEvent.keyDown(document, { key: "a" });
     expect(advButton).toHaveAttribute("aria-pressed", "true");
