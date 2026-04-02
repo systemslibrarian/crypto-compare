@@ -384,23 +384,34 @@ export default function CryptoCompare() {
                 aria-expanded={mobileNavOpen}
                 style={{
                   display: "none",
-                  background: "#0e1420",
-                  color: "#d4deea",
-                  border: "1px solid #334155",
+                  background: mobileNavOpen ? "#1d4ed8" : "#0e1420",
+                  color: mobileNavOpen ? "#fff" : "#d4deea",
+                  border: `1px solid ${mobileNavOpen ? "#2563eb" : "#334155"}`,
                   borderRadius: "6px",
                   padding: "10px 14px",
-                  fontSize: "18px",
+                  fontSize: "15px",
                   cursor: "pointer",
                   minWidth: "44px",
                   minHeight: "44px",
+                  gap: "6px",
+                  fontWeight: 700,
+                  fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
                 }}
               >
-                {mobileNavOpen ? "✕" : "☰"}
+                <span aria-hidden="true">{mobileNavOpen ? "✕" : "☰"}</span>
+                <span className="mobileMenuLabel">{CATEGORIES.find((c) => c.id === cat)?.icon} {CATEGORIES.find((c) => c.id === cat)?.label}</span>
               </button>
             </div>
           </div>
         </header>
 
+        {mobileNavOpen && (
+          <div
+            className="mobileNavBackdrop"
+            onClick={() => setMobileNavOpen(false)}
+            aria-hidden="true"
+          />
+        )}
         <nav aria-label="Cryptography categories" role="tablist" className={`categoryNav ${mobileNavOpen ? "mobileNavOpen" : ""}`} style={{ display: "flex", gap: 0, borderBottom: "1px solid #111827", overflowX: "auto", WebkitOverflowScrolling: "touch", position: "sticky", top: 0, zIndex: 10, background: "#070b12" }}>
           {CATEGORIES.map((c) => {
             const accent = CATEGORY_ACCENT[c.id];
@@ -810,6 +821,11 @@ export default function CryptoCompare() {
             <time dateTime="2026-03-16">March 16, 2026</time>
           </div>
           Sources: NIST FIPS, IETF RFCs, KPQC, CRYPTREC, GB/T, GOST, DSTU, ISO, Eurocrypt/CRYPTO proceedings. Security estimates reflect known attacks and public literature, and should be treated as continuously updated guidance, not certification.
+          <div style={{ marginTop: "10px" }}>
+            <span className="text-accent" style={{ fontWeight: 700 }}>Related:</span>{" "}
+            <a href="https://github.com/systemslibrarian/crypto-compare" target="_blank" rel="noopener noreferrer" style={{ color: "#7dd3fc" }}>crypto-compare</a>{" · "}
+            <a href="https://github.com/systemslibrarian/blind-oracle" target="_blank" rel="noopener noreferrer" style={{ color: "#7dd3fc" }}>blind-oracle</a>
+          </div>
         </footer>
       </div>
 
@@ -938,6 +954,14 @@ export default function CryptoCompare() {
           display: none !important;
         }
 
+        .mobileMenuLabel {
+          display: none;
+        }
+
+        .mobileNavBackdrop {
+          display: none;
+        }
+
         /* ── Mobile: tablets and smaller ── */
         @media (max-width: 900px) {
           .pageShell {
@@ -967,18 +991,41 @@ export default function CryptoCompare() {
             display: flex !important;
             align-items: center;
             justify-content: center;
+            flex: 1 1 100%;
+            order: 10;
+            justify-content: center;
+          }
+
+          .mobileMenuLabel {
+            display: inline;
+          }
+
+          .mobileNavBackdrop {
+            display: block;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9;
           }
 
           .categoryNav {
             display: none !important;
             flex-direction: column;
-            position: static;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: calc(100vw - 32px);
+            max-width: 400px;
             background: #0a0f1a;
             border: 1px solid #1e293b;
-            border-radius: 8px;
-            margin: 8px 0;
-            max-height: 70vh;
+            border-radius: 12px;
+            margin: 0;
+            max-height: 80vh;
             overflow-y: auto;
+            z-index: 20;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            padding: 8px 0;
           }
 
           .categoryNav.mobileNavOpen {
@@ -987,16 +1034,17 @@ export default function CryptoCompare() {
 
           .categoryNav .categoryTab {
             text-align: left;
-            padding: 14px 18px !important;
-            min-height: 48px;
-            font-size: 15px !important;
+            padding: 16px 20px !important;
+            min-height: 52px;
+            font-size: 16px !important;
             border-bottom: none !important;
-            border-left: 3px solid transparent;
+            border-left: 4px solid transparent;
           }
 
           .categoryNav .categoryTab[aria-selected="true"] {
             border-left-color: #3b82f6;
             background: #0e1628;
+            color: #7dd3fc !important;
           }
 
           .searchInput {
