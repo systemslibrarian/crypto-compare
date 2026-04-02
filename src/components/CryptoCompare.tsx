@@ -344,7 +344,7 @@ export default function CryptoCompare() {
               <span className="headerLegend" style={{ fontSize: "14px", color: "#c4d1e3", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>C = Classical, PQ = Post-Quantum</span>
               <Link
                 href="/visuals"
-                className="headerBtn focusRing"
+                className="headerBtn desktopOnly focusRing"
                 style={{
                   background: "#0e1420",
                   color: "#d4deea",
@@ -362,7 +362,7 @@ export default function CryptoCompare() {
               <button
                 onClick={() => setAdv(!adv)}
                 aria-pressed={adv}
-                className="focusRing headerBtn"
+                className="focusRing headerBtn desktopOnly"
                 style={{
                   background: adv ? "#11203a" : "#0e1420",
                   color: adv ? "#7dd3fc" : "#d4deea",
@@ -413,6 +413,27 @@ export default function CryptoCompare() {
           />
         )}
         <nav aria-label="Cryptography categories" role="tablist" className={`categoryNav ${mobileNavOpen ? "mobileNavOpen" : ""}`} style={{ display: "flex", gap: 0, borderBottom: "1px solid #111827", overflowX: "auto", WebkitOverflowScrolling: "touch", position: "sticky", top: 0, zIndex: 10, background: "#070b12" }}>
+          <div className="mobileNavActions">
+            <Link
+              href="/visuals"
+              className="focusRing mobileNavActionBtn"
+              onClick={() => setMobileNavOpen(false)}
+              style={{ textDecoration: "none" }}
+            >
+              📊 Visual Guide
+            </Link>
+            <button
+              onClick={() => { setAdv(!adv); setMobileNavOpen(false); }}
+              className="focusRing mobileNavActionBtn"
+              aria-pressed={adv}
+              style={{
+                background: adv ? "#1e3a5f" : undefined,
+                color: adv ? "#7dd3fc" : undefined,
+              }}
+            >
+              {adv ? "⚙️ Advanced mode" : "📖 Beginner mode"}
+            </button>
+          </div>
           {CATEGORIES.map((c) => {
             const accent = CATEGORY_ACCENT[c.id];
             return (
@@ -962,6 +983,10 @@ export default function CryptoCompare() {
           display: none;
         }
 
+        .mobileNavActions {
+          display: none;
+        }
+
         /* ── Mobile: tablets and smaller ── */
         @media (max-width: 900px) {
           .pageShell {
@@ -998,6 +1023,35 @@ export default function CryptoCompare() {
 
           .mobileMenuLabel {
             display: inline;
+          }
+
+          .desktopOnly {
+            display: none !important;
+          }
+
+          .mobileNavActions {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            border-bottom: 2px solid #1e293b;
+          }
+
+          .mobileNavActionBtn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: #1a2332;
+            color: #d4deea;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+            cursor: pointer;
+            min-height: 44px;
           }
 
           .mobileNavBackdrop {
