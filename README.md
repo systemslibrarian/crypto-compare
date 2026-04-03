@@ -1,6 +1,6 @@
 # crypto::compare 🔐
 
-**Interactive cryptographic algorithm reference — 12 categories, 64 algorithms, 16+ countries.**
+**Interactive cryptographic algorithm reference — 16 categories, 85 algorithms, 16+ countries.**
 
 🌐 **[Live Site →](https://systemslibrarian.github.io/crypto-compare/)**
 
@@ -28,7 +28,7 @@ A browser-based reference tool for exploring, comparing, and choosing cryptograp
 
 ## What You Can Do
 
-### Browse 64 Algorithms Across 12 Categories
+### Browse 85 Algorithms Across 16 Categories
 
 | Category | Algorithms |
 |----------|------------|
@@ -44,6 +44,10 @@ A browser-based reference tool for exploring, comparing, and choosing cryptograp
 | Zero-Knowledge Proofs | Groth16, PLONK, zk-STARK, Bulletproofs |
 | Multi-Party Computation | SPDZ, ABY, Yao's Garbled Circuits, Sharemind |
 | OT / PIR | Base OT, OT Extension, Computational PIR, IT-PIR |
+| Asymmetric Encryption | RSA-OAEP-2048, RSA-OAEP-4096, ElGamal, ECIES (P-256), SM2 |
+| Steganography | LSB Steganography, DCT-Domain F5, BPCS, Spread Spectrum, WOW |
+| Threshold Signatures | FROST, GG20, BLS Threshold, Shamir+Schnorr, DKLS23 |
+| CSPRNG | HMAC-DRBG, CTR-DRBG, Hash-DRBG, ChaCha20-DRBG, Fortuna |
 
 Each algorithm shows: origin country, use cases, classical security bits, post-quantum security bits (with visual meters), best known attack, reduction quality, performance summary, standardization status, **recommendation level** (✅ Recommended / 🟡 Acceptable / ⚠️ Legacy / 🔬 Research / ❌ Avoid), **recommendation rationale** (why this level), **when it changes** (conditions that would shift the recommendation), **"Why not this?"** tradeoffs, **assumptions**, and **estimation methodology** (how classical/quantum security levels were derived, with basis and notes).
 
@@ -55,7 +59,7 @@ Select any 2+ algorithms within a category → compare them in a structured tabl
 
 ### "What Should I Use?" Decision Flowchart
 
-An interactive step-by-step wizard that asks what you need to accomplish and recommends a specific algorithm with reasoning. Covers all 12 categories with 2–3 narrowing questions per path.
+An interactive step-by-step wizard that asks what you need to accomplish and recommends a specific algorithm with reasoning. Covers all 16 categories with 2–3 narrowing questions per path.
 
 **Download Justification Report**: After the wizard recommends an algorithm, click "Download Justification Report" to get a full Markdown report containing: your decision path (questions + answers), recommendation rationale, security assumptions, estimation methodology, "why not this?" tradeoffs, "changes when" conditions, sources with URLs, and a disclaimer. Designed to be defensible in a security review or architecture meeting.
 
@@ -161,6 +165,35 @@ Full per-algorithm source links are in the app's provenance panel and in [`src/d
 
 No backend. No external API calls. No cookies. No analytics.
 
+### Accessibility (ADA / WCAG 2.1)
+
+| Feature | Status |
+|---------|--------|
+| Skip-to-content link | ✅ |
+| Semantic HTML landmarks (`header`, `nav`, `main`, `footer`) | ✅ |
+| ARIA roles, labels, `aria-expanded`, `aria-pressed`, `aria-selected` | ✅ |
+| Keyboard navigation (Tab, Enter, Space, Arrow keys, Escape) | ✅ |
+| Focus-visible outlines on all interactive elements | ✅ |
+| `prefers-reduced-motion` support (disables transitions/animations) | ✅ |
+| Mobile nav focus trap + body scroll lock | ✅ |
+| Minimum 44×44px touch targets | ✅ |
+| Color contrast (dark theme, light text on dark backgrounds) | ✅ |
+| Screen reader support (descriptive `aria-label` on all controls) | ✅ |
+| Minimum 14px font size on all interactive elements (phones) | ✅ |
+
+### Mobile Responsiveness
+
+| Breakpoint | Layout |
+|------------|--------|
+| > 900px | Desktop: 2-column algorithm grid, horizontal category tabs |
+| ≤ 900px | Tablet: 1-column grid, bottom-sheet category nav with backdrop |
+| ≤ 480px | Phone: Increased padding, larger font sizes, full-width controls |
+
+- Bottom-sheet category navigation with `safe-area-inset-bottom` for notched phones
+- Touch-friendly 44px minimum button/control sizes
+- 16px search input font to prevent iOS auto-zoom
+- Hamburger menu with focus trap and body scroll lock
+
 ---
 
 ## Getting Started
@@ -203,8 +236,8 @@ src/
 │   ├── ErrorBoundary.tsx       # React error boundary with reload
 │   └── ui.tsx                  # Badge, SecurityMeter, formatBytes
 ├── data/
-│   ├── algorithms.ts           # 64 algorithm definitions (20+ fields each, audit-hardened)
-│   ├── categories.ts           # 12 category definitions + explainers
+│   ├── algorithms.ts           # 85 algorithm definitions (20+ fields each, audit-hardened)
+│   ├── categories.ts           # 16 category definitions + explainers
 │   ├── hybridPatterns.ts       # 6 hybrid cryptography patterns (classical + PQ)
 │   └── provenance.ts           # Per-algorithm source links + review dates
 ├── lib/
@@ -226,8 +259,9 @@ src/
 | Project | Crypto Categories |
 |---------|------------------|
 | [Quantum Vault KPQC](https://github.com/systemslibrarian/quantum-vault-kpqc) | Symmetric, KEM, Signatures, KDF, MAC, Secret Sharing |
-| [meow-decoder](https://github.com/systemslibrarian/meow-decoder) | Symmetric, Hash, Steganography |
-| [Scripture Cloak](https://github.com/systemslibrarian/scripture-cloak) | ZKP concepts, Hash, PIR concept |
+| [meow-decoder](https://github.com/systemslibrarian/meow-decoder) | Symmetric, Hash, Steganography (LSB/F5/WOW) |
+| [Scripture Cloak](https://github.com/systemslibrarian/scripture-cloak) | ZKP concepts, Hash, PIR concept, CSPRNG |
+| [zk-proof-lab](https://github.com/systemslibrarian/zk-proof-lab) | Zero-Knowledge Proofs (Groth16, PLONK, Bulletproofs) |
 
 ---
 

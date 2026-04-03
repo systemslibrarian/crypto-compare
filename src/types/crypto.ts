@@ -12,7 +12,11 @@ export type AlgorithmCategory =
   | "he"
   | "zkp"
   | "mpc"
-  | "ot_pir";
+  | "ot_pir"
+  | "asymmetric"
+  | "steganography"
+  | "threshold_sig"
+  | "csprng";
 
 export type AlgorithmStatus = "standard" | "candidate";
 
@@ -181,6 +185,37 @@ export type OTPIRAlgorithm = AlgorithmBase & {
   computationalModel: string;
 };
 
+export type AsymmetricAlgorithm = AlgorithmBase & {
+  category: "asymmetric";
+  keySize: number;
+  ciphertextOverhead: string;
+  pqSafe: boolean;
+};
+
+export type SteganographyAlgorithm = AlgorithmBase & {
+  category: "steganography";
+  carrierType: string;
+  payloadCapacity: string;
+  steganalysisResistance: string;
+  producesArtifacts: boolean;
+};
+
+export type ThresholdSigAlgorithm = AlgorithmBase & {
+  category: "threshold_sig";
+  thresholdConfig: string;
+  rounds: number;
+  identifiableAbort: boolean;
+  pqSafe: boolean;
+};
+
+export type CSPRNGAlgorithm = AlgorithmBase & {
+  category: "csprng";
+  nistApproved: boolean;
+  reseedRequired: boolean;
+  forwardSecrecy: boolean;
+  catastrophicReseedRecovery: boolean;
+};
+
 export type Algorithm =
   | SymmetricAlgorithm
   | KEMAlgorithm
@@ -193,7 +228,11 @@ export type Algorithm =
   | HEAlgorithm
   | ZKPAlgorithm
   | MPCAlgorithm
-  | OTPIRAlgorithm;
+  | OTPIRAlgorithm
+  | AsymmetricAlgorithm
+  | SteganographyAlgorithm
+  | ThresholdSigAlgorithm
+  | CSPRNGAlgorithm;
 
 export type ComparisonRow = {
   label: string;

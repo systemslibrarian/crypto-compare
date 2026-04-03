@@ -24,6 +24,10 @@ const DECISION_TREE: Record<string, DecisionNode> = {
       { label: "Prove something without revealing it", next: "zkp" },
       { label: "Jointly compute without revealing inputs", next: "mpc" },
       { label: "Fetch data without revealing which item", next: "ot_pir" },
+      { label: "Encrypt for a recipient without a shared secret", next: "asymmetric" },
+      { label: "Hide that communication is happening at all", next: "steganography" },
+      { label: "Require multiple parties to cooperate to sign", next: "threshold_sig" },
+      { label: "Generate cryptographic key material or nonces", next: "csprng" },
     ],
   },
   symmetric: {
@@ -159,6 +163,77 @@ const DECISION_TREE: Record<string, DecisionNode> = {
     options: [
       { label: "Single server (computational PIR)", answer: { algo: "Computational PIR", id: "cpir", reason: "One server. Privacy based on computational hardness (lattice/LWE). Higher server cost but simpler deployment.", category: "ot_pir" } },
       { label: "Multiple non-colluding servers", answer: { algo: "Information-Theoretic PIR", id: "it_pir", reason: "Perfect privacy if servers don't collude. Lower per-query cost but requires trust in server separation.", category: "ot_pir" } },
+    ],
+  },
+  asymmetric: {
+    question: "Do you need legacy RSA compatibility, or can you use modern EC?",
+    options: [
+      { label: "Need RSA for legacy system compatibility", next: "asymmetric_rsa" },
+      { label: "Modern elliptic curve (smaller keys, same security)", next: "asymmetric_ec" },
+    ],
+  },
+  asymmetric_rsa: {
+    question: "What's your minimum key size?",
+    options: [
+      { label: "2048-bit (legacy compat, acceptable until 2030)", answer: { algo: "RSA-OAEP-2048", id: "rsa_oaep_2048", reason: "NIST SP 800-56B / RFC 8017. 112-bit classical security. Acceptable until 2030 NIST deprecation. OAEP padding mandatory.", category: "asymmetric" } },
+      { label: "4096-bit (higher classical security margin)", answer: { algo: "RSA-OAEP-4096", id: "rsa_oaep_4096", reason: "~140-bit classical security. Still 0 PQ security — Shor's algorithm breaks any RSA key size. Use ML-KEM for new designs.", category: "asymmetric" } },
+    ],
+  },
+  asymmetric_ec: {
+    question: "Which regional standard applies?",
+    options: [
+      { label: "International / NIST (P-256)", answer: { algo: "ECIES (P-256)", id: "ecies_p256", reason: "ANSI X9.63 / ISO 18033-2. 128-bit classical security. Smaller keys than RSA. Not PQ-safe.", category: "asymmetric" } },
+      { label: "Chinese government compliance (SM2)", answer: { algo: "SM2 Encryption", id: "sm2_enc", reason: "GB/T 32918 / ISO 14888-3. Required for Chinese PKI. Equivalent security to P-256. Not PQ-safe.", category: "asymmetric" } },
+    ],
+  },
+  steganography: {
+    question: "What is the goal — covert communication or watermarking/ownership proof?",
+    options: [
+      { label: "Covert communication (hide the message)", next: "stego_covert" },
+      { label: "Watermarking (prove ownership, survive modifications)", answer: { algo: "Spread Spectrum Watermarking", id: "spread_spectrum_stego", reason: "Cox et al. 1997. Robust to JPEG, cropping, filtering. Low capacity. Foundation of Adobe Content Credentials and commercial watermarking.", category: "steganography" } },
+    ],
+  },
+  stego_covert: {
+    question: "What's the carrier medium?",
+    options: [
+      { label: "Raw/PNG image (state-of-the-art steganalysis resistance)", answer: { algo: "Adaptive Steganography (WOW)", id: "wow_stego", reason: "Holub & Fridrich 2012. State of practice. Adaptive cost function concentrates bits in textured regions. Best steganalysis resistance for spatial-domain image steganography.", category: "steganography" } },
+      { label: "JPEG image", answer: { algo: "DCT-Domain (JPEG F5)", id: "dct_f5", reason: "Westfeld 2001. Embeds in DCT coefficients with matrix encoding. Steganalysis-resistant for low payloads in JPEG.", category: "steganography" } },
+    ],
+  },
+  threshold_sig: {
+    question: "Which signature type do you need?",
+    options: [
+      { label: "Schnorr / EdDSA (IETF standard, most flexible)", answer: { algo: "FROST", id: "frost", reason: "RFC 9591. IETF standard. 2-round threshold Schnorr. Identifiable abort. First threshold sig scheme with an IETF RFC.", category: "threshold_sig" } },
+      { label: "ECDSA (compatible with Ethereum / Bitcoin chains)", next: "threshold_ecdsa" },
+      { label: "BLS (needs non-interactive aggregation for large sets)", answer: { algo: "BLS Threshold", id: "bls_threshold", reason: "Boneh et al. 2004. Non-interactive aggregation. O(1) verification for large validator sets. Ethereum 2.0 PoS uses this.", category: "threshold_sig" } },
+    ],
+  },
+  threshold_ecdsa: {
+    question: "Is this a new deployment or is cutting-edge round efficiency worth the research risk?",
+    options: [
+      { label: "Production deployment (use established scheme)", answer: { algo: "GG20", id: "gg20", reason: "Gennaro & Goldfeder 2020. Most widely deployed threshold ECDSA. Compatible with Ethereum/Bitcoin. Fireblocks, Coinbase, and major custody solutions use GG20 variants.", category: "threshold_sig" } },
+      { label: "Research / next-generation (3 rounds, very recent)", answer: { algo: "DKLS23", id: "dkls23", reason: "Doerner et al. 2023. Three-round threshold ECDSA. Improves GG20 round complexity. IEEE S&P 2024. Too new for production.", category: "threshold_sig" } },
+    ],
+  },
+  csprng: {
+    question: "Do you need NIST FIPS 140-2/3 compliance?",
+    options: [
+      { label: "Yes — FIPS compliance required", next: "csprng_fips" },
+      { label: "No — best software performance / Linux/BSD environments", next: "csprng_nonfips" },
+    ],
+  },
+  csprng_fips: {
+    question: "Is AES-NI hardware available?",
+    options: [
+      { label: "Yes — hardware AES available (fast throughput)", answer: { algo: "CTR-DRBG (AES-256)", id: "ctr_drbg", reason: "NIST SP 800-90A Rev 1. AES-NI accelerated. ~1-2 GB/s. Fastest NIST-approved DRBG. Used in Windows CNG and hardware HSMs.", category: "csprng" } },
+      { label: "No — or prefer hash-based construction", answer: { algo: "HMAC-DRBG", id: "hmac_drbg", reason: "NIST SP 800-90A Rev 1. HMAC-SHA-256 backed. Proven under PRF assumption. No known weaknesses. The unbackdoored alternative to Dual_EC_DRBG in the same spec.", category: "csprng" } },
+    ],
+  },
+  csprng_nonfips: {
+    question: "OS-level CSPRNG design or general software randomness?",
+    options: [
+      { label: "OS entropy pool with catastrophic reseed recovery (macOS/BSD pattern)", answer: { algo: "Fortuna", id: "fortuna", reason: "Ferguson & Schneier 2003. 32 entropy pools guarantee recovery from full state compromise. FreeBSD and macOS use this design.", category: "csprng" } },
+      { label: "Application-level or Linux kernel (constant-time, no AES-NI)", answer: { algo: "ChaCha20-DRBG", id: "chacha20_drbg", reason: "Linux ≥ 5.17 primary DRBG. Constant-time — no lookup tables, immune to timing attacks. Not FIPS-approved.", category: "csprng" } },
     ],
   },
 };

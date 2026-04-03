@@ -434,4 +434,136 @@ export const ALGORITHM_PROVENANCE: Record<string, { sources: AlgorithmSource[]; 
       { label: "Chor et al. 1998", url: "https://doi.org/10.1145/293347.293350", note: "Private information retrieval (information-theoretic).", kind: "analysis" },
     ],
   },
+  // ─── Asymmetric ──────────────────────────────────────────────────
+  rsa_oaep_2048: {
+    lastReviewed: "2026-04-03",
+    sources: [
+      { label: "NIST SP 800-56B Rev 2", url: "https://csrc.nist.gov/pubs/sp/800/56/b/r2/final", note: "Recommendation for Pair-Wise Key-Establishment Schemes Using Integer Factorization Cryptography. Defines RSA security levels.", kind: "standard" },
+      { label: "RFC 8017 (PKCS#1 v2.2)", url: "https://www.rfc-editor.org/rfc/rfc8017", note: "RSA Cryptography Specifications including OAEP padding construction.", kind: "standard" },
+    ],
+  },
+  rsa_oaep_4096: {
+    lastReviewed: "2026-04-03",
+    sources: [
+      { label: "NIST SP 800-56B Rev 2", url: "https://csrc.nist.gov/pubs/sp/800/56/b/r2/final", note: "RSA key size security levels. 4096-bit RSA provides ~140-bit classical security per Table 2.", kind: "standard" },
+      { label: "RFC 8017 (PKCS#1 v2.2)", url: "https://www.rfc-editor.org/rfc/rfc8017", note: "RSA OAEP padding specification.", kind: "standard" },
+    ],
+  },
+  elgamal: {
+    lastReviewed: "2026-04-03",
+    sources: [
+      { label: "ElGamal 1985", url: "https://doi.org/10.1109/TIT.1985.1057074", note: "A Public-Key Cryptosystem and a Signature Scheme Based on Discrete Logarithms. IEEE Trans. Inf. Theory, vol. 31, no. 4, pp. 469–472.", kind: "analysis" },
+    ],
+  },
+  ecies_p256: {
+    lastReviewed: "2026-04-03",
+    sources: [
+      { label: "ISO/IEC 18033-2", url: "https://www.iso.org/standard/37971.html", note: "Information technology — Security techniques — Encryption algorithms — Part 2: Asymmetric ciphers. Defines ECIES.", kind: "standard" },
+      { label: "ANSI X9.63", url: "https://webstore.ansi.org/Standards/ANSI/ANSIX9632001", note: "Public Key Cryptography for the Financial Services Industry: Key Agreement and Key Transport Using Elliptic Curve Cryptography.", kind: "standard" },
+    ],
+  },
+  sm2_enc: {
+    lastReviewed: "2026-04-03",
+    sources: [
+      { label: "GB/T 32918.4-2016", url: "https://www.oscca.gov.cn/", note: "SM2 elliptic curve public key encryption algorithm (Chinese national standard).", kind: "standard" },
+      { label: "ISO/IEC 14888-3 Amd.1", url: "https://www.iso.org/standard/76382.html", note: "SM2 digital signature algorithm registered with ISO/IEC.", kind: "standard" },
+    ],
+  },
+  // ─── Steganography ───────────────────────────────────────────────
+  lsb_stego: {
+    lastReviewed: "2026-04-03",
+    sources: [
+      { label: "Fridrich, Goljan & Du 2001", url: "https://www.ws.binghamton.edu/fridrich/Research/acm_si.pdf", note: "Reliable Detection of LSB Steganography in Grayscale and Color Images. ACM Workshop on Multimedia and Security 2001.", kind: "analysis" },
+    ],
+  },
+  dct_f5: {
+    lastReviewed: "2026-04-03",
+    sources: [
+      { label: "Westfeld 2001", url: "https://doi.org/10.1007/3-540-45496-9_21", note: "F5 — A Steganographic Algorithm. Information Hiding 4th International Workshop, LNCS 2137, Springer.", kind: "analysis" },
+    ],
+  },
+  bpcs: {
+    lastReviewed: "2026-04-03",
+    sources: [
+      { label: "Kawaguchi & Eason 1998", url: "https://doi.org/10.1117/12.335472", note: "Principles and Applications of BPCS-Steganography. SPIE Photonics East, Proc. 3528.", kind: "analysis" },
+    ],
+  },
+  spread_spectrum_stego: {
+    lastReviewed: "2026-04-03",
+    sources: [
+      { label: "Cox et al. 1997", url: "https://doi.org/10.1109/83.650120", note: "Secure Spread Spectrum Watermarking for Multimedia. IEEE Transactions on Image Processing, vol. 6, no. 12.", kind: "analysis" },
+    ],
+  },
+  wow_stego: {
+    lastReviewed: "2026-04-03",
+    sources: [
+      { label: "Holub & Fridrich 2012", url: "https://doi.org/10.1109/WIFS.2012.6412576", note: "Designing Steganographic Distortion Using Directional Filters. IEEE Workshop on Information Forensics and Security (WIFS).", kind: "analysis" },
+    ],
+  },
+  // ─── Threshold Signatures ────────────────────────────────────────
+  frost: {
+    lastReviewed: "2026-04-03",
+    sources: [
+      { label: "RFC 9591", url: "https://www.rfc-editor.org/rfc/rfc9591", note: "The Flexible Round-Optimized Schnorr Threshold (FROST) Protocol. IETF standard, June 2024.", kind: "standard" },
+      { label: "Komlo & Goldberg 2020", url: "https://eprint.iacr.org/2020/852", note: "FROST: Flexible Round-Optimized Schnorr Threshold Signatures. Original academic paper.", kind: "analysis" },
+    ],
+  },
+  gg20: {
+    lastReviewed: "2026-04-03",
+    sources: [
+      { label: "Gennaro & Goldfeder 2020", url: "https://eprint.iacr.org/2020/540", note: "One Round Threshold ECDSA with Identifiable Abort. ACM CCS 2020.", kind: "analysis" },
+    ],
+  },
+  bls_threshold: {
+    lastReviewed: "2026-04-03",
+    sources: [
+      { label: "Boneh, Lynn & Shacham 2004", url: "https://doi.org/10.1007/s00145-004-0314-9", note: "Short Signatures from the Weil Pairing. Journal of Cryptology vol. 17, pp. 297–319.", kind: "analysis" },
+      { label: "IETF BLS Signature draft", url: "https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-bls-signature", note: "BLS Signatures specification on BLS12-381 curve.", kind: "standard" },
+    ],
+  },
+  shamir_schnorr: {
+    lastReviewed: "2026-04-03",
+    sources: [
+      { label: "Stinson & Strobl 2001", url: "https://doi.org/10.1007/3-540-45682-1_30", note: "Provably Secure Distributed Schnorr Signatures and a (t,n) Threshold Scheme for Implicit Certificates. ACISP 2001, LNCS 2119.", kind: "analysis" },
+    ],
+  },
+  dkls23: {
+    lastReviewed: "2026-04-03",
+    sources: [
+      { label: "Doerner, Kondi, Lee & Shelat 2023", url: "https://eprint.iacr.org/2023/765", note: "Threshold ECDSA in Three Rounds. ePrint 2023/765. IEEE Security & Privacy 2024.", kind: "analysis" },
+    ],
+  },
+  // ─── CSPRNG ──────────────────────────────────────────────────────
+  hmac_drbg: {
+    lastReviewed: "2026-04-03",
+    sources: [
+      { label: "NIST SP 800-90A Rev 1", url: "https://csrc.nist.gov/pubs/sp/800/90/a/r1/final", note: "Recommendation for Random Number Generation Using Deterministic Random Bit Generators. HMAC_DRBG construction.", kind: "standard" },
+    ],
+  },
+  ctr_drbg: {
+    lastReviewed: "2026-04-03",
+    sources: [
+      { label: "NIST SP 800-90A Rev 1", url: "https://csrc.nist.gov/pubs/sp/800/90/a/r1/final", note: "CTR_DRBG using AES-256. Performance-optimized NIST-approved DRBG construction.", kind: "standard" },
+    ],
+  },
+  hash_drbg: {
+    lastReviewed: "2026-04-03",
+    sources: [
+      { label: "NIST SP 800-90A Rev 1", url: "https://csrc.nist.gov/pubs/sp/800/90/a/r1/final", note: "Hash_DRBG construction using SHA-256 or SHA-512 as the underlying hash.", kind: "standard" },
+    ],
+  },
+  chacha20_drbg: {
+    lastReviewed: "2026-04-03",
+    sources: [
+      { label: "RFC 7539", url: "https://www.rfc-editor.org/rfc/rfc7539", note: "ChaCha20 and Poly1305 for IETF Protocols. Underlying cipher specification for ChaCha20-DRBG.", kind: "standard" },
+      { label: "Linux kernel CSPRNG docs", url: "https://www.kernel.org/doc/html/latest/driver-api/random.html", note: "Linux ≥ 5.17 uses ChaCha20-based DRBG as primary kernel CSPRNG.", kind: "deployment" },
+    ],
+  },
+  fortuna: {
+    lastReviewed: "2026-04-03",
+    sources: [
+      { label: "Ferguson & Schneier 2003", url: "https://www.schneier.com/books/practical-cryptography/", note: "Practical Cryptography (Wiley). Chapters 9–10 specify the Fortuna PRNG design with 32 entropy pools.", kind: "analysis" },
+      { label: "FreeBSD arc4random / Fortuna", url: "https://man.freebsd.org/cgi/man.cgi?query=random&sektion=4", note: "FreeBSD kernel Fortuna-based CSPRNG implementation documentation.", kind: "deployment" },
+    ],
+  },
 };

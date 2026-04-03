@@ -1,7 +1,9 @@
 import { Badge, RecommendationBadge, SecurityMeter, formatBytes, recommendationText } from "@/components/ui";
 import type {
   Algorithm,
+  AsymmetricAlgorithm,
   ComparisonRow,
+  CSPRNGAlgorithm,
   HEAlgorithm,
   HashAlgorithm,
   KDFAlgorithm,
@@ -12,7 +14,9 @@ import type {
   PasswordAlgorithm,
   SharingAlgorithm,
   SignatureAlgorithm,
+  SteganographyAlgorithm,
   SymmetricAlgorithm,
+  ThresholdSigAlgorithm,
   ZKPAlgorithm,
   AlgorithmCategory,
 } from "@/types/crypto";
@@ -63,6 +67,22 @@ function asMPC(algo: Algorithm): MPCAlgorithm {
 
 function asOTPIR(algo: Algorithm): OTPIRAlgorithm {
   return algo as OTPIRAlgorithm;
+}
+
+function asAsymmetric(algo: Algorithm): AsymmetricAlgorithm {
+  return algo as AsymmetricAlgorithm;
+}
+
+function asSteganography(algo: Algorithm): SteganographyAlgorithm {
+  return algo as SteganographyAlgorithm;
+}
+
+function asThresholdSig(algo: Algorithm): ThresholdSigAlgorithm {
+  return algo as ThresholdSigAlgorithm;
+}
+
+function asCSPRNG(algo: Algorithm): CSPRNGAlgorithm {
+  return algo as CSPRNGAlgorithm;
 }
 
 function formatReviewDate(iso: string | undefined): string {
@@ -127,6 +147,25 @@ export function buildRows(category: AlgorithmCategory, advanced: boolean): Compa
   } else if (category === "ot_pir") {
     rows.push({ label: "Type", render: (a) => asOTPIR(a).otType, exportText: (a) => asOTPIR(a).otType });
     rows.push({ label: "Model", render: (a) => asOTPIR(a).computationalModel, exportText: (a) => asOTPIR(a).computationalModel });
+  } else if (category === "asymmetric") {
+    rows.push({ label: "Key Size", render: (a) => `${asAsymmetric(a).keySize} bits`, exportText: (a) => `${asAsymmetric(a).keySize} bits` });
+    rows.push({ label: "Ciphertext Overhead", render: (a) => asAsymmetric(a).ciphertextOverhead, exportText: (a) => asAsymmetric(a).ciphertextOverhead });
+    rows.push({ label: "PQ-Safe", render: (a) => (asAsymmetric(a).pqSafe ? "Yes" : "No"), exportText: (a) => (asAsymmetric(a).pqSafe ? "Yes" : "No") });
+  } else if (category === "steganography") {
+    rows.push({ label: "Carrier Type", render: (a) => asSteganography(a).carrierType, exportText: (a) => asSteganography(a).carrierType });
+    rows.push({ label: "Payload Capacity", render: (a) => asSteganography(a).payloadCapacity, exportText: (a) => asSteganography(a).payloadCapacity });
+    rows.push({ label: "Steganalysis Resist.", render: (a) => asSteganography(a).steganalysisResistance, exportText: (a) => asSteganography(a).steganalysisResistance });
+    rows.push({ label: "Produces Artifacts", render: (a) => (asSteganography(a).producesArtifacts ? "Yes" : "No"), exportText: (a) => (asSteganography(a).producesArtifacts ? "Yes" : "No") });
+  } else if (category === "threshold_sig") {
+    rows.push({ label: "Threshold", render: (a) => asThresholdSig(a).thresholdConfig, exportText: (a) => asThresholdSig(a).thresholdConfig });
+    rows.push({ label: "Rounds", render: (a) => `${asThresholdSig(a).rounds}`, exportText: (a) => `${asThresholdSig(a).rounds}` });
+    rows.push({ label: "Identifiable Abort", render: (a) => (asThresholdSig(a).identifiableAbort ? "Yes" : "No"), exportText: (a) => (asThresholdSig(a).identifiableAbort ? "Yes" : "No") });
+    rows.push({ label: "PQ-Safe", render: (a) => (asThresholdSig(a).pqSafe ? "Yes" : "No"), exportText: (a) => (asThresholdSig(a).pqSafe ? "Yes" : "No") });
+  } else if (category === "csprng") {
+    rows.push({ label: "NIST Approved", render: (a) => (asCSPRNG(a).nistApproved ? "Yes" : "No"), exportText: (a) => (asCSPRNG(a).nistApproved ? "Yes" : "No") });
+    rows.push({ label: "Reseed Required", render: (a) => (asCSPRNG(a).reseedRequired ? "Yes" : "Self-reseeding"), exportText: (a) => (asCSPRNG(a).reseedRequired ? "Yes" : "Self-reseeding") });
+    rows.push({ label: "Forward Secrecy", render: (a) => (asCSPRNG(a).forwardSecrecy ? "Yes" : "No"), exportText: (a) => (asCSPRNG(a).forwardSecrecy ? "Yes" : "No") });
+    rows.push({ label: "Catastrophic Recovery", render: (a) => (asCSPRNG(a).catastrophicReseedRecovery ? "Yes" : "No"), exportText: (a) => (asCSPRNG(a).catastrophicReseedRecovery ? "Yes" : "No") });
   }
 
   rows.push({ label: "Use Cases", render: (a) => a.useCases, exportText: (a) => a.useCases });

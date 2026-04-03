@@ -13,6 +13,10 @@ export const CATEGORIES: CategoryDefinition[] = [
   { id:"zkp", label:"ZKP", icon:"🎭" },
   { id:"mpc", label:"MPC", icon:"🤖" },
   { id:"ot_pir", label:"OT / PIR", icon:"👁️" },
+  { id:"asymmetric", label:"Asymmetric", icon:"🔓" },
+  { id:"steganography", label:"Stego", icon:"🖼️" },
+  { id:"threshold_sig", label:"Threshold Sigs", icon:"⚖️" },
+  { id:"csprng", label:"CSPRNG", icon:"🎲" },
 ];
 
 /** Each category has a unique accent color used for card borders, tab highlights, and glows. */
@@ -29,6 +33,10 @@ export const CATEGORY_ACCENT: Record<AlgorithmCategory, string> = {
   zkp: "#f97316",         // orange
   mpc: "#6366f1",         // indigo
   ot_pir: "#84cc16",      // lime
+  asymmetric: "#0ea5e9",  // sky
+  steganography: "#c026d3", // fuchsia
+  threshold_sig: "#f43f5e", // rose
+  csprng: "#4ade80",      // green
 };
 
 export const CATEGORY_INFO: CategoryInfoMap = {
@@ -133,7 +141,9 @@ export const CATEGORY_INFO: CategoryInfoMap = {
   zkp:{
     title:"Zero-Knowledge Proofs",
     oneLiner:"Mathematical proof without revelation. Prove you know a secret, prove a statement is true, prove you qualify — without revealing anything beyond the truth of the claim itself.",
-    projects:[],
+    projects:[
+      { name:"zk-proof-lab", tech:"Interactive ZKP playground — Groth16, PLONK, Bulletproofs with step-by-step visualization", url:"https://github.com/systemslibrarian/zk-proof-lab", public:true },
+    ],
     projectIdea:"Scripture Knowledge Proof — prove completion of a Scripture Journey lesson path without revealing which lessons or quiz scores. Or: church membership credential verification without revealing identity.",
     explanation:"Imagine proving you're over 21 without showing your ID. Proving you have enough money for a transaction without revealing your balance. Proving a computation was done correctly without showing the inputs. Zero-knowledge proofs make all of this possible. The prover convinces the verifier that a statement is true while revealing absolutely nothing else. There are two main families: SNARKs produce tiny proofs (a few hundred bytes) that verify in milliseconds but often require a trusted setup ceremony. STARKs produce larger proofs but need no trusted setup and are quantum-resistant. Both are enabling a revolution in blockchain scalability and privacy.",
     realWorld:"Zcash uses zk-SNARKs so you can make transactions on a public blockchain where the sender, receiver, and amount are all hidden — but the network can still verify no money was created from thin air. Ethereum Layer 2 rollups (zkSync, StarkNet, Polygon zkEVM) use ZK proofs to bundle thousands of transactions into a single proof, verified on-chain in milliseconds — this is how Ethereum plans to scale. Digital identity systems use ZK proofs for selective disclosure: prove your age without revealing your birthday, prove citizenship without revealing your passport number. ZK proofs are also used in verifiable computation — outsource computation to a cloud server and get a proof that the result is correct without re-running the computation.",
@@ -158,5 +168,47 @@ export const CATEGORY_INFO: CategoryInfoMap = {
     explanation:"Oblivious Transfer (OT) is a two-party protocol where a sender holds multiple messages and a receiver picks one to receive — but the sender doesn't learn which one was chosen, and the receiver only gets the one they picked. It sounds simple but it's the fundamental building block of virtually all MPC protocols. Private Information Retrieval (PIR) scales this idea to databases: a user queries a database and gets back their result, but the database server has no idea which record was accessed. Current PIR schemes are based on lattice cryptography (making them quantum-resistant) or use multiple non-colluding servers for information-theoretic guarantees. The practical challenge is efficiency — truly private database access is expensive compared to just asking openly.",
     realWorld:"Apple's iCloud Private Relay uses PIR-like techniques so Apple's servers help route your traffic without knowing which websites you visit. Signal uses Private Contact Discovery — you can check which of your phone contacts are on Signal without Signal learning your contact list. Certificate Transparency systems are exploring PIR so browsers can check if a certificate has been revoked without telling the CA which sites they're visiting (which would leak browsing history). Password breach checking services (like Have I Been Pwned's k-anonymity API and 1Password's implementation) use PIR-adjacent techniques so you can check if your password was breached without sending the password. Chrome's SafeBrowsing is exploring PIR to check URLs against malware databases without Google learning which URLs you visit.",
     whyItMatters:"The metadata problem: even when data is encrypted, the access pattern reveals information. If a medical database can see you looked up \"oncology treatment protocols,\" the query itself leaks your health situation. OT and PIR protect the access pattern — not just the data, but the fact that you accessed it. As surveillance concerns grow and privacy regulations tighten, hiding what you access becomes as important as encrypting what you send."
+  },
+  asymmetric:{
+    title:"Asymmetric / Public-Key Encryption",
+    oneLiner:"Two keys, one public, one private — the foundation of how strangers on the internet trust each other.",
+    projects:[
+      { name:"Sealed in the Word", tech:"RSA-OAEP / ECIES key wrapping + Cloud KMS envelope encryption", url:null, public:false, app:"PrayerWarriors.Mobi" },
+      { name:"meow-decoder", tech:"Public-key wrapped symmetric keys for QR file transfer", url:"https://github.com/systemslibrarian/meow-decoder", public:true },
+    ],
+    explanation:"Public-key encryption lets anyone encrypt a message that only the private key holder can decrypt. Unlike symmetric crypto, no shared secret needs to be established in advance. The sender uses the recipient's public key (which can be posted on a website) to lock the message, and only the recipient's private key can unlock it. This breaks the chicken-and-egg problem of 'how do you securely share a key with someone you've never talked to?' The mathematical trapdoor properties of RSA (integer factorization) and elliptic curves (discrete log) make this possible — easy to compute one direction, computationally infeasible to reverse. Critically, this predates the modern era of quantum computers: all classical asymmetric schemes are vulnerable to Shor's algorithm. Post-quantum key encapsulation (KEM) is replacing these for key exchange purposes.",
+    realWorld:"PGP email encryption, S/MIME (email signing/encryption in Outlook and iOS Mail), SSH key-based authentication (your ~/.ssh/id_rsa.pub is a public key), legacy TLS handshakes (pre-TLS 1.3), certificate authorities signing server certificates, Java JAR signing, code signing certificates, mobile app stores verifying app authenticity, and every HTTPS certificate you've ever clicked on.",
+    whyItMatters:"Without asymmetric encryption, every secure connection would require a prior out-of-band secret exchange. You'd have to meet your bank in person to set up a password before ever banking online. It's what makes cold-contact secure communication possible — a stranger can securely send you a message using nothing but your public key, which you could post on a billboard. The loss of confidence in classical asymmetric crypto due to quantum computers is why the post-quantum transition is an emergency: the entire PKI trust model needs rebuilding."
+  },
+  steganography:{
+    title:"Steganography",
+    oneLiner:"Hide the message so no one knows a message exists.",
+    projects:[
+      { name:"meow-decoder", tech:"Steganography-aware QR encoding demonstrating covert channel concepts", url:"https://github.com/systemslibrarian/meow-decoder", public:true },
+      { name:"snow2", tech:"Modern Rust tool named for the SNOW stream cipher family; references steganographic covert channels", url:"https://github.com/systemslibrarian/snow2", public:true },
+    ],
+    projectIdea:"Scripture Cloak — embed annotated Bible verse encoding inside an innocuous image, demonstrating how the steganography/ZKP/hash chain proves a verse's integrity without revealing which study was being done.",
+    explanation:"Steganography conceals data inside innocent-looking carrier files — images, audio, video, text — so that an observer doesn't know communication is happening at all. Distinct from encryption, which hides content but not the fact of communication. A steganographic image looks exactly like an ordinary photo; a steganalyst must actively examine statistical properties of the file to detect that a hidden message exists. The hiding technique ranges from naive (replacing the least significant bit of each pixel — easily detected) to sophisticated adaptive methods (WOW, HUGO) that concentrate hidden bits in regions of natural images that are statistically hardest to analyze. Modern steganalysis uses machine learning classifiers trained on millions of cover and stego images, making this an arms race between embedders and detectors.",
+    realWorld:"Digital watermarking (Adobe Content Credentials, camera manufacturer fingerprinting), covert channel research, law enforcement forensics (detecting hidden contraband in images), printer steganography (yellow dot tracking used by Xerox and HP — every color laser printer secretly embeds a unique device ID in every printed page using near-invisible yellow dots), broadcast monitoring systems, newspaper photo authentication. Related projects: meow-decoder, SNOW2.",
+    whyItMatters:"Encryption reveals that secrets exist. Steganography hides that they do. For adversarial environments — authoritarian surveillance states, whistleblower communication, covert journalism — deniability matters as much as confidentiality. If carrying an encrypted file gets you detained and compelled to reveal the key, steganography's 'there is no hidden file' defense is the only option. It's also the foundation of digital watermarking, which is how media companies prove ownership of images and how camera manufacturers build forensic provenance into every photo."
+  },
+  threshold_sig:{
+    title:"Threshold Signatures",
+    oneLiner:"No single key controls everything — signing requires agreement from a quorum.",
+    projects:[],
+    projectIdea:"Distributed Church Document Signing — pastoral board decisions require signatures from 3-of-5 elders before a document is signed and published. No single elder can act unilaterally.",
+    explanation:"Threshold signature schemes distribute signing authority across N parties such that any T of them must cooperate to produce a valid signature. The critical distinction from secret sharing: no single party ever holds or reconstructs the full private key — the signing happens via a distributed protocol that never assembles the key in one place. This is architecturally different from Shamir's secret sharing, which splits a secret that is eventually reassembled. In threshold signatures, the private key is mathematically divided such that T parties can jointly produce a valid signature for any message without any of them learning the full key. The result looks exactly like a signature from a single key.",
+    realWorld:"Cryptocurrency custody (Fireblocks, Coinbase Vault — institutional crypto custody where a single compromised server can't steal funds), ICANN DNSSEC root key ceremonies (multiple trusted community members each hold a share; a quorum must physically gather to sign the root), multi-org certificate authorities, blockchain validator sets (Ethereum 2.0 validators use BLS threshold signatures), enterprise HSM clusters for code signing where a single HSM compromise shouldn't enable malicious signing.",
+    whyItMatters:"A single compromised key ends security. Threshold schemes mean an attacker must compromise T parties simultaneously — raising the cost of a signing key theft from 'hack one server' to 'hack T independent organizations.' For critical infrastructure like DNS root keys or billion-dollar custody wallets, this distinction is the difference between a security incident and a catastrophic failure. Unlike secret sharing (which splits a stored secret), threshold signing ensures the key is never reassembled anywhere, eliminating the window of vulnerability during reconstruction."
+  },
+  csprng:{
+    title:"CSPRNG — Cryptographic Randomness",
+    oneLiner:"Everything in cryptography starts here — the randomness that makes secrets unguessable.",
+    projects:[
+      { name:"Quantum Vault KPQC", tech:"CSPRNG for nonce generation and key randomness foundations", url:"https://github.com/systemslibrarian/quantum-vault-kpqc", public:true },
+    ],
+    explanation:"Cryptographically Secure Pseudo-Random Number Generators (CSPRNGs) produce output that is computationally indistinguishable from true randomness. They are seeded by entropy sources — hardware noise (thermal, quantum), OS entropy pools, timing jitter — and expanded into the key material every other primitive in this museum depends on. Every AES key, every RSA prime, every ECDH nonce, every TLS session key — all start with a CSPRNG. A broken CSPRNG breaks everything built on top of it, regardless of the mathematical strength of the algorithms that use its output. The 2008 Debian OpenSSL vulnerability (a patch accidentally zeroed the entropy pool) produced predictable keys from a 'broken' CSPRNG seeded with only the process ID — thousands of SSH and TLS keys remained compromised for years after the fix. CSPRNGs are only as good as their entropy input: a CSPRNG seeded with weak entropy (low-entropy VM boot, predictable seed) produces predictable output regardless of algorithm quality.",
+    realWorld:"/dev/urandom (Linux), /dev/random (macOS/BSD), CryptGenRandom / BCryptGenRandom (Windows), SecureRandom (Java), crypto.getRandomValues() (browsers), every TLS session key generation, every private key generated by any tool, every nonce in every AEAD encryption operation ever performed.",
+    whyItMatters:"A broken CSPRNG breaks everything. The 2008 Debian OpenSSL incident. The 2012 Android Bitcoin wallet vulnerability (predictable SecureRandom led to private key theft). The NIST Dual_EC_DRBG backdoor (an NSA-influenced constant that allowed state-level prediction of CSPRNG output). These didn't break AES or RSA — they broke the randomness that feeds them. Every other algorithm in this museum is rendered worthless if the keys and nonces that feed into it are predictable."
   },
 };

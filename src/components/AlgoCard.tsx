@@ -100,7 +100,7 @@ export default function AlgoCard({ algo, advanced, selected, onToggle, favorited
         )}
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px", flexWrap: "wrap", paddingRight: "48px" }}>
-        <span style={{ fontSize: "18px", fontWeight: 700, color: "#f8fafc", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>{algo.name}</span>
+        <span style={{ fontSize: "18px", fontWeight: 700, color: "#f8fafc", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", overflowWrap: "break-word", wordBreak: "break-word" }}>{algo.name}</span>
         <Badge status={algo.status} label={algo.statusLabel} />
         <RecommendationBadge level={algo.recommendation} />
       </div>

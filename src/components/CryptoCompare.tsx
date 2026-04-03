@@ -91,6 +91,7 @@ export default function CryptoCompare() {
   const [favorites, setFavorites] = useState<string[]>([]);
   const [favOnly, setFavOnly] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const mobileNavRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const validationErrors = validateAlgorithms(dataset);
@@ -98,6 +99,35 @@ export default function CryptoCompare() {
       console.warn("Algorithm validation issues", validationErrors);
     }
   }, [dataset]);
+
+  // Lock body scroll when mobile nav is open
+  useEffect(() => {
+    if (mobileNavOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileNavOpen]);
+
+  // Focus trap for mobile nav
+  useEffect(() => {
+    if (!mobileNavOpen || !mobileNavRef.current) return;
+    const nav = mobileNavRef.current;
+    const focusable = nav.querySelectorAll<HTMLElement>('button, a, [tabindex]:not([tabindex="-1"])');
+    if (focusable.length > 0) focusable[0].focus();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { setMobileNavOpen(false); return; }
+      if (e.key !== "Tab") return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [mobileNavOpen]);
 
   // Load favorites from localStorage
   useEffect(() => {
@@ -338,7 +368,7 @@ export default function CryptoCompare() {
                   <span><span style={{ color: "#3b82f6" }}>crypto</span>::compare</span>
                 </button>
               </h1>
-              <p className="headerSubtitle" style={{ margin: "6px 0 0", fontSize: "16px", color: "#c4d1e3" }}>International cryptographic algorithm reference across 12 categories.</p>
+              <p className="headerSubtitle" style={{ margin: "6px 0 0", fontSize: "16px", color: "#c4d1e3" }}>International cryptographic algorithm reference across 16 categories.</p>
             </div>
             <div className="headerActions" style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
               <span className="headerLegend" style={{ fontSize: "14px", color: "#c4d1e3", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>C = Classical, PQ = Post-Quantum</span>
@@ -412,7 +442,7 @@ export default function CryptoCompare() {
             aria-hidden="true"
           />
         )}
-        <nav aria-label="Cryptography categories" role="tablist" className={`categoryNav ${mobileNavOpen ? "mobileNavOpen" : ""}`} style={{ display: "flex", gap: 0, borderBottom: "1px solid #111827", overflowX: "auto", WebkitOverflowScrolling: "touch", position: "sticky", top: 0, zIndex: 10, background: "#070b12" }}>
+        <nav ref={mobileNavRef} aria-label="Cryptography categories" role="tablist" className={`categoryNav ${mobileNavOpen ? "mobileNavOpen" : ""}`} style={{ display: "flex", gap: 0, borderBottom: "1px solid #111827", overflowX: "auto", WebkitOverflowScrolling: "touch", position: "sticky", top: 0, zIndex: 10, background: "#070b12" }}>
           <div className="mobileNavActions">
             <Link
               href="/visuals"
@@ -1121,7 +1151,7 @@ export default function CryptoCompare() {
         /* ── Mobile: phones ── */
         @media (max-width: 480px) {
           .pageShell {
-            padding: 0 12px;
+            padding: 0 16px;
           }
 
           .headerActions {
@@ -1132,13 +1162,13 @@ export default function CryptoCompare() {
 
           .headerBtn {
             padding: 10px 12px !important;
-            font-size: 12px !important;
+            font-size: 14px !important;
             min-height: 44px;
           }
 
           .controlBtn,
           .controlSelect {
-            font-size: 13px;
+            font-size: 14px;
             padding: 10px 12px;
             min-height: 44px;
             flex: 1 1 auto;
