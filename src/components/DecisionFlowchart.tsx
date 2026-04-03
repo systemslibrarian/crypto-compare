@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { RecommendationBadge, ReviewBadge, formatReviewDate } from "@/components/ui";
 import type { Algorithm, AlgorithmCategory, AlgorithmSource } from "@/types/crypto";
 
 type DecisionNode = {
@@ -244,13 +245,6 @@ type DecisionFlowchartProps = {
   provenance: Record<string, { sources: AlgorithmSource[]; lastReviewed: string }>;
 };
 
-function formatReviewDate(iso: string | undefined): string {
-  if (!iso) return "Not reviewed";
-  const [y, m] = iso.split("-");
-  const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-  return `${months[parseInt(m, 10) - 1]} ${y}`;
-}
-
 function buildJustificationReport(
   result: { algo: string; id: string; reason: string; category: AlgorithmCategory },
   history: string[],
@@ -356,6 +350,8 @@ export default function DecisionFlowchart({ onNavigate, algorithms, provenance }
   } | null>(null);
 
   const node = DECISION_TREE[currentNode];
+  const resultAlgo = result ? algorithms.find((algo) => algo.id === result.id) : undefined;
+  const resultProvenance = result ? provenance[result.id] : undefined;
 
   const goBack = () => {
     if (result) {
@@ -518,6 +514,42 @@ export default function DecisionFlowchart({ onNavigate, algorithms, provenance }
             <div style={{ fontSize: "15px", color: "#d4deea", lineHeight: 1.75, marginBottom: "14px" }}>
               {result.reason}
             </div>
+            {(resultAlgo || resultProvenance) && (
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+                  gap: "8px",
+                  marginBottom: "14px",
+                }}
+              >
+                {resultAlgo && (
+                  <div style={{ background: "#0d1626", border: "1px solid #1e293b", borderRadius: "8px", padding: "10px 12px" }}>
+                    <div style={{ fontSize: "11px", color: "#7dd3fc", textTransform: "uppercase", letterSpacing: "0.4px", fontWeight: 700, marginBottom: "6px" }}>
+                      Recommendation
+                    </div>
+                    <RecommendationBadge level={resultAlgo.recommendation} />
+                  </div>
+                )}
+                <div style={{ background: "#0d1626", border: "1px solid #1e293b", borderRadius: "8px", padding: "10px 12px" }}>
+                  <div style={{ fontSize: "11px", color: "#7dd3fc", textTransform: "uppercase", letterSpacing: "0.4px", fontWeight: 700, marginBottom: "6px" }}>
+                    Review freshness
+                  </div>
+                  <ReviewBadge iso={resultProvenance?.lastReviewed} />
+                </div>
+                <div style={{ background: "#0d1626", border: "1px solid #1e293b", borderRadius: "8px", padding: "10px 12px" }}>
+                  <div style={{ fontSize: "11px", color: "#7dd3fc", textTransform: "uppercase", letterSpacing: "0.4px", fontWeight: 700, marginBottom: "6px" }}>
+                    Source basis
+                  </div>
+                  <div style={{ fontSize: "14px", color: "#e2e8f0", fontWeight: 700 }}>
+                    {resultProvenance?.sources.length ?? 0} cited source{(resultProvenance?.sources.length ?? 0) !== 1 ? "s" : ""}
+                  </div>
+                  <div style={{ fontSize: "12px", color: "#93a4bb", marginTop: "4px" }}>
+                    {resultProvenance?.lastReviewed ? `Reviewed ${formatReviewDate(resultProvenance.lastReviewed)}` : "Review date pending"}
+                  </div>
+                </div>
+              </div>
+            )}
             <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
               <button
                 onClick={() => onNavigate(result.category, result.id)}
@@ -561,6 +593,11 @@ export default function DecisionFlowchart({ onNavigate, algorithms, provenance }
                 ↓ Download Justification Report
               </button>
             </div>
+            {resultAlgo && (
+              <p style={{ margin: "14px 0 0", color: "#93a4bb", fontSize: "13px", lineHeight: 1.7 }}>
+                Treat this as a decision aid, not an automatic approval. The recommendation is strongest when the algorithm's recommendation level, cited sources, and review freshness all align with your operational constraints.
+              </p>
+            )}
           </div>
         </div>
       )}

@@ -1,3 +1,4 @@
+import { RecommendationBadge, ReviewBadge } from "@/components/ui";
 import type { Algorithm, ComparisonRow } from "@/types/crypto";
 
 type ComparisonTableProps = {
@@ -21,7 +22,7 @@ export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
       <div className="comparison-desktop" style={{ overflowX: "auto", borderRadius: "8px", border: "1px solid #141c2b", position: "relative" }}>
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "15px", minWidth: "760px" }}>
           <caption style={{ textAlign: "left", padding: "14px 16px", color: "#d1dae6", fontSize: "15px", captionSide: "top" }}>
-            Side-by-side comparison of the selected algorithms. Rows with differences are highlighted.
+            Side-by-side comparison of the selected algorithms. Rows with differences are highlighted, and review badges show how fresh the cited entry is.
           </caption>
           <thead>
             <tr>
@@ -61,7 +62,13 @@ export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
                     background: "#070b12",
                   }}
                 >
-                  {a.name}
+                  <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    <span>{a.name}</span>
+                    <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", alignItems: "center" }}>
+                      <RecommendationBadge level={a.recommendation} />
+                      <ReviewBadge iso={a.lastReviewed} />
+                    </div>
+                  </div>
                 </th>
               ))}
             </tr>
@@ -143,6 +150,10 @@ export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
             >
               {algo.name}
             </h3>
+            <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginBottom: "12px" }}>
+              <RecommendationBadge level={algo.recommendation} />
+              <ReviewBadge iso={algo.lastReviewed} />
+            </div>
             {rows.map((row) => {
               const value = row.render(algo);
               return (

@@ -1,5 +1,7 @@
 import type { AlgorithmStatus, RecommendationLevel, SourceKind } from "@/types/crypto";
 
+const REVIEW_MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
 const STATUS_COLORS: Record<AlgorithmStatus, { bg: string; text: string; border: string }> = {
   standard: { bg: "#0d3320", text: "#34d399", border: "#065f46" },
   candidate: { bg: "#312e2a", text: "#fbbf24", border: "#78350f" },
@@ -72,6 +74,59 @@ export function formatBytes(b: number | null | undefined): string {
     return `${(b / 1024).toFixed(1)} KB`;
   }
   return `${b} B`;
+}
+
+export function formatReviewDate(iso: string | undefined): string {
+  if (!iso) return "Review pending";
+  const [year, month] = iso.split("-");
+  const monthIndex = Number.parseInt(month ?? "0", 10) - 1;
+  if (monthIndex < 0 || monthIndex >= REVIEW_MONTHS.length) return iso;
+  return `${REVIEW_MONTHS[monthIndex]} ${year}`;
+}
+
+function getReviewFreshness(iso: string | undefined): { label: string; color: string; bg: string; border: string } {
+  if (!iso) {
+    return { label: "Review pending", color: "#fbbf24", bg: "#312e2a", border: "#78350f" };
+  }
+
+  const reviewedAt = new Date(`${iso}T00:00:00Z`).getTime();
+  if (Number.isNaN(reviewedAt)) {
+    return { label: "Review date invalid", color: "#f87171", bg: "#2d1215", border: "#7f1d1d" };
+  }
+
+  const ageDays = Math.floor((Date.now() - reviewedAt) / (1000 * 60 * 60 * 24));
+  if (ageDays <= 45) {
+    return { label: "Fresh review", color: "#34d399", bg: "#0d3320", border: "#065f46" };
+  }
+  if (ageDays <= 120) {
+    return { label: "Review aging", color: "#fbbf24", bg: "#312e2a", border: "#78350f" };
+  }
+  return { label: "Needs review", color: "#f87171", bg: "#2d1215", border: "#7f1d1d" };
+}
+
+export function ReviewBadge({ iso }: { iso: string | undefined }) {
+  const freshness = getReviewFreshness(iso);
+  return (
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "4px",
+        background: freshness.bg,
+        color: freshness.color,
+        border: `1px solid ${freshness.border}`,
+        padding: "2px 8px",
+        borderRadius: "4px",
+        fontSize: "11px",
+        fontWeight: 700,
+        letterSpacing: "0.3px",
+        whiteSpace: "nowrap",
+      }}
+      title={iso ? `${freshness.label} · ${formatReviewDate(iso)}` : freshness.label}
+    >
+      {iso ? formatReviewDate(iso) : freshness.label}
+    </span>
+  );
 }
 
 const RECOMMENDATION_CONFIG: Record<RecommendationLevel, { icon: string; label: string; color: string; bg: string; border: string }> = {

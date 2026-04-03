@@ -1,4 +1,4 @@
-import { Badge, RecommendationBadge, SecurityMeter } from "@/components/ui";
+import { Badge, RecommendationBadge, ReviewBadge, SecurityMeter } from "@/components/ui";
 import { CATEGORY_ACCENT } from "@/data/categories";
 import type { Algorithm } from "@/types/crypto";
 
@@ -123,15 +123,17 @@ export default function AlgoCard({ algo, advanced, selected, onToggle, favorited
         </span>
         <span style={{ fontSize: "14px", color: "#93a4bb" }}>·</span>
         <span style={{ fontSize: "14px", color: "#c4d1e3" }}>{algo.origin}</span>
+        <ReviewBadge iso={algo.lastReviewed} />
       </div>
       <p style={{ fontSize: "15px", color: "#d4deea", lineHeight: "1.7", margin: "0 0 12px" }}>{algo.useCases}</p>
       <SecurityMeter bits={algo.securityBits} label="C" />
       <div style={{ height: "6px" }} />
       <SecurityMeter bits={algo.pqSecurityBits} label="PQ" />
       {algo.sources && algo.sources.length > 0 && (
-        <div style={{ marginTop: "8px", fontSize: "12px", color: "#7d8a9e", display: "flex", alignItems: "center", gap: "6px" }}>
-          <span>{algo.sources.length} source{algo.sources.length !== 1 ? "s" : ""}</span>
-          {algo.lastReviewed && <span>· Reviewed {algo.lastReviewed}</span>}
+        <div style={{ marginTop: "10px", fontSize: "12px", color: "#7d8a9e", display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
+          <span style={{ color: "#7dd3fc", fontWeight: 600 }}>{algo.sources.length} source{algo.sources.length !== 1 ? "s" : ""}</span>
+          <span>·</span>
+          <span>{algo.status === "standard" ? "Standards-backed" : "Candidate / emerging"}</span>
         </div>
       )}
       {advanced && (
