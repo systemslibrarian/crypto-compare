@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import AlgoCard from "@/components/AlgoCard";
-import AdvisorCta from "@/components/AdvisorCta";
 import AppHeaderNav from "@/components/AppHeaderNav";
 import CategoryExplainer from "@/components/CategoryExplainer";
 import ComparisonWorkspace from "@/components/ComparisonWorkspace";
@@ -14,7 +13,6 @@ import QuickStartPanel from "@/components/QuickStartPanel";
 import ResultsStatus from "@/components/ResultsStatus";
 import SearchControls from "@/components/SearchControls";
 import SourceCitationsPanel from "@/components/SourceCitationsPanel";
-import TrustSnapshotPanel from "@/components/TrustSnapshotPanel";
 import { ALGORITHMS } from "@/data/algorithms";
 import { CATEGORIES, CATEGORY_ACCENT } from "@/data/categories";
 import { buildRows, exportToCSV, exportToMarkdown } from "@/lib/comparison";
@@ -250,9 +248,10 @@ export default function CryptoCompare() {
             selectedCategoryLabel={selectedCategoryLabel}
             globalSearch={globalSearch}
             datasetSize={dataset.length}
-            categoryCount={CATEGORIES.length}
-            recommendationCount={filteredRecommendationCounts.recommended ?? 0}
+            filteredCount={filtered.length}
+            recommendationCounts={filteredRecommendationCounts}
             trustSnapshot={trustSnapshot}
+            totalSources={trustSnapshot.totalSources}
           />
 
           <QuickStartPanel
@@ -261,15 +260,6 @@ export default function CryptoCompare() {
             onShowDefaults={controller.showRecommendedDefaults}
             onSearchAll={controller.activateGlobalSearch}
             onShowSafeUsage={() => setShowSafeUsage(true)}
-          />
-
-          <TrustSnapshotPanel
-            snapshot={trustSnapshot}
-            datasetSize={dataset.length}
-            filteredCount={filtered.length}
-            globalSearch={globalSearch}
-            selectedCategoryLabel={selectedCategoryLabel}
-            recommendationCounts={filteredRecommendationCounts}
           />
 
           <SearchControls
@@ -311,23 +301,6 @@ export default function CryptoCompare() {
 
           <CategoryExplainer category={cat} expanded={explainerOpen} onToggle={() => setExplainerOpen(!explainerOpen)} />
 
-          <KnowledgeSections
-            showHybrid={showHybrid}
-            showGuide={showGuide}
-            showSafeUsage={showSafeUsage}
-            showArchitectures={showArchitectures}
-            showLibraries={showLibraries}
-            showPhilosophy={showPhilosophy}
-            onToggleHybrid={() => setShowHybrid((value) => !value)}
-            onToggleGuide={() => setShowGuide((value) => !value)}
-            onToggleSafeUsage={() => setShowSafeUsage((value) => !value)}
-            onToggleArchitectures={() => setShowArchitectures((value) => !value)}
-            onToggleLibraries={() => setShowLibraries((value) => !value)}
-            onTogglePhilosophy={() => setShowPhilosophy((value) => !value)}
-          />
-
-          <AdvisorCta />
-
           <ResultsStatus explainerOpen={explainerOpen} filteredCount={filtered.length} />
 
           <section aria-label={`${globalSearch ? "All categories" : selectedCategoryLabel} algorithms`} className="algoGrid" style={{ marginBottom: "18px" }}>
@@ -349,6 +322,21 @@ export default function CryptoCompare() {
           />
 
           <SourceCitationsPanel algorithms={selAlgos} />
+
+          <KnowledgeSections
+            showHybrid={showHybrid}
+            showGuide={showGuide}
+            showSafeUsage={showSafeUsage}
+            showArchitectures={showArchitectures}
+            showLibraries={showLibraries}
+            showPhilosophy={showPhilosophy}
+            onToggleHybrid={() => setShowHybrid((value) => !value)}
+            onToggleGuide={() => setShowGuide((value) => !value)}
+            onToggleSafeUsage={() => setShowSafeUsage((value) => !value)}
+            onToggleArchitectures={() => setShowArchitectures((value) => !value)}
+            onToggleLibraries={() => setShowLibraries((value) => !value)}
+            onTogglePhilosophy={() => setShowPhilosophy((value) => !value)}
+          />
         </main>
 
         <FooterShell trustSnapshot={trustSnapshot} />

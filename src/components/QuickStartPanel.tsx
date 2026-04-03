@@ -1,4 +1,7 @@
+import { useEffect, useState } from "react";
 import Link from "next/link";
+
+const DISMISSED_KEY = "crypto-compare-quickstart-dismissed";
 
 type QuickStartPanelProps = {
   showMethodology: boolean;
@@ -15,6 +18,32 @@ export default function QuickStartPanel({
   onSearchAll,
   onShowSafeUsage,
 }: QuickStartPanelProps) {
+  const [dismissed, setDismissed] = useState(true); // start hidden to avoid flash
+
+  useEffect(() => {
+    setDismissed(localStorage.getItem(DISMISSED_KEY) === "1");
+  }, []);
+
+  function handleDismiss() {
+    setDismissed(true);
+    localStorage.setItem(DISMISSED_KEY, "1");
+  }
+
+  function handleRestore() {
+    setDismissed(false);
+    localStorage.removeItem(DISMISSED_KEY);
+  }
+
+  if (dismissed) {
+    return (
+      <div style={{ marginBottom: "12px", textAlign: "right" }}>
+        <button type="button" className="focusRing controlBtn" onClick={handleRestore} style={{ fontSize: "12px", padding: "6px 12px" }}>
+          Show quick start guide
+        </button>
+      </div>
+    );
+  }
+
   return (
     <section className="panel" aria-label="Quick start actions" style={{ marginBottom: "16px", background: "linear-gradient(135deg, #0a1220 0%, #101b31 100%)" }}>
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "16px", flexWrap: "wrap", marginBottom: "12px" }}>
@@ -31,6 +60,9 @@ export default function QuickStartPanel({
           <Link href="/advisor" className="focusRing controlBtn" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center" }}>
             Open advisor
           </Link>
+          <button type="button" className="focusRing controlBtn" onClick={handleDismiss} aria-label="Dismiss quick start" style={{ padding: "8px 12px", fontSize: "13px" }}>
+            ✕
+          </button>
         </div>
       </div>
       <div className="quickStartGrid">
