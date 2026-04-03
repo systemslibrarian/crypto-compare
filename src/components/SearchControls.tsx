@@ -75,6 +75,7 @@ export default function SearchControls({
   onActivateSearchAll,
 }: SearchControlsProps) {
   const hasActiveFilters = pqOnly || standardOnly || nistOnly || deployedOnly || showDefaults || country !== "all" || favOnly;
+  const activeFilterCount = [pqOnly, standardOnly, nistOnly, deployedOnly, showDefaults, country !== "all", favOnly].filter(Boolean).length;
 
   return (
     <>
@@ -114,7 +115,7 @@ export default function SearchControls({
           ))}
         </select>
         <button className="focusRing controlBtn" onClick={onToggleFilters} aria-expanded={showFilters} aria-label={`${showFilters ? "Hide" : "Show"} filter options${hasActiveFilters ? " (active)" : ""}`}>
-          {showFilters ? "▾" : "▸"} Filters{hasActiveFilters ? " ●" : ""}
+          {showFilters ? "▾" : "▸"} Filters{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
         </button>
         <button className="focusRing controlBtn" onClick={onToggleMethodology} aria-expanded={showMethodology} aria-label={`${showMethodology ? "Hide" : "Show"} methodology and trust model`}>
           How to read this site

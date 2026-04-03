@@ -48,7 +48,7 @@ export default function CryptoCompare() {
   const [adv, setAdv] = useState(false);
   const [sel, setSel] = useState<string[]>([]);
   const [cmp, setCmp] = useState(false);
-  const [explainerOpen, setExplainerOpen] = useState(true);
+  const [explainerOpen, setExplainerOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [pqOnly, setPqOnly] = useState(false);
   const [standardOnly, setStandardOnly] = useState(false);
@@ -69,6 +69,7 @@ export default function CryptoCompare() {
   const { favorites, toggleFavorite } = usePersistentFavorites();
   const [favOnly, setFavOnly] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [advisorHighlight, setAdvisorHighlight] = useState<string | null>(null);
   const mobileNavRef = useRef<HTMLElement>(null);
   const controller = useCryptoCompareController({
     searchRef,
@@ -104,6 +105,27 @@ export default function CryptoCompare() {
       console.warn("Algorithm validation issues", validationErrors);
     }
   }, [dataset]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("from") === "advisor") {
+      const selParam = params.get("sel");
+      if (selParam) {
+        const algoId = selParam.split(",")[0];
+        setAdvisorHighlight(algoId);
+        // Scroll to the highlighted card after render
+        requestAnimationFrame(() => {
+          const el = document.getElementById(`algo-${algoId}`);
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+        });
+        // Clean the URL param
+        params.delete("from");
+        const newUrl = `${window.location.pathname}?${params.toString()}`;
+        window.history.replaceState({}, "", newUrl);
+      }
+    }
+  }, []);
 
   useMobileNavBehavior({
     isOpen: mobileNavOpen,
@@ -305,7 +327,7 @@ export default function CryptoCompare() {
 
           <section aria-label={`${globalSearch ? "All categories" : selectedCategoryLabel} algorithms`} className="algoGrid" style={{ marginBottom: "18px" }}>
             {filtered.map((a) => (
-              <AlgoCard key={a.id} algo={a} advanced={adv} selected={sel.includes(a.id)} onToggle={() => controller.toggleSelection(a.id)} favorited={favorites.includes(a.id)} onToggleFavorite={() => toggleFavorite(a.id)} />
+              <AlgoCard key={a.id} algo={a} advanced={adv} selected={sel.includes(a.id)} onToggle={() => controller.toggleSelection(a.id)} favorited={favorites.includes(a.id)} onToggleFavorite={() => toggleFavorite(a.id)} advisorPick={advisorHighlight === a.id} />
             ))}
           </section>
 

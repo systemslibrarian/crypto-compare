@@ -11,7 +11,7 @@ export default function AdvisorView() {
   const router = useRouter();
 
   const handleNavigate = (category: AlgorithmCategory, algoId: string) => {
-    router.push(`/?cat=${category}&sel=${algoId}`);
+    router.push(`/?cat=${category}&sel=${algoId}&from=advisor`);
   };
 
   return (

@@ -540,6 +540,16 @@ body {
     .algoGrid {
       gap: 12px;
     }
+
+    .contextBar {
+      padding: 8px 12px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .algoGrid {
+      grid-template-columns: 1fr;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

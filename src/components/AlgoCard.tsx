@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Badge, RecommendationBadge, ReviewBadge, SecurityMeter } from "@/components/ui";
 import { CATEGORY_ACCENT } from "@/data/categories";
 import type { Algorithm } from "@/types/crypto";
@@ -9,10 +10,12 @@ type AlgoCardProps = {
   onToggle: () => void;
   favorited?: boolean;
   onToggleFavorite?: () => void;
+  advisorPick?: boolean;
 };
 
-export default function AlgoCard({ algo, advanced, selected, onToggle, favorited, onToggleFavorite }: AlgoCardProps) {
+export default function AlgoCard({ algo, advanced, selected, onToggle, favorited, onToggleFavorite, advisorPick }: AlgoCardProps) {
   const accent = CATEGORY_ACCENT[algo.category];
+  const [detailOpen, setDetailOpen] = useState(false);
 
   return (
     <div
@@ -30,9 +33,9 @@ export default function AlgoCard({ algo, advanced, selected, onToggle, favorited
       aria-label={`${selected ? "Deselect" : "Select"} ${algo.name} for comparison`}
       className="focusRing algoCard"
       style={{
-        background: selected ? "#0e1628" : "#0b0f17",
-        border: `1.5px solid ${selected ? accent : "#1e293b"}`,
-        borderLeft: `3px solid ${selected ? accent : `${accent}55`}`,
+        background: advisorPick ? "#0c1a2e" : selected ? "#0e1628" : "#0b0f17",
+        border: `1.5px solid ${advisorPick ? "#34d399" : selected ? accent : "#1e293b"}`,
+        borderLeft: `3px solid ${advisorPick ? "#34d399" : selected ? accent : `${accent}55`}`,
         borderRadius: "10px",
         padding: "20px 22px",
         cursor: "pointer",
@@ -55,6 +58,29 @@ export default function AlgoCard({ algo, advanced, selected, onToggle, favorited
       }}
     >
       <div style={{ position: "absolute", top: "8px", right: "10px", display: "flex", gap: "6px", alignItems: "center" }}>
+        <button
+          type="button"
+          onClick={(e) => { e.stopPropagation(); setDetailOpen((v) => !v); }}
+          aria-label={detailOpen ? `Hide ${algo.name} details` : `Show ${algo.name} details`}
+          aria-expanded={detailOpen}
+          style={{
+            background: detailOpen ? "#1e293b" : "transparent",
+            border: "none",
+            cursor: "pointer",
+            fontSize: "16px",
+            padding: "8px",
+            minWidth: "44px",
+            minHeight: "44px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: detailOpen ? "#7dd3fc" : "#475569",
+            transition: "color 0.15s",
+            borderRadius: "6px",
+          }}
+        >
+          ℹ
+        </button>
         {onToggleFavorite && (
           <button
             type="button"
@@ -103,6 +129,9 @@ export default function AlgoCard({ algo, advanced, selected, onToggle, favorited
         <span style={{ fontSize: "18px", fontWeight: 700, color: "#f8fafc", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", overflowWrap: "break-word", wordBreak: "break-word" }}>{algo.name}</span>
         <Badge status={algo.status} label={algo.statusLabel} />
         <RecommendationBadge level={algo.recommendation} />
+        {advisorPick && (
+          <span style={{ fontSize: "11px", fontWeight: 700, color: "#34d399", background: "#06271c", border: "1px solid #065f46", padding: "2px 8px", borderRadius: "4px", letterSpacing: "0.4px", textTransform: "uppercase" }}>Advisor pick</span>
+        )}
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px", flexWrap: "wrap" }}>
         <span
@@ -162,6 +191,55 @@ export default function AlgoCard({ algo, advanced, selected, onToggle, favorited
           <span style={{ color: "#e2c97e" }}>{algo.whyNotThis}</span>
         </div>
       )}
+      {detailOpen && (
+        <div
+          onClick={(e) => e.stopPropagation()}
+          style={{ marginTop: "14px", paddingTop: "14px", borderTop: "1px solid #1e293b", fontSize: "13px", color: "#d4deea", lineHeight: 1.7 }}
+        >
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "10px", marginBottom: "12px" }}>
+            <DetailField label="Best known attack" value={algo.bestAttack} />
+            <DetailField label="Performance" value={algo.performance} />
+            <DetailField label="Reduction quality" value={algo.reductionQuality} />
+            <DetailField label="Assumptions" value={algo.assumptions} />
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "10px", marginBottom: "12px" }}>
+            <DetailField label="Recommendation" value={`${algo.recommendation} — ${algo.recommendationRationale}`} />
+            <DetailField label="Changes when" value={algo.recommendationChangesWhen} />
+            {algo.whyNotThis && <DetailField label="Why not this" value={algo.whyNotThis} />}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "10px", marginBottom: "12px" }}>
+            <DetailField label="Classical estimate" value={`${algo.estimationMethodology.classicalBasis}: ${algo.estimationMethodology.classicalNote}`} />
+            <DetailField label="Quantum estimate" value={`${algo.estimationMethodology.quantumBasis}: ${algo.estimationMethodology.quantumNote}`} />
+            <DetailField label="Origin" value={algo.originDetail} />
+          </div>
+          {algo.notes && (
+            <div style={{ marginBottom: "12px" }}>
+              <DetailField label="Notes" value={algo.notes} />
+            </div>
+          )}
+          {algo.sources && algo.sources.length > 0 && (
+            <div>
+              <div style={{ fontSize: "11px", fontWeight: 700, color: "#7dd3fc", textTransform: "uppercase", letterSpacing: "0.4px", marginBottom: "6px" }}>Sources</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                {algo.sources.map((s) => (
+                  <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} style={{ color: "#93c5fd", fontSize: "12px", textDecoration: "none", lineHeight: 1.5 }}>
+                    {s.label} <span style={{ color: "#475569" }}>— {s.note}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DetailField({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <div style={{ fontSize: "11px", fontWeight: 700, color: "#7dd3fc", textTransform: "uppercase", letterSpacing: "0.4px", marginBottom: "4px" }}>{label}</div>
+      <div style={{ fontSize: "13px", color: "#d4deea", lineHeight: 1.6 }}>{value}</div>
     </div>
   );
 }
