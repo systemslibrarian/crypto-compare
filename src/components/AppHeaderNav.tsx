@@ -33,14 +33,14 @@ export default function AppHeaderNav({
 
   return (
     <>
-      <header style={{ borderBottom: "1px solid #111827", padding: "22px 0" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px" }}>
-          <div>
-            <h1 style={{ margin: 0, fontSize: "28px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", letterSpacing: "-0.5px", display: "flex", alignItems: "center", gap: "10px" }}>
+      <header className="headerShell" style={{ borderBottom: "1px solid #111827", padding: "22px 0" }}>
+        <div className="headerRow" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px" }}>
+          <div className="headerBrandBlock">
+            <h1 className="headerTitle" style={{ margin: 0, fontSize: "28px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", letterSpacing: "-0.5px", display: "flex", alignItems: "center", gap: "10px" }}>
               <button
                 type="button"
                 onClick={onReset}
-                className="focusRing"
+                className="focusRing headerBrandButton"
                 aria-label="Back to main menu"
                 style={{
                   margin: 0,
@@ -134,7 +134,7 @@ export default function AppHeaderNav({
           aria-hidden="true"
         />
       )}
-      <nav ref={mobileNavRef} aria-label="Cryptography categories" role="tablist" className={`categoryNav ${mobileNavOpen ? "mobileNavOpen" : ""}`} style={{ display: "flex", gap: 0, borderBottom: "1px solid #111827", overflowX: "auto", WebkitOverflowScrolling: "touch", position: "sticky", top: 0, zIndex: 10, background: "#070b12" }}>
+      <nav ref={mobileNavRef} aria-label="Cryptography categories" role="tablist" className={`categoryNav ${mobileNavOpen ? "mobileNavOpen" : ""}`} style={{ display: "flex", gap: 0, borderBottom: "1px solid #111827", position: "sticky", top: 0, zIndex: 10, background: "#070b12" }}>
         <div className="mobileNavActions" aria-hidden={!mobileNavOpen} hidden={!mobileNavOpen}>
           <Link
             href="/visuals"
