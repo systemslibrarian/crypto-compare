@@ -4,6 +4,7 @@ import type { Algorithm, AlgorithmCategory } from "@/types/crypto";
 const ALGORITHM_CATEGORIES = [
   "symmetric", "kem", "signature", "hash", "kdf", "mac",
   "password", "sharing", "he", "zkp", "mpc", "ot_pir",
+  "asymmetric", "steganography", "threshold_sig", "csprng",
 ] as const;
 
 const ALGORITHM_STATUSES = ["standard", "candidate"] as const;
@@ -141,6 +142,37 @@ const OTPIRSchema = AlgorithmBaseSchema.extend({
   computationalModel: z.string().min(1),
 });
 
+const AsymmetricSchema = AlgorithmBaseSchema.extend({
+  category: z.literal("asymmetric"),
+  keySize: z.number().int().min(0),
+  ciphertextOverhead: z.string().min(1),
+  pqSafe: z.boolean(),
+});
+
+const SteganographySchema = AlgorithmBaseSchema.extend({
+  category: z.literal("steganography"),
+  carrierType: z.string().min(1),
+  payloadCapacity: z.string().min(1),
+  steganalysisResistance: z.string().min(1),
+  producesArtifacts: z.boolean(),
+});
+
+const ThresholdSigSchema = AlgorithmBaseSchema.extend({
+  category: z.literal("threshold_sig"),
+  thresholdConfig: z.string().min(1),
+  rounds: z.number().int().min(1),
+  identifiableAbort: z.boolean(),
+  pqSafe: z.boolean(),
+});
+
+const CSPRNGSchema = AlgorithmBaseSchema.extend({
+  category: z.literal("csprng"),
+  nistApproved: z.boolean(),
+  reseedRequired: z.boolean(),
+  forwardSecrecy: z.boolean(),
+  catastrophicReseedRecovery: z.boolean(),
+});
+
 const AlgorithmSchema = z.discriminatedUnion("category", [
   SymmetricSchema,
   KEMSchema,
@@ -154,6 +186,10 @@ const AlgorithmSchema = z.discriminatedUnion("category", [
   ZKPSchema,
   MPCSchema,
   OTPIRSchema,
+  AsymmetricSchema,
+  SteganographySchema,
+  ThresholdSigSchema,
+  CSPRNGSchema,
 ]);
 
 function crossFieldRules(algo: Algorithm): string[] {

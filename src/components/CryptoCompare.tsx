@@ -5,6 +5,11 @@ import Link from "next/link";
 import AlgoCard from "@/components/AlgoCard";
 import CategoryExplainer from "@/components/CategoryExplainer";
 import ComparisonTable from "@/components/ComparisonTable";
+import UseCaseGuide from "@/components/UseCaseGuide";
+import SafeUsage from "@/components/SafeUsage";
+import ReferenceArchitectures from "@/components/ReferenceArchitectures";
+import DesignPhilosophy from "@/components/DesignPhilosophy";
+import RecommendedLibraries from "@/components/RecommendedLibraries";
 import { ALGORITHMS } from "@/data/algorithms";
 import { CATEGORIES, CATEGORY_ACCENT } from "@/data/categories";
 import { ALGORITHM_PROVENANCE } from "@/data/provenance";
@@ -86,6 +91,11 @@ export default function CryptoCompare() {
   const [showMethodology, setShowMethodology] = useState(false);
   const [showHybrid, setShowHybrid] = useState(false);
   const [showDefaults, setShowDefaults] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
+  const [showSafeUsage, setShowSafeUsage] = useState(false);
+  const [showArchitectures, setShowArchitectures] = useState(false);
+  const [showPhilosophy, setShowPhilosophy] = useState(false);
+  const [showLibraries, setShowLibraries] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [globalSearch, setGlobalSearch] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
@@ -317,6 +327,11 @@ export default function CryptoCompare() {
     setShowMethodology(false);
     setShowHybrid(false);
     setShowDefaults(false);
+    setShowGuide(false);
+    setShowSafeUsage(false);
+    setShowArchitectures(false);
+    setShowPhilosophy(false);
+    setShowLibraries(false);
     setShowFilters(false);
     setGlobalSearch(false);
     setFavOnly(false);
@@ -523,7 +538,7 @@ export default function CryptoCompare() {
               aria-pressed={globalSearch}
               title="Search across all categories"
             >
-              {globalSearch ? "🌐 All" : "🌐"}
+              {globalSearch ? "🌐 All 85" : "🌐 All 85"}
             </button>
             <select value={sortBy} onChange={(e) => setSortBy(e.target.value as SortOption)} className="focusRing controlSelect" aria-label="Sort algorithms">
               {SORT_OPTIONS.map((option) => (
@@ -637,6 +652,36 @@ export default function CryptoCompare() {
             </section>
           )}
 
+          {/* ── Search All Banner ── */}
+          {!globalSearch && (
+            <button
+              onClick={() => { setGlobalSearch(true); setTimeout(() => searchRef.current?.focus(), 50); }}
+              className="focusRing"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "10px",
+                width: "100%",
+                background: "linear-gradient(135deg, #0c1422 0%, #111d33 100%)",
+                border: "1px solid #1e293b",
+                borderRadius: "10px",
+                padding: "14px 20px",
+                marginBottom: "14px",
+                cursor: "pointer",
+                color: "#c4d1e3",
+                fontSize: "15px",
+                fontWeight: 600,
+                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+                transition: "border-color 0.15s, background 0.15s",
+              }}
+              aria-label="Search across all 85 algorithms"
+            >
+              <span aria-hidden="true" style={{ fontSize: "18px" }}>🔍</span>
+              Search all {dataset.length} algorithms across {CATEGORIES.length} categories
+            </button>
+          )}
+
           <CategoryExplainer category={cat} expanded={explainerOpen} onToggle={() => setExplainerOpen(!explainerOpen)} />
 
           <button className="focusRing controlBtn" onClick={() => setShowHybrid(!showHybrid)} aria-expanded={showHybrid} aria-label={`${showHybrid ? "Hide" : "Show"} hybrid cryptography patterns`} style={{ marginBottom: showHybrid ? "0" : "12px" }}>
@@ -676,6 +721,73 @@ export default function CryptoCompare() {
                   </div>
                 </div>
               ))}
+            </section>
+          )}
+
+          {/* ── Use Case Guide ── */}
+          <button className="focusRing controlBtn" onClick={() => setShowGuide(!showGuide)} aria-expanded={showGuide} aria-label={`${showGuide ? "Hide" : "Show"} practical use case guide`} style={{ marginBottom: showGuide ? "0" : "12px" }}>
+            {showGuide ? "▾" : "▸"} If You&apos;re Building X → Use This
+          </button>
+          {showGuide && (
+            <section className="panel" aria-label="Use case guidance" style={{ marginBottom: "18px" }}>
+              <h2 className="panel-heading">If You&apos;re Building X → Use This</h2>
+              <p style={{ color: "#93a4bb", fontSize: "13px", lineHeight: 1.6, margin: "0 0 8px" }}>
+                Practical, real-world algorithm recommendations for common system architectures. Click any algorithm tag to view its full entry.
+              </p>
+              <UseCaseGuide />
+            </section>
+          )}
+
+          {/* ── Safe Usage ── */}
+          <button className="focusRing controlBtn" onClick={() => setShowSafeUsage(!showSafeUsage)} aria-expanded={showSafeUsage} aria-label={`${showSafeUsage ? "Hide" : "Show"} safe usage guidelines`} style={{ marginBottom: showSafeUsage ? "0" : "12px" }}>
+            {showSafeUsage ? "▾" : "▸"} Common Pitfalls &amp; Safe Usage
+          </button>
+          {showSafeUsage && (
+            <section className="panel" aria-label="Safe usage guidelines" style={{ marginBottom: "18px" }}>
+              <h2 className="panel-heading">Common Pitfalls &amp; Safe Usage Guidelines</h2>
+              <p style={{ color: "#93a4bb", fontSize: "13px", lineHeight: 1.6, margin: "0 0 8px" }}>
+                Choosing the right algorithm is 10% of the battle. These guidelines prevent the mistakes that cause real-world crypto failures.
+              </p>
+              <SafeUsage />
+            </section>
+          )}
+
+          {/* ── Reference Architectures ── */}
+          <button className="focusRing controlBtn" onClick={() => setShowArchitectures(!showArchitectures)} aria-expanded={showArchitectures} aria-label={`${showArchitectures ? "Hide" : "Show"} reference architectures`} style={{ marginBottom: showArchitectures ? "0" : "12px" }}>
+            {showArchitectures ? "▾" : "▸"} Reference Architectures
+          </button>
+          {showArchitectures && (
+            <section className="panel" aria-label="Reference architectures" style={{ marginBottom: "18px" }}>
+              <h2 className="panel-heading">Reference Architectures</h2>
+              <p style={{ color: "#93a4bb", fontSize: "13px", lineHeight: 1.6, margin: "0 0 8px" }}>
+                How cryptographic primitives combine into real systems. Each architecture shows the data flow, stack, and security properties.
+              </p>
+              <ReferenceArchitectures />
+            </section>
+          )}
+
+          {/* ── Recommended Libraries ── */}
+          <button className="focusRing controlBtn" onClick={() => setShowLibraries(!showLibraries)} aria-expanded={showLibraries} aria-label={`${showLibraries ? "Hide" : "Show"} recommended libraries`} style={{ marginBottom: showLibraries ? "0" : "12px" }}>
+            {showLibraries ? "▾" : "▸"} Recommended Libraries (Real-World Implementation Guidance)
+          </button>
+          {showLibraries && (
+            <section className="panel" aria-label="Recommended libraries" style={{ marginBottom: "18px" }}>
+              <h2 className="panel-heading">Recommended Libraries (Real-World Implementation Guidance)</h2>
+              <RecommendedLibraries />
+            </section>
+          )}
+
+          {/* ── Design Philosophy ── */}
+          <button className="focusRing controlBtn" onClick={() => setShowPhilosophy(!showPhilosophy)} aria-expanded={showPhilosophy} aria-label={`${showPhilosophy ? "Hide" : "Show"} design philosophy`} style={{ marginBottom: showPhilosophy ? "0" : "12px" }}>
+            {showPhilosophy ? "▾" : "▸"} Design Philosophy &amp; Trust Model
+          </button>
+          {showPhilosophy && (
+            <section className="panel" aria-label="Design philosophy" style={{ marginBottom: "18px" }}>
+              <h2 className="panel-heading">Design Philosophy &amp; Trust Model</h2>
+              <p style={{ color: "#93a4bb", fontSize: "13px", lineHeight: 1.6, margin: "0 0 8px" }}>
+                Why this tool exists, how recommendations are derived, and what it intentionally does not do.
+              </p>
+              <DesignPhilosophy />
             </section>
           )}
 

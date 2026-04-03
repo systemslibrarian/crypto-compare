@@ -523,7 +523,7 @@ describe("URL State Hydration", () => {
     const CryptoCompare = (await import("@/components/CryptoCompare")).default;
     const { unmount } = render(<CryptoCompare />);
     // Falls back to default "symmetric"
-    const symTab = screen.getByRole("tab", { name: /Symmetric/i });
+    const symTab = screen.getByRole("tab", { name: /\bSymmetric\b/i });
     expect(symTab).toHaveAttribute("aria-selected", "true");
     unmount();
   });
@@ -689,7 +689,7 @@ describe("Keyboard Shortcuts", () => {
     const CryptoCompare = (await import("@/components/CryptoCompare")).default;
     const { unmount } = render(<CryptoCompare />);
     fireEvent.keyDown(document, { key: "ArrowLeft" });
-    const symTab = screen.getByRole("tab", { name: /Symmetric/i });
+    const symTab = screen.getByRole("tab", { name: /\bSymmetric\b/i });
     expect(symTab).toHaveAttribute("aria-selected", "true");
     unmount();
   });
