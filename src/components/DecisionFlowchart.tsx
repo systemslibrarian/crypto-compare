@@ -241,8 +241,8 @@ const DECISION_TREE: Record<string, DecisionNode> = {
 
 type DecisionFlowchartProps = {
   onNavigate: (category: AlgorithmCategory, algoId: string) => void;
-  algorithms: Algorithm[];
-  provenance: Record<string, { sources: AlgorithmSource[]; lastReviewed: string }>;
+  algorithms?: Algorithm[];
+  provenance?: Record<string, { sources: AlgorithmSource[]; lastReviewed: string }>;
 };
 
 function buildJustificationReport(
@@ -339,7 +339,7 @@ function buildJustificationReport(
   return lines.join("\n");
 }
 
-export default function DecisionFlowchart({ onNavigate, algorithms, provenance }: DecisionFlowchartProps) {
+export default function DecisionFlowchart({ onNavigate, algorithms = [], provenance = {} }: DecisionFlowchartProps) {
   const [currentNode, setCurrentNode] = useState("start");
   const [history, setHistory] = useState<string[]>([]);
   const [result, setResult] = useState<{
@@ -595,7 +595,7 @@ export default function DecisionFlowchart({ onNavigate, algorithms, provenance }
             </div>
             {resultAlgo && (
               <p style={{ margin: "14px 0 0", color: "#93a4bb", fontSize: "13px", lineHeight: 1.7 }}>
-                Treat this as a decision aid, not an automatic approval. The recommendation is strongest when the algorithm's recommendation level, cited sources, and review freshness all align with your operational constraints.
+                Treat this as a decision aid, not an automatic approval. The recommendation is strongest when the algorithm&apos;s recommendation level, cited sources, and review freshness all align with your operational constraints.
               </p>
             )}
           </div>

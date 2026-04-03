@@ -135,7 +135,7 @@ export default function AppHeaderNav({
         />
       )}
       <nav ref={mobileNavRef} aria-label="Cryptography categories" role="tablist" className={`categoryNav ${mobileNavOpen ? "mobileNavOpen" : ""}`} style={{ display: "flex", gap: 0, borderBottom: "1px solid #111827", overflowX: "auto", WebkitOverflowScrolling: "touch", position: "sticky", top: 0, zIndex: 10, background: "#070b12" }}>
-        <div className="mobileNavActions">
+        <div className="mobileNavActions" aria-hidden={!mobileNavOpen} hidden={!mobileNavOpen}>
           <Link
             href="/visuals"
             className="focusRing mobileNavActionBtn"

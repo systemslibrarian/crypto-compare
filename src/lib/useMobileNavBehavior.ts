@@ -20,9 +20,10 @@ export function useMobileNavBehavior({ isOpen, navElement, onClose }: UseMobileN
   }, [isOpen]);
 
   useEffect(() => {
-    if (!isOpen || !navElement) return;
+    if (!isOpen) return;
 
-    const focusable = navElement.querySelectorAll<HTMLElement>('button, a, [tabindex]:not([tabindex="-1"])');
+    const getFocusable = () => navElement?.querySelectorAll<HTMLElement>('button, a, [tabindex]:not([tabindex="-1"])') ?? [];
+    const focusable = getFocusable();
     if (focusable.length > 0) focusable[0].focus();
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -31,10 +32,11 @@ export function useMobileNavBehavior({ isOpen, navElement, onClose }: UseMobileN
         return;
       }
 
-      if (event.key !== "Tab" || focusable.length === 0) return;
+      const activeFocusable = getFocusable();
+      if (event.key !== "Tab" || activeFocusable.length === 0) return;
 
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
+      const first = activeFocusable[0];
+      const last = activeFocusable[activeFocusable.length - 1];
       if (event.shiftKey && document.activeElement === first) {
         event.preventDefault();
         last.focus();

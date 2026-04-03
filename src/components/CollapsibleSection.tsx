@@ -25,7 +25,7 @@ export default function CollapsibleSection({
         className="focusRing controlBtn"
         onClick={onToggle}
         aria-expanded={isOpen}
-        aria-label={`${isOpen ? "Hide" : "Show"} ${sectionLabel}`}
+        aria-label={`${isOpen ? "Hide" : "Show"} ${buttonLabel}`}
         style={{ marginBottom: isOpen ? "0" : "12px" }}
       >
         {isOpen ? "▾" : "▸"} {buttonLabel}

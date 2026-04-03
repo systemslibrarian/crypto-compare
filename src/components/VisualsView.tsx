@@ -1,30 +1,33 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-
-const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+import cryptoTimeline from "../../public/images/crypto-timeline.png";
+import encryptionPerformanceComparison from "../../public/images/encryption-performance-comparison.png";
+import hashingVsEncryptionVsEncoding from "../../public/images/hashing-vs-encryption-vs-encoding.png";
+import tlsHttpsDataFlow from "../../public/images/tls-https-data-flow.png";
 
 const VISUALS = [
   {
-    src: `${BASE_PATH}/images/encryption-performance-comparison.png`,
+    src: encryptionPerformanceComparison,
     alt: "Performance comparison of symmetric and asymmetric encryption algorithms across speed, key size, and security tradeoffs",
     heading: "Encryption Performance Comparison",
     desc: "Speed, key size, and security tradeoffs across the major algorithm families.",
   },
   {
-    src: `${BASE_PATH}/images/hashing-vs-encryption-vs-encoding.png`,
+    src: hashingVsEncryptionVsEncoding,
     alt: "Side-by-side comparison of hashing, encryption, and encoding: their properties, reversibility, and use cases",
     heading: "Hashing vs Encryption vs Encoding",
     desc: "Three concepts that are frequently confused — each serves a distinct purpose in modern systems.",
   },
   {
-    src: `${BASE_PATH}/images/tls-https-data-flow.png`,
+    src: tlsHttpsDataFlow,
     alt: "Diagram of TLS handshake and HTTPS data flow showing key exchange, authentication, and symmetric encryption in sequence",
     heading: "How TLS & HTTPS Work",
     desc: "Cryptography in action — how the algorithms on this site combine to secure every HTTPS connection.",
   },
   {
-    src: `${BASE_PATH}/images/crypto-timeline.png`,
+    src: cryptoTimeline,
     alt: "Timeline of major cryptographic milestones from classical ciphers to post-quantum algorithms",
     heading: "Evolution of Cryptography",
     desc: "From Caesar ciphers to post-quantum standards — the history of the field at a glance.",
@@ -128,9 +131,10 @@ export default function VisualsView() {
                 textAlign: "center",
               }}
             >
-              <img
+              <Image
                 src={v.src}
                 alt={v.alt}
+                sizes="(max-width: 768px) 100vw, 720px"
                 style={{
                   display: "block",
                   width: "100%",
