@@ -2,7 +2,7 @@
 
 **Interactive cryptographic algorithm reference — 12 categories, 64 algorithms, 16+ countries.**
 
-🌐 **[Live Site → systemslibrarian.github.io/crypto-compare](https://systemslibrarian.github.io/crypto-compare/)**
+🌐 **[Live Site →](https://systemslibrarian.github.io/crypto-compare/)**
 
 > *So whether you eat or drink or whatever you do, do it all for the glory of God.* — 1 Corinthians 10:31
 
