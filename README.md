@@ -304,6 +304,7 @@ That honesty is part of the trust model, not a weakness in spite of it.
 | **Download justification reports** | Markdown output for architecture reviews and design discussion |
 | **Filter and sort** | PQ-safe, standards-track, NIST status, deployment, origin, size, and security dimensions |
 | **Review hybrid patterns** | Classical-plus-PQ constructions for practical migration planning |
+| **Explore linked demo projects** | Each category links to working open-source projects that demonstrate the underlying cryptographic concepts in practice |
 | **Read safety and architecture guidance** | Use-case content, pitfalls, library direction, and system-level flows |
 
 ### Coverage Snapshot
@@ -396,12 +397,24 @@ High-value files:
 
 ## Related Projects
 
+Each category in the app links to working demo projects that illustrate the cryptographic concepts in practice.
+
 | Project | Focus |
 |---------|-------|
-| [Quantum Vault KPQC](https://github.com/systemslibrarian/quantum-vault-kpqc) | Symmetric crypto, KEM, signatures, KDF, MAC, secret sharing |
-| [meow-decoder](https://github.com/systemslibrarian/meow-decoder) | Symmetric crypto, hashing, steganography |
-| [Scripture Cloak](https://github.com/systemslibrarian/scripture-cloak) | ZKP concepts, hashing, PIR concepts, CSPRNG |
+| [Quantum Vault KPQC](https://github.com/systemslibrarian/quantum-vault-kpqc) | Symmetric crypto, KEM, signatures, KDF, MAC, secret sharing, CSPRNG |
+| [Blind Oracle](https://github.com/systemslibrarian/blind-oracle) | Fully homomorphic encryption (TFHE) |
+| [Blind Oracle API](https://github.com/systemslibrarian/blind-oracle-api) | FHE backend — Rust + Axum + TFHE-rs |
+| [Silent Tally](https://github.com/systemslibrarian/silent-tally) | Secure multi-party computation |
+| [FROST Threshold](https://github.com/systemslibrarian/frost-threshold) | Threshold signatures (FROST) |
+| [Patron Shield](https://github.com/systemslibrarian/patron-shield) | Private information retrieval (PIR) |
+| [Iron Letter](https://github.com/systemslibrarian/iron-letter) | Asymmetric / public-key encryption (ECIES, RSA-OAEP) |
+| [Shadow Vault](https://github.com/systemslibrarian/shadow-vault) | Deniable symmetric encryption (ChaCha20-Poly1305) |
+| [Dad Mode Morse](https://github.com/systemslibrarian/dad-mode-morse2) | Symmetric encryption + digital signatures |
+| [Corrupted Oracle](https://github.com/systemslibrarian/corrupted-oracle) | CSPRNG backdoor demonstration (Dual_EC_DRBG) |
 | [zk-proof-lab](https://github.com/systemslibrarian/zk-proof-lab) | Zero-knowledge proof systems |
+| [meow-decoder](https://github.com/systemslibrarian/meow-decoder) | Symmetric crypto, hashing, steganography |
+| [snow2](https://github.com/systemslibrarian/snow2) | Steganography / covert channels |
+| [Scripture Cloak](https://github.com/systemslibrarian/scripture-cloak) | ZKP concepts, hashing, PIR concepts, CSPRNG |
 
 ---
 
