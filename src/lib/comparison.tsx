@@ -92,7 +92,7 @@ function formatReviewDate(iso: string | undefined): string {
   return `${months[parseInt(m, 10) - 1]} ${y}`;
 }
 
-export function buildRows(category: AlgorithmCategory, advanced: boolean): ComparisonRow[] {
+export function buildRows(category: AlgorithmCategory, _advanced?: boolean): ComparisonRow[] {
   const rows: ComparisonRow[] = [];
   rows.push({ label: "Origin", render: (a) => a.origin, exportText: (a) => a.origin });
   rows.push({ label: "Status", render: (a) => <Badge status={a.status} label={a.statusLabel} />, exportText: (a) => a.statusLabel });
@@ -202,12 +202,10 @@ export function buildRows(category: AlgorithmCategory, advanced: boolean): Compa
     exportText: (a) => `${a.estimationMethodology.quantumBasis}: ${a.estimationMethodology.quantumNote}`,
   });
 
-  if (advanced) {
-    rows.push({ label: "Best Attack", render: (a) => a.bestAttack, exportText: (a) => a.bestAttack });
-    rows.push({ label: "Reduction", render: (a) => a.reductionQuality, exportText: (a) => a.reductionQuality });
-    rows.push({ label: "Performance", render: (a) => a.performance, exportText: (a) => a.performance });
-    rows.push({ label: "Notes", render: (a) => a.notes, exportText: (a) => a.notes });
-  }
+  rows.push({ label: "Best Attack", render: (a) => a.bestAttack, exportText: (a) => a.bestAttack });
+  rows.push({ label: "Reduction", render: (a) => a.reductionQuality, exportText: (a) => a.reductionQuality });
+  rows.push({ label: "Performance", render: (a) => a.performance, exportText: (a) => a.performance });
+  rows.push({ label: "Notes", render: (a) => a.notes, exportText: (a) => a.notes });
 
   return rows;
 }

@@ -39,7 +39,7 @@ const algorithms: Algorithm[] = [
 
 describe("useCryptoCompareUrlState helpers", () => {
   it("parses supported query params", () => {
-    const parsed = parseCryptoCompareQueryState("?cat=hash&adv=1&q=sha&pq=1&country=Japan&sort=security&defaults=1&fav=1&algo=aes256gcm", {
+    const parsed = parseCryptoCompareQueryState("?cat=hash&q=sha&pq=1&country=Japan&sort=security&defaults=1&fav=1&algo=aes256gcm", {
       categoryOptions: ["symmetric", "hash"],
       countryOptions: ["all", "Japan"],
       sortOptions: ["name", "security"],
@@ -47,7 +47,6 @@ describe("useCryptoCompareUrlState helpers", () => {
     });
 
     expect(parsed.cat).toBe("hash");
-    expect(parsed.adv).toBe(true);
     expect(parsed.search).toBe("sha");
     expect(parsed.pqOnly).toBe(true);
     expect(parsed.country).toBe("Japan");
@@ -60,7 +59,6 @@ describe("useCryptoCompareUrlState helpers", () => {
   it("builds a stable query string from state", () => {
     const queryString = buildCryptoCompareQueryString({
       cat: "symmetric",
-      adv: true,
       cmp: true,
       sel: ["aes256gcm", "xchacha20poly"],
       search: "chacha",
@@ -74,6 +72,6 @@ describe("useCryptoCompareUrlState helpers", () => {
       favOnly: true,
     });
 
-    expect(queryString).toBe("cat=symmetric&adv=1&cmp=1&sel=aes256gcm%2Cxchacha20poly&q=chacha&pq=1&nist=1&country=Japan&sort=security&defaults=1&fav=1");
+    expect(queryString).toBe("cat=symmetric&cmp=1&sel=aes256gcm%2Cxchacha20poly&q=chacha&pq=1&nist=1&country=Japan&sort=security&defaults=1&fav=1");
   });
 });

@@ -428,12 +428,6 @@ describe("buildRows coverage", () => {
       expect(rows.length).toBeGreaterThanOrEqual(4); // at least Origin, Status, Recommendation, Classical, PQ, Use Cases
     });
 
-    it(`produces advanced rows for category: ${cat}`, () => {
-      const basicRows = buildRows(cat, false);
-      const advRows = buildRows(cat, true);
-      expect(advRows.length).toBeGreaterThan(basicRows.length);
-    });
-
     it(`all rows have exportText for category: ${cat}`, () => {
       const rows = buildRows(cat, true);
       const algos = ALGORITHMS.filter((a) => a.category === cat);
@@ -493,7 +487,6 @@ describe("URL State Hydration", () => {
     const params = new URLSearchParams(window.location.search);
     expect(params.get("cat")).toBe("symmetric");
     // No optional filters set
-    expect(params.get("adv")).toBeNull();
     expect(params.get("cmp")).toBeNull();
     expect(params.get("pq")).toBeNull();
     unmount();
@@ -506,15 +499,6 @@ describe("URL State Hydration", () => {
     // The hash category tab should be selected
     const hashTab = screen.getByRole("tab", { name: /Hash/i });
     expect(hashTab).toHaveAttribute("aria-selected", "true");
-    unmount();
-  });
-
-  it("restores advanced mode from URL", async () => {
-    window.history.replaceState({}, "", "?cat=symmetric&adv=1");
-    const CryptoCompare = (await import("@/components/CryptoCompare")).default;
-    const { unmount } = render(<CryptoCompare />);
-    const advButton = screen.getByRole("button", { name: /Advanced/i });
-    expect(advButton).toHaveAttribute("aria-pressed", "true");
     unmount();
   });
 
@@ -661,23 +645,11 @@ describe("Keyboard Shortcuts", () => {
     unmount();
   });
 
-  it("'a' toggles advanced mode", async () => {
-    const CryptoCompare = (await import("@/components/CryptoCompare")).default;
-    const { unmount } = render(<CryptoCompare />);
-    const advButtons = screen.getAllByText(/Beginner/i);
-    const advButton = advButtons.find((el) => el.hasAttribute("aria-pressed"))!;
-    expect(advButton).toHaveAttribute("aria-pressed", "false");
-    fireEvent.keyDown(document, { key: "a" });
-    expect(advButton).toHaveAttribute("aria-pressed", "true");
-    expect(advButton).toHaveTextContent("Advanced");
-    unmount();
-  });
-
   it("ArrowRight navigates to next category", async () => {
     const CryptoCompare = (await import("@/components/CryptoCompare")).default;
     const { unmount } = render(<CryptoCompare />);
-    // Default is "symmetric" — ArrowRight goes to next
-    const nextCat = CATEGORIES[1]; // kem
+    // Default is "symmetric" (index 1) — ArrowRight goes to next
+    const nextCat = CATEGORIES[2]; // hash
     fireEvent.keyDown(document, { key: "ArrowRight" });
     const nextTab = screen.getByRole("tab", { name: new RegExp(nextCat.label, "i") });
     expect(nextTab).toHaveAttribute("aria-selected", "true");
@@ -685,7 +657,7 @@ describe("Keyboard Shortcuts", () => {
   });
 
   it("ArrowLeft navigates to previous category", async () => {
-    window.history.replaceState({}, "", "?cat=kem");
+    window.history.replaceState({}, "", "?cat=hash");
     const CryptoCompare = (await import("@/components/CryptoCompare")).default;
     const { unmount } = render(<CryptoCompare />);
     fireEvent.keyDown(document, { key: "ArrowLeft" });

@@ -19,9 +19,14 @@ describe("QuickStartPanel", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /read trust model/i }));
-    fireEvent.click(screen.getByRole("button", { name: /start with recommended algorithms/i }));
-    fireEvent.click(screen.getByRole("button", { name: /search all algorithms intentionally/i }));
+    // Collapsed bar buttons
+    fireEvent.click(screen.getByRole("button", { name: /^trust model$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^safe defaults$/i }));
+
+    // Expand to access card buttons
+    fireEvent.click(screen.getByRole("button", { name: /^quick start$/i }));
+
+    fireEvent.click(screen.getByRole("button", { name: /search all algorithms/i }));
     fireEvent.click(screen.getByRole("button", { name: /read the safe-usage rules/i }));
 
     expect(onToggleMethodology).toHaveBeenCalledTimes(1);

@@ -4,7 +4,6 @@ import { useEffect } from "react";
 
 type KeyboardShortcutHandlers = {
   onFocusSearch: () => void;
-  onToggleAdvanced: () => void;
   onToggleMethodology: () => void;
   onEscape: () => void;
   onNextCategory: () => void;
@@ -28,11 +27,6 @@ export function useKeyboardShortcuts(handlers: KeyboardShortcutHandlers) {
       if ((e.key === "/" || (e.key === "k" && (e.metaKey || e.ctrlKey)))) {
         e.preventDefault();
         handlers.onFocusSearch();
-        return;
-      }
-
-      if (e.key === "a" && !e.metaKey && !e.ctrlKey) {
-        handlers.onToggleAdvanced();
         return;
       }
 

@@ -6,28 +6,30 @@ type AppHeaderNavProps = {
   categories: CategoryDefinition[];
   categoryAccent: Record<AlgorithmCategory, string>;
   selectedCategory: AlgorithmCategory;
-  advanced: boolean;
   mobileNavOpen: boolean;
   mobileNavRef: Ref<HTMLElement>;
   onReset: () => void;
-  onToggleAdvanced: () => void;
   onToggleMobileNav: () => void;
   onCloseMobileNav: () => void;
   onSelectCategory: (category: AlgorithmCategory) => void;
+  onShowDefaults?: () => void;
+  onShowSafeUsage?: () => void;
+  onToggleMethodology?: () => void;
 };
 
 export default function AppHeaderNav({
   categories,
   categoryAccent,
   selectedCategory,
-  advanced,
   mobileNavOpen,
   mobileNavRef,
   onReset,
-  onToggleAdvanced,
   onToggleMobileNav,
   onCloseMobileNav,
   onSelectCategory,
+  onShowDefaults,
+  onShowSafeUsage,
+  onToggleMethodology,
 }: AppHeaderNavProps) {
   const selected = categories.find((category) => category.id === selectedCategory);
 
@@ -82,30 +84,11 @@ export default function AppHeaderNav({
               Visual Guide
             </Link>
             <button
-              onClick={onToggleAdvanced}
-              aria-pressed={advanced}
-              className="focusRing headerBtn desktopOnly"
-              style={{
-                background: advanced ? "#11203a" : "#0e1420",
-                color: advanced ? "#7dd3fc" : "#d4deea",
-                border: `1px solid ${advanced ? "#163052" : "#334155"}`,
-                padding: "10px 16px",
-                borderRadius: "6px",
-                cursor: "pointer",
-                fontSize: "14px",
-                fontWeight: 700,
-                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-              }}
-            >
-              {advanced ? "Advanced" : "Beginner"}
-            </button>
-            <button
               className="focusRing mobileMenuBtn"
               onClick={onToggleMobileNav}
               aria-label="Toggle category menu"
               aria-expanded={mobileNavOpen}
               style={{
-                display: "none",
                 background: mobileNavOpen ? "#1d4ed8" : "#0e1420",
                 color: mobileNavOpen ? "#fff" : "#d4deea",
                 border: `1px solid ${mobileNavOpen ? "#2563eb" : "#334155"}`,
@@ -144,20 +127,30 @@ export default function AppHeaderNav({
           >
             📊 Visual Guide
           </Link>
-          <button
-            onClick={() => {
-              onToggleAdvanced();
-              onCloseMobileNav();
-            }}
-            className="focusRing mobileNavActionBtn"
-            aria-pressed={advanced}
-            style={{
-              background: advanced ? "#1e3a5f" : undefined,
-              color: advanced ? "#7dd3fc" : undefined,
-            }}
-          >
-            {advanced ? "⚙️ Advanced mode" : "📖 Beginner mode"}
-          </button>
+          {onShowDefaults && (
+            <button
+              onClick={() => { onShowDefaults(); onCloseMobileNav(); }}
+              className="focusRing mobileNavActionBtn"
+            >
+              ✅ Safe defaults
+            </button>
+          )}
+          {onToggleMethodology && (
+            <button
+              onClick={() => { onToggleMethodology(); onCloseMobileNav(); }}
+              className="focusRing mobileNavActionBtn"
+            >
+              📊 Trust model
+            </button>
+          )}
+          {onShowSafeUsage && (
+            <button
+              onClick={() => { onShowSafeUsage(); onCloseMobileNav(); }}
+              className="focusRing mobileNavActionBtn"
+            >
+              ⚠️ Safe usage
+            </button>
+          )}
         </div>
         {categories.map((category) => {
           const accent = categoryAccent[category.id];

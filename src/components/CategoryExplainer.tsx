@@ -186,7 +186,7 @@ export default function CategoryExplainer({ category, expanded, onToggle }: Cate
                     />
                     <div style={{ flex: 1 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-                        {project.public && project.url ? (
+                        {project.url ? (
                           <a
                             href={project.url}
                             target="_blank"
@@ -222,6 +222,35 @@ export default function CategoryExplainer({ category, expanded, onToggle }: Cate
                         >
                           {project.public ? "PUBLIC" : "PRIVATE"}
                         </span>
+                        {project.app && (
+                          <a
+                            href={project.app.startsWith("http") ? project.app : `https://${project.app}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              color: "#a78bfa",
+                              fontSize: "12px",
+                              fontWeight: 700,
+                              fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+                              textDecoration: "none",
+                              background: "#1a1333",
+                              border: "1px solid #2e1065",
+                              padding: "2px 8px",
+                              borderRadius: "4px",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.textDecoration = "underline";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.textDecoration = "none";
+                            }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                            }}
+                          >
+                            ↗ {project.app}
+                          </a>
+                        )}
                       </div>
                       <div style={{ fontSize: "14px", color: "#b4c1d2", marginTop: "4px" }}>{project.tech}</div>
                       {project.note && <div style={{ fontSize: "13px", color: "#93a4bb", marginTop: "4px", fontStyle: "italic" }}>{project.note}</div>}

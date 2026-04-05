@@ -1,22 +1,22 @@
 import type { AlgorithmCategory, CategoryDefinition, CategoryInfoMap } from "@/types/crypto";
 
 export const CATEGORIES: CategoryDefinition[] = [
+  { id:"csprng", label:"CSPRNG", icon:"🎲" },
   { id:"symmetric", label:"Symmetric", icon:"🔐" },
+  { id:"hash", label:"Hash", icon:"#️⃣" },
+  { id:"mac", label:"MAC", icon:"🏷️" },
+  { id:"kdf", label:"KDF", icon:"🔑" },
+  { id:"password", label:"Password", icon:"🔒" },
+  { id:"asymmetric", label:"Asymmetric", icon:"🔓" },
   { id:"kem", label:"KEM", icon:"🤝" },
   { id:"signature", label:"Signatures", icon:"✍️" },
-  { id:"hash", label:"Hash", icon:"#️⃣" },
-  { id:"kdf", label:"KDF", icon:"🔑" },
-  { id:"mac", label:"MAC", icon:"🏷️" },
-  { id:"password", label:"Password", icon:"🔒" },
+  { id:"threshold_sig", label:"Threshold Sigs", icon:"⚖️" },
   { id:"sharing", label:"Sharing", icon:"🧩" },
   { id:"he", label:"HE", icon:"🔮" },
   { id:"zkp", label:"ZKP", icon:"🎭" },
   { id:"mpc", label:"MPC", icon:"🤖" },
   { id:"ot_pir", label:"OT / PIR", icon:"👁️" },
-  { id:"asymmetric", label:"Asymmetric", icon:"🔓" },
   { id:"steganography", label:"Stego", icon:"🖼️" },
-  { id:"threshold_sig", label:"Threshold Sigs", icon:"⚖️" },
-  { id:"csprng", label:"CSPRNG", icon:"🎲" },
 ];
 
 /** Each category has a unique accent color used for card borders, tab highlights, and glows. */
@@ -45,6 +45,8 @@ export const CATEGORY_INFO: CategoryInfoMap = {
     oneLiner:"The padlock on your data. One key locks it, same key unlocks it.",
     projects:[
       { name:"Quantum Vault KPQC", tech:"AES-256-GCM for payload encryption", url:"https://github.com/systemslibrarian/quantum-vault-kpqc", public:true },
+      { name:"Shadow Vault", tech:"ChaCha20-Poly1305 deniable encryption — one container, two passphrases, two messages", url:"https://github.com/systemslibrarian/shadow-vault", public:true },
+      { name:"Dad Mode Morse", tech:"AES-256-GCM encrypted Morse code transmissions", url:"https://github.com/systemslibrarian/dad-mode-morse2", public:true },
       { name:"Sealed in the Word", tech:"AES-256-GCM with per-member key wrapping", url:null, public:false, app:"PrayerWarriors.Mobi" },
       { name:"meow-decoder", tech:"AES-256-GCM encrypted QR file transfer", url:"https://github.com/systemslibrarian/meow-decoder", public:true },
     ],
@@ -68,6 +70,7 @@ export const CATEGORY_INFO: CategoryInfoMap = {
     oneLiner:"A tamper-evident seal that proves who wrote something and that nobody changed it — mathematically unforgeable.",
     projects:[
       { name:"Quantum Vault KPQC", tech:"HAETAE post-quantum signature scheme", url:"https://github.com/systemslibrarian/quantum-vault-kpqc", public:true },
+      { name:"Dad Mode Morse", tech:"Ed25519 digital signature verification for authenticated messages", url:"https://github.com/systemslibrarian/dad-mode-morse2", public:true },
     ],
     explanation:"When you sign a physical document, anyone can copy your signature. Digital signatures are fundamentally different — they're mathematically impossible to forge. The signer uses a private key (that only they know) to produce a signature, and anyone can verify it using the public key (which is freely shared). If even a single bit of the signed data changes, the signature fails. This gives you two guarantees simultaneously: authenticity (this really came from who it claims) and integrity (it hasn't been altered since signing). In the post-quantum era, these must be built on math that quantum computers can't crack — lattice problems or hash functions.",
     realWorld:"Every software update your phone installs was digitally signed — that's how your device knows it's a real update from Apple or Google and not malware. Every HTTPS certificate that proves \"this is really google.com\" is digitally signed by a Certificate Authority. Git commits are signed. Government documents are signed. Court filings are signed. Code libraries are signed. Every time your computer trusts that software is legitimate or a website is who it claims to be, digital signatures are the reason.",
@@ -78,6 +81,7 @@ export const CATEGORY_INFO: CategoryInfoMap = {
     oneLiner:"A digital fingerprint machine. Feed in any amount of data, get back a unique fixed-size fingerprint that's impossible to reverse.",
     projects:[
       { name:"Quantum Vault KPQC", tech:"SHA-256 for container integrity, HKDF foundation", url:"https://github.com/systemslibrarian/quantum-vault-kpqc", public:true },
+      { name:"Shadow Vault", tech:"SHA-256 key commitment and container integrity verification", url:"https://github.com/systemslibrarian/shadow-vault", public:true },
       { name:"meow-decoder", tech:"Hash-based integrity verification for QR frames", url:"https://github.com/systemslibrarian/meow-decoder", public:true },
       { name:"LCPL Registration Platform", tech:"HMAC-based webhook signatures, integrity checks", url:null, public:false, app:"Enterprise" },
     ],
@@ -90,6 +94,8 @@ export const CATEGORY_INFO: CategoryInfoMap = {
     oneLiner:"The key factory. Takes one piece of secret material and produces as many unique, independent cryptographic keys as you need.",
     projects:[
       { name:"Quantum Vault KPQC", tech:"HKDF with domain separation labels (HKDF_LABEL_SHARE_KEY, HKDF_LABEL_SHARE_NONCE)", url:"https://github.com/systemslibrarian/quantum-vault-kpqc", public:true },
+      { name:"snow2", tech:"HKDF-SHA-256 for key derivation from passphrase-derived material", url:"https://github.com/systemslibrarian/snow2", public:true },
+      { name:"Dad Mode Morse", tech:"HKDF-SHA-256 key derivation for message encryption keys", url:"https://github.com/systemslibrarian/dad-mode-morse2", public:true },
     ],
     explanation:"After a key exchange, you have a shared secret — but you often need multiple keys from it: one for encrypting, one for authenticating, one for each direction of communication. You can't just reuse the same key for different purposes (that's catastrophic). A KDF takes your original secret and, using domain separation labels, derives as many independent keys as you need — each one cryptographically unrelated to the others even though they came from the same source. The critical distinction: some KDFs (like HKDF) expect high-quality input material from a key exchange. Others (like Argon2) are designed for low-quality input like human-chosen passwords. Using the wrong one is a serious mistake.",
     realWorld:"TLS 1.3 uses HKDF to derive all its session keys — handshake keys, application keys, resumption keys — all from a single shared secret. Signal Protocol derives new message keys for every single message (forward secrecy) using KDF chains. When Quantum Vault KPQC takes the shared secret from SMAUG-T and derives separate encryption and authentication keys with distinct labels, that's HKDF doing the work. Every VPN, every encrypted messaging app, and every secure protocol uses KDFs to turn one secret into the many keys it needs.",
@@ -110,7 +116,9 @@ export const CATEGORY_INFO: CategoryInfoMap = {
     title:"Password Hashing",
     oneLiner:"The vault door for credentials. Makes cracking stolen password databases so expensive that attackers give up.",
     projects:[
-      { name:"PrayerWarriors.Mobi", tech:"Firebase Auth (handles bcrypt/scrypt internally)", url:null, public:false, app:"PrayerWarriors.Mobi", note:"Indirect — Firebase handles the hashing. No standalone demo yet." },
+      { name:"Phantom Vault", tech:"PBKDF2-SHA-256 + HMAC-DRBG stateless password derivation — nothing stored, nothing synced, nothing to breach", url:"https://github.com/systemslibrarian/phantom-vault", public:true },
+      { name:"Shadow Vault", tech:"Argon2id key stretching for deniable encryption passphrases", url:"https://github.com/systemslibrarian/shadow-vault", public:true },
+      { name:"PrayerWarriors.Mobi", tech:"Firebase Auth (handles bcrypt/scrypt internally)", url:null, public:false, app:"PrayerWarriors.Mobi" },
     ],
     explanation:"Regular hash functions are designed to be fast. That's exactly wrong for passwords. If hashing is fast, an attacker who steals a database of password hashes can try billions of guesses per second using GPUs. Password hashing algorithms are intentionally slow and expensive — they force every guess to consume significant CPU time, memory, or both. The key insight: legitimate users only hash their password once (at login), so a half-second delay is fine. But an attacker trying millions of passwords now needs millions of half-seconds. Memory-hard functions go further: they require large amounts of RAM per guess, which makes GPU and ASIC cracking rigs either impossible or prohibitively expensive to build. This turns a million-dollar cracking rig into an expensive paperweight.",
     realWorld:"Every competent web application stores passwords using one of these algorithms. When LinkedIn was breached in 2012, passwords were stored as plain SHA-1 hashes — millions were cracked in hours. When Dropbox was breached in 2016, passwords were bcrypt-hashed — cracking was impractically slow. That's the difference. Major password managers (1Password, Bitstrike) use Argon2 or PBKDF2 to derive encryption keys from your master password. Cryptocurrency wallets use scrypt or Argon2 to protect wallet keys. Every time you create an account on a well-built website, your password goes through one of these before storage.",
@@ -173,8 +181,9 @@ export const CATEGORY_INFO: CategoryInfoMap = {
     title:"Asymmetric / Public-Key Encryption",
     oneLiner:"Two keys, one public, one private — the foundation of how strangers on the internet trust each other.",
     projects:[
-      { name:"Sealed in the Word", tech:"RSA-OAEP / ECIES key wrapping + Cloud KMS envelope encryption", url:null, public:false, app:"PrayerWarriors.Mobi" },
+      { name:"Iron Letter", tech:"ECIES P-256 vs RSA-OAEP side-by-side — seal a letter that only one key can open", url:"https://github.com/systemslibrarian/iron-letter", public:true },
       { name:"meow-decoder", tech:"Public-key wrapped symmetric keys for QR file transfer", url:"https://github.com/systemslibrarian/meow-decoder", public:true },
+      { name:"Sealed in the Word", tech:"RSA-OAEP / ECIES key wrapping + Cloud KMS envelope encryption", url:null, public:false, app:"PrayerWarriors.Mobi" },
     ],
     explanation:"Public-key encryption lets anyone encrypt a message that only the private key holder can decrypt. Unlike symmetric crypto, no shared secret needs to be established in advance. The sender uses the recipient's public key (which can be posted on a website) to lock the message, and only the recipient's private key can unlock it. This breaks the chicken-and-egg problem of 'how do you securely share a key with someone you've never talked to?' The mathematical trapdoor properties of RSA (integer factorization) and elliptic curves (discrete log) make this possible — easy to compute one direction, computationally infeasible to reverse. Critically, this predates the modern era of quantum computers: all classical asymmetric schemes are vulnerable to Shor's algorithm. Post-quantum key encapsulation (KEM) is replacing these for key exchange purposes.",
     realWorld:"PGP email encryption, S/MIME (email signing/encryption in Outlook and iOS Mail), SSH key-based authentication (your ~/.ssh/id_rsa.pub is a public key), legacy TLS handshakes (pre-TLS 1.3), certificate authorities signing server certificates, Java JAR signing, code signing certificates, mobile app stores verifying app authenticity, and every HTTPS certificate you've ever clicked on.",
@@ -205,6 +214,7 @@ export const CATEGORY_INFO: CategoryInfoMap = {
     title:"CSPRNG — Cryptographic Randomness",
     oneLiner:"Everything in cryptography starts here — the randomness that makes secrets unguessable.",
     projects:[
+      { name:"Corrupted Oracle", tech:"Dual_EC_DRBG backdoor demonstration — shows what a compromised CSPRNG looks like vs. HMAC-DRBG and ChaCha20-DRBG", url:"https://github.com/systemslibrarian/corrupted-oracle", public:true },
       { name:"Quantum Vault KPQC", tech:"CSPRNG for nonce generation and key randomness foundations", url:"https://github.com/systemslibrarian/quantum-vault-kpqc", public:true },
     ],
     explanation:"Cryptographically Secure Pseudo-Random Number Generators (CSPRNGs) produce output that is computationally indistinguishable from true randomness. They are seeded by entropy sources — hardware noise (thermal, quantum), OS entropy pools, timing jitter — and expanded into the key material every other primitive in this museum depends on. Every AES key, every RSA prime, every ECDH nonce, every TLS session key — all start with a CSPRNG. A broken CSPRNG breaks everything built on top of it, regardless of the mathematical strength of the algorithms that use its output. The 2008 Debian OpenSSL vulnerability (a patch accidentally zeroed the entropy pool) produced predictable keys from a 'broken' CSPRNG seeded with only the process ID — thousands of SSH and TLS keys remained compromised for years after the fix. CSPRNGs are only as good as their entropy input: a CSPRNG seeded with weak entropy (low-entropy VM boot, predictable seed) produces predictable output regardless of algorithm quality.",

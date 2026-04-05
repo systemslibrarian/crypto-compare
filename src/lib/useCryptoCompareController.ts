@@ -7,7 +7,6 @@ type CountryFilter = "all" | "Korea" | "USA" | "Europe" | "Japan" | "China" | "R
 type UseCryptoCompareControllerArgs = {
   searchRef: RefObject<HTMLInputElement | null>;
   setCat: (value: AlgorithmCategory) => void;
-  setAdv: (value: boolean) => void;
   setSel: (value: string[] | ((previous: string[]) => string[])) => void;
   setCmp: (value: boolean) => void;
   setExplainerOpen: (value: boolean) => void;
@@ -35,7 +34,6 @@ type UseCryptoCompareControllerArgs = {
 export function useCryptoCompareController({
   searchRef,
   setCat,
-  setAdv,
   setSel,
   setCmp,
   setExplainerOpen,
@@ -95,7 +93,6 @@ export function useCryptoCompareController({
 
   const resetToMainMenu = useCallback(() => {
     setCat("symmetric");
-    setAdv(false);
     setSel([]);
     setCmp(false);
     setExplainerOpen(true);
@@ -121,7 +118,6 @@ export function useCryptoCompareController({
     window.history.replaceState({}, "", window.location.pathname);
   }, [
     setCat,
-    setAdv,
     setSel,
     setCmp,
     setExplainerOpen,

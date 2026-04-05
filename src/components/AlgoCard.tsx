@@ -5,7 +5,6 @@ import type { Algorithm } from "@/types/crypto";
 
 type AlgoCardProps = {
   algo: Algorithm;
-  advanced: boolean;
   selected: boolean;
   onToggle: () => void;
   favorited?: boolean;
@@ -13,7 +12,7 @@ type AlgoCardProps = {
   advisorPick?: boolean;
 };
 
-export default function AlgoCard({ algo, advanced, selected, onToggle, favorited, onToggleFavorite, advisorPick }: AlgoCardProps) {
+export default function AlgoCard({ algo, selected, onToggle, favorited, onToggleFavorite, advisorPick }: AlgoCardProps) {
   const accent = CATEGORY_ACCENT[algo.category];
   const [detailOpen, setDetailOpen] = useState(false);
 
@@ -163,16 +162,6 @@ export default function AlgoCard({ algo, advanced, selected, onToggle, favorited
           <span style={{ color: "#7dd3fc", fontWeight: 600 }}>{algo.sources.length} source{algo.sources.length !== 1 ? "s" : ""}</span>
           <span>·</span>
           <span>{algo.status === "standard" ? "Standards-backed" : "Candidate / emerging"}</span>
-        </div>
-      )}
-      {advanced && (
-        <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px solid #1e293b", fontSize: "14px", color: "#d4deea", lineHeight: "1.7" }}>
-          <div>
-            <span style={{ color: "#93a4bb", fontWeight: 700 }}>Attack:</span> {algo.bestAttack}
-          </div>
-          <div style={{ marginTop: "6px" }}>
-            <span style={{ color: "#93a4bb", fontWeight: 700 }}>Perf:</span> {algo.performance}
-          </div>
         </div>
       )}
       {(algo.recommendation === "legacy" || algo.recommendation === "avoid") && (

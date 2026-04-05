@@ -46,9 +46,7 @@ describe("SearchControls", () => {
     );
 
     fireEvent.click(screen.getByRole("button", { name: /show filter options \(active\)/i }));
-    fireEvent.click(screen.getByRole("button", { name: /search across all 85 algorithms/i }));
 
     expect(onToggleFilters).toHaveBeenCalledTimes(1);
-    expect(onActivateSearchAll).toHaveBeenCalledTimes(1);
   });
 });

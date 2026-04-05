@@ -310,12 +310,22 @@ That honesty is part of the trust model, not a weakness in spite of it.
 
 | Category | Examples |
 |----------|----------|
+| CSPRNG | CSPRNG (OS), ChaCha20-based DRBG |
 | Symmetric Encryption | AES-256-GCM, ChaCha20-Poly1305, XChaCha20-Poly1305 |
+| Hashing | SHA-2, SHA-3, BLAKE2b, BLAKE3 |
+| MAC | HMAC-SHA-256, CMAC-AES, KMAC-256 |
+| KDF | HKDF, Argon2-KDF |
+| Password Hashing | Argon2id, bcrypt, scrypt, PBKDF2 |
+| Asymmetric Encryption | RSA-OAEP, ECIES |
 | KEM | ML-KEM, HQC, Classic McEliece, FrodoKEM |
 | Signatures | ML-DSA, FALCON, SLH-DSA, XMSS |
-| Hashing | SHA-2, SHA-3, BLAKE2b, BLAKE3 |
-| Password Hashing | Argon2id, bcrypt, scrypt, PBKDF2 |
-| Advanced Categories | Homomorphic encryption, ZKPs, MPC, OT/PIR, threshold signatures |
+| Threshold Signatures | FROST, GG20 |
+| Secret Sharing | Shamir, Feldman VSS, Additive |
+| Homomorphic Encryption | TFHE, CKKS, BGV |
+| ZKP | Groth16, zk-STARKs, PLONK |
+| MPC | SPDZ, ABY, Garbled Circuits |
+| OT / PIR | OT, SimplePIR, SealPIR |
+| Steganography | LSB, DCT, Spread Spectrum |
 
 ---
 

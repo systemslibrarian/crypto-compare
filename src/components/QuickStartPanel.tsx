@@ -18,7 +18,8 @@ export default function QuickStartPanel({
   onSearchAll,
   onShowSafeUsage,
 }: QuickStartPanelProps) {
-  const [dismissed, setDismissed] = useState(true); // start hidden to avoid flash
+  const [expanded, setExpanded] = useState(false);
+  const [dismissed, setDismissed] = useState(true);
 
   useEffect(() => {
     setDismissed(localStorage.getItem(DISMISSED_KEY) === "1");
@@ -26,6 +27,7 @@ export default function QuickStartPanel({
 
   function handleDismiss() {
     setDismissed(true);
+    setExpanded(false);
     localStorage.setItem(DISMISSED_KEY, "1");
   }
 
@@ -36,7 +38,7 @@ export default function QuickStartPanel({
 
   if (dismissed) {
     return (
-      <div style={{ marginBottom: "12px", textAlign: "right" }}>
+      <div className="quickStartBar" style={{ marginBottom: "10px", textAlign: "right" }}>
         <button type="button" className="focusRing controlBtn" onClick={handleRestore} style={{ fontSize: "12px", padding: "6px 12px" }}>
           Show quick start guide
         </button>
@@ -45,43 +47,90 @@ export default function QuickStartPanel({
   }
 
   return (
-    <section className="panel" aria-label="Quick start actions" style={{ marginBottom: "16px", background: "linear-gradient(135deg, #0a1220 0%, #101b31 100%)" }}>
-      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "16px", flexWrap: "wrap", marginBottom: "12px" }}>
-        <div>
-          <h2 className="panel-heading" style={{ marginBottom: "6px" }}>Start Here</h2>
-          <p style={{ margin: 0, color: "#93a4bb", fontSize: "14px", lineHeight: 1.7 }}>
-            Use the app in the order that tends to produce the safest decisions: scope the problem, narrow the field, then verify the trust signals.
-          </p>
-        </div>
-        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-          <button className="focusRing controlBtn" onClick={onToggleMethodology}>
-            {showMethodology ? "Hide trust model" : "Read trust model"}
+    <div className="quickStartBar" style={{ marginBottom: "10px" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          flexWrap: "wrap",
+          padding: "8px 14px",
+          border: "1px solid #1e293b",
+          borderRadius: expanded ? "10px 10px 0 0" : "10px",
+          background: "linear-gradient(135deg, #0a1220 0%, #101b31 100%)",
+        }}
+      >
+        <button
+          type="button"
+          className="focusRing"
+          onClick={() => setExpanded((v) => !v)}
+          aria-expanded={expanded}
+          style={{
+            background: "transparent",
+            border: "none",
+            color: "#7dd3fc",
+            cursor: "pointer",
+            fontWeight: 700,
+            fontSize: "14px",
+            fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+            padding: "4px 0",
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+          }}
+        >
+          <span aria-hidden="true" style={{ fontSize: "12px" }}>{expanded ? "▾" : "▸"}</span>
+          Quick Start
+        </button>
+        <span style={{ color: "#64748b", fontSize: "13px" }}>—</span>
+        <span style={{ color: "#93a4bb", fontSize: "13px", flex: "1 1 auto" }}>
+          Scope → Narrow → Verify
+        </span>
+        <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+          <button className="focusRing controlBtn" onClick={onShowDefaults} style={{ fontSize: "12px", padding: "5px 10px" }}>
+            Safe defaults
           </button>
-          <Link href="/advisor" className="focusRing controlBtn" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center" }}>
-            Open advisor
+          <button className="focusRing controlBtn" onClick={onToggleMethodology} style={{ fontSize: "12px", padding: "5px 10px" }}>
+            {showMethodology ? "Hide trust model" : "Trust model"}
+          </button>
+          <Link href="/advisor" className="focusRing controlBtn" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", fontSize: "12px", padding: "5px 10px" }}>
+            Advisor
           </Link>
-          <button type="button" className="focusRing controlBtn" onClick={handleDismiss} aria-label="Dismiss quick start" style={{ padding: "8px 12px", fontSize: "13px" }}>
+          <button type="button" className="focusRing controlBtn" onClick={handleDismiss} aria-label="Dismiss quick start" style={{ fontSize: "12px", padding: "5px 8px" }}>
             ✕
           </button>
         </div>
       </div>
-      <div className="quickStartGrid">
-        <button type="button" className="focusRing quickStartCard" onClick={onShowDefaults}>
-          <div className="quickStartEyebrow">1. Safe defaults</div>
-          <div className="quickStartTitle">Start with recommended algorithms</div>
-          <div className="quickStartBody">Filter the current view to recommended defaults before comparing anything niche, legacy, or research-grade.</div>
-        </button>
-        <button type="button" className="focusRing quickStartCard" onClick={onSearchAll}>
-          <div className="quickStartEyebrow">2. Narrow the field</div>
-          <div className="quickStartTitle">Search all algorithms intentionally</div>
-          <div className="quickStartBody">Search across categories when you know the property you need but not yet the family that should implement it.</div>
-        </button>
-        <button type="button" className="focusRing quickStartCard" onClick={onShowSafeUsage}>
-          <div className="quickStartEyebrow">3. Avoid failure modes</div>
-          <div className="quickStartTitle">Read the safe-usage rules</div>
-          <div className="quickStartBody">Nonce reuse, bad key separation, and skipped verification destroy otherwise sound algorithm choices.</div>
-        </button>
-      </div>
-    </section>
+      {expanded && (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: "10px",
+            padding: "12px 14px",
+            border: "1px solid #1e293b",
+            borderTop: "none",
+            borderRadius: "0 0 10px 10px",
+            background: "linear-gradient(135deg, #0a1220 0%, #101b31 100%)",
+          }}
+        >
+          <button type="button" className="focusRing quickStartCard" onClick={onShowDefaults}>
+            <div className="quickStartEyebrow">1. Safe defaults</div>
+            <div className="quickStartTitle">Start with recommended algorithms</div>
+            <div className="quickStartBody">Filter to recommended defaults before comparing niche or research-grade options.</div>
+          </button>
+          <button type="button" className="focusRing quickStartCard" onClick={onSearchAll}>
+            <div className="quickStartEyebrow">2. Narrow the field</div>
+            <div className="quickStartTitle">Search all algorithms</div>
+            <div className="quickStartBody">Search across categories when you know the property you need but not the family.</div>
+          </button>
+          <button type="button" className="focusRing quickStartCard" onClick={onShowSafeUsage}>
+            <div className="quickStartEyebrow">3. Avoid failure modes</div>
+            <div className="quickStartTitle">Read the safe-usage rules</div>
+            <div className="quickStartBody">Nonce reuse, bad key separation, and skipped verification destroy sound choices.</div>
+          </button>
+        </div>
+      )}
+    </div>
   );
 }

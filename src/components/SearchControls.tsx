@@ -152,34 +152,6 @@ export default function SearchControls({
         </div>
       )}
 
-      {!globalSearch && (
-        <button
-          onClick={onActivateSearchAll}
-          className="focusRing"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "10px",
-            width: "100%",
-            background: "linear-gradient(135deg, #0c1422 0%, #111d33 100%)",
-            border: "1px solid #1e293b",
-            borderRadius: "10px",
-            padding: "14px 20px",
-            marginBottom: "14px",
-            cursor: "pointer",
-            color: "#c4d1e3",
-            fontSize: "15px",
-            fontWeight: 600,
-            fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-            transition: "border-color 0.15s, background 0.15s",
-          }}
-          aria-label="Search across all 85 algorithms"
-        >
-          <span aria-hidden="true" style={{ fontSize: "18px" }}>🔍</span>
-          Search all {datasetSize} algorithms across {categoryCount} categories
-        </button>
-      )}
     </>
   );
 }

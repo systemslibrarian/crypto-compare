@@ -3,7 +3,6 @@ import type { Algorithm, AlgorithmCategory } from "@/types/crypto";
 
 type UrlState<Country extends string, Sort extends string> = {
   cat: AlgorithmCategory;
-  adv: boolean;
   cmp: boolean;
   sel: string[];
   search: string;
@@ -19,7 +18,6 @@ type UrlState<Country extends string, Sort extends string> = {
 
 type UrlSetters<Country extends string, Sort extends string> = {
   setCat: (value: AlgorithmCategory) => void;
-  setAdv: (value: boolean) => void;
   setCmp: (value: boolean) => void;
   setSel: (value: string[]) => void;
   setSearch: (value: string) => void;
@@ -65,7 +63,6 @@ export function parseCryptoCompareQueryState<Country extends string, Sort extend
 
   if (catParam && options.categoryOptions.includes(catParam)) parsed.cat = catParam;
   if (selectedParam) parsed.sel = selectedParam.split(",").filter(Boolean);
-  if (params.get("adv") === "1") parsed.adv = true;
   if (params.get("cmp") === "1") parsed.cmp = true;
   if (params.get("q")) parsed.search = params.get("q") || "";
   if (params.get("pq") === "1") parsed.pqOnly = true;
@@ -88,7 +85,6 @@ export function parseCryptoCompareQueryState<Country extends string, Sort extend
 export function buildCryptoCompareQueryString<Country extends string, Sort extends string>(state: UrlState<Country, Sort>) {
   const params = new URLSearchParams();
   params.set("cat", state.cat);
-  if (state.adv) params.set("adv", "1");
   if (state.cmp && state.sel.length >= 2) params.set("cmp", "1");
   if (state.sel.length > 0) params.set("sel", state.sel.join(","));
   if (state.search) params.set("q", state.search);
@@ -113,7 +109,6 @@ export function useCryptoCompareUrlState<Country extends string, Sort extends st
 }: UseCryptoCompareUrlStateArgs<Country, Sort>) {
   const {
     cat,
-    adv,
     cmp,
     sel,
     search,
@@ -137,7 +132,6 @@ export function useCryptoCompareUrlState<Country extends string, Sort extends st
 
     if (parsed.cat) setters.setCat(parsed.cat);
     if (parsed.sel) setters.setSel(parsed.sel);
-    if (parsed.adv) setters.setAdv(true);
     if (parsed.cmp) setters.setCmp(true);
     if (typeof parsed.search === "string") setters.setSearch(parsed.search);
     if (parsed.pqOnly) setters.setPqOnly(true);
@@ -167,7 +161,6 @@ export function useCryptoCompareUrlState<Country extends string, Sort extends st
   useEffect(() => {
     const queryString = buildCryptoCompareQueryString({
       cat,
-      adv,
       cmp,
       sel,
       search,
@@ -181,5 +174,5 @@ export function useCryptoCompareUrlState<Country extends string, Sort extends st
       favOnly,
     });
     window.history.replaceState({}, "", `?${queryString}`);
-  }, [cat, adv, cmp, sel, search, pqOnly, standardOnly, nistOnly, deployedOnly, country, sortBy, showDefaults, favOnly]);
+  }, [cat, cmp, sel, search, pqOnly, standardOnly, nistOnly, deployedOnly, country, sortBy, showDefaults, favOnly]);
 }

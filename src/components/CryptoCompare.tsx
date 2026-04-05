@@ -45,7 +45,6 @@ export default function CryptoCompare() {
   const searchRef = useRef<HTMLInputElement>(null);
 
   const [cat, setCat] = useState<AlgorithmCategory>("symmetric");
-  const [adv, setAdv] = useState(false);
   const [sel, setSel] = useState<string[]>([]);
   const [cmp, setCmp] = useState(false);
   const [explainerOpen, setExplainerOpen] = useState(false);
@@ -74,7 +73,6 @@ export default function CryptoCompare() {
   const controller = useCryptoCompareController({
     searchRef,
     setCat,
-    setAdv,
     setSel,
     setCmp,
     setExplainerOpen,
@@ -136,7 +134,6 @@ export default function CryptoCompare() {
   useCryptoCompareUrlState({
     state: {
       cat,
-      adv,
       cmp,
       sel,
       search,
@@ -151,7 +148,6 @@ export default function CryptoCompare() {
     },
     setters: {
       setCat,
-      setAdv,
       setCmp,
       setSel,
       setSearch,
@@ -190,7 +186,7 @@ export default function CryptoCompare() {
   );
 
   const selAlgos = useMemo(() => filtered.filter((a) => sel.includes(a.id)), [filtered, sel]);
-  const rows = useMemo(() => buildRows(cat, adv), [cat, adv]);
+  const rows = useMemo(() => buildRows(cat), [cat]);
   const trustSnapshot = useMemo(() => summarizeReviewWindow(dataset), [dataset]);
   const filteredRecommendationCounts = useMemo(() => countRecommendations(filtered), [filtered]);
 
@@ -199,7 +195,6 @@ export default function CryptoCompare() {
   const kbHandlers = useMemo(
     () => ({
       onFocusSearch: () => searchRef.current?.focus(),
-      onToggleAdvanced: () => setAdv((v) => !v),
       onToggleMethodology: () => setShowMethodology((v) => !v),
       onEscape: () => {
         setShowMethodology(false);
@@ -251,11 +246,9 @@ export default function CryptoCompare() {
           categories={CATEGORIES}
           categoryAccent={CATEGORY_ACCENT}
           selectedCategory={cat}
-          advanced={adv}
           mobileNavOpen={mobileNavOpen}
           mobileNavRef={mobileNavRef}
           onReset={controller.resetToMainMenu}
-          onToggleAdvanced={() => setAdv((value) => !value)}
           onToggleMobileNav={() => setMobileNavOpen((value) => !value)}
           onCloseMobileNav={() => setMobileNavOpen(false)}
           onSelectCategory={(category) => {
@@ -263,6 +256,9 @@ export default function CryptoCompare() {
             setMobileNavOpen(false);
             setGlobalSearch(false);
           }}
+          onShowDefaults={controller.showRecommendedDefaults}
+          onShowSafeUsage={() => setShowSafeUsage(true)}
+          onToggleMethodology={() => setShowMethodology((value) => !value)}
         />
 
         <main id="main-content" className="cryptoCompareMain" aria-label={`${globalSearch ? "All categories" : selectedCategoryLabel} algorithms`}>
@@ -327,7 +323,7 @@ export default function CryptoCompare() {
 
           <section aria-label={`${globalSearch ? "All categories" : selectedCategoryLabel} algorithms`} className="algoGrid" style={{ marginBottom: "18px" }}>
             {filtered.map((a) => (
-              <AlgoCard key={a.id} algo={a} advanced={adv} selected={sel.includes(a.id)} onToggle={() => controller.toggleSelection(a.id)} favorited={favorites.includes(a.id)} onToggleFavorite={() => toggleFavorite(a.id)} advisorPick={advisorHighlight === a.id} />
+              <AlgoCard key={a.id} algo={a} selected={sel.includes(a.id)} onToggle={() => controller.toggleSelection(a.id)} favorited={favorites.includes(a.id)} onToggleFavorite={() => toggleFavorite(a.id)} advisorPick={advisorHighlight === a.id} />
             ))}
           </section>
 

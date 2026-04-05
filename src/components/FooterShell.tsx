@@ -22,7 +22,6 @@ export default function FooterShell({ trustSnapshot }: FooterShellProps) {
           aria-label="Keyboard shortcuts"
         >
           <span><kbd className="kbd">/</kbd> Search</span>
-          <span><kbd className="kbd">A</kbd> Toggle Advanced</span>
           <span><kbd className="kbd">← →</kbd> Switch Category</span>
           <span><kbd className="kbd">?</kbd> Methodology</span>
           <span><kbd className="kbd">Esc</kbd> Close</span>
