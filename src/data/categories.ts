@@ -160,7 +160,9 @@ export const CATEGORY_INFO: CategoryInfoMap = {
   mpc:{
     title:"Secure Multi-Party Computation",
     oneLiner:"Joint computation, zero shared data. Multiple parties compute a result together — but nobody learns anything about anyone else's input.",
-    projects:[],
+    projects:[
+      { name:"Silent Tally", tech:"Secure multi-party computation for private collective decision-making", url:"https://github.com/systemslibrarian/silent-tally", public:true },
+    ],
     projectIdea:"Church Budget Consensus — elders privately submit budget priorities, system computes consensus allocation without revealing individual submissions. Or: multi-branch library acquisition planning without sharing circulation data.",
     explanation:"Picture three companies that want to know their combined average salary without any company revealing their individual salary data. Or two hospitals that want to train an AI model together without sharing patient records. MPC makes this possible: each party keeps their private data locally, they interact through a cryptographic protocol, and at the end everyone learns the agreed-upon output — and nothing else. Not a single bit of anyone else's input leaks. This isn't just encryption — the computation itself is distributed so that no single point ever holds the combined data. Different MPC protocols handle different trust models: some protect against honest-but-curious parties, others protect even against actively malicious participants trying to cheat.",
     realWorld:"The Boston Women's Workforce Council used MPC to compute gender pay gap statistics across multiple companies — no company revealed their salary data to each other or to the council, but the aggregate statistics were accurately computed. Estonian government uses Sharemind (MPC platform) for tax fraud detection across databases that legally cannot be combined. Sugar beet auctions in Denmark were conducted via MPC so bidders couldn't learn each other's bids. Private Set Intersection (a specialized MPC) is used by Apple and Google for contact tracing, password breach detection, and ad measurement — checking if two lists overlap without revealing the lists themselves. Cryptocurrency wallets use MPC-based threshold signing so no single device ever holds the complete private key.",
@@ -204,7 +206,9 @@ export const CATEGORY_INFO: CategoryInfoMap = {
   threshold_sig:{
     title:"Threshold Signatures",
     oneLiner:"No single key controls everything — signing requires agreement from a quorum.",
-    projects:[],
+    projects:[
+      { name:"FROST Threshold", tech:"FROST threshold signature scheme for distributed signing authority", url:"https://github.com/systemslibrarian/frost-threshold", public:true },
+    ],
     projectIdea:"Distributed Church Document Signing — pastoral board decisions require signatures from 3-of-5 elders before a document is signed and published. No single elder can act unilaterally.",
     explanation:"Threshold signature schemes distribute signing authority across N parties such that any T of them must cooperate to produce a valid signature. The critical distinction from secret sharing: no single party ever holds or reconstructs the full private key — the signing happens via a distributed protocol that never assembles the key in one place. This is architecturally different from Shamir's secret sharing, which splits a secret that is eventually reassembled. In threshold signatures, the private key is mathematically divided such that T parties can jointly produce a valid signature for any message without any of them learning the full key. The result looks exactly like a signature from a single key.",
     realWorld:"Cryptocurrency custody (Fireblocks, Coinbase Vault — institutional crypto custody where a single compromised server can't steal funds), ICANN DNSSEC root key ceremonies (multiple trusted community members each hold a share; a quorum must physically gather to sign the root), multi-org certificate authorities, blockchain validator sets (Ethereum 2.0 validators use BLS threshold signatures), enterprise HSM clusters for code signing where a single HSM compromise shouldn't enable malicious signing.",
