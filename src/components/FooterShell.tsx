@@ -37,7 +37,7 @@ export default function FooterShell({ trustSnapshot }: FooterShellProps) {
         <div style={{ marginTop: "10px" }}>
           <span className="text-accent" style={{ fontWeight: 700 }}>Related:</span>{" "}
           <a href="https://github.com/systemslibrarian/crypto-compare" target="_blank" rel="noopener noreferrer" style={{ color: "#7dd3fc" }}>crypto-compare</a>{" · "}
-          <a href="https://github.com/systemslibrarian/blind-oracle" target="_blank" rel="noopener noreferrer" style={{ color: "#7dd3fc" }}>blind-oracle</a>
+          <a href="https://github.com/systemslibrarian/crypto-lab-blind-oracle" target="_blank" rel="noopener noreferrer" style={{ color: "#7dd3fc" }}>blind-oracle</a>
         </div>
       </footer>
     </>

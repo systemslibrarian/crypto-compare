@@ -401,20 +401,27 @@ Each category in the app links to working demo projects that illustrate the cryp
 
 | Project | Focus |
 |---------|-------|
-| [Quantum Vault KPQC](https://github.com/systemslibrarian/quantum-vault-kpqc) | Symmetric crypto, KEM, signatures, KDF, MAC, secret sharing, CSPRNG |
-| [Blind Oracle](https://github.com/systemslibrarian/blind-oracle) | Fully homomorphic encryption (TFHE) |
-| [Blind Oracle API](https://github.com/systemslibrarian/blind-oracle-api) | FHE backend — Rust + Axum + TFHE-rs |
-| [Silent Tally](https://github.com/systemslibrarian/silent-tally) | Secure multi-party computation |
-| [FROST Threshold](https://github.com/systemslibrarian/frost-threshold) | Threshold signatures (FROST) |
-| [Patron Shield](https://github.com/systemslibrarian/patron-shield) | Private information retrieval (PIR) |
-| [Iron Letter](https://github.com/systemslibrarian/iron-letter) | Asymmetric / public-key encryption (ECIES, RSA-OAEP) |
-| [Shadow Vault](https://github.com/systemslibrarian/shadow-vault) | Deniable symmetric encryption (ChaCha20-Poly1305) |
+| [Quantum Vault KPQC](https://github.com/systemslibrarian/crypto-lab-quantum-vault-kpqc) | Symmetric crypto, KEM, signatures, KDF, MAC, secret sharing, CSPRNG |
+| [Blind Oracle](https://github.com/systemslibrarian/crypto-lab-blind-oracle) | Fully homomorphic encryption (TFHE) |
+| [Silent Tally](https://github.com/systemslibrarian/crypto-lab-silent-tally) | Secure multi-party computation |
+| [FROST Threshold](https://github.com/systemslibrarian/crypto-lab-frost-threshold) | Threshold signatures (FROST / Ed25519) |
+| [Patron Shield](https://github.com/systemslibrarian/crypto-lab-patron-shield) | Private information retrieval (PIR) |
+| [Iron Letter](https://github.com/systemslibrarian/crypto-lab-iron-letter) | Asymmetric / public-key encryption (ECIES, RSA-OAEP) |
+| [Shadow Vault](https://github.com/systemslibrarian/crypto-lab-shadow-vault) | Deniable symmetric encryption (ChaCha20-Poly1305) |
 | [Dad Mode Morse](https://github.com/systemslibrarian/dad-mode-morse2) | Symmetric encryption + digital signatures |
-| [Corrupted Oracle](https://github.com/systemslibrarian/corrupted-oracle) | CSPRNG backdoor demonstration (Dual_EC_DRBG) |
-| [zk-proof-lab](https://github.com/systemslibrarian/zk-proof-lab) | Zero-knowledge proof systems |
-| [meow-decoder](https://github.com/systemslibrarian/meow-decoder) | Symmetric crypto, hashing, steganography |
+| [Corrupted Oracle](https://github.com/systemslibrarian/crypto-lab-corrupted-oracle) | CSPRNG backdoor demonstration (Dual_EC_DRBG) |
+| [ZK Proof Lab](https://github.com/systemslibrarian/crypto-lab-zk-proof-lab) | Zero-knowledge proof systems |
+| [Phantom Vault](https://github.com/systemslibrarian/crypto-lab-phantom-vault) | Stateless password manager (PBKDF2 + HMAC-DRBG) |
 | [snow2](https://github.com/systemslibrarian/snow2) | Steganography / covert channels |
-| [Scripture Cloak](https://github.com/systemslibrarian/scripture-cloak) | ZKP concepts, hashing, PIR concepts, CSPRNG |
+| [Hybrid Wire](https://github.com/systemslibrarian/crypto-lab-hybrid-wire) | Hybrid post-quantum key exchange (X25519 + ML-KEM-768) |
+| [Kyber Vault](https://github.com/systemslibrarian/crypto-lab-kyber-vault) | ML-KEM (CRYSTALS-Kyber) key encapsulation — NIST FIPS 203 |
+| [Dilithium Seal](https://github.com/systemslibrarian/crypto-lab-dilithium-seal) | ML-DSA (CRYSTALS-Dilithium) post-quantum signatures — NIST FIPS 204 |
+| [SPHINCS+ Ledger](https://github.com/systemslibrarian/crypto-lab-sphincs-ledger) | SLH-DSA (SPHINCS+) hash-based PQ signatures — NIST FIPS 205 |
+| [Ratchet Wire](https://github.com/systemslibrarian/crypto-lab-ratchet-wire) | Double Ratchet Algorithm (Signal protocol) |
+| [Shamir Gate](https://github.com/systemslibrarian/crypto-lab-shamir-gate) | Shamir's Secret Sharing with polynomial visualization |
+| [Iron Serpent](https://github.com/systemslibrarian/crypto-lab-iron-serpent) | Serpent-256 block cipher (AES finalist) |
+| [Dead Sea Cipher](https://github.com/systemslibrarian/crypto-lab-dead-sea-cipher) | Cryptographic history — Atbash to AES-256-GCM |
+| [Biham Lens](https://github.com/systemslibrarian/crypto-lab-biham-lens) | Differential cryptanalysis (Biham & Shamir, DES) |
 
 ---
 

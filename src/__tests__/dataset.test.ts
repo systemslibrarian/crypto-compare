@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { readFileSync } from "fs";
+import { join } from "path";
 import { ALGORITHMS } from "@/data/algorithms";
-import { CATEGORIES } from "@/data/categories";
+import { CATEGORIES, CATEGORY_INFO } from "@/data/categories";
 import { ALGORITHM_PROVENANCE } from "@/data/provenance";
 import { HYBRID_PATTERNS } from "@/data/hybridPatterns";
 import { validateAlgorithms } from "@/lib/validation";
@@ -65,6 +67,23 @@ describe("Categories", () => {
       expect(cat.label.length).toBeGreaterThan(0);
       expect(cat.icon.length).toBeGreaterThan(0);
     }
+  });
+
+  it("covers every related public project listed in the README", () => {
+    const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
+    const relatedProjectsSection = readme.match(/## Related Projects([\s\S]*?)---/)?.[1] ?? "";
+    const readmeRepos = Array.from(
+      new Set(Array.from(relatedProjectsSection.matchAll(/https:\/\/github\.com\/systemslibrarian\/([A-Za-z0-9._-]+)/g), (match) => match[1])),
+    );
+    const listedRepos = new Set(
+      Object.values(CATEGORY_INFO)
+        .flatMap((category) => category.projects)
+        .map((project) => project.url?.match(/github\.com\/systemslibrarian\/([A-Za-z0-9._-]+)/)?.[1])
+        .filter((repo): repo is string => Boolean(repo)),
+    );
+
+    const missingRepos = readmeRepos.filter((repo) => !listedRepos.has(repo));
+    expect(missingRepos).toEqual([]);
   });
 });
 
