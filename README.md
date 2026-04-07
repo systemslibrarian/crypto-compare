@@ -2,7 +2,7 @@
 
 **Cryptographic algorithm decision system for engineers, architects, and technical decision-makers.**
 
-85 algorithms. 16 categories. Sourced recommendations. Safe-usage guidance. Reference architectures. Post-quantum migration context.
+95 algorithms. 17 categories. Sourced recommendations. Safe-usage guidance. Reference architectures. Post-quantum migration context.
 
 🌐 **[Live Site →](https://systemslibrarian.github.io/crypto-compare/)**
 
@@ -48,7 +48,7 @@ This project tries to earn trust in concrete ways rather than by tone alone.
 
 | Signal | What It Means |
 |--------|----------------|
-| **85 algorithms across 16 categories** | Coverage is broad enough to support real design tradeoffs, not just a curated shortlist |
+| **95 algorithms across 17 categories** | Coverage is broad enough to support real design tradeoffs, not just a curated shortlist |
 | **Per-algorithm provenance** | Entries are backed by standards, cryptanalysis, deployment references, and review dates |
 | **5-level recommendation model** | Recommendations are not binary; they distinguish safe defaults from acceptable, legacy, research, and avoid |
 | **Explicit tradeoffs** | Entries include "Why not this?", assumptions, and "When this changes" conditions |
@@ -63,7 +63,7 @@ Trust still has limits here:
 
 ### Freshness Snapshot
 
-- provenance entries currently carry review dates spanning **2026-03-16** through **2026-04-03**
+- provenance entries currently carry review dates spanning **2026-03-16** through **2026-04-07**
 - each algorithm record includes a `lastReviewed` value in the dataset provenance
 - recommendation confidence should drop as that review window gets older relative to new cryptanalysis, standards work, or deployment changes
 
@@ -298,7 +298,7 @@ That honesty is part of the trust model, not a weakness in spite of it.
 
 | Capability | What It Gives You |
 |-----------|--------------------|
-| **Browse by category** | 85 algorithms across encryption, KEM, signatures, hashing, password hashing, ZKPs, MPC, OT/PIR, threshold signatures, and more |
+| **Browse by category** | 95 algorithms across elliptic curves, encryption, KEM, signatures, hashing, password hashing, ZKPs, MPC, OT/PIR, threshold signatures, and more |
 | **Compare side by side** | Consistent field-by-field comparisons adapted to category-specific metrics |
 | **Use the decision flowchart** | A guided path from problem statement to algorithm recommendation |
 | **Download justification reports** | Markdown output for architecture reviews and design discussion |

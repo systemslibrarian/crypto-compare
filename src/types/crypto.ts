@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 export type AlgorithmCategory =
   | "symmetric"
+  | "curve"
   | "kem"
   | "signature"
   | "hash"
@@ -108,6 +109,12 @@ export type SymmetricAlgorithm = AlgorithmBase & {
   nonceSize: number;
   tagSize: number | null;
   blockSize: number | null;
+};
+
+export type CurveAlgorithm = AlgorithmBase & {
+  category: "curve";
+  curveForm: string;
+  safeCurves: string;
 };
 
 export type KEMAlgorithm = AlgorithmBase & {
@@ -218,6 +225,7 @@ export type CSPRNGAlgorithm = AlgorithmBase & {
 
 export type Algorithm =
   | SymmetricAlgorithm
+  | CurveAlgorithm
   | KEMAlgorithm
   | SignatureAlgorithm
   | HashAlgorithm

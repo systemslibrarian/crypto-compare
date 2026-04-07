@@ -1,7 +1,7 @@
 import { getSizeMetric } from "@/lib/dataset";
 import type { Algorithm, AlgorithmCategory } from "@/types/crypto";
 
-const DEFAULT_RECOMMENDED_IDS = new Set(["xchacha20poly", "aes256gcm", "mlkem768", "mldsa65", "argon2id", "hmac_sha256", "kmac256"]);
+const DEFAULT_RECOMMENDED_IDS = new Set(["xchacha20poly", "aes256gcm", "curve25519", "ed25519", "mlkem768", "mldsa65", "argon2id", "hmac_sha256", "kmac256"]);
 
 export type AlgorithmSortOption = "name" | "security" | "pq" | "publicKey" | "signature";
 

@@ -3,6 +3,7 @@ import type {
   Algorithm,
   AsymmetricAlgorithm,
   ComparisonRow,
+  CurveAlgorithm,
   CSPRNGAlgorithm,
   HEAlgorithm,
   HashAlgorithm,
@@ -23,6 +24,10 @@ import type {
 
 function asSymmetric(algo: Algorithm): SymmetricAlgorithm {
   return algo as SymmetricAlgorithm;
+}
+
+function asCurve(algo: Algorithm): CurveAlgorithm {
+  return algo as CurveAlgorithm;
 }
 
 function asKEM(algo: Algorithm): KEMAlgorithm {
@@ -92,6 +97,12 @@ function formatReviewDate(iso: string | undefined): string {
   return `${months[parseInt(m, 10) - 1]} ${y}`;
 }
 
+function formatPqSecurity(bits: number | null | undefined): string {
+  if (bits == null) return "TBD";
+  if (bits === 0) return "Broken (Shor)";
+  return `${bits} bits`;
+}
+
 export function buildRows(category: AlgorithmCategory, _advanced?: boolean): ComparisonRow[] {
   const rows: ComparisonRow[] = [];
   rows.push({ label: "Origin", render: (a) => a.origin, exportText: (a) => a.origin });
@@ -101,13 +112,16 @@ export function buildRows(category: AlgorithmCategory, _advanced?: boolean): Com
   rows.push({ label: "Changes When", render: (a) => a.recommendationChangesWhen, exportText: (a) => a.recommendationChangesWhen });
   rows.push({ label: "Why Not This?", render: (a) => a.whyNotThis, exportText: (a) => a.whyNotThis });
   rows.push({ label: "Classical", render: (a) => <SecurityMeter bits={a.securityBits} />, exportText: (a) => a.securityBits != null ? `${a.securityBits} bits` : "TBD" });
-  rows.push({ label: "PQ", render: (a) => <SecurityMeter bits={a.pqSecurityBits} />, exportText: (a) => a.pqSecurityBits != null ? `${a.pqSecurityBits} bits` : "TBD" });
+  rows.push({ label: "PQ", render: (a) => <SecurityMeter bits={a.pqSecurityBits} label="PQ" />, exportText: (a) => formatPqSecurity(a.pqSecurityBits) });
 
   if (category === "symmetric") {
     rows.push({ label: "Key", render: (a) => `${asSymmetric(a).keySize} bits`, exportText: (a) => `${asSymmetric(a).keySize} bits` });
     rows.push({ label: "Nonce", render: (a) => `${asSymmetric(a).nonceSize} bits`, exportText: (a) => `${asSymmetric(a).nonceSize} bits` });
     rows.push({ label: "Tag", render: (a) => (asSymmetric(a).tagSize ? `${asSymmetric(a).tagSize} bits` : "-"), exportText: (a) => (asSymmetric(a).tagSize ? `${asSymmetric(a).tagSize} bits` : "-") });
     rows.push({ label: "Block", render: (a) => (asSymmetric(a).blockSize ? `${asSymmetric(a).blockSize} bits` : "Stream"), exportText: (a) => (asSymmetric(a).blockSize ? `${asSymmetric(a).blockSize} bits` : "Stream") });
+  } else if (category === "curve") {
+    rows.push({ label: "Form", render: (a) => asCurve(a).curveForm, exportText: (a) => asCurve(a).curveForm });
+    rows.push({ label: "SafeCurves", render: (a) => asCurve(a).safeCurves, exportText: (a) => asCurve(a).safeCurves });
   } else if (category === "kem") {
     rows.push({ label: "Public Key", render: (a) => formatBytes(asKEM(a).publicKeySize), exportText: (a) => formatBytes(asKEM(a).publicKeySize) });
     rows.push({ label: "Ciphertext", render: (a) => formatBytes(asKEM(a).ciphertextSize), exportText: (a) => formatBytes(asKEM(a).ciphertextSize) });

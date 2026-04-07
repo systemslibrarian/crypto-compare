@@ -85,8 +85,8 @@ describe("Export Correctness", () => {
 
   it("exports all categories without [object Object]", () => {
     const categories: AlgorithmCategory[] = [
-      "symmetric", "kem", "signature", "hash", "kdf", "mac",
-      "password", "sharing", "he", "zkp", "mpc", "ot_pir",
+      "symmetric", "curve", "kem", "signature", "hash", "kdf", "mac",
+      "password", "sharing", "he", "zkp", "mpc", "ot_pir", "asymmetric", "steganography", "threshold_sig", "csprng",
     ];
     for (const cat of categories) {
       const algos = ALGORITHMS.filter((a) => a.category === cat).slice(0, 2);
@@ -418,8 +418,8 @@ describe("Provenance Coverage", () => {
 
 describe("buildRows coverage", () => {
   const categories: AlgorithmCategory[] = [
-    "symmetric", "kem", "signature", "hash", "kdf", "mac",
-    "password", "sharing", "he", "zkp", "mpc", "ot_pir",
+    "symmetric", "curve", "kem", "signature", "hash", "kdf", "mac",
+    "password", "sharing", "he", "zkp", "mpc", "ot_pir", "asymmetric", "steganography", "threshold_sig", "csprng",
   ];
 
   for (const cat of categories) {
@@ -648,8 +648,8 @@ describe("Keyboard Shortcuts", () => {
   it("ArrowRight navigates to next category", async () => {
     const CryptoCompare = (await import("@/components/CryptoCompare")).default;
     const { unmount } = render(<CryptoCompare />);
-    // Default is "symmetric" (index 1) — ArrowRight goes to next
-    const nextCat = CATEGORIES[2]; // hash
+    // Default is "symmetric" (index 1) — ArrowRight goes to next ("curve", index 2)
+    const nextCat = CATEGORIES[2]; // curve
     fireEvent.keyDown(document, { key: "ArrowRight" });
     const nextTab = screen.getByRole("tab", { name: new RegExp(nextCat.label, "i") });
     expect(nextTab).toHaveAttribute("aria-selected", "true");
@@ -660,9 +660,10 @@ describe("Keyboard Shortcuts", () => {
     window.history.replaceState({}, "", "?cat=hash");
     const CryptoCompare = (await import("@/components/CryptoCompare")).default;
     const { unmount } = render(<CryptoCompare />);
+    // hash (index 3) — ArrowLeft goes to curve (index 2)
     fireEvent.keyDown(document, { key: "ArrowLeft" });
-    const symTab = screen.getByRole("tab", { name: /\bSymmetric\b/i });
-    expect(symTab).toHaveAttribute("aria-selected", "true");
+    const curveTab = screen.getByRole("tab", { name: /Elliptic Curves/i });
+    expect(curveTab).toHaveAttribute("aria-selected", "true");
     unmount();
   });
 

@@ -317,7 +317,7 @@ export default function CryptoCompare() {
 
           {showMethodology && <MethodologyPanel trustSnapshot={trustSnapshot} />}
 
-          <CategoryExplainer category={cat} expanded={explainerOpen} onToggle={() => setExplainerOpen(!explainerOpen)} />
+          <CategoryExplainer category={cat} expanded={explainerOpen} onToggle={() => setExplainerOpen(!explainerOpen)} onNavigateCategory={controller.switchCategory} />
 
           <ResultsStatus explainerOpen={explainerOpen} filteredCount={filtered.length} />
 

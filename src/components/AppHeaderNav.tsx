@@ -62,7 +62,7 @@ export default function AppHeaderNav({
                 <span><span style={{ color: "#3b82f6" }}>crypto</span>::compare</span>
               </button>
             </h1>
-            <p className="headerSubtitle" style={{ margin: "6px 0 0", fontSize: "16px", color: "#c4d1e3" }}>International cryptographic algorithm reference across 16 categories.</p>
+            <p className="headerSubtitle" style={{ margin: "6px 0 0", fontSize: "16px", color: "#c4d1e3" }}>International cryptographic algorithm reference across 17 categories.</p>
           </div>
           <div className="headerActions" style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
             <span className="headerLegend" style={{ fontSize: "14px", color: "#c4d1e3", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>C = Classical, PQ = Post-Quantum</span>

@@ -34,6 +34,35 @@ export function SecurityMeter({ bits, max = 256, label }: { bits: number | null 
     return <span style={{ color: "#7f8ea3", fontSize: "13px" }}>TBD</span>;
   }
 
+  const brokenByShor = label === "PQ" && bits === 0;
+  if (brokenByShor) {
+    return (
+      <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+        {label && (
+          <span aria-hidden="true" style={{ fontSize: "14px", color: "#93a4bb", minWidth: "28px", fontWeight: 700 }}>
+            {label}
+          </span>
+        )}
+        <div
+          role="meter"
+          aria-label="Post-Quantum security: Broken by Shor's algorithm"
+          aria-valuenow={0}
+          aria-valuemin={0}
+          aria-valuemax={max}
+          style={{ flex: 1, height: "6px", background: "#141a26", borderRadius: "999px", overflow: "hidden", minWidth: "50px" }}
+        >
+          <div style={{ width: "0%", height: "100%", background: "#f87171", borderRadius: "2px" }} />
+        </div>
+        <span
+          aria-hidden="true"
+          style={{ color: "#f87171", fontSize: "13px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", fontWeight: 700, minWidth: "112px", textAlign: "right" }}
+        >
+          Broken (Shor)
+        </span>
+      </div>
+    );
+  }
+
   const pct = Math.min((bits / max) * 100, 100);
   const c = bits >= 192 ? "#34d399" : bits >= 128 ? "#38bdf8" : bits >= 112 ? "#fbbf24" : "#f87171";
   const levelLabel = bits >= 192 ? "high" : bits >= 128 ? "standard" : bits >= 112 ? "moderate" : "low";

@@ -2,7 +2,7 @@ import { z } from "zod";
 import type { Algorithm, AlgorithmCategory } from "@/types/crypto";
 
 const ALGORITHM_CATEGORIES = [
-  "symmetric", "kem", "signature", "hash", "kdf", "mac",
+  "symmetric", "curve", "kem", "signature", "hash", "kdf", "mac",
   "password", "sharing", "he", "zkp", "mpc", "ot_pir",
   "asymmetric", "steganography", "threshold_sig", "csprng",
 ] as const;
@@ -65,6 +65,12 @@ const SymmetricSchema = AlgorithmBaseSchema.extend({
   nonceSize: z.number().int().min(0).max(512),
   tagSize: z.number().int().min(0).nullable(),
   blockSize: z.number().int().min(0).nullable(),
+});
+
+const CurveSchema = AlgorithmBaseSchema.extend({
+  category: z.literal("curve"),
+  curveForm: z.string().min(1),
+  safeCurves: z.string().min(1),
 });
 
 const KEMSchema = AlgorithmBaseSchema.extend({
@@ -175,6 +181,7 @@ const CSPRNGSchema = AlgorithmBaseSchema.extend({
 
 const AlgorithmSchema = z.discriminatedUnion("category", [
   SymmetricSchema,
+  CurveSchema,
   KEMSchema,
   SignatureSchema,
   HashSchema,

@@ -1,7 +1,7 @@
 {
   "name": "crypto-compare",
   "version": "1.0.0",
-  "description": "Interactive cryptographic algorithm reference — 16 categories, 85 algorithms, international",
+  "description": "Interactive cryptographic algorithm reference — 17 categories, 95 algorithms, international",
   "private": true,
   "scripts": {
     "dev": "next dev",

@@ -59,6 +59,78 @@ export const ALGORITHM_PROVENANCE: Record<string, { sources: AlgorithmSource[]; 
       { label: "snow2 (demo)", url: "https://github.com/systemslibrarian/snow2", note: "Modern Rust steganography tool using SNOW-inspired naming with XChaCha20-Poly1305.", kind: "deployment" },
     ],
   },
+  // ─── Elliptic Curves ────────────────────────────────────────────
+  curve25519: {
+    lastReviewed: "2026-04-07",
+    sources: [
+      { label: "RFC 7748", url: "https://www.rfc-editor.org/rfc/rfc7748", note: "Elliptic Curves for Security. Defines X25519 and X448.", kind: "standard" },
+      { label: "SafeCurves", url: "https://safecurves.cr.yp.to/", note: "Curve25519 is one of the SafeCurves project's canonical modern curve designs.", kind: "analysis" },
+    ],
+  },
+  ed25519: {
+    lastReviewed: "2026-04-07",
+    sources: [
+      { label: "RFC 8032", url: "https://www.rfc-editor.org/rfc/rfc8032", note: "Edwards-Curve Digital Signature Algorithm (EdDSA). Defines Ed25519 and Ed448.", kind: "standard" },
+      { label: "SafeCurves", url: "https://safecurves.cr.yp.to/", note: "Edwards25519 is covered in the SafeCurves project discussion of safer modern curves.", kind: "analysis" },
+    ],
+  },
+  p256: {
+    lastReviewed: "2026-04-07",
+    sources: [
+      { label: "NIST SP 800-186", url: "https://csrc.nist.gov/pubs/sp/800/186/final", note: "NIST elliptic-curve domain parameters including P-256.", kind: "standard" },
+      { label: "NIST SP 800-57 Part 1 Rev. 5", url: "https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final", note: "Security-strength mapping assigning 128-bit strength to 256-bit ECC.", kind: "standard" },
+      { label: "SafeCurves", url: "https://safecurves.cr.yp.to/", note: "Includes NIST P-256 in the SafeCurves comparison framework.", kind: "analysis" },
+    ],
+  },
+  p384: {
+    lastReviewed: "2026-04-07",
+    sources: [
+      { label: "NIST SP 800-186", url: "https://csrc.nist.gov/pubs/sp/800/186/final", note: "NIST elliptic-curve domain parameters including P-384.", kind: "standard" },
+      { label: "NIST SP 800-57 Part 1 Rev. 5", url: "https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final", note: "Security-strength mapping assigning 192-bit strength to 384-bit ECC.", kind: "standard" },
+      { label: "SafeCurves", url: "https://safecurves.cr.yp.to/", note: "Includes NIST P-384 in the SafeCurves comparison framework.", kind: "analysis" },
+    ],
+  },
+  p521: {
+    lastReviewed: "2026-04-07",
+    sources: [
+      { label: "NIST SP 800-186", url: "https://csrc.nist.gov/pubs/sp/800/186/final", note: "NIST elliptic-curve domain parameters including P-521.", kind: "standard" },
+      { label: "NIST SP 800-57 Part 1 Rev. 5", url: "https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final", note: "Security-strength mapping assigning 256-bit strength to 512-bit-and-above ECC.", kind: "standard" },
+      { label: "SafeCurves", url: "https://safecurves.cr.yp.to/", note: "Includes NIST P-521 in the SafeCurves comparison framework.", kind: "analysis" },
+    ],
+  },
+  secp256k1: {
+    lastReviewed: "2026-04-07",
+    sources: [
+      { label: "SEC 2 v2.0", url: "https://www.secg.org/sec2-v2.pdf", note: "SECG domain parameters for secp256k1.", kind: "standard" },
+      { label: "SafeCurves", url: "https://safecurves.cr.yp.to/", note: "Includes secp256k1 in the SafeCurves comparison framework.", kind: "analysis" },
+    ],
+  },
+  curve448_ed448: {
+    lastReviewed: "2026-04-07",
+    sources: [
+      { label: "RFC 7748", url: "https://www.rfc-editor.org/rfc/rfc7748", note: "Defines X448 and positions the 448-bit family as roughly 224-bit classical security.", kind: "standard" },
+      { label: "RFC 8032", url: "https://www.rfc-editor.org/rfc/rfc8032", note: "Defines Ed448 in the EdDSA family.", kind: "standard" },
+    ],
+  },
+  bls12_381_curve: {
+    lastReviewed: "2026-04-07",
+    sources: [
+      { label: "Pairing-Friendly Curves draft", url: "https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-pairing-friendly-curves", note: "CFRG draft describing BLS12-381 as a pairing-friendly curve designed for approximately 128-bit security.", kind: "standard" },
+      { label: "RFC 9380", url: "https://www.rfc-editor.org/rfc/rfc9380", note: "Hashing to elliptic curves, including BLS12-381 suites used in deployed systems.", kind: "standard" },
+    ],
+  },
+  bn254: {
+    lastReviewed: "2026-04-07",
+    sources: [
+      { label: "Kim & Barbulescu 2016", url: "https://doi.org/10.1007/978-3-662-53887-6_11", note: "The Extended Tower Number Field Sieve. ASIACRYPT 2016. Basis for the reduced security estimates applied to BN254/alt_bn128.", kind: "analysis" },
+    ],
+  },
+  brainpool_p256r1: {
+    lastReviewed: "2026-04-07",
+    sources: [
+      { label: "RFC 5639", url: "https://www.rfc-editor.org/rfc/rfc5639", note: "Elliptic Curve Cryptography (ECC) Brainpool Standard Curves and Curve Generation.", kind: "standard" },
+    ],
+  },
   // ─── KEM ─────────────────────────────────────────────────────────
   mlkem768: {
     lastReviewed: "2026-03-16",

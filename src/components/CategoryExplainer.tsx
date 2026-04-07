@@ -1,17 +1,103 @@
-import { CATEGORY_INFO } from "@/data/categories";
+import type { ReactNode } from "react";
+import { CATEGORY_ACCENT, CATEGORY_INFO } from "@/data/categories";
 import type { AlgorithmCategory } from "@/types/crypto";
+
+/**
+ * Recognized phrases that refer to another category.
+ * Sorted longest-first so the regex prefers the most-specific match.
+ */
+const CROSS_LINK_TERMS: [string, AlgorithmCategory][] = [
+  ["Key derivation functions", "kdf"],
+  ["threshold-signature systems", "threshold_sig"],
+  ["key encapsulation (KEM)", "kem"],
+  ["Shamir's secret sharing", "sharing"],
+  ["Digital signatures", "signature"],
+  ["Password hashing", "password"],
+  ["AEAD ciphers", "symmetric"],
+  ["MPC protocols", "mpc"],
+  ["key exchange", "kem"],
+  ["Key exchange", "kem"],
+  ["zk-SNARK", "zkp"],
+  ["zk systems", "zkp"],
+  ["Signatures", "signature"],
+  ["signatures", "signature"],
+  ["KEM", "kem"],
+  ["ZKP", "zkp"],
+  ["MPC", "mpc"],
+  ["HMAC", "mac"],
+];
+
+const TERM_MAP = new Map(CROSS_LINK_TERMS);
+const CROSS_LINK_RE = new RegExp(
+  "(" +
+    CROSS_LINK_TERMS.map(([t]) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|") +
+    ")",
+  "g",
+);
+
+function linkifyCategories(
+  text: string,
+  currentCategory: AlgorithmCategory,
+  onNavigate: (cat: AlgorithmCategory) => void,
+): ReactNode {
+  const parts: ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  CROSS_LINK_RE.lastIndex = 0;
+
+  while ((match = CROSS_LINK_RE.exec(text)) !== null) {
+    const targetCat = TERM_MAP.get(match[1]);
+    if (!targetCat || targetCat === currentCategory) continue;
+
+    if (match.index > lastIndex) parts.push(text.slice(lastIndex, match.index));
+
+    const accent = CATEGORY_ACCENT[targetCat];
+    parts.push(
+      <button
+        key={match.index}
+        onClick={(e) => {
+          e.stopPropagation();
+          onNavigate(targetCat);
+        }}
+        style={{
+          color: accent,
+          background: "none",
+          border: "none",
+          borderBottom: `1px dashed ${accent}`,
+          padding: 0,
+          font: "inherit",
+          cursor: "pointer",
+          fontWeight: 700,
+        }}
+        aria-label={`Go to ${targetCat} category`}
+      >
+        {match[1]}
+      </button>,
+    );
+
+    lastIndex = CROSS_LINK_RE.lastIndex;
+  }
+
+  if (lastIndex === 0) return text;
+  if (lastIndex < text.length) parts.push(text.slice(lastIndex));
+  return <>{parts}</>;
+}
 
 type CategoryExplainerProps = {
   category: AlgorithmCategory;
   expanded: boolean;
   onToggle: () => void;
+  onNavigateCategory?: (cat: AlgorithmCategory) => void;
 };
 
-export default function CategoryExplainer({ category, expanded, onToggle }: CategoryExplainerProps) {
+export default function CategoryExplainer({ category, expanded, onToggle, onNavigateCategory }: CategoryExplainerProps) {
   const info = CATEGORY_INFO[category];
   if (!info) {
     return null;
   }
+
+  const renderText = (text: string) =>
+    onNavigateCategory ? linkifyCategories(text, category, onNavigateCategory) : text;
 
   return (
     <div
@@ -90,7 +176,7 @@ export default function CategoryExplainer({ category, expanded, onToggle }: Cate
             >
               What it does
             </div>
-            <div style={{ fontSize: "16px", color: "#e2e8f0", lineHeight: "1.85" }}>{info.explanation}</div>
+            <div style={{ fontSize: "16px", color: "#e2e8f0", lineHeight: "1.85" }}>{renderText(info.explanation)}</div>
           </div>
 
           <div style={{ background: "#0a1018", borderRadius: "8px", padding: "16px 18px", borderLeft: "3px solid #3b82f6" }}>
@@ -107,7 +193,7 @@ export default function CategoryExplainer({ category, expanded, onToggle }: Cate
             >
               Where you see it in the real world
             </div>
-            <div style={{ fontSize: "16px", color: "#d1dae6", lineHeight: "1.85" }}>{info.realWorld}</div>
+            <div style={{ fontSize: "16px", color: "#d1dae6", lineHeight: "1.85" }}>{renderText(info.realWorld)}</div>
           </div>
 
           <div
@@ -131,7 +217,7 @@ export default function CategoryExplainer({ category, expanded, onToggle }: Cate
             >
               Why it matters
             </div>
-            <div style={{ fontSize: "16px", color: "#fde68a", lineHeight: "1.85", fontWeight: 600 }}>{info.whyItMatters}</div>
+            <div style={{ fontSize: "16px", color: "#fde68a", lineHeight: "1.85", fontWeight: 600 }}>{renderText(info.whyItMatters)}</div>
           </div>
 
           <div

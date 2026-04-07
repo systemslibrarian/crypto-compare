@@ -3,6 +3,7 @@ import type { AlgorithmCategory, CategoryDefinition, CategoryInfoMap } from "@/t
 export const CATEGORIES: CategoryDefinition[] = [
   { id:"csprng", label:"CSPRNG", icon:"🎲" },
   { id:"symmetric", label:"Symmetric", icon:"🔐" },
+  { id:"curve", label:"Elliptic Curves", icon:"🌀" },
   { id:"hash", label:"Hash", icon:"#️⃣" },
   { id:"mac", label:"MAC", icon:"🏷️" },
   { id:"kdf", label:"KDF", icon:"🔑" },
@@ -22,6 +23,7 @@ export const CATEGORIES: CategoryDefinition[] = [
 /** Each category has a unique accent color used for card borders, tab highlights, and glows. */
 export const CATEGORY_ACCENT: Record<AlgorithmCategory, string> = {
   symmetric: "#3b82f6",   // blue
+  curve: "#eab308",       // gold
   kem: "#06b6d4",         // cyan
   signature: "#8b5cf6",   // violet
   hash: "#f59e0b",        // amber
@@ -40,6 +42,19 @@ export const CATEGORY_ACCENT: Record<AlgorithmCategory, string> = {
 };
 
 export const CATEGORY_INFO: CategoryInfoMap = {
+  curve:{
+    title:"Elliptic Curves",
+    oneLiner:"The mathematical substrate beneath modern public-key systems. The curve is the primitive; signatures, key agreement, and many proof systems are the protocols built on top of it.",
+    projects:[
+      { name:"Iron Letter", tech:"ECIES on NIST P-256 — classical elliptic-curve encryption in a practical sealed-message demo", url:"https://github.com/systemslibrarian/crypto-lab-iron-letter", public:true },
+      { name:"Corrupted Oracle", tech:"P-256-adjacent cautionary material around ECC-era randomness failures and Dual_EC_DRBG backdoor history", url:"https://github.com/systemslibrarian/crypto-lab-corrupted-oracle", public:true },
+      { name:"Ratchet Wire", tech:"X25519 key agreement inside a Signal-style Double Ratchet message transport", url:"https://github.com/systemslibrarian/crypto-lab-ratchet-wire", public:true },
+      { name:"FROST Threshold", tech:"Ed25519-based threshold signatures showing how a curve becomes a signing system", url:"https://github.com/systemslibrarian/crypto-lab-frost-threshold", public:true },
+    ],
+    explanation:"Elliptic curves are not protocols by themselves; they are the algebraic groups that protocols live on top of. X25519 turns a curve into key agreement, Ed25519 and ECDSA turn curves into signatures, and BLS12-381 or BN254 turn pairing-friendly curves into zk-SNARK and aggregation machinery. This is also where the post-quantum contrast matters: ML-KEM lives in the KEM tab, but it is lattice-based rather than curve-based.",
+    realWorld:"Curve25519 and P-256 drive secure messaging and TLS. Ed25519 drives SSH keys, package signing, and threshold-signature systems like FROST. BLS12-381 and BN254 appear in zk systems and Ethereum infrastructure, where the curve choice determines proving cost, interoperability, and long-term security margin.",
+    whyItMatters:"Curves matter because they are the foundation layer, not the finished tool. If you need an applied recommendation, move next to KEM for key establishment, Signatures for Ed25519 and ECDSA, and ZKP for BN254/BLS12-381 proof systems — but the security, rigidity, and implementation risk begin here."
+  },
   symmetric:{
     title:"Symmetric Encryption",
     oneLiner:"The padlock on your data. One key locks it, same key unlocks it.",
