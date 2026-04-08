@@ -569,3 +569,100 @@ body {
     }
   }
 }
+
+/* ─── Light theme overrides ─── */
+[data-theme="light"] body {
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  color: #1e293b;
+}
+
+[data-theme="light"] .cryptoCompareRoot {
+  color: #1e293b;
+}
+
+[data-theme="light"] .algoCard,
+[data-theme="light"] .panel,
+[data-theme="light"] .panel-inner {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+[data-theme="light"] .algoCard:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] .controlBtn,
+[data-theme="light"] .controlSelect {
+  background: #ffffff;
+  color: #334155;
+  border-color: #cbd5e1;
+}
+
+[data-theme="light"] .controlBtn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+[data-theme="light"] .controlBtnActive {
+  background: #dbeafe !important;
+  color: #1d4ed8 !important;
+  border-color: #93c5fd !important;
+}
+
+[data-theme="light"] .contextBar {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .contextPill {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+  color: #475569;
+}
+
+[data-theme="light"] .contextPillAccent {
+  background: #dbeafe;
+  border-color: #93c5fd;
+  color: #1d4ed8;
+}
+
+[data-theme="light"] .searchInput,
+[data-theme="light"] input[aria-label="Search algorithms"] {
+  background: #ffffff !important;
+  color: #1e293b !important;
+  border-color: #cbd5e1 !important;
+}
+
+[data-theme="light"] .trustCard {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .site-footer {
+  border-color: #e2e8f0;
+  color: #475569;
+}
+
+[data-theme="light"] .headerGradientBar {
+  opacity: 0.7;
+}
+
+[data-theme="light"] .pageShell {
+  color: #1e293b;
+}
+
+[data-theme="light"] .themeToggle {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+
+[data-theme="light"] .themeToggle:hover {
+  background: #e2e8f0;
+}
+
+[data-theme="light"] .compareBar {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-top-color: #e2e8f0 !important;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1) !important;
+}

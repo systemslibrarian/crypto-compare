@@ -94,6 +94,7 @@ describe("ComparisonWorkspace", () => {
         onClearSelection={vi.fn()}
         onExportCsv={vi.fn()}
         onExportMarkdown={vi.fn()}
+        onExportJson={vi.fn()}
       />,
     );
 

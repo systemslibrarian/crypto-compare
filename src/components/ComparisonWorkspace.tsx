@@ -11,6 +11,7 @@ type ComparisonWorkspaceProps = {
   onClearSelection: () => void;
   onExportCsv: () => void;
   onExportMarkdown: () => void;
+  onExportJson: () => void;
 };
 
 export default function ComparisonWorkspace({
@@ -23,6 +24,7 @@ export default function ComparisonWorkspace({
   onClearSelection,
   onExportCsv,
   onExportMarkdown,
+  onExportJson,
 }: ComparisonWorkspaceProps) {
   if (algorithms.length === 1) {
     return <p style={{ textAlign: "center", color: "#d4deea", fontSize: "15px" }}>Select one more algorithm to compare.</p>;
@@ -34,7 +36,25 @@ export default function ComparisonWorkspace({
 
   if (!comparing) {
     return (
-      <div style={{ textAlign: "center", margin: "10px 0", display: "flex", justifyContent: "center", gap: "10px", flexWrap: "wrap" }}>
+      <div
+        className="compareBar"
+        style={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 900,
+          display: "flex",
+          justifyContent: "center",
+          gap: "10px",
+          flexWrap: "wrap",
+          padding: "12px 16px",
+          background: "rgba(15, 23, 42, 0.95)",
+          backdropFilter: "blur(8px)",
+          borderTop: "1px solid rgba(255,255,255,0.1)",
+          boxShadow: "0 -4px 20px rgba(0,0,0,0.4)",
+        }}
+      >
         <button
           onClick={onStartCompare}
           className="focusRing"
@@ -78,6 +98,9 @@ export default function ComparisonWorkspace({
           </button>
           <button className="focusRing controlBtn" onClick={onExportMarkdown}>
             Export Markdown
+          </button>
+          <button className="focusRing controlBtn" onClick={onExportJson}>
+            Export JSON
           </button>
         </div>
       </div>

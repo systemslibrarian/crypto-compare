@@ -8,6 +8,7 @@ type AppHeaderNavProps = {
   selectedCategory: AlgorithmCategory;
   mobileNavOpen: boolean;
   mobileNavRef: Ref<HTMLElement>;
+  theme?: "dark" | "light";
   onReset: () => void;
   onToggleMobileNav: () => void;
   onCloseMobileNav: () => void;
@@ -15,6 +16,7 @@ type AppHeaderNavProps = {
   onShowDefaults?: () => void;
   onShowSafeUsage?: () => void;
   onToggleMethodology?: () => void;
+  onToggleTheme?: () => void;
 };
 
 export default function AppHeaderNav({
@@ -23,6 +25,7 @@ export default function AppHeaderNav({
   selectedCategory,
   mobileNavOpen,
   mobileNavRef,
+  theme,
   onReset,
   onToggleMobileNav,
   onCloseMobileNav,
@@ -30,6 +33,7 @@ export default function AppHeaderNav({
   onShowDefaults,
   onShowSafeUsage,
   onToggleMethodology,
+  onToggleTheme,
 }: AppHeaderNavProps) {
   const selected = categories.find((category) => category.id === selectedCategory);
 
@@ -66,6 +70,30 @@ export default function AppHeaderNav({
           </div>
           <div className="headerActions" style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
             <span className="headerLegend" style={{ fontSize: "14px", color: "#c4d1e3", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>C = Classical, PQ = Post-Quantum</span>
+            {onToggleTheme && (
+              <button
+                onClick={onToggleTheme}
+                className="focusRing themeToggle"
+                aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+                style={{
+                  background: "#0e1420",
+                  color: "#d4deea",
+                  border: "1px solid #334155",
+                  borderRadius: "6px",
+                  padding: "10px 14px",
+                  fontSize: "16px",
+                  cursor: "pointer",
+                  minWidth: "44px",
+                  minHeight: "44px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+                }}
+              >
+                {theme === "dark" ? "☀️" : "🌙"}
+              </button>
+            )}
             <Link
               href="/visuals"
               className="headerBtn desktopOnly focusRing"

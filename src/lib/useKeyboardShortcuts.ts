@@ -5,6 +5,7 @@ import { useEffect } from "react";
 type KeyboardShortcutHandlers = {
   onFocusSearch: () => void;
   onToggleMethodology: () => void;
+  onToggleShortcuts?: () => void;
   onEscape: () => void;
   onNextCategory: () => void;
   onPrevCategory: () => void;
@@ -31,7 +32,11 @@ export function useKeyboardShortcuts(handlers: KeyboardShortcutHandlers) {
       }
 
       if (e.key === "?" && e.shiftKey) {
-        handlers.onToggleMethodology();
+        if (handlers.onToggleShortcuts) {
+          handlers.onToggleShortcuts();
+        } else {
+          handlers.onToggleMethodology();
+        }
         return;
       }
 

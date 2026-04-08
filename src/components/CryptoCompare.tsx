@@ -12,10 +12,12 @@ import MethodologyPanel from "@/components/MethodologyPanel";
 import QuickStartPanel from "@/components/QuickStartPanel";
 import ResultsStatus from "@/components/ResultsStatus";
 import SearchControls from "@/components/SearchControls";
+import ShortcutHelp from "@/components/ShortcutHelp";
 import SourceCitationsPanel from "@/components/SourceCitationsPanel";
 import { ALGORITHMS } from "@/data/algorithms";
 import { CATEGORIES, CATEGORY_ACCENT } from "@/data/categories";
-import { buildRows, exportToCSV, exportToMarkdown } from "@/lib/comparison";
+import type { FilterPreset } from "@/data/filterPresets";
+import { buildRows, exportToCSV, exportToJSON, exportToMarkdown } from "@/lib/comparison";
 import { withProvenance } from "@/lib/dataset";
 import { filterAlgorithms } from "@/lib/filterAlgorithms";
 import { useCryptoCompareController } from "@/lib/useCryptoCompareController";
@@ -24,6 +26,7 @@ import { useCryptoCompareUrlState } from "@/lib/useCryptoCompareUrlState";
 import { useMobileNavBehavior } from "@/lib/useMobileNavBehavior";
 import { usePersistentFavorites } from "@/lib/usePersistentFavorites";
 import { useKeyboardShortcuts } from "@/lib/useKeyboardShortcuts";
+import { useTheme } from "@/lib/useTheme";
 import { validateAlgorithms } from "@/lib/validation";
 import type { Algorithm, AlgorithmCategory } from "@/types/crypto";
 
@@ -65,8 +68,10 @@ export default function CryptoCompare() {
   const [showLibraries, setShowLibraries] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [globalSearch, setGlobalSearch] = useState(false);
+  const [showShortcuts, setShowShortcuts] = useState(false);
   const { favorites, toggleFavorite } = usePersistentFavorites();
   const [favOnly, setFavOnly] = useState(false);
+  const { theme, toggleTheme } = useTheme();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [advisorHighlight, setAdvisorHighlight] = useState<string | null>(null);
   const mobileNavRef = useRef<HTMLElement>(null);
@@ -196,8 +201,10 @@ export default function CryptoCompare() {
     () => ({
       onFocusSearch: () => searchRef.current?.focus(),
       onToggleMethodology: () => setShowMethodology((v) => !v),
+      onToggleShortcuts: () => setShowShortcuts((v) => !v),
       onEscape: () => {
         setShowMethodology(false);
+        setShowShortcuts(false);
         setCmp(false);
       },
       onNextCategory: () => {
@@ -214,15 +221,46 @@ export default function CryptoCompare() {
   useKeyboardShortcuts(kbHandlers);
 
   const exportComparison = useCallback(
-    (format: "csv" | "markdown") => {
+    (format: "csv" | "markdown" | "json") => {
       if (selAlgos.length < 2) return;
       if (format === "csv") {
         downloadText(exportToCSV(rows, selAlgos), "comparison.csv", "text/csv");
+      } else if (format === "json") {
+        downloadText(exportToJSON(rows, selAlgos), "comparison.json", "application/json");
       } else {
         downloadText(exportToMarkdown(rows, selAlgos), "comparison.md", "text/markdown");
       }
     },
     [selAlgos, rows],
+  );
+
+  const applyPreset = useCallback(
+    (preset: FilterPreset) => {
+      // Reset all filters to defaults before applying preset
+      setGlobalSearch(false);
+      setPqOnly(false);
+      setStandardOnly(false);
+      setNistOnly(false);
+      setDeployedOnly(false);
+      setShowDefaults(false);
+      setCountry("all");
+      setSortBy("name");
+      setSearch("");
+      setFavOnly(false);
+
+      // Apply preset-specific values
+      const f = preset.filters;
+      if (f.globalSearch) setGlobalSearch(f.globalSearch);
+      if (f.pqOnly) setPqOnly(f.pqOnly);
+      if (f.standardOnly) setStandardOnly(f.standardOnly);
+      if (f.nistOnly) setNistOnly(f.nistOnly);
+      if (f.deployedOnly) setDeployedOnly(f.deployedOnly);
+      if (f.showDefaults) setShowDefaults(f.showDefaults);
+      if (f.country) setCountry(f.country as typeof country);
+      if (f.sortBy) setSortBy(f.sortBy as SortOption);
+      if (f.search) setSearch(f.search);
+    },
+    [],
   );
 
   function downloadText(content: string, filename: string, mime: string) {
@@ -240,6 +278,7 @@ export default function CryptoCompare() {
       <a href="#main-content" className="skipLink">
         Skip to main content
       </a>
+      <ShortcutHelp open={showShortcuts} onClose={() => setShowShortcuts(false)} />
       <div className="headerGradientBar" aria-hidden="true" />
       <div className="pageShell">
         <AppHeaderNav
@@ -248,6 +287,7 @@ export default function CryptoCompare() {
           selectedCategory={cat}
           mobileNavOpen={mobileNavOpen}
           mobileNavRef={mobileNavRef}
+          theme={theme}
           onReset={controller.resetToMainMenu}
           onToggleMobileNav={() => setMobileNavOpen((value) => !value)}
           onCloseMobileNav={() => setMobileNavOpen(false)}
@@ -259,6 +299,7 @@ export default function CryptoCompare() {
           onShowDefaults={controller.showRecommendedDefaults}
           onShowSafeUsage={() => setShowSafeUsage(true)}
           onToggleMethodology={() => setShowMethodology((value) => !value)}
+          onToggleTheme={toggleTheme}
         />
 
         <main id="main-content" className="cryptoCompareMain" aria-label={`${globalSearch ? "All categories" : selectedCategoryLabel} algorithms`}>
@@ -313,6 +354,7 @@ export default function CryptoCompare() {
             onToggleDefaults={() => setShowDefaults((value) => !value)}
             onToggleFavorites={() => setFavOnly((value) => !value)}
             onActivateSearchAll={controller.activateGlobalSearch}
+            onApplyPreset={applyPreset}
           />
 
           {showMethodology && <MethodologyPanel trustSnapshot={trustSnapshot} />}
@@ -337,6 +379,7 @@ export default function CryptoCompare() {
             onClearSelection={controller.clearComparison}
             onExportCsv={() => exportComparison("csv")}
             onExportMarkdown={() => exportComparison("markdown")}
+            onExportJson={() => exportComparison("json")}
           />
 
           <SourceCitationsPanel algorithms={selAlgos} />

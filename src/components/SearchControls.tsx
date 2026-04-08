@@ -1,4 +1,5 @@
 import type { ChangeEvent, Ref } from "react";
+import { FILTER_PRESETS, type FilterPreset } from "@/data/filterPresets";
 
 type SortOption = {
   id: string;
@@ -38,6 +39,7 @@ type SearchControlsProps = {
   onToggleDefaults: () => void;
   onToggleFavorites: () => void;
   onActivateSearchAll: () => void;
+  onApplyPreset?: (preset: FilterPreset) => void;
 };
 
 export default function SearchControls({
@@ -73,6 +75,7 @@ export default function SearchControls({
   onToggleDefaults,
   onToggleFavorites,
   onActivateSearchAll,
+  onApplyPreset,
 }: SearchControlsProps) {
   const hasActiveFilters = pqOnly || standardOnly || nistOnly || deployedOnly || showDefaults || country !== "all" || favOnly;
   const activeFilterCount = [pqOnly, standardOnly, nistOnly, deployedOnly, showDefaults, country !== "all", favOnly].filter(Boolean).length;
@@ -149,6 +152,24 @@ export default function SearchControls({
           <button className={`focusRing controlBtn ${favOnly ? "controlBtnActive" : ""}`} onClick={onToggleFavorites} aria-pressed={favOnly} aria-label={favOnly ? "Showing favorites only — click to show all" : "Show only favorited algorithms"}>
             ★ Favorites{favoritesCount > 0 ? ` (${favoritesCount})` : ""}
           </button>
+        </div>
+      )}
+
+      {showFilters && onApplyPreset && (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "12px" }}>
+          <span style={{ fontSize: "12px", fontWeight: 700, color: "#7dd3fc", textTransform: "uppercase", letterSpacing: "0.4px", alignSelf: "center", marginRight: "4px" }}>Presets</span>
+          {FILTER_PRESETS.map((preset) => (
+            <button
+              key={preset.id}
+              className="focusRing controlBtn"
+              onClick={() => onApplyPreset(preset)}
+              title={preset.description}
+              aria-label={`Apply preset: ${preset.label} — ${preset.description}`}
+              style={{ fontSize: "13px", padding: "6px 12px" }}
+            >
+              {preset.icon} {preset.label}
+            </button>
+          ))}
         </div>
       )}
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Badge, RecommendationBadge, ReviewBadge, SecurityMeter } from "@/components/ui";
+import { Badge, RecommendationBadge, ReviewBadge, SecurityMeter, recommendationText } from "@/components/ui";
 import { CATEGORY_ACCENT } from "@/data/categories";
 import type { Algorithm } from "@/types/crypto";
 
@@ -15,6 +15,26 @@ type AlgoCardProps = {
 export default function AlgoCard({ algo, selected, onToggle, favorited, onToggleFavorite, advisorPick }: AlgoCardProps) {
   const accent = CATEGORY_ACCENT[algo.category];
   const [detailOpen, setDetailOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  function copyRecommendation(e: React.MouseEvent) {
+    e.stopPropagation();
+    const text = [
+      `## ${algo.name}`,
+      `Recommendation: ${recommendationText(algo.recommendation)}`,
+      `Rationale: ${algo.recommendationRationale}`,
+      `Classical security: ${algo.securityBits} bits | PQ security: ${algo.pqSecurityBits ?? "N/A"} bits`,
+      `Use cases: ${algo.useCases}`,
+      algo.whyNotThis ? `Caution: ${algo.whyNotThis}` : "",
+      algo.notes ? `Notes: ${algo.notes}` : "",
+    ].filter(Boolean).join("\n");
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    }, () => {
+      // Clipboard API unavailable (e.g. HTTP context or denied permission)
+    });
+  }
 
   return (
     <div
@@ -218,6 +238,17 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
               </div>
             </div>
           )}
+          <div style={{ marginTop: "12px", display: "flex", gap: "8px" }}>
+            <button
+              type="button"
+              onClick={copyRecommendation}
+              className="focusRing controlBtn"
+              style={{ fontSize: "12px", padding: "6px 12px" }}
+              aria-label={`Copy ${algo.name} recommendation summary to clipboard`}
+            >
+              {copied ? "✓ Copied" : "📋 Copy recommendation"}
+            </button>
+          </div>
         </div>
       )}
     </div>

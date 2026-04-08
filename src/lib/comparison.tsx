@@ -242,3 +242,14 @@ export function exportToMarkdown(rows: ComparisonRow[], algos: Algorithm[]): str
   ];
   return mdRows.join("\n");
 }
+
+export function exportToJSON(rows: ComparisonRow[], algos: Algorithm[]): string {
+  const data = algos.map((a) => {
+    const entry: Record<string, string> = { name: a.name, id: a.id };
+    for (const row of rows) {
+      entry[row.label] = row.exportText(a);
+    }
+    return entry;
+  });
+  return JSON.stringify(data, null, 2);
+}
