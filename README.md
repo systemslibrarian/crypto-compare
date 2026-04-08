@@ -422,6 +422,22 @@ Each category in the app links to working demo projects that illustrate the cryp
 | [Iron Serpent](https://github.com/systemslibrarian/crypto-lab-iron-serpent) | Serpent-256 block cipher (AES finalist) |
 | [Dead Sea Cipher](https://github.com/systemslibrarian/crypto-lab-dead-sea-cipher) | Cryptographic history — Atbash to AES-256-GCM |
 | [Biham Lens](https://github.com/systemslibrarian/crypto-lab-biham-lens) | Differential cryptanalysis (Biham & Shamir, DES) |
+| [AES Modes](https://github.com/systemslibrarian/crypto-lab-aes-modes) | AES modes comparison — ECB, CBC, CTR, GCM, CCM with attacks |
+| [Format Ward](https://github.com/systemslibrarian/crypto-lab-format-ward) | Format-preserving encryption (FF1, FF3-1) |
+| [Padding Oracle](https://github.com/systemslibrarian/crypto-lab-padding-oracle) | CBC padding oracle attack (Vaudenay 2002) |
+| [Timing Oracle](https://github.com/systemslibrarian/crypto-lab-timing-oracle) | Timing side-channel attacks and constant-time defenses |
+| [Curve Lens](https://github.com/systemslibrarian/crypto-lab-curve-lens) | Elliptic curve explorer — point arithmetic, ECDH |
+| [X3DH Wire](https://github.com/systemslibrarian/crypto-lab-x3dh-wire) | X3DH asynchronous key agreement (Signal handshake) |
+| [BIKE Vault](https://github.com/systemslibrarian/crypto-lab-bike-vault) | BIKE code-based post-quantum KEM |
+| [McEliece Gate](https://github.com/systemslibrarian/crypto-lab-mceliece-gate) | Classic McEliece — oldest post-quantum KEM (1978) |
+| [HQC Vault](https://github.com/systemslibrarian/crypto-lab-hqc-vault) | HQC Hamming Quasi-Cyclic post-quantum KEM |
+| [Noise Pipe](https://github.com/systemslibrarian/crypto-lab-noise-pipe) | Noise Protocol Framework — handshake patterns + WireGuard |
+| [Falcon Seal](https://github.com/systemslibrarian/crypto-lab-falcon-seal) | Falcon NTRU lattice signatures (NIST alternate) |
+| [Babel Hash](https://github.com/systemslibrarian/crypto-lab-babel-hash) | Hash functions — SHA-256, SHA3-256, BLAKE3 with attacks |
+| [KDF Chain](https://github.com/systemslibrarian/crypto-lab-kdf-chain) | KDF comparison — HKDF, PBKDF2, scrypt, Argon2id |
+| [MAC Race](https://github.com/systemslibrarian/crypto-lab-mac-race) | MAC comparison — HMAC, CMAC, Poly1305, GHASH |
+| [RSA Forge](https://github.com/systemslibrarian/crypto-lab-rsa-forge) | RSA demo — textbook, OAEP, PSS, live attacks |
+| [Meow Decoder](https://github.com/systemslibrarian/meow-decoder) | Secure optical air-gap file transfer via QR-code GIFs |
 
 ---
 
