@@ -59,6 +59,13 @@ export const ALGORITHM_PROVENANCE: Record<string, { sources: AlgorithmSource[]; 
       { label: "snow2 (demo)", url: "https://github.com/systemslibrarian/snow2", note: "Modern Rust steganography tool using SNOW-inspired naming with XChaCha20-Poly1305.", kind: "deployment" },
     ],
   },
+  aes256gcmsiv: {
+    lastReviewed: "2026-04-09",
+    sources: [
+      { label: "RFC 8452", url: "https://www.rfc-editor.org/rfc/rfc8452", note: "AES-GCM-SIV: Nonce Misuse-Resistant Authenticated Encryption.", kind: "standard" },
+      { label: "Gueron & Lindell 2015", url: "https://eprint.iacr.org/2015/102", note: "AES-GCM-SIV construction and security analysis.", kind: "analysis" },
+    ],
+  },
   // ─── Elliptic Curves ────────────────────────────────────────────
   curve25519: {
     lastReviewed: "2026-04-07",
@@ -216,6 +223,14 @@ export const ALGORITHM_PROVENANCE: Record<string, { sources: AlgorithmSource[]; 
     sources: [
       { label: "RFC 8391", url: "https://www.rfc-editor.org/rfc/rfc8391", note: "XMSS: eXtended Merkle Signature Scheme.", kind: "standard" },
       { label: "NIST SP 800-208", url: "https://csrc.nist.gov/pubs/sp/800/208/final", note: "Recommendation for stateful hash-based signature schemes.", kind: "standard" },
+    ],
+  },
+  lms_hss: {
+    lastReviewed: "2026-04-09",
+    sources: [
+      { label: "RFC 8554", url: "https://www.rfc-editor.org/rfc/rfc8554", note: "Leighton-Micali Hash-Based Signatures (LMS) specification.", kind: "standard" },
+      { label: "NIST SP 800-208", url: "https://csrc.nist.gov/pubs/sp/800/208/final", note: "Recommendation for stateful hash-based signature schemes (LMS and XMSS).", kind: "standard" },
+      { label: "CNSA 2.0", url: "https://media.defense.gov/2022/Sep/07/2003071834/-1/-1/0/CSA_CNSA_2.0_ALGORITHMS_.PDF", note: "NSA CNSA 2.0 recommends LMS for firmware signing in the post-quantum transition.", kind: "standard" },
     ],
   },
   // ─── Hash ────────────────────────────────────────────────────────

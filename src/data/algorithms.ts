@@ -141,6 +141,24 @@ export const ALGORITHMS: Algorithm[] = [
     notes:"SNOW family powers 4G/LTE globally (SNOW 3G). SNOW-V targets 5G with 256-bit security. Stream cipher — no built-in auth."
   },
 
+  { id:"aes256gcmsiv", name:"AES-256-GCM-SIV", category:"symmetric", family:"AES", origin:"🇺🇸/🇮🇱 US/Israel",
+    originDetail:"Shay Gueron (Intel/University of Haifa) & Yehuda Lindell (Bar-Ilan University). IETF RFC 8452 (2019).",
+    useCases:"Nonce-misuse-resistant authenticated encryption. Systems where nonce uniqueness cannot be guaranteed — distributed systems, cloud KMS, at-rest encryption.",
+    status:"standard", statusLabel:"IETF RFC 8452",
+    recommendation:"recommended",
+    recommendationRationale:"RFC 8452 standardized. Provides nonce-misuse resistance via synthetic IV construction — nonce reuse leaks only whether two plaintexts are identical, without catastrophic key/auth compromise. Used by Google Tink, AWS S3, and cloud KMS systems. AES-NI hardware acceleration.",
+    recommendationChangesWhen:"Downgrade if AES is weakened. Change if a more efficient misuse-resistant AEAD emerges with similar hardware support.",
+    whyNotThis:"Slightly slower than AES-GCM (~2x due to POLYVAL + SIV construction). Not a drop-in replacement — different API semantics. If nonce uniqueness is guaranteed, AES-GCM is faster.",
+    assumptions:"Security relies on AES as a PRP and POLYVAL as a universal hash. Nonce reuse reveals plaintext equality but does not break authentication or leak the key (unlike AES-GCM). PQ security is 128-bit via Grover.",
+    estimationMethodology:{classicalBasis:"exact",quantumBasis:"exact",classicalNote:"256-bit key, security reduces to AES PRP + POLYVAL (RFC 8452)",quantumNote:"Grover's algorithm halves effective key length to 128-bit"},
+    keySize:256, nonceSize:96, tagSize:128, blockSize:128,
+    securityBits:256, pqSecurityBits:128,
+    bestAttack:"No known shortcut. Same as AES-256 — biclique (2^254.4 theoretical). Grover reduces to 2^128.",
+    reductionQuality:"Proven secure under AES PRP + POLYVAL universal hash assumption",
+    performance:"~2 cycles/byte with AES-NI (slightly slower than GCM due to SIV construction)",
+    notes:"Misuse-resistant: nonce reuse only reveals plaintext equality, never catastrophic key/auth compromise. Google Tink default AEAD. RFC 8452."
+  },
+
   // ═══════════════════════════════════════
   // ELLIPTIC CURVES
   // ═══════════════════════════════════════
@@ -552,6 +570,23 @@ export const ALGORITHMS: Algorithm[] = [
     reductionQuality:"Only second-preimage resistance needed",
     performance:"~10ms sign, ~1ms verify",
     notes:"Stateful — reusing a signature index completely breaks security. BSI and ANSSI recommended."
+  },
+  { id:"lms_hss", name:"LMS / HSS", category:"signature", family:"Hash-based", origin:"🇺🇸 United States",
+    originDetail:"David McGrew & Michael Curcio (Cisco). Standardized as NIST SP 800-208 and IETF RFC 8554.",
+    useCases:"Firmware signing, code signing, CNSA 2.0 compliance. Stateful — designed for limited-use signing keys with predictable lifetimes.",
+    status:"standard", statusLabel:"NIST SP 800-208 / RFC 8554",
+    recommendation:"acceptable",
+    recommendationRationale:"NIST SP 800-208 standardized alongside XMSS. Levinshtein Merkle Signature scheme with Hierarchical Signature System (HSS) for multi-tree key management. W-OTS+ one-time signatures. Simpler implementation than XMSS with comparable security guarantees.",
+    recommendationChangesWhen:"Downgrade if state management failures prove endemic in real-world firmware signing. Change if stateless SLH-DSA fully supplants stateful schemes for all use cases.",
+    whyNotThis:"Stateful: each leaf key can sign exactly once — reuse is catastrophic and produces real forgeries. Requires reliable persistent state tracking. Use SLH-DSA (stateless) unless firmware/code signing with predictable key lifetimes.",
+    assumptions:"Stateful scheme — one-time key reuse produces real forgeable signatures (not just theoretical weakness). Security relies only on hash function second-preimage resistance. HSS extends key lifetime via hierarchical tree structure.",
+    estimationMethodology:{classicalBasis:"exact",quantumBasis:"exact",classicalNote:"Security reduces to hash function properties (NIST SP 800-208 / RFC 8554)",quantumNote:"Hash-based: Grover provides at most quadratic speedup on preimage"},
+    publicKeySize:60, signatureSize:4652,
+    securityBits:128, pqSecurityBits:128,
+    bestAttack:"Generic hash preimage attacks only (2^128). One-time key reuse attack is practical and devastating.",
+    reductionQuality:"Minimal — only hash function second-preimage resistance needed",
+    performance:"~5ms sign, ~1ms verify (faster verification than XMSS)",
+    notes:"Simpler than XMSS. CNSA 2.0 recommended for firmware signing. HSS extends to multi-level trees for larger key capacity. One-time key reuse attack is real and immediate — not theoretical."
   },
 
   // ═══════════════════════════════════════
