@@ -375,6 +375,7 @@ export default function CryptoCompare() {
             categoryAccent={CATEGORY_ACCENT[cat]}
             rows={rows}
             onStartCompare={() => setCmp(true)}
+            onClose={() => setCmp(false)}
             onCopyLink={controller.copyComparisonLink}
             onClearSelection={controller.clearComparison}
             onExportCsv={() => exportComparison("csv")}

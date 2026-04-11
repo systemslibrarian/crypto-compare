@@ -666,3 +666,174 @@ body {
   border-top-color: #e2e8f0 !important;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1) !important;
 }
+
+/* ─── Comparison full-screen overlay ─── */
+.comparisonOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  background: #070b12;
+  overflow: hidden;
+}
+
+.comparisonOverlayHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  border-bottom: 1px solid #1e293b;
+  background: rgba(7, 11, 18, 0.98);
+  flex-shrink: 0;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.comparisonOverlayActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.comparisonOverlayBody {
+  flex: 1;
+  overflow: auto;
+  padding: 16px 24px 32px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ─── Filter bottom sheet (mobile) ─── */
+.filterSheetBackdrop,
+.filterSheet,
+.filterSheetHeader,
+.filterSheetBody,
+.filterSheetFooter {
+  display: none;
+}
+
+.filterInlineDesktop {
+  display: block;
+}
+
+/* ─── Filter chip compact style ─── */
+.filterChip {
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  /* Hide inline filters on mobile */
+  .filterInlineDesktop {
+    display: none !important;
+  }
+
+  .filterSheetBackdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 950;
+    backdrop-filter: blur(2px);
+  }
+
+  .filterSheet {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 960;
+    max-height: 80vh;
+    background: #111827;
+    border-top: 2px solid #3b82f6;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.5);
+    animation: sheetSlideUp 0.25s ease-out;
+  }
+
+  @keyframes sheetSlideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  .filterSheetHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-bottom: 1px solid #1e293b;
+    flex-shrink: 0;
+  }
+
+  .filterSheetBody {
+    display: block;
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 16px 20px;
+  }
+
+  .filterSheetFooter {
+    display: block;
+    padding: 12px 20px env(safe-area-inset-bottom, 16px);
+    border-top: 1px solid #1e293b;
+    flex-shrink: 0;
+  }
+
+  .filterGroup {
+    flex-direction: column !important;
+  }
+
+  .filterChip {
+    width: 100%;
+    text-align: left;
+    justify-content: flex-start;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Comparison overlay mobile adjustments */
+  .comparisonOverlayHeader {
+    padding: 10px 16px;
+  }
+
+  .comparisonOverlayBody {
+    padding: 12px 16px 24px;
+  }
+
+  .comparisonOverlayExportBtn {
+    font-size: 12px !important;
+    padding: 6px 10px !important;
+  }
+}
+
+/* ─── Light theme: overlay & sheet overrides ─── */
+[data-theme="light"] .comparisonOverlay {
+  background: #f8fafc;
+}
+
+[data-theme="light"] .comparisonOverlayHeader {
+  background: rgba(248, 250, 252, 0.98);
+  border-bottom-color: #e2e8f0;
+}
+
+[data-theme="light"] .filterSheet {
+  background: #ffffff;
+  border-top-color: #3b82f6;
+}
+
+[data-theme="light"] .filterSheetHeader {
+  border-bottom-color: #e2e8f0;
+}
+
+[data-theme="light"] .filterSheetFooter {
+  border-top-color: #e2e8f0;
+}
+
+[data-theme="light"] .filterSheetBackdrop {
+  background: rgba(0, 0, 0, 0.2);
+}

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import ComparisonTable from "@/components/ComparisonTable";
 import type { Algorithm, ComparisonRow } from "@/types/crypto";
 
@@ -7,6 +8,7 @@ type ComparisonWorkspaceProps = {
   categoryAccent: string;
   rows: ComparisonRow[];
   onStartCompare: () => void;
+  onClose: () => void;
   onCopyLink: () => void;
   onClearSelection: () => void;
   onExportCsv: () => void;
@@ -20,12 +22,30 @@ export default function ComparisonWorkspace({
   categoryAccent,
   rows,
   onStartCompare,
+  onClose,
   onCopyLink,
   onClearSelection,
   onExportCsv,
   onExportMarkdown,
   onExportJson,
 }: ComparisonWorkspaceProps) {
+  // Lock body scroll when comparison overlay is open
+  useEffect(() => {
+    if (!comparing) return;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, [comparing]);
+
+  // Close on Escape key
+  useEffect(() => {
+    if (!comparing) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [comparing, onClose]);
+
   if (algorithms.length === 1) {
     return <p style={{ textAlign: "center", color: "#d4deea", fontSize: "15px" }}>Select one more algorithm to compare.</p>;
   }
@@ -81,30 +101,41 @@ export default function ComparisonWorkspace({
   }
 
   return (
-    <section aria-label="Comparison table" style={{ marginBottom: "16px" }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px", gap: "10px", flexWrap: "wrap" }}>
-        <h2 style={{ margin: 0, fontSize: "22px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", display: "flex", alignItems: "center", gap: "8px" }}>
+    <div className="comparisonOverlay" role="dialog" aria-modal="true" aria-label="Algorithm comparison">
+      <div className="comparisonOverlayHeader">
+        <h2 style={{ margin: 0, fontSize: "20px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", display: "flex", alignItems: "center", gap: "8px" }}>
           <span style={{ color: categoryAccent }}>▍</span>Comparison
+          <span style={{ fontSize: "14px", fontWeight: 400, color: "#93a4bb" }}>({algorithms.length} algorithms)</span>
         </h2>
-        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-          <button onClick={onClearSelection} className="focusRing controlBtn">
-            Clear selection
-          </button>
+        <div className="comparisonOverlayActions">
           <button className="focusRing controlBtn" onClick={onCopyLink}>
             Copy link
           </button>
-          <button className="focusRing controlBtn" onClick={onExportCsv}>
-            Export CSV
+          <button className="focusRing controlBtn comparisonOverlayExportBtn" onClick={onExportCsv}>
+            CSV
           </button>
-          <button className="focusRing controlBtn" onClick={onExportMarkdown}>
-            Export Markdown
+          <button className="focusRing controlBtn comparisonOverlayExportBtn" onClick={onExportMarkdown}>
+            MD
           </button>
-          <button className="focusRing controlBtn" onClick={onExportJson}>
-            Export JSON
+          <button className="focusRing controlBtn comparisonOverlayExportBtn" onClick={onExportJson}>
+            JSON
+          </button>
+          <button onClick={onClearSelection} className="focusRing controlBtn" style={{ color: "#f87171" }}>
+            Clear
+          </button>
+          <button
+            onClick={onClose}
+            className="focusRing controlBtn"
+            aria-label="Close comparison"
+            style={{ fontWeight: 700, fontSize: "18px", lineHeight: 1, padding: "8px 12px" }}
+          >
+            ✕
           </button>
         </div>
       </div>
-      <ComparisonTable algos={algorithms} rows={rows} />
-    </section>
+      <div className="comparisonOverlayBody">
+        <ComparisonTable algos={algorithms} rows={rows} />
+      </div>
+    </div>
   );
 }
