@@ -2,7 +2,7 @@
 
 **Cryptographic algorithm decision system for engineers, architects, and technical decision-makers.**
 
-95 algorithms. 17 categories. Sourced recommendations. Safe-usage guidance. Reference architectures. Post-quantum migration context.
+97 algorithms. 17 categories. Sourced recommendations. Safe-usage guidance. Reference architectures. Post-quantum migration context.
 
 🌐 **[Live Site →](https://systemslibrarian.github.io/crypto-compare/)**
 
@@ -48,7 +48,7 @@ This project tries to earn trust in concrete ways rather than by tone alone.
 
 | Signal | What It Means |
 |--------|----------------|
-| **95 algorithms across 17 categories** | Coverage is broad enough to support real design tradeoffs, not just a curated shortlist |
+| **97 algorithms across 17 categories** | Coverage is broad enough to support real design tradeoffs, not just a curated shortlist |
 | **Per-algorithm provenance** | Entries are backed by standards, cryptanalysis, deployment references, and review dates |
 | **5-level recommendation model** | Recommendations are not binary; they distinguish safe defaults from acceptable, legacy, research, and avoid |
 | **Explicit tradeoffs** | Entries include "Why not this?", assumptions, and "When this changes" conditions |
@@ -298,7 +298,7 @@ That honesty is part of the trust model, not a weakness in spite of it.
 
 | Capability | What It Gives You |
 |-----------|--------------------|
-| **Browse by category** | 95 algorithms across elliptic curves, encryption, KEM, signatures, hashing, password hashing, ZKPs, MPC, OT/PIR, threshold signatures, and more |
+| **Browse by category** | 97 algorithms across elliptic curves, encryption, KEM, signatures, hashing, password hashing, ZKPs, MPC, OT/PIR, threshold signatures, and more |
 | **Compare side by side** | Consistent field-by-field comparisons adapted to category-specific metrics |
 | **Use the decision flowchart** | A guided path from problem statement to algorithm recommendation |
 | **Download justification reports** | Markdown output for architecture reviews and design discussion |

@@ -2,12 +2,95 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Theme CSS Custom Properties ─── */
+:root {
+  /* Backgrounds */
+  --color-bg: #070b12;
+  --color-bg-card: #0b0f17;
+  --color-bg-surface: #0e1628;
+  --color-bg-control: #0e1420;
+  --color-bg-elevated: #111827;
+  --color-bg-inset: #0c1422;
+  --color-bg-hover: #111827;
+  --color-bg-meter: #141a26;
+  --color-bg-selected: #0e1628;
+  --color-bg-advisor: #0c1a2e;
+  --color-bg-mobile-card: #0a0f1a;
+  --color-bg-detail-toggle: #1e293b;
+  --color-bg-kbd: #11182b;
+  --color-bg-warning: #1a1207;
+  --color-bg-table-alt: #090e18;
+
+  /* Borders */
+  --color-border: #1e293b;
+  --color-border-subtle: #111827;
+  --color-border-muted: #334155;
+  --color-border-row: #0d1320;
+  --color-border-header: #1a2540;
+
+  /* Text */
+  --color-text: #e2e8f0;
+  --color-text-body: #d4deea;
+  --color-text-secondary: #c4d1e3;
+  --color-text-heading: #f8fafc;
+  --color-text-muted: #93a4bb;
+  --color-text-dim: #7a8ba3;
+  --color-text-ghost: #475569;
+  --color-text-label: #b4c1d2;
+  --color-text-sublabel: #7d8a9e;
+  --color-text-caption: #d1dae6;
+  --color-text-accent-bright: #7dd3fc;
+  --color-text-link: #93c5fd;
+  --color-text-warning: #e2c97e;
+}
+
+[data-theme="light"] {
+  /* Backgrounds */
+  --color-bg: #f8fafc;
+  --color-bg-card: #ffffff;
+  --color-bg-surface: #f1f5f9;
+  --color-bg-control: #ffffff;
+  --color-bg-elevated: #f8fafc;
+  --color-bg-inset: #ffffff;
+  --color-bg-hover: #f1f5f9;
+  --color-bg-meter: #e2e8f0;
+  --color-bg-selected: #eff6ff;
+  --color-bg-advisor: #f0fdf4;
+  --color-bg-mobile-card: #ffffff;
+  --color-bg-detail-toggle: #e2e8f0;
+  --color-bg-kbd: #f1f5f9;
+  --color-bg-warning: #fffbeb;
+  --color-bg-table-alt: #f8fafc;
+
+  /* Borders */
+  --color-border: #e2e8f0;
+  --color-border-subtle: #f1f5f9;
+  --color-border-muted: #cbd5e1;
+  --color-border-row: #e2e8f0;
+  --color-border-header: #cbd5e1;
+
+  /* Text */
+  --color-text: #1e293b;
+  --color-text-body: #334155;
+  --color-text-secondary: #475569;
+  --color-text-heading: #0f172a;
+  --color-text-muted: #64748b;
+  --color-text-dim: #94a3b8;
+  --color-text-ghost: #94a3b8;
+  --color-text-label: #64748b;
+  --color-text-sublabel: #64748b;
+  --color-text-caption: #475569;
+  --color-text-accent-bright: #0284c7;
+  --color-text-link: #2563eb;
+  --color-text-warning: #92400e;
+}
+
 body {
   background:
     radial-gradient(circle at top left, rgba(29, 78, 216, 0.12), transparent 26%),
     radial-gradient(circle at top right, rgba(14, 165, 233, 0.1), transparent 22%),
-    linear-gradient(180deg, #070b12 0%, #08101b 100%);
-  color: #e2e8f0;
+    linear-gradient(180deg, var(--color-bg) 0%, var(--color-bg) 100%);
+  color: var(--color-text);
 }
 
 @keyframes gradientShift {
@@ -23,7 +106,7 @@ body {
 @layer components {
   .cryptoCompareRoot {
     min-height: 100vh;
-    color: #e2e8f0;
+    color: var(--color-text);
     font-family: var(--font-ibm-plex-sans), "IBM Plex Sans", -apple-system, sans-serif;
     line-height: 1.6;
   }
@@ -122,9 +205,9 @@ body {
 
   .controlBtn,
   .controlSelect {
-    background: #0e1420;
-    color: #d4deea;
-    border: 1px solid #334155;
+    background: var(--color-bg-control);
+    color: var(--color-text-body);
+    border: 1px solid var(--color-border-muted);
     border-radius: 7px;
     padding: 10px 14px;
     font-size: 14px;
@@ -134,8 +217,8 @@ body {
   }
 
   .trustCard {
-    background: rgba(12, 20, 34, 0.9);
-    border: 1px solid #1e293b;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
     border-radius: 8px;
     padding: 12px 14px;
   }
@@ -145,7 +228,7 @@ body {
     font-weight: 700;
     letter-spacing: 0.4px;
     text-transform: uppercase;
-    color: #7dd3fc;
+    color: var(--color-text-accent-bright);
     margin-bottom: 6px;
     font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
   }
@@ -153,20 +236,20 @@ body {
   .trustValue {
     font-size: 15px;
     font-weight: 700;
-    color: #f8fafc;
+    color: var(--color-text-heading);
     line-height: 1.5;
     margin-bottom: 4px;
   }
 
   .trustMeta {
     font-size: 12px;
-    color: #93a4bb;
+    color: var(--color-text-muted);
     line-height: 1.5;
   }
 
   .controlBtn:hover {
-    border-color: #475569;
-    background: #111827;
+    border-color: var(--color-border-muted);
+    background: var(--color-bg-hover);
   }
 
   .controlBtn {
@@ -174,14 +257,14 @@ body {
   }
 
   .controlBtnActive {
-    background: #11203a !important;
-    color: #7dd3fc !important;
-    border-color: #163052 !important;
+    background: var(--color-bg-selected) !important;
+    color: var(--color-text-accent-bright) !important;
+    border-color: var(--color-border) !important;
   }
 
   .controlSelect {
-    background: #0e1420;
-    color: #d4deea;
+    background: var(--color-bg-control);
+    color: var(--color-text-body);
   }
 
   .skipLink {
@@ -213,15 +296,17 @@ body {
   }
   /* Section panels (methodology, sources, etc.) */
   .panel {
-    @apply border border-slate-800 rounded-xl p-4 mb-4;
-    background: linear-gradient(180deg, rgba(10, 15, 26, 0.96) 0%, rgba(9, 14, 24, 0.96) 100%);
+    @apply rounded-xl p-4 mb-4;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
     box-shadow: 0 14px 34px rgba(2, 8, 23, 0.22);
     backdrop-filter: blur(10px);
   }
 
   .panel-inner {
-    @apply border border-slate-800 rounded-xl p-4;
-    background: linear-gradient(180deg, rgba(12, 18, 32, 0.98) 0%, rgba(11, 18, 31, 0.98) 100%);
+    @apply rounded-xl p-4;
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
   }
 
   /* Headings inside panels */
@@ -232,18 +317,19 @@ body {
 
   /* Footer area */
   .site-footer {
-    @apply border-t border-slate-800 text-sm leading-relaxed;
+    @apply text-sm leading-relaxed;
+    border-top: 1px solid var(--color-border);
     padding: 20px 0 28px;
-    color: #b4c1d2;
+    color: var(--color-text-label);
     font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
   }
 
   /* Keyboard shortcut key */
   .kbd {
     @apply inline-block text-xs rounded px-1.5 py-0.5;
-    background: #11182b;
-    border: 1px solid #1e293b;
-    color: #7d8a9e;
+    background: var(--color-bg-kbd);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-sublabel);
   }
 
   /* Primary action button (blue) */
@@ -257,11 +343,11 @@ body {
 
   /* Muted text styles */
   .text-muted {
-    color: #93a4bb;
+    color: var(--color-text-muted);
   }
 
   .text-body {
-    color: #d4deea;
+    color: var(--color-text-body);
   }
 
   .text-accent {
@@ -274,9 +360,9 @@ body {
     gap: 8px;
     padding: 10px 14px;
     margin-bottom: 12px;
-    border: 1px solid #1e293b;
+    border: 1px solid var(--color-border);
     border-radius: 10px;
-    background: linear-gradient(135deg, #08111f 0%, #0c1628 100%);
+    background: var(--color-bg-surface);
   }
 
   .contextBarPills {
@@ -291,9 +377,9 @@ body {
     align-items: center;
     padding: 4px 10px;
     border-radius: 999px;
-    border: 1px solid #1e293b;
-    background: rgba(12, 20, 34, 0.78);
-    color: #93a4bb;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-card);
+    color: var(--color-text-muted);
     font-size: 12px;
     font-weight: 600;
     font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
@@ -407,8 +493,8 @@ body {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
       padding: 12px 16px 14px;
-      border-bottom: 2px solid #1e293b;
-      background: linear-gradient(180deg, rgba(15, 23, 42, 0.98) 0%, rgba(17, 24, 39, 0.94) 100%);
+      border-bottom: 2px solid var(--color-border);
+      background: var(--color-bg-elevated);
     }
 
     .mobileNavActionBtn {
@@ -417,9 +503,9 @@ body {
       align-items: center;
       justify-content: center;
       gap: 6px;
-      background: #1a2332;
-      color: #d4deea;
-      border: 1px solid #334155;
+      background: var(--color-bg-control);
+      color: var(--color-text-body);
+      border: 1px solid var(--color-border-muted);
       border-radius: 8px;
       padding: 10px 12px;
       font-size: 14px;
@@ -447,7 +533,7 @@ body {
       right: 0;
       width: 100%;
       max-width: 100%;
-      background: #111827;
+      background: var(--color-bg-elevated);
       border-top: 2px solid #3b82f6;
       border-radius: 16px 16px 0 0;
       margin: 0;
@@ -468,9 +554,9 @@ body {
       padding: 14px 20px !important;
       min-height: 48px;
       font-size: 15px !important;
-      border-bottom: 1px solid #1e293b !important;
+      border-bottom: 1px solid var(--color-border) !important;
       border-left: none;
-      color: #e2e8f0 !important;
+      color: var(--color-text) !important;
       width: 100%;
     }
 
@@ -570,101 +656,32 @@ body {
   }
 }
 
-/* ─── Light theme overrides ─── */
-[data-theme="light"] body {
-  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
-  color: #1e293b;
-}
-
-[data-theme="light"] .cryptoCompareRoot {
-  color: #1e293b;
-}
-
-[data-theme="light"] .algoCard,
-[data-theme="light"] .panel,
-[data-theme="light"] .panel-inner {
-  background: #ffffff !important;
-  border-color: #e2e8f0 !important;
-}
+/* ─── Light theme: additional overrides ─── */
+/* Most light-mode theming is handled by CSS custom properties in :root / [data-theme="light"] above. */
+/* These rules cover selectors that need !important or structural changes beyond variable swaps. */
 
 [data-theme="light"] .algoCard:hover {
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
 }
 
-[data-theme="light"] .controlBtn,
-[data-theme="light"] .controlSelect {
-  background: #ffffff;
-  color: #334155;
-  border-color: #cbd5e1;
-}
-
-[data-theme="light"] .controlBtn:hover {
-  background: #f1f5f9;
-  border-color: #94a3b8;
-}
-
-[data-theme="light"] .controlBtnActive {
-  background: #dbeafe !important;
-  color: #1d4ed8 !important;
-  border-color: #93c5fd !important;
-}
-
-[data-theme="light"] .contextBar {
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  border-color: #e2e8f0;
-}
-
-[data-theme="light"] .contextPill {
-  background: #f1f5f9;
-  border-color: #e2e8f0;
-  color: #475569;
-}
-
-[data-theme="light"] .contextPillAccent {
-  background: #dbeafe;
-  border-color: #93c5fd;
-  color: #1d4ed8;
-}
-
 [data-theme="light"] .searchInput,
 [data-theme="light"] input[aria-label="Search algorithms"] {
-  background: #ffffff !important;
-  color: #1e293b !important;
-  border-color: #cbd5e1 !important;
-}
-
-[data-theme="light"] .trustCard {
-  background: #ffffff;
-  border-color: #e2e8f0;
-}
-
-[data-theme="light"] .site-footer {
-  border-color: #e2e8f0;
-  color: #475569;
+  background: var(--color-bg-inset) !important;
+  color: var(--color-text) !important;
+  border-color: var(--color-border-muted) !important;
 }
 
 [data-theme="light"] .headerGradientBar {
   opacity: 0.7;
 }
 
-[data-theme="light"] .pageShell {
-  color: #1e293b;
+[data-theme="light"] .categoryTab:hover {
+  color: var(--color-text-heading) !important;
 }
 
-[data-theme="light"] .themeToggle {
-  background: #f1f5f9;
-  color: #475569;
-  border-color: #cbd5e1;
-}
-
-[data-theme="light"] .themeToggle:hover {
-  background: #e2e8f0;
-}
-
-[data-theme="light"] .compareBar {
-  background: rgba(255, 255, 255, 0.95) !important;
-  border-top-color: #e2e8f0 !important;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1) !important;
+[data-theme="light"] .categoryNav .categoryTab[aria-selected="true"] {
+  background: #dbeafe;
+  color: #1d4ed8 !important;
 }
 
 /* ─── Comparison full-screen overlay ─── */
@@ -674,7 +691,7 @@ body {
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  background: #070b12;
+  background: var(--color-bg);
   overflow: hidden;
 }
 
@@ -683,8 +700,8 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 12px 24px;
-  border-bottom: 1px solid #1e293b;
-  background: rgba(7, 11, 18, 0.98);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg);
   flex-shrink: 0;
   gap: 12px;
   flex-wrap: wrap;
@@ -746,7 +763,7 @@ body {
     right: 0;
     z-index: 960;
     max-height: 80vh;
-    background: #111827;
+    background: var(--color-bg-elevated);
     border-top: 2px solid #3b82f6;
     border-radius: 16px 16px 0 0;
     box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.5);
@@ -763,7 +780,7 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 14px 20px;
-    border-bottom: 1px solid #1e293b;
+    border-bottom: 1px solid var(--color-border);
     flex-shrink: 0;
   }
 
@@ -779,7 +796,7 @@ body {
   .filterSheetFooter {
     display: block;
     padding: 12px 20px env(safe-area-inset-bottom, 16px);
-    border-top: 1px solid #1e293b;
+    border-top: 1px solid var(--color-border);
     flex-shrink: 0;
   }
 
@@ -811,29 +828,4 @@ body {
   }
 }
 
-/* ─── Light theme: overlay & sheet overrides ─── */
-[data-theme="light"] .comparisonOverlay {
-  background: #f8fafc;
-}
-
-[data-theme="light"] .comparisonOverlayHeader {
-  background: rgba(248, 250, 252, 0.98);
-  border-bottom-color: #e2e8f0;
-}
-
-[data-theme="light"] .filterSheet {
-  background: #ffffff;
-  border-top-color: #3b82f6;
-}
-
-[data-theme="light"] .filterSheetHeader {
-  border-bottom-color: #e2e8f0;
-}
-
-[data-theme="light"] .filterSheetFooter {
-  border-top-color: #e2e8f0;
-}
-
-[data-theme="light"] .filterSheetBackdrop {
-  background: rgba(0, 0, 0, 0.2);
-}
+/* Light theme overrides already handled by CSS custom properties above */
