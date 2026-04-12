@@ -17,7 +17,7 @@ const CATEGORIES: CategorySection[] = [
   {
     icon: "🔐",
     title: "Symmetric Encryption",
-    color: "#60a5fa",
+    color: "var(--color-accent-blue-label)",
     libs: [
       { name: "libsodium / NaCl", note: "Misuse-resistant AEAD (XChaCha20-Poly1305) by default. Bindings for every major language. Used in Minisign, age, and many modern tools." },
       { name: "BoringSSL", note: "Google's hardened OpenSSL fork. Powers Chrome, Android, Cloudflare, and AWS-LC. Includes AES-GCM with hardware acceleration." },
@@ -35,7 +35,7 @@ const CATEGORIES: CategorySection[] = [
   {
     icon: "🔑",
     title: "Key Exchange / KEM",
-    color: "#a78bfa",
+    color: "var(--color-badge-purple-text)",
     libs: [
       { name: "libsodium", note: "X25519 key exchange out of the box. Used by WireGuard, Signal, and age. Simple API, hard to misuse." },
       { name: "BoringSSL / AWS-LC", note: "X25519, P-256 ECDH, and ML-KEM (Kyber) for post-quantum hybrid key exchange. Used in Chrome's TLS 1.3 PQ experiments." },
@@ -52,7 +52,7 @@ const CATEGORIES: CategorySection[] = [
   {
     icon: "✍️",
     title: "Digital Signatures",
-    color: "#34d399",
+    color: "var(--color-badge-green-text)",
     libs: [
       { name: "libsodium", note: "Ed25519 signatures. Deterministic, fast, constant-time. Used by SSH, WireGuard, Minisign, and most modern signing systems." },
       { name: "BoringSSL", note: "Ed25519, ECDSA (P-256, P-384), RSA. Battle-tested in Chrome and Android's code signing." },
@@ -70,7 +70,7 @@ const CATEGORIES: CategorySection[] = [
   {
     icon: "#️⃣",
     title: "Hashing",
-    color: "#fbbf24",
+    color: "var(--color-badge-yellow-text)",
     libs: [
       { name: "libsodium", note: "BLAKE2b by default — faster than SHA-256 on all platforms, with a 256-bit security level." },
       { name: "OpenSSL / BoringSSL", note: "SHA-256, SHA-384, SHA-512, SHA-3. Hardware-accelerated on modern CPUs (SHA-NI extension)." },
@@ -88,7 +88,7 @@ const CATEGORIES: CategorySection[] = [
   {
     icon: "🔒",
     title: "Password Hashing",
-    color: "#f87171",
+    color: "var(--color-badge-red-text)",
     libs: [
       { name: "libsodium (crypto_pwhash)", note: "Argon2id — the OWASP recommended default. Memory-hard, resistant to GPU and ASIC attacks. libsodium provides safe parameter presets." },
       { name: "argon2 (reference C impl)", note: "The official Argon2 reference implementation from the PHC winners. Bindings available for most languages." },
@@ -123,7 +123,7 @@ const CATEGORIES: CategorySection[] = [
   {
     icon: "🛡️",
     title: "MACs (Message Authentication Codes)",
-    color: "#c084fc",
+    color: "var(--color-badge-purple-text)",
     libs: [
       { name: "libsodium", note: "Poly1305 (with ChaCha20 as AEAD) and HMAC-SHA-512-256. Poly1305 is a one-time authenticator — always used within an AEAD construction." },
       { name: "OpenSSL / BoringSSL", note: "HMAC-SHA-256, HMAC-SHA-384, HMAC-SHA-512, KMAC (SHA-3-based). HMAC is the workhorse MAC for most protocols." },
@@ -140,7 +140,7 @@ const CATEGORIES: CategorySection[] = [
   {
     icon: "🎲",
     title: "CSPRNG (Cryptographically Secure Random)",
-    color: "#fb923c",
+    color: "var(--color-badge-orange-text)",
     libs: [
       { name: "OS-provided (recommended)", note: "/dev/urandom (Linux), getentropy() (modern Linux/BSD), BCryptGenRandom (Windows), SecRandomCopyBytes (macOS/iOS). These are the ultimate trust anchors — use them." },
       { name: "libsodium (randombytes_buf)", note: "Wraps the OS CSPRNG with a simple, portable API. Consistent behavior across all platforms." },
@@ -172,7 +172,7 @@ export default function RecommendedLibraries() {
       <p style={{ margin: "0 0 16px", color: S.mutedColor, fontSize: S.text, lineHeight: S.lineHeight }}>
         Algorithms are public standards — their security comes from mathematical proofs and decades of analysis, not from keeping the design secret.
         But a perfect algorithm becomes a vulnerability the moment it is implemented incorrectly: a leaked timing signal, a reused nonce, a mishandled buffer.{" "}
-        <strong style={{ color: "#f87171" }}>Never write your own cryptographic primitives.</strong>{" "}
+        <strong style={{ color: "var(--color-badge-red-text)" }}>Never write your own cryptographic primitives.</strong>{" "}
         Use the audited, battle-tested libraries listed below — they exist so you don&apos;t have to solve problems that took world-class cryptographers years to get right.
       </p>
 
@@ -181,7 +181,7 @@ export default function RecommendedLibraries() {
           key={cat.title}
           style={{
             marginBottom: "20px",
-            ...(i > 0 ? { borderTop: "1px solid #1e293b", paddingTop: "16px" } : {}),
+            ...(i > 0 ? { borderTop: "1px solid var(--color-border)", paddingTop: "16px" } : {}),
           }}
         >
           <h3
@@ -231,7 +231,7 @@ export default function RecommendedLibraries() {
               style={{
                 fontSize: "12px",
                 fontWeight: 700,
-                color: "#94a3b8",
+                color: "var(--color-text-dim)",
                 textTransform: "uppercase",
                 letterSpacing: "0.05em",
                 marginBottom: "6px",
@@ -253,10 +253,10 @@ export default function RecommendedLibraries() {
         margin: "16px 0 0",
         padding: "12px 14px",
         background: "var(--color-bg-inset)",
-        border: "1px solid #1e293b",
-        borderLeft: "3px solid #f87171",
+        border: "1px solid var(--color-border)",
+        borderLeft: "3px solid var(--color-badge-red-text)",
         borderRadius: "6px",
-        color: "#f87171",
+        color: "var(--color-badge-red-text)",
         fontSize: "13px",
         fontWeight: 600,
         lineHeight: 1.6,

@@ -11,7 +11,7 @@ export default function MethodologyPanel({ trustSnapshot }: MethodologyPanelProp
       <h2 className="panel-heading">Methodology &amp; Trust Model</h2>
 
       <div style={{ marginBottom: "16px" }}>
-        <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#60a5fa", margin: "12px 0 6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
+        <h3 style={{ fontSize: "15px", fontWeight: 700, color: "var(--color-accent-blue-label)", margin: "12px 0 6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
           Reading Security Values
         </h3>
         <ul style={{ margin: 0, paddingLeft: "18px", color: "var(--color-text-secondary)", lineHeight: 1.8 }}>
@@ -23,7 +23,7 @@ export default function MethodologyPanel({ trustSnapshot }: MethodologyPanelProp
       </div>
 
       <div style={{ marginBottom: "16px" }}>
-        <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#60a5fa", margin: "0 0 6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
+        <h3 style={{ fontSize: "15px", fontWeight: 700, color: "var(--color-accent-blue-label)", margin: "0 0 6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
           Data Sourcing
         </h3>
         <ul style={{ margin: 0, paddingLeft: "18px", color: "var(--color-text-secondary)", lineHeight: 1.8 }}>
@@ -35,7 +35,7 @@ export default function MethodologyPanel({ trustSnapshot }: MethodologyPanelProp
       </div>
 
       <div style={{ marginBottom: "16px" }}>
-        <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#60a5fa", margin: "0 0 6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
+        <h3 style={{ fontSize: "15px", fontWeight: 700, color: "var(--color-accent-blue-label)", margin: "0 0 6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
           Recommendation Labels
         </h3>
         <ul style={{ margin: 0, paddingLeft: "18px", color: "var(--color-text-secondary)", lineHeight: 1.8 }}>
@@ -48,7 +48,7 @@ export default function MethodologyPanel({ trustSnapshot }: MethodologyPanelProp
       </div>
 
       <div style={{ marginBottom: "16px" }}>
-        <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#60a5fa", margin: "0 0 6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
+        <h3 style={{ fontSize: "15px", fontWeight: 700, color: "var(--color-accent-blue-label)", margin: "0 0 6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
           Review Process
         </h3>
         <ul style={{ margin: 0, paddingLeft: "18px", color: "var(--color-text-secondary)", lineHeight: 1.8 }}>
@@ -60,7 +60,7 @@ export default function MethodologyPanel({ trustSnapshot }: MethodologyPanelProp
       </div>
 
       <div style={{ marginBottom: "16px" }}>
-        <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#60a5fa", margin: "0 0 6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
+        <h3 style={{ fontSize: "15px", fontWeight: 700, color: "var(--color-accent-blue-label)", margin: "0 0 6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
           Reasonable Expert Disagreement
         </h3>
         <ul style={{ margin: 0, paddingLeft: "18px", color: "var(--color-text-secondary)", lineHeight: 1.8 }}>
@@ -71,7 +71,7 @@ export default function MethodologyPanel({ trustSnapshot }: MethodologyPanelProp
       </div>
 
       <div>
-        <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#60a5fa", margin: "0 0 6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
+        <h3 style={{ fontSize: "15px", fontWeight: 700, color: "var(--color-accent-blue-label)", margin: "0 0 6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
           Limitations
         </h3>
         <ul style={{ margin: 0, paddingLeft: "18px", color: "var(--color-text-secondary)", lineHeight: 1.8 }}>

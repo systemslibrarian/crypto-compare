@@ -103,9 +103,11 @@ export default function CryptoCompare() {
   });
 
   useEffect(() => {
-    const validationErrors = validateAlgorithms(dataset);
-    if (validationErrors.length > 0) {
-      console.warn("Algorithm validation issues", validationErrors);
+    if (process.env.NODE_ENV !== "production") {
+      const validationErrors = validateAlgorithms(dataset);
+      if (validationErrors.length > 0) {
+        console.warn("Algorithm validation issues", validationErrors);
+      }
     }
   }, [dataset]);
 

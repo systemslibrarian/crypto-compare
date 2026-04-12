@@ -55,9 +55,9 @@ export default function QuickStartPanel({
           gap: "8px",
           flexWrap: "wrap",
           padding: "8px 14px",
-          border: "1px solid #1e293b",
+          border: "1px solid var(--color-border)",
           borderRadius: expanded ? "10px 10px 0 0" : "10px",
-          background: "linear-gradient(135deg, #0a1220 0%, #101b31 100%)",
+          background: "linear-gradient(135deg, var(--color-bg-panel-gradient-from) 0%, var(--color-bg-panel-gradient-to) 100%)",
         }}
       >
         <button
@@ -108,10 +108,10 @@ export default function QuickStartPanel({
             gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
             gap: "10px",
             padding: "12px 14px",
-            border: "1px solid #1e293b",
+            border: "1px solid var(--color-border)",
             borderTop: "none",
             borderRadius: "0 0 10px 10px",
-            background: "linear-gradient(135deg, #0a1220 0%, #101b31 100%)",
+            background: "linear-gradient(135deg, var(--color-bg-panel-gradient-from) 0%, var(--color-bg-panel-gradient-to) 100%)",
           }}
         >
           <button type="button" className="focusRing quickStartCard" onClick={onShowDefaults}>

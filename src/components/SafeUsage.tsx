@@ -2,7 +2,7 @@
 
 const SECTION = {
   heading: "12px" as const,
-  headingColor: "#60a5fa",
+  headingColor: "var(--color-accent-blue-label)",
   text: "13px" as const,
   textColor: "var(--color-text-secondary)",
   mutedColor: "var(--color-text-muted)",
@@ -16,27 +16,27 @@ export default function SafeUsage() {
       {/* ── Critical Rules ── */}
       <div style={{ marginBottom: "20px" }}>
         <h3 style={{
-          fontSize: "15px", fontWeight: 700, color: "#f87171", margin: "0 0 8px",
+          fontSize: "15px", fontWeight: 700, color: "var(--color-badge-red-text)", margin: "0 0 8px",
           fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
           display: "flex", alignItems: "center", gap: "8px",
         }}>
           <span aria-hidden="true">⚠️</span> Critical Rules (Never Break These)
         </h3>
         <ul style={{ margin: 0, paddingLeft: SECTION.listPad, color: SECTION.textColor, fontSize: SECTION.text, lineHeight: SECTION.lineHeight }}>
-          <li><strong style={{ color: "#f87171" }}>Never reuse a nonce</strong> with AES-GCM or ChaCha20-Poly1305. A single nonce reuse is a catastrophic failure — it leaks the authentication key and allows forgery.</li>
-          <li><strong style={{ color: "#f87171" }}>Never encrypt without authentication.</strong> Use AEAD modes only (GCM, Poly1305, CCM). Unauthenticated encryption (CBC, CTR alone) enables padding oracles and ciphertext manipulation.</li>
-          <li><strong style={{ color: "#f87171" }}>Never use MD5, SHA-1, or plain SHA-256 for passwords.</strong> Fast hashes let attackers try billions of guesses per second. Use Argon2id, bcrypt, or scrypt — they are intentionally slow.</li>
-          <li><strong style={{ color: "#f87171" }}>Never use ECB mode.</strong> ECB preserves plaintext patterns in ciphertext. The &quot;ECB penguin&quot; is a famous visual demonstration of why this is broken.</li>
-          <li><strong style={{ color: "#f87171" }}>Never hard-code keys or secrets in source code.</strong> Keys in code end up in version control, CI logs, container images, and eventually in attacker hands. Use a secrets manager.</li>
-          <li><strong style={{ color: "#f87171" }}>Never roll your own crypto primitives.</strong> Custom ciphers, custom ECDSA implementations, custom key exchange protocols — these always have fatal bugs. Use audited libraries.</li>
-          <li><strong style={{ color: "#f87171" }}>Never skip certificate/key verification.</strong> Setting <code style={{ background: "var(--color-bg-inset)", padding: "1px 5px", borderRadius: "3px", fontSize: "12px" }}>verify=False</code> or accepting all certificates defeats the entire security model of TLS.</li>
+          <li><strong style={{ color: "var(--color-badge-red-text)" }}>Never reuse a nonce</strong> with AES-GCM or ChaCha20-Poly1305. A single nonce reuse is a catastrophic failure — it leaks the authentication key and allows forgery.</li>
+          <li><strong style={{ color: "var(--color-badge-red-text)" }}>Never encrypt without authentication.</strong> Use AEAD modes only (GCM, Poly1305, CCM). Unauthenticated encryption (CBC, CTR alone) enables padding oracles and ciphertext manipulation.</li>
+          <li><strong style={{ color: "var(--color-badge-red-text)" }}>Never use MD5, SHA-1, or plain SHA-256 for passwords.</strong> Fast hashes let attackers try billions of guesses per second. Use Argon2id, bcrypt, or scrypt — they are intentionally slow.</li>
+          <li><strong style={{ color: "var(--color-badge-red-text)" }}>Never use ECB mode.</strong> ECB preserves plaintext patterns in ciphertext. The &quot;ECB penguin&quot; is a famous visual demonstration of why this is broken.</li>
+          <li><strong style={{ color: "var(--color-badge-red-text)" }}>Never hard-code keys or secrets in source code.</strong> Keys in code end up in version control, CI logs, container images, and eventually in attacker hands. Use a secrets manager.</li>
+          <li><strong style={{ color: "var(--color-badge-red-text)" }}>Never roll your own crypto primitives.</strong> Custom ciphers, custom ECDSA implementations, custom key exchange protocols — these always have fatal bugs. Use audited libraries.</li>
+          <li><strong style={{ color: "var(--color-badge-red-text)" }}>Never skip certificate/key verification.</strong> Setting <code style={{ background: "var(--color-bg-inset)", padding: "1px 5px", borderRadius: "3px", fontSize: "12px" }}>verify=False</code> or accepting all certificates defeats the entire security model of TLS.</li>
         </ul>
       </div>
 
       {/* ── Key Management Basics ── */}
       <div style={{ marginBottom: "20px", borderTop: "1px solid var(--color-border)", paddingTop: "16px" }}>
         <h3 style={{
-          fontSize: "15px", fontWeight: 700, color: "#34d399", margin: "0 0 8px",
+          fontSize: "15px", fontWeight: 700, color: "var(--color-badge-green-text)", margin: "0 0 8px",
           fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
           display: "flex", alignItems: "center", gap: "8px",
         }}>
@@ -85,7 +85,7 @@ export default function SafeUsage() {
             </div>
           ))}
         </div>
-        <p style={{ margin: 0, color: "#f87171", fontSize: "13px", fontWeight: 600, lineHeight: 1.6 }}>
+        <p style={{ margin: 0, color: "var(--color-badge-red-text)", fontSize: "13px", fontWeight: 600, lineHeight: 1.6 }}>
           If the phrase &quot;I wrote my own AES implementation&quot; appears in your codebase, stop and replace it with a library call. Custom implementations are the #1 source of real-world crypto vulnerabilities.
         </p>
       </div>
@@ -93,7 +93,7 @@ export default function SafeUsage() {
       {/* ── What This Tool Does NOT Protect You From ── */}
       <div style={{ borderTop: "1px solid var(--color-border)", paddingTop: "16px" }}>
         <h3 style={{
-          fontSize: "15px", fontWeight: 700, color: "#fbbf24", margin: "0 0 8px",
+          fontSize: "15px", fontWeight: 700, color: "var(--color-badge-yellow-text)", margin: "0 0 8px",
           fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
           display: "flex", alignItems: "center", gap: "8px",
         }}>

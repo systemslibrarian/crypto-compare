@@ -388,7 +388,7 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
         border: "1px solid var(--color-border)",
         borderRadius: "10px",
         padding: "20px 24px",
-        background: "linear-gradient(135deg, #0c1222 0%, #0e1628 100%)",
+        background: "linear-gradient(135deg, var(--color-bg-panel-gradient-from) 0%, var(--color-bg-panel-gradient-to) 100%)",
         marginBottom: "18px",
       }}
       role="region"
@@ -414,7 +414,7 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
               style={{
                 background: "var(--color-bg-control)",
                 color: "var(--color-text-body)",
-                border: "1px solid #334155",
+                border: "1px solid var(--color-border-muted)",
                 borderRadius: "6px",
                 padding: "10px 14px",
                 fontSize: "13px",
@@ -433,7 +433,7 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
               style={{
                 background: "var(--color-bg-control)",
                 color: "var(--color-text-body)",
-                border: "1px solid #334155",
+                border: "1px solid var(--color-border-muted)",
                 borderRadius: "6px",
                 padding: "10px 14px",
                 fontSize: "13px",
@@ -450,7 +450,7 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
 
       {!result && node && (
         <div role="group" aria-label={`Step ${step}: ${node.question}`}>
-          <div style={{ fontSize: "13px", color: "#60a5fa", fontWeight: 700, marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+          <div style={{ fontSize: "13px", color: "var(--color-accent-blue-label)", fontWeight: 700, marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
             Step {step}
           </div>
           <div id="flowchart-question" style={{ fontSize: "17px", color: "var(--color-text)", fontWeight: 600, marginBottom: "14px", lineHeight: 1.6 }}>
@@ -474,7 +474,7 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
                   transition: "border-color 0.15s",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "#3b82f6";
+                  e.currentTarget.style.borderColor = "var(--color-accent-blue)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.borderColor = "var(--color-border)";
@@ -489,13 +489,13 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
 
       {result && (
         <div role="alert" aria-live="assertive">
-          <div style={{ fontSize: "13px", color: "#34d399", fontWeight: 700, marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+          <div style={{ fontSize: "13px", color: "var(--color-badge-green-text)", fontWeight: 700, marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
             Recommendation
           </div>
           <div
             style={{
               background: "var(--color-bg-card)",
-              border: "1px solid #065f46",
+              border: "1px solid var(--color-badge-green-border)",
               borderRadius: "10px",
               padding: "18px 20px",
             }}
@@ -504,7 +504,7 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
               style={{
                 fontSize: "22px",
                 fontWeight: 700,
-                color: "#34d399",
+                color: "var(--color-badge-green-text)",
                 fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
                 marginBottom: "8px",
               }}
@@ -554,8 +554,8 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
               <button
                 onClick={() => onNavigate(result.category, result.id)}
                 style={{
-                  background: "#1d4ed8",
-                  color: "#fff",
+                  background: "var(--color-button-primary)",
+                  color: "var(--color-button-primary-text)",
                   border: "none",
                   padding: "12px 20px",
                   borderRadius: "6px",
@@ -581,7 +581,7 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
                 style={{
                   background: "var(--color-bg-control)",
                   color: "var(--color-text-body)",
-                  border: "1px solid #334155",
+                  border: "1px solid var(--color-border-muted)",
                   padding: "12px 20px",
                   borderRadius: "6px",
                   fontSize: "14px",

@@ -1,4 +1,4 @@
-import { useCallback, type RefObject } from "react";
+import { useCallback, useMemo, type RefObject } from "react";
 import type { AlgorithmCategory } from "@/types/crypto";
 
 type SortOption = "name" | "security" | "pq" | "publicKey" | "signature";
@@ -151,7 +151,7 @@ export function useCryptoCompareController({
     }
   }, []);
 
-  return {
+  return useMemo(() => ({
     activateGlobalSearch,
     clearComparison,
     copyComparisonLink,
@@ -159,5 +159,13 @@ export function useCryptoCompareController({
     showRecommendedDefaults,
     switchCategory,
     toggleSelection,
-  };
+  }), [
+    activateGlobalSearch,
+    clearComparison,
+    copyComparisonLink,
+    resetToMainMenu,
+    showRecommendedDefaults,
+    switchCategory,
+    toggleSelection,
+  ]);
 }

@@ -124,7 +124,7 @@ export default function SearchControls({
             className="focusRing controlBtn"
             onClick={onClearAllFilters}
             aria-label="Clear all active filters"
-            style={{ color: "#f87171", fontSize: "13px" }}
+            style={{ color: "var(--color-badge-red-text)", fontSize: "13px" }}
           >
             ✕ Clear all
           </button>
@@ -227,7 +227,7 @@ export default function SearchControls({
             <div className="filterSheetFooter" style={{ display: "flex", gap: "8px" }}>
               {hasActiveFilters && onClearAllFilters && (
                 <button onClick={() => { onClearAllFilters(); onToggleFilters(); }} className="focusRing" style={{
-                  background: "transparent", color: "#f87171", border: "1px solid #f8717144", padding: "14px 16px",
+                  background: "transparent", color: "var(--color-badge-red-text)", border: "1px solid var(--color-badge-red-border)", padding: "14px 16px",
                   borderRadius: "8px", fontSize: "16px", fontWeight: 700, cursor: "pointer", flex: "0 0 auto",
                   fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
                 }}
@@ -237,7 +237,7 @@ export default function SearchControls({
                 </button>
               )}
               <button onClick={onToggleFilters} className="focusRing" style={{
-                background: "#1d4ed8", color: "#fff", border: "none", padding: "14px 28px",
+                background: "var(--color-button-primary)", color: "var(--color-button-primary-text)", border: "none", padding: "14px 28px",
                 borderRadius: "8px", fontSize: "16px", fontWeight: 700, cursor: "pointer", flex: "1 1 auto",
                 fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
               }}>

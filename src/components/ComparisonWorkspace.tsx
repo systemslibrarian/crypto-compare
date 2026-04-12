@@ -69,10 +69,10 @@ export default function ComparisonWorkspace({
           gap: "10px",
           flexWrap: "wrap",
           padding: "12px 16px",
-          background: "rgba(15, 23, 42, 0.95)",
+          background: "var(--color-bg-overlay)",
           backdropFilter: "blur(8px)",
-          borderTop: "1px solid rgba(255,255,255,0.1)",
-          boxShadow: "0 -4px 20px rgba(0,0,0,0.4)",
+          borderTop: "1px solid var(--color-border-bar)",
+          boxShadow: "0 -4px 20px var(--color-shadow-overlay)",
         }}
       >
         <button
@@ -80,8 +80,8 @@ export default function ComparisonWorkspace({
           className="focusRing"
           aria-label={`Compare ${algorithms.length} selected algorithms`}
           style={{
-            background: "#1d4ed8",
-            color: "#fff",
+            background: "var(--color-button-primary)",
+            color: "var(--color-button-primary-text)",
             border: "none",
             padding: "12px 28px",
             borderRadius: "8px",
@@ -120,7 +120,7 @@ export default function ComparisonWorkspace({
           <button className="focusRing controlBtn comparisonOverlayExportBtn" onClick={onExportJson}>
             JSON
           </button>
-          <button onClick={onClearSelection} className="focusRing controlBtn" style={{ color: "#f87171" }}>
+          <button onClick={onClearSelection} className="focusRing controlBtn" style={{ color: "var(--color-badge-red-text)" }}>
             Clear
           </button>
           <button

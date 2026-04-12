@@ -102,8 +102,8 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
   return (
     <div
       style={{
-        background: "linear-gradient(135deg, #0c1222 0%, #0e1628 100%)",
-        border: "1px solid #1a2540",
+        background: "linear-gradient(135deg, var(--color-bg-panel-gradient-from) 0%, var(--color-bg-panel-gradient-to) 100%)",
+        border: "1px solid var(--color-bg-panel-border)",
         borderRadius: "10px",
         padding: expanded ? "24px 28px" : "18px 22px",
         marginBottom: "16px",
@@ -141,9 +141,9 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
           aria-expanded={expanded}
           aria-label={expanded ? `Collapse ${info.title} details` : `Expand ${info.title} details`}
           style={{
-            background: expanded ? "var(--color-border-header)" : "#111d33",
+            background: expanded ? "var(--color-border-header)" : "var(--color-bg-surface)",
             color: expanded ? "var(--color-text-accent-bright)" : "var(--color-text-muted)",
-            border: `1px solid ${expanded ? "#1e3a5f" : "var(--color-border-header)"}`,
+            border: `1px solid ${expanded ? "var(--color-border-accent)" : "var(--color-border-header)"}`,
             padding: "12px 16px",
             borderRadius: "5px",
             cursor: "pointer",
@@ -167,7 +167,7 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
               style={{
                 fontSize: "13px",
                 fontWeight: 700,
-                color: "#60a5fa",
+                color: "var(--color-accent-blue-label)",
                 textTransform: "uppercase",
                 letterSpacing: "1.2px",
                 marginBottom: "10px",
@@ -179,7 +179,7 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
             <div style={{ fontSize: "16px", color: "var(--color-text)", lineHeight: "1.85" }}>{renderText(info.explanation)}</div>
           </div>
 
-          <div style={{ background: "var(--color-bg-card)", borderRadius: "8px", padding: "16px 18px", borderLeft: "3px solid #3b82f6" }}>
+          <div style={{ background: "var(--color-bg-card)", borderRadius: "8px", padding: "16px 18px", borderLeft: "3px solid var(--color-accent-blue)" }}>
             <div
               style={{
                 fontSize: "13px",
@@ -198,17 +198,17 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
 
           <div
             style={{
-              background: "linear-gradient(90deg, rgba(59,130,246,0.08) 0%, transparent 100%)",
+              background: "linear-gradient(90deg, var(--color-accent-blue-tint) 0%, transparent 100%)",
               borderRadius: "8px",
               padding: "14px 18px",
-              borderLeft: "3px solid #f59e0b",
+              borderLeft: "3px solid var(--color-badge-yellow-text)",
             }}
           >
             <div
               style={{
                 fontSize: "13px",
                 fontWeight: 700,
-                color: "#fcd34d",
+                color: "var(--color-accent-yellow-label)",
                 textTransform: "uppercase",
                 letterSpacing: "1.2px",
                 marginBottom: "10px",
@@ -217,7 +217,7 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
             >
               Why it matters
             </div>
-            <div style={{ fontSize: "16px", color: "#fde68a", lineHeight: "1.85", fontWeight: 600 }}>{renderText(info.whyItMatters)}</div>
+            <div style={{ fontSize: "16px", color: "var(--color-accent-yellow-body)", lineHeight: "1.85", fontWeight: 600 }}>{renderText(info.whyItMatters)}</div>
           </div>
 
           <div
@@ -225,14 +225,14 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
               background: "var(--color-bg-card)",
               borderRadius: "8px",
               padding: "16px 18px",
-              borderLeft: info.projects.length > 0 ? "3px solid #34d399" : "3px solid #f87171",
+              borderLeft: info.projects.length > 0 ? "3px solid var(--color-badge-green-text)" : "3px solid var(--color-badge-red-text)",
             }}
           >
             <div
               style={{
                 fontSize: "13px",
                 fontWeight: 700,
-                color: info.projects.length > 0 ? "#6ee7b7" : "#fca5a5",
+                color: info.projects.length > 0 ? "var(--color-accent-green-label)" : "var(--color-accent-red-label)",
                 textTransform: "uppercase",
                 letterSpacing: "1.2px",
                 marginBottom: "10px",
@@ -257,7 +257,7 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
                       padding: "8px 10px",
                       background: "var(--color-bg-inset)",
                       borderRadius: "6px",
-                      border: "1px solid #141c2b",
+                      border: "1px solid var(--color-border-interactive)",
                     }}
                   >
                     <div
@@ -267,7 +267,7 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
                         borderRadius: "50%",
                         flexShrink: 0,
                         marginTop: "4px",
-                        background: project.public ? "#34d399" : "#fbbf24",
+                        background: project.public ? "var(--color-dot-public)" : "var(--color-dot-private)",
                       }}
                     />
                     <div style={{ flex: 1 }}>
@@ -277,7 +277,7 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
                             href={project.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            style={{ color: "#38bdf8", fontSize: "13px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", textDecoration: "none" }}
+                            style={{ color: "var(--color-text-accent-bright)", fontSize: "13px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", textDecoration: "none" }}
                             onMouseEnter={(e) => {
                               e.currentTarget.style.textDecoration = "underline";
                             }}
@@ -297,9 +297,9 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
                         )}
                         <span
                           style={{
-                            background: project.public ? "#0d3320" : "#312e2a",
-                            color: project.public ? "#34d399" : "#fbbf24",
-                            border: `1px solid ${project.public ? "#065f46" : "#78350f"}`,
+                            background: project.public ? "var(--color-badge-green-bg)" : "var(--color-badge-yellow-bg)",
+                            color: project.public ? "var(--color-badge-green-text)" : "var(--color-badge-yellow-text)",
+                            border: `1px solid ${project.public ? "var(--color-badge-green-border)" : "var(--color-badge-yellow-border)"}`,
                             padding: "3px 8px",
                             borderRadius: "4px",
                             fontSize: "13px",
@@ -314,13 +314,13 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
                             target="_blank"
                             rel="noopener noreferrer"
                             style={{
-                              color: "#a78bfa",
+                              color: "var(--color-badge-purple-text)",
                               fontSize: "12px",
                               fontWeight: 700,
                               fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
                               textDecoration: "none",
-                              background: "#1a1333",
-                              border: "1px solid #2e1065",
+                              background: "var(--color-badge-purple-bg)",
+                              border: "1px solid var(--color-border-app)",
                               padding: "2px 8px",
                               borderRadius: "4px",
                             }}
@@ -347,11 +347,11 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
             ) : (
               <div>
                 {info.projectIdea && (
-                  <div style={{ padding: "10px 12px", background: "var(--color-bg-inset)", borderRadius: "6px", border: "1px dashed #2a1a1a" }}>
-                    <div style={{ fontSize: "13px", color: "#fca5a5", fontWeight: 700, marginBottom: "8px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
+                  <div style={{ padding: "10px 12px", background: "var(--color-bg-inset)", borderRadius: "6px", border: "1px dashed var(--color-border-dashed)" }}>
+                    <div style={{ fontSize: "13px", color: "var(--color-accent-red-label)", fontWeight: 700, marginBottom: "8px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
                       Project idea
                     </div>
-                    <div style={{ fontSize: "15px", color: "#e8b4b4", lineHeight: "1.75" }}>{info.projectIdea}</div>
+                    <div style={{ fontSize: "15px", color: "var(--color-accent-red-body)", lineHeight: "1.75" }}>{info.projectIdea}</div>
                   </div>
                 )}
               </div>

@@ -3,8 +3,8 @@ import type { AlgorithmStatus, RecommendationLevel, SourceKind } from "@/types/c
 const REVIEW_MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 const STATUS_COLORS: Record<AlgorithmStatus, { bg: string; text: string; border: string }> = {
-  standard: { bg: "#0d3320", text: "#34d399", border: "#065f46" },
-  candidate: { bg: "#312e2a", text: "#fbbf24", border: "#78350f" },
+  standard: { bg: "var(--color-badge-green-bg)", text: "var(--color-badge-green-text)", border: "var(--color-badge-green-border)" },
+  candidate: { bg: "var(--color-badge-yellow-bg)", text: "var(--color-badge-yellow-text)", border: "var(--color-badge-yellow-border)" },
 };
 
 export function Badge({ status, label }: { status: AlgorithmStatus; label: string }) {
@@ -51,11 +51,11 @@ export function SecurityMeter({ bits, max = 256, label }: { bits: number | null 
           aria-valuemax={max}
           style={{ flex: 1, height: "6px", background: "var(--color-bg-meter)", borderRadius: "999px", overflow: "hidden", minWidth: "50px" }}
         >
-          <div style={{ width: "0%", height: "100%", background: "#f87171", borderRadius: "2px" }} />
+          <div style={{ width: "0%", height: "100%", background: "var(--color-badge-red-text)", borderRadius: "2px" }} />
         </div>
         <span
           aria-hidden="true"
-          style={{ color: "#f87171", fontSize: "13px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", fontWeight: 700, minWidth: "112px", textAlign: "right" }}
+          style={{ color: "var(--color-badge-red-text)", fontSize: "13px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", fontWeight: 700, minWidth: "112px", textAlign: "right" }}
         >
           Broken (Shor)
         </span>
@@ -64,7 +64,7 @@ export function SecurityMeter({ bits, max = 256, label }: { bits: number | null 
   }
 
   const pct = Math.min((bits / max) * 100, 100);
-  const c = bits >= 192 ? "#34d399" : bits >= 128 ? "#38bdf8" : bits >= 112 ? "#fbbf24" : "#f87171";
+  const c = bits >= 192 ? "var(--color-badge-green-text)" : bits >= 128 ? "var(--color-accent-blue)" : bits >= 112 ? "var(--color-badge-yellow-text)" : "var(--color-badge-red-text)";
   const levelLabel = bits >= 192 ? "high" : bits >= 128 ? "standard" : bits >= 112 ? "moderate" : "low";
   const fullLabel = label === "C" ? "Classical" : label === "PQ" ? "Post-Quantum" : label || "Security";
 
@@ -115,22 +115,22 @@ export function formatReviewDate(iso: string | undefined): string {
 
 function getReviewFreshness(iso: string | undefined): { label: string; color: string; bg: string; border: string } {
   if (!iso) {
-    return { label: "Review pending", color: "#fbbf24", bg: "#312e2a", border: "#78350f" };
+    return { label: "Review pending", color: "var(--color-badge-yellow-text)", bg: "var(--color-badge-yellow-bg)", border: "var(--color-badge-yellow-border)" };
   }
 
   const reviewedAt = new Date(`${iso}T00:00:00Z`).getTime();
   if (Number.isNaN(reviewedAt)) {
-    return { label: "Review date invalid", color: "#f87171", bg: "#2d1215", border: "#7f1d1d" };
+    return { label: "Review date invalid", color: "var(--color-badge-red-text)", bg: "var(--color-badge-red-bg)", border: "var(--color-badge-red-border)" };
   }
 
   const ageDays = Math.floor((Date.now() - reviewedAt) / (1000 * 60 * 60 * 24));
   if (ageDays <= 45) {
-    return { label: "Fresh review", color: "#34d399", bg: "#0d3320", border: "#065f46" };
+    return { label: "Fresh review", color: "var(--color-badge-green-text)", bg: "var(--color-badge-green-bg)", border: "var(--color-badge-green-border)" };
   }
   if (ageDays <= 120) {
-    return { label: "Review aging", color: "#fbbf24", bg: "#312e2a", border: "#78350f" };
+    return { label: "Review aging", color: "var(--color-badge-yellow-text)", bg: "var(--color-badge-yellow-bg)", border: "var(--color-badge-yellow-border)" };
   }
-  return { label: "Needs review", color: "#f87171", bg: "#2d1215", border: "#7f1d1d" };
+  return { label: "Needs review", color: "var(--color-badge-red-text)", bg: "var(--color-badge-red-bg)", border: "var(--color-badge-red-border)" };
 }
 
 export function ReviewBadge({ iso }: { iso: string | undefined }) {
@@ -159,11 +159,11 @@ export function ReviewBadge({ iso }: { iso: string | undefined }) {
 }
 
 const RECOMMENDATION_CONFIG: Record<RecommendationLevel, { icon: string; label: string; color: string; bg: string; border: string }> = {
-  recommended: { icon: "✅", label: "Recommended default", color: "#34d399", bg: "#0d3320", border: "#065f46" },
-  acceptable: { icon: "⚠️", label: "Acceptable (constrained)", color: "#fbbf24", bg: "#312e2a", border: "#78350f" },
-  legacy: { icon: "🔄", label: "Legacy / compatibility only", color: "#f97316", bg: "#2d1f0e", border: "#7c3a0a" },
-  research: { icon: "🔬", label: "Research / niche", color: "#a78bfa", bg: "#1e1633", border: "#4c1d95" },
-  avoid: { icon: "❌", label: "Do not use in new systems", color: "#f87171", bg: "#2d1215", border: "#7f1d1d" },
+  recommended: { icon: "✅", label: "Recommended default", color: "var(--color-badge-green-text)", bg: "var(--color-badge-green-bg)", border: "var(--color-badge-green-border)" },
+  acceptable: { icon: "⚠️", label: "Acceptable (constrained)", color: "var(--color-badge-yellow-text)", bg: "var(--color-badge-yellow-bg)", border: "var(--color-badge-yellow-border)" },
+  legacy: { icon: "🔄", label: "Legacy / compatibility only", color: "var(--color-badge-orange-text)", bg: "var(--color-badge-orange-bg)", border: "var(--color-badge-orange-border)" },
+  research: { icon: "🔬", label: "Research / niche", color: "var(--color-badge-purple-text)", bg: "var(--color-badge-purple-bg)", border: "var(--color-badge-purple-border)" },
+  avoid: { icon: "❌", label: "Do not use in new systems", color: "var(--color-badge-red-text)", bg: "var(--color-badge-red-bg)", border: "var(--color-badge-red-border)" },
 };
 
 export function RecommendationBadge({ level }: { level: RecommendationLevel }) {
@@ -197,10 +197,10 @@ export function recommendationText(level: RecommendationLevel): string {
 }
 
 const SOURCE_KIND_CONFIG: Record<SourceKind, { icon: string; label: string; color: string; bg: string; border: string }> = {
-  standard: { icon: "📜", label: "Standard", color: "#34d399", bg: "#0d3320", border: "#065f46" },
-  analysis: { icon: "🔍", label: "Analysis", color: "#38bdf8", bg: "#0c2d4a", border: "#0e4f82" },
-  deployment: { icon: "🚀", label: "Deployment", color: "#a78bfa", bg: "#1e1633", border: "#4c1d95" },
-  benchmark: { icon: "⏱️", label: "Benchmark", color: "#fbbf24", bg: "#312e2a", border: "#78350f" },
+  standard: { icon: "📜", label: "Standard", color: "var(--color-badge-green-text)", bg: "var(--color-badge-green-bg)", border: "var(--color-badge-green-border)" },
+  analysis: { icon: "🔍", label: "Analysis", color: "var(--color-badge-blue-text)", bg: "var(--color-badge-blue-bg)", border: "var(--color-badge-blue-border)" },
+  deployment: { icon: "🚀", label: "Deployment", color: "var(--color-badge-purple-text)", bg: "var(--color-badge-purple-bg)", border: "var(--color-badge-purple-border)" },
+  benchmark: { icon: "⏱️", label: "Benchmark", color: "var(--color-badge-yellow-text)", bg: "var(--color-badge-yellow-bg)", border: "var(--color-badge-yellow-border)" },
 };
 
 export function SourceKindBadge({ kind }: { kind: SourceKind }) {

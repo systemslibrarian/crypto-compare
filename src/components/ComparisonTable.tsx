@@ -83,7 +83,7 @@ export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
                   style={{
                     padding: "12px 14px",
                     borderBottom: "1px solid var(--color-border-row)",
-                    color: hasDiff ? "#fbbf24" : "var(--color-text-label)",
+                    color: hasDiff ? "var(--color-badge-yellow-text)" : "var(--color-text-label)",
                     fontWeight: 700,
                     position: "sticky",
                     left: 0,
@@ -93,7 +93,7 @@ export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
                     textTransform: "uppercase",
                     letterSpacing: "0.4px",
                     verticalAlign: "top",
-                    borderLeft: hasDiff ? "3px solid #f59e0b44" : "3px solid transparent",
+                    borderLeft: hasDiff ? "3px solid var(--color-diff-border)" : "3px solid transparent",
                   }}
                 >
                   {row.label}{hasDiff && <span style={{ marginLeft: "4px", fontSize: "10px", opacity: 0.7 }}>≠</span>}
@@ -109,8 +109,8 @@ export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
                         color: "var(--color-text)",
                         verticalAlign: "top",
                         background: hasDiff
-                          ? (i % 2 === 0 ? "rgba(245,158,11,0.04)" : "rgba(245,158,11,0.06)")
-                          : (i % 2 === 0 ? "transparent" : "rgba(255,255,255,0.015)"),
+                          ? (i % 2 === 0 ? "var(--color-diff-bg-even)" : "var(--color-diff-bg-odd)")
+                          : (i % 2 === 0 ? "transparent" : "var(--color-bg-table-diff)"),
                         maxWidth: "320px",
                         lineHeight: "1.7",
                       }}
@@ -144,7 +144,7 @@ export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
                 margin: "0 0 12px",
                 fontSize: "18px",
                 fontWeight: 700,
-                color: "#f8fafc",
+                color: "var(--color-text-heading)",
                 fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
               }}
             >

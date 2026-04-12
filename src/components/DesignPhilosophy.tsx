@@ -3,7 +3,7 @@
 export default function DesignPhilosophy() {
   const sectionStyle = {
     marginBottom: "20px" as const,
-    borderTop: "1px solid #1e293b",
+    borderTop: "1px solid var(--color-border)",
     paddingTop: "16px",
   };
   const headingStyle = {
@@ -27,7 +27,7 @@ export default function DesignPhilosophy() {
     <div>
       {/* ── Purpose ── */}
       <div style={{ marginBottom: "20px" }}>
-        <h3 style={{ ...headingStyle, color: "#60a5fa" }}>
+        <h3 style={{ ...headingStyle, color: "var(--color-accent-blue-label)" }}>
           <span aria-hidden="true">🎯</span> Purpose
         </h3>
         <p style={{ margin: 0, color: "var(--color-text-secondary)", fontSize: "14px", lineHeight: 1.7 }}>
@@ -40,7 +40,7 @@ export default function DesignPhilosophy() {
 
       {/* ── What This Tool Does NOT Do ── */}
       <div style={sectionStyle}>
-        <h3 style={{ ...headingStyle, color: "#f87171" }}>
+        <h3 style={{ ...headingStyle, color: "var(--color-badge-red-text)" }}>
           <span aria-hidden="true">🚫</span> What This Tool Does NOT Do
         </h3>
         <ul style={listStyle}>
@@ -70,7 +70,7 @@ export default function DesignPhilosophy() {
 
       {/* ── Recommendation Philosophy ── */}
       <div style={sectionStyle}>
-        <h3 style={{ ...headingStyle, color: "#34d399" }}>
+        <h3 style={{ ...headingStyle, color: "var(--color-badge-green-text)" }}>
           <span aria-hidden="true">⚖️</span> Recommendation Philosophy
         </h3>
         <ul style={listStyle}>
@@ -84,7 +84,7 @@ export default function DesignPhilosophy() {
 
       {/* ── Transparency ── */}
       <div style={sectionStyle}>
-        <h3 style={{ ...headingStyle, color: "#fbbf24" }}>
+        <h3 style={{ ...headingStyle, color: "var(--color-badge-yellow-text)" }}>
           <span aria-hidden="true">🔍</span> Transparency
         </h3>
         <p style={{ margin: "0 0 8px", color: "var(--color-text-muted)", fontSize: "13px", lineHeight: 1.7 }}>
@@ -101,7 +101,7 @@ export default function DesignPhilosophy() {
 
       {/* ── Intended Audience ── */}
       <div style={sectionStyle}>
-        <h3 style={{ ...headingStyle, color: "#a78bfa" }}>
+        <h3 style={{ ...headingStyle, color: "var(--color-badge-purple-text)" }}>
           <span aria-hidden="true">🧠</span> Intended Audience
         </h3>
         <ul style={listStyle}>

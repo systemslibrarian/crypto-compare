@@ -29,22 +29,22 @@ export default function HybridPatternsSection({ isOpen, onToggle }: HybridPatter
                     borderRadius: "3px",
                     background:
                       pattern.recommendation === "recommended"
-                        ? "#0d3320"
+                        ? "var(--color-badge-green-bg)"
                         : pattern.recommendation === "acceptable"
-                          ? "#312e2a"
-                          : "#1e1633",
+                          ? "var(--color-badge-yellow-bg)"
+                          : "var(--color-badge-purple-bg)",
                     color:
                       pattern.recommendation === "recommended"
-                        ? "#34d399"
+                        ? "var(--color-badge-green-text)"
                         : pattern.recommendation === "acceptable"
-                          ? "#fbbf24"
-                          : "#a78bfa",
+                          ? "var(--color-badge-yellow-text)"
+                          : "var(--color-badge-purple-text)",
                     border: `1px solid ${
                       pattern.recommendation === "recommended"
-                        ? "#065f46"
+                        ? "var(--color-badge-green-border)"
                         : pattern.recommendation === "acceptable"
-                          ? "#78350f"
-                          : "#4c1d95"
+                          ? "var(--color-badge-yellow-border)"
+                          : "var(--color-badge-purple-border)"
                     }`,
                   }}
                 >
@@ -58,7 +58,7 @@ export default function HybridPatternsSection({ isOpen, onToggle }: HybridPatter
                 <div><span style={{ color: "var(--color-text-muted)" }}>Method:</span> {pattern.combinationMethod}</div>
                 <pre
                   style={{
-                    background: "#0a0e17",
+                    background: "var(--color-bg-code)",
                     border: "1px solid var(--color-border)",
                     borderRadius: "6px",
                     padding: "10px 14px",

@@ -26,7 +26,7 @@ export default function ShortcutHelp({ open, onClose }: ShortcutHelpProps) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "rgba(0, 0, 0, 0.5)",
+        background: "var(--color-overlay-backdrop)",
         backdropFilter: "blur(4px)",
       }}
       onClick={onClose}
@@ -34,13 +34,13 @@ export default function ShortcutHelp({ open, onClose }: ShortcutHelpProps) {
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          background: "#0b1120",
+          background: "var(--color-bg-modal)",
           border: "1px solid var(--color-border)",
           borderRadius: "12px",
           padding: "28px 32px",
           maxWidth: "440px",
           width: "90vw",
-          boxShadow: "0 20px 60px rgba(0, 0, 0, 0.4)",
+          boxShadow: "0 20px 60px var(--color-shadow-overlay)",
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>

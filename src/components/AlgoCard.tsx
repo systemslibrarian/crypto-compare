@@ -53,8 +53,8 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
       className="focusRing algoCard"
       style={{
         background: advisorPick ? "var(--color-bg-advisor)" : selected ? "var(--color-bg-selected)" : "var(--color-bg-card)",
-        border: `1.5px solid ${advisorPick ? "#34d399" : selected ? accent : "var(--color-border)"}`,
-        borderLeft: `3px solid ${advisorPick ? "#34d399" : selected ? accent : `${accent}55`}`,
+        border: `1.5px solid ${advisorPick ? "var(--color-badge-green-text)" : selected ? accent : "var(--color-border)"}`,
+        borderLeft: `3px solid ${advisorPick ? "var(--color-badge-green-text)" : selected ? accent : `${accent}55`}`,
         borderRadius: "10px",
         padding: "20px 22px",
         cursor: "pointer",
@@ -117,7 +117,7 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: favorited ? "#fbbf24" : "var(--color-text-ghost)",
+              color: favorited ? "var(--color-dot-private)" : "var(--color-text-ghost)",
               transition: "color 0.15s",
             }}
           >
@@ -136,7 +136,7 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
               alignItems: "center",
               justifyContent: "center",
               fontSize: "11px",
-              color: "#fff",
+              color: "var(--color-button-primary-text)",
               fontWeight: 700,
             }}
           >
@@ -149,7 +149,7 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
         <Badge status={algo.status} label={algo.statusLabel} />
         <RecommendationBadge level={algo.recommendation} />
         {advisorPick && (
-          <span style={{ fontSize: "11px", fontWeight: 700, color: "#34d399", background: "#06271c", border: "1px solid #065f46", padding: "2px 8px", borderRadius: "4px", letterSpacing: "0.4px", textTransform: "uppercase" }}>Advisor pick</span>
+          <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--color-badge-green-text)", background: "var(--color-badge-green-bg)", border: "1px solid var(--color-badge-green-border)", padding: "2px 8px", borderRadius: "4px", letterSpacing: "0.4px", textTransform: "uppercase" }}>Advisor pick</span>
         )}
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px", flexWrap: "wrap" }}>
@@ -190,11 +190,11 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
           padding: "10px 12px",
           borderRadius: "6px",
           background: "var(--color-bg-warning)",
-          border: "1px solid #78350f",
+          border: "1px solid var(--color-badge-yellow-border)",
           fontSize: "13px",
           lineHeight: 1.6,
         }}>
-          <strong style={{ color: "#fbbf24", display: "block", marginBottom: "4px" }}>
+          <strong style={{ color: "var(--color-badge-yellow-text)", display: "block", marginBottom: "4px" }}>
             ⚠ {algo.recommendation === "legacy" ? "Migration recommended" : "Do not use"}
           </strong>
           <span style={{ color: "var(--color-text-warning)" }}>{algo.whyNotThis}</span>

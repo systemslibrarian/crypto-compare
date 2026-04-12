@@ -63,7 +63,7 @@ export default function AppHeaderNav({
                 }}
               >
                 <span className="brandMark" aria-hidden="true">◈</span>
-                <span><span style={{ color: "#3b82f6" }}>crypto</span>::compare</span>
+                <span><span style={{ color: "var(--color-accent-blue)" }}>crypto</span>::compare</span>
               </button>
             </h1>
             <p className="headerSubtitle" style={{ margin: "6px 0 0", fontSize: "16px", color: "var(--color-text-secondary)" }}>International cryptographic algorithm reference across 17 categories.</p>
@@ -117,9 +117,9 @@ export default function AppHeaderNav({
               aria-label="Toggle category menu"
               aria-expanded={mobileNavOpen}
               style={{
-                background: mobileNavOpen ? "#1d4ed8" : "var(--color-bg-control)",
-                color: mobileNavOpen ? "#fff" : "var(--color-text-body)",
-                border: `1px solid ${mobileNavOpen ? "#2563eb" : "var(--color-border-muted)"}`,                borderRadius: "6px",
+                background: mobileNavOpen ? "var(--color-button-primary)" : "var(--color-bg-control)",
+                color: mobileNavOpen ? "var(--color-button-primary-text)" : "var(--color-text-body)",
+                border: `1px solid ${mobileNavOpen ? "var(--color-button-primary-hover)" : "var(--color-border-muted)"}`,                borderRadius: "6px",
                 padding: "10px 14px",
                 fontSize: "15px",
                 cursor: "pointer",

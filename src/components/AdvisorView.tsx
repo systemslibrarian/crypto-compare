@@ -58,7 +58,7 @@ export default function AdvisorView() {
                   color: "var(--color-text)",
                 }}
               >
-                <span style={{ color: "#3b82f6" }}>◈ crypto</span>::compare
+                <span style={{ color: "var(--color-accent-blue)" }}>◈ crypto</span>::compare
               </span>
             </Link>
             <Link
@@ -66,7 +66,7 @@ export default function AdvisorView() {
               style={{
                 background: "var(--color-bg-control)",
                 color: "var(--color-text-body)",
-                border: "1px solid #334155",
+                border: "1px solid var(--color-border-muted)",
                 borderRadius: "7px",
                 padding: "10px 14px",
                 fontSize: "13px",
@@ -112,20 +112,20 @@ export default function AdvisorView() {
           <section
             aria-label="Important limitations"
             style={{
-              background: "#1a1207",
-              border: "1px solid #78350f",
+              background: "var(--color-bg-warning)",
+              border: "1px solid var(--color-badge-yellow-border)",
               borderRadius: "8px",
               padding: "16px 20px",
               marginTop: "8px",
               fontSize: "13px",
-              color: "#fbbf24",
+              color: "var(--color-badge-yellow-text)",
               lineHeight: 1.7,
             }}
           >
             <strong style={{ display: "block", marginBottom: "8px", fontSize: "14px" }}>
               ⚠ Limitations
             </strong>
-            <ul style={{ margin: 0, paddingLeft: "18px", color: "#e2c97e" }}>
+            <ul style={{ margin: 0, paddingLeft: "18px", color: "var(--color-text-warning)" }}>
               <li>
                 <strong>Not a certification.</strong> Validate all guidance against your specific threat model, compliance requirements, and operational constraints.
               </li>
@@ -169,7 +169,7 @@ export default function AdvisorView() {
           }}
         >
           <div style={{ marginBottom: "6px" }}>
-            <span style={{ color: "#60a5fa", fontWeight: 700 }}>Dataset reviewed:</span>{" "}
+            <span style={{ color: "var(--color-accent-blue-label)", fontWeight: 700 }}>Dataset reviewed:</span>{" "}
             <time dateTime="2026-03-16">March 16, 2026</time>
           </div>
           Sources: NIST FIPS, IETF RFCs, KPQC, CRYPTREC, GB/T, GOST, DSTU, ISO, Eurocrypt/CRYPTO proceedings.

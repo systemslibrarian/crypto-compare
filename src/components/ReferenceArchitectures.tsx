@@ -170,11 +170,11 @@ export default function ReferenceArchitectures() {
 
           {/* Flow diagram */}
           <div style={{
-            background: "#0a0e17", border: "1px solid var(--color-border)", borderRadius: "8px",
+            background: "var(--color-bg-code)", border: "1px solid var(--color-border)", borderRadius: "8px",
             padding: "12px 16px", marginBottom: "14px", overflowX: "auto",
           }}>
             <div style={{
-              fontSize: "12px", fontWeight: 700, color: "#64748b", textTransform: "uppercase",
+              fontSize: "12px", fontWeight: 700, color: "var(--color-text-dim)", textTransform: "uppercase",
               letterSpacing: "0.5px", marginBottom: "6px",
             }}>Data Flow</div>
             <div style={{
@@ -187,7 +187,7 @@ export default function ReferenceArchitectures() {
 
           {/* Stack */}
           <div style={{ marginBottom: "14px" }}>
-            <div style={{ fontSize: "12px", fontWeight: 700, color: "#34d399", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>
+            <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--color-badge-green-text)", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>
               Cryptographic Stack
             </div>
             <div style={{ display: "grid", gap: "6px" }}>
@@ -197,7 +197,7 @@ export default function ReferenceArchitectures() {
                   flexWrap: "wrap",
                 }}>
                   <span style={{
-                    color: "#64748b", fontWeight: 700, minWidth: "140px", flexShrink: 0,
+                    color: "var(--color-text-dim)", fontWeight: 700, minWidth: "140px", flexShrink: 0,
                     fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
                     fontSize: "12px",
                   }}>{s.label}</span>
@@ -209,7 +209,7 @@ export default function ReferenceArchitectures() {
 
           {/* Explanation */}
           <div style={{ marginBottom: "14px" }}>
-            <div style={{ fontSize: "12px", fontWeight: 700, color: "#60a5fa", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>
+            <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--color-accent-blue-label)", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>
               How It Works
             </div>
             <ol style={{ margin: 0, paddingLeft: "20px", color: "var(--color-text-muted)", fontSize: "13px", lineHeight: 1.7 }}>
@@ -219,7 +219,7 @@ export default function ReferenceArchitectures() {
 
           {/* Security Properties */}
           <div style={{ marginBottom: "10px" }}>
-            <div style={{ fontSize: "12px", fontWeight: 700, color: "#fbbf24", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>
+            <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--color-badge-yellow-text)", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>
               Security Properties
             </div>
             <ul style={{ margin: 0, paddingLeft: "18px", color: "var(--color-text-muted)", fontSize: "13px", lineHeight: 1.7, listStyleType: "'✓ '" }}>
@@ -236,7 +236,7 @@ export default function ReferenceArchitectures() {
                 style={{
                   fontSize: "11px", fontWeight: 700,
                   fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-                  color: "var(--color-text-accent-bright)", background: "var(--color-bg-advisor)", border: "1px solid #1e3a5f",
+                  color: "var(--color-text-accent-bright)", background: "var(--color-bg-advisor)", border: "1px solid var(--color-border-accent)",
                   borderRadius: "4px", padding: "3px 8px", textDecoration: "none",
                 }}
               >

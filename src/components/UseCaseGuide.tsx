@@ -344,19 +344,19 @@ export default function UseCaseGuide() {
           </h3>
 
           <div style={{ marginBottom: "12px" }}>
-            <div style={{ fontSize: "12px", fontWeight: 700, color: "#60a5fa", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "4px" }}>Goal</div>
+            <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--color-accent-blue-label)", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "4px" }}>Goal</div>
             <p style={{ margin: 0, color: "var(--color-text-secondary)", fontSize: "14px", lineHeight: 1.6 }}>{s.goal}</p>
           </div>
 
           <div style={{ marginBottom: "12px" }}>
-            <div style={{ fontSize: "12px", fontWeight: 700, color: "#34d399", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "4px" }}>Recommended Stack</div>
+            <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--color-badge-green-text)", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "4px" }}>Recommended Stack</div>
             <ul style={{ margin: 0, paddingLeft: "18px", color: "var(--color-text-secondary)", fontSize: "14px", lineHeight: 1.8, listStyleType: "'▸ '" }}>
               {s.stack.map((item, j) => <li key={j}>{item}</li>)}
             </ul>
           </div>
 
           <div style={{ marginBottom: "12px" }}>
-            <div style={{ fontSize: "12px", fontWeight: 700, color: "#60a5fa", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "4px" }}>Why This Works</div>
+            <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--color-accent-blue-label)", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "4px" }}>Why This Works</div>
             <ul style={{ margin: 0, paddingLeft: "18px", color: "var(--color-text-muted)", fontSize: "13px", lineHeight: 1.7 }}>
               {s.why.map((item, j) => <li key={j}>{item}</li>)}
             </ul>
@@ -370,14 +370,14 @@ export default function UseCaseGuide() {
           </div>
 
           <div style={{ marginBottom: "12px" }}>
-            <div style={{ fontSize: "12px", fontWeight: 700, color: "#f87171", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "4px" }}>Avoid This</div>
+            <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--color-badge-red-text)", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "4px" }}>Avoid This</div>
             <ul style={{ margin: 0, paddingLeft: "18px", color: "var(--color-text-muted)", fontSize: "13px", lineHeight: 1.7 }}>
               {s.avoid.map((item, j) => <li key={j}>{item}</li>)}
             </ul>
           </div>
 
           <div style={{ marginBottom: "8px" }}>
-            <div style={{ fontSize: "12px", fontWeight: 700, color: "#fbbf24", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "4px" }}>When This Changes</div>
+            <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--color-badge-yellow-text)", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "4px" }}>When This Changes</div>
             <p style={{ margin: 0, color: "var(--color-text-muted)", fontSize: "13px", lineHeight: 1.6 }}>{s.whenChanges}</p>
           </div>
 
@@ -392,7 +392,7 @@ export default function UseCaseGuide() {
                   fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
                   color: "var(--color-text-accent-bright)",
                   background: "var(--color-bg-advisor)",
-                  border: "1px solid #1e3a5f",
+                  border: "1px solid var(--color-border-accent)",
                   borderRadius: "4px",
                   padding: "3px 8px",
                   textDecoration: "none",

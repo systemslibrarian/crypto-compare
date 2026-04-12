@@ -42,6 +42,74 @@
   --color-text-accent-bright: #7dd3fc;
   --color-text-link: #93c5fd;
   --color-text-warning: #e2c97e;
+
+  /* Semantic badge colors */
+  --color-badge-green-bg: #0d3320;
+  --color-badge-green-text: #34d399;
+  --color-badge-green-border: #065f46;
+  --color-badge-yellow-bg: #312e2a;
+  --color-badge-yellow-text: #fbbf24;
+  --color-badge-yellow-border: #78350f;
+  --color-badge-red-bg: #2d1215;
+  --color-badge-red-text: #f87171;
+  --color-badge-red-border: #7f1d1d;
+  --color-badge-orange-bg: #2d1f0e;
+  --color-badge-orange-text: #f97316;
+  --color-badge-orange-border: #7c3a0a;
+  --color-badge-purple-bg: #1e1633;
+  --color-badge-purple-text: #a78bfa;
+  --color-badge-purple-border: #4c1d95;
+  --color-badge-blue-bg: #0c2d4a;
+  --color-badge-blue-text: #38bdf8;
+  --color-badge-blue-border: #0e4f82;
+
+  /* Panel / gradient backgrounds */
+  --color-bg-panel-gradient-from: #0c1222;
+  --color-bg-panel-gradient-to: #0e1628;
+  --color-bg-panel-border: #1a2540;
+  --color-bg-code: #0a0e17;
+  --color-bg-overlay: rgba(15, 23, 42, 0.95);
+  --color-bg-modal: #0b1120;
+  --color-bg-error: #0c0f18;
+
+  /* Button / accent */
+  --color-button-primary: #1d4ed8;
+  --color-button-primary-hover: #2563eb;
+  --color-accent-blue: #3b82f6;
+  --color-accent-blue-label: #60a5fa;
+  --color-accent-yellow-label: #fcd34d;
+  --color-accent-yellow-body: #fde68a;
+  --color-accent-green-label: #6ee7b7;
+  --color-accent-red-label: #fca5a5;
+  --color-accent-red-body: #e8b4b4;
+
+  /* Project dot colors */
+  --color-dot-public: #34d399;
+  --color-dot-private: #fbbf24;
+
+  /* Interactive borders */
+  --color-border-accent: #1e3a5f;
+  --color-border-interactive: #141c2b;
+  --color-border-app: #2e1065;
+  --color-border-dashed: #2a1a1a;
+  --color-border-error: #991b1b;
+
+  /* Overlay / shadow */
+  --color-overlay-backdrop: rgba(0, 0, 0, 0.5);
+  --color-shadow-overlay: rgba(0, 0, 0, 0.4);
+  --color-border-bar: rgba(255, 255, 255, 0.1);
+  --color-button-primary-text: #ffffff;
+  --color-bg-table-diff: rgba(255, 255, 255, 0.015);
+  --color-diff-border: rgba(245, 158, 11, 0.27);
+  --color-diff-bg-even: rgba(245, 158, 11, 0.04);
+  --color-diff-bg-odd: rgba(245, 158, 11, 0.06);
+  --color-shadow-image-heavy: rgba(0, 0, 0, 0.55);
+  --color-shadow-image-soft: rgba(0, 0, 0, 0.35);
+  --color-accent-blue-tint: rgba(59, 130, 246, 0.08);
+
+  /* Body background gradient */
+  --color-bg-gradient-1: rgba(29, 78, 216, 0.12);
+  --color-bg-gradient-2: rgba(14, 165, 233, 0.1);
 }
 
 [data-theme="light"] {
@@ -83,12 +151,80 @@
   --color-text-accent-bright: #0284c7;
   --color-text-link: #2563eb;
   --color-text-warning: #92400e;
+
+  /* Semantic badge colors */
+  --color-badge-green-bg: #dcfce7;
+  --color-badge-green-text: #166534;
+  --color-badge-green-border: #86efac;
+  --color-badge-yellow-bg: #fef9c3;
+  --color-badge-yellow-text: #854d0e;
+  --color-badge-yellow-border: #fde047;
+  --color-badge-red-bg: #fee2e2;
+  --color-badge-red-text: #991b1b;
+  --color-badge-red-border: #fca5a5;
+  --color-badge-orange-bg: #ffedd5;
+  --color-badge-orange-text: #9a3412;
+  --color-badge-orange-border: #fdba74;
+  --color-badge-purple-bg: #ede9fe;
+  --color-badge-purple-text: #5b21b6;
+  --color-badge-purple-border: #c4b5fd;
+  --color-badge-blue-bg: #dbeafe;
+  --color-badge-blue-text: #1e40af;
+  --color-badge-blue-border: #93c5fd;
+
+  /* Panel / gradient backgrounds */
+  --color-bg-panel-gradient-from: #f1f5f9;
+  --color-bg-panel-gradient-to: #f8fafc;
+  --color-bg-panel-border: #cbd5e1;
+  --color-bg-code: #f1f5f9;
+  --color-bg-overlay: rgba(248, 250, 252, 0.95);
+  --color-bg-modal: #ffffff;
+  --color-bg-error: #fef2f2;
+
+  /* Button / accent */
+  --color-button-primary: #2563eb;
+  --color-button-primary-hover: #1d4ed8;
+  --color-accent-blue: #3b82f6;
+  --color-accent-blue-label: #1d4ed8;
+  --color-accent-yellow-label: #92400e;
+  --color-accent-yellow-body: #78350f;
+  --color-accent-green-label: #166534;
+  --color-accent-red-label: #991b1b;
+  --color-accent-red-body: #7f1d1d;
+
+  /* Project dot colors */
+  --color-dot-public: #16a34a;
+  --color-dot-private: #ca8a04;
+
+  /* Interactive borders */
+  --color-border-accent: #93c5fd;
+  --color-border-interactive: #e2e8f0;
+  --color-border-app: #c4b5fd;
+  --color-border-dashed: #e2e8f0;
+  --color-border-error: #f87171;
+
+  /* Overlay / shadow */
+  --color-overlay-backdrop: rgba(0, 0, 0, 0.3);
+  --color-shadow-overlay: rgba(0, 0, 0, 0.15);
+  --color-border-bar: rgba(0, 0, 0, 0.1);
+  --color-button-primary-text: #ffffff;
+  --color-bg-table-diff: rgba(0, 0, 0, 0.02);
+  --color-diff-border: rgba(245, 158, 11, 0.35);
+  --color-diff-bg-even: rgba(245, 158, 11, 0.06);
+  --color-diff-bg-odd: rgba(245, 158, 11, 0.08);
+  --color-shadow-image-heavy: rgba(0, 0, 0, 0.15);
+  --color-shadow-image-soft: rgba(0, 0, 0, 0.08);
+  --color-accent-blue-tint: rgba(59, 130, 246, 0.05);
+
+  /* Body background gradient */
+  --color-bg-gradient-1: rgba(59, 130, 246, 0.06);
+  --color-bg-gradient-2: rgba(14, 165, 233, 0.04);
 }
 
 body {
   background:
-    radial-gradient(circle at top left, rgba(29, 78, 216, 0.12), transparent 26%),
-    radial-gradient(circle at top right, rgba(14, 165, 233, 0.1), transparent 22%),
+    radial-gradient(circle at top left, var(--color-bg-gradient-1), transparent 26%),
+    radial-gradient(circle at top right, var(--color-bg-gradient-2), transparent 22%),
     linear-gradient(180deg, var(--color-bg) 0%, var(--color-bg) 100%);
   color: var(--color-text);
 }

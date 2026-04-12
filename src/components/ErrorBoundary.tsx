@@ -37,13 +37,13 @@ export default class ErrorBoundary extends Component<Props, State> {
             style={{
               maxWidth: "480px",
               textAlign: "center",
-              border: "1px solid #991b1b",
+              border: "1px solid var(--color-border-error)",
               borderRadius: "12px",
               padding: "32px",
-              background: "#0c0f18",
+              background: "var(--color-bg-error)",
             }}
           >
-            <h1 style={{ fontSize: "24px", fontWeight: 700, color: "#f87171", margin: "0 0 12px" }}>
+            <h1 style={{ fontSize: "24px", fontWeight: 700, color: "var(--color-badge-red-text)", margin: "0 0 12px" }}>
               Something went wrong
             </h1>
             <p style={{ color: "var(--color-text-body)", lineHeight: 1.7, margin: "0 0 16px" }}>
@@ -55,7 +55,7 @@ export default class ErrorBoundary extends Component<Props, State> {
                 padding: "12px",
                 borderRadius: "6px",
                 fontSize: "13px",
-                color: "#fca5a5",
+                color: "var(--color-accent-red-label)",
                 overflow: "auto",
                 textAlign: "left",
                 maxHeight: "120px",
@@ -67,8 +67,8 @@ export default class ErrorBoundary extends Component<Props, State> {
               onClick={() => window.location.reload()}
               style={{
                 marginTop: "16px",
-                background: "#1d4ed8",
-                color: "#fff",
+                background: "var(--color-button-primary)",
+                color: "var(--color-button-primary-text)",
                 border: "none",
                 padding: "10px 24px",
                 borderRadius: "6px",

@@ -10,8 +10,8 @@ export default function AdvisorCta() {
           alignItems: "center",
           justifyContent: "space-between",
           gap: "16px",
-          background: "linear-gradient(135deg, #0c1222 0%, #0e1628 100%)",
-          border: "1px solid #1e293b",
+          background: "linear-gradient(135deg, var(--color-bg-panel-gradient-from) 0%, var(--color-bg-panel-gradient-to) 100%)",
+          border: "1px solid var(--color-border)",
           borderRadius: "10px",
           padding: "20px 24px",
           textDecoration: "none",
@@ -37,8 +37,8 @@ export default function AdvisorCta() {
         <span
           className="advisorCta"
           style={{
-            background: "#1d4ed8",
-            color: "#fff",
+            background: "var(--color-button-primary)",
+            color: "var(--color-button-primary-text)",
             borderRadius: "7px",
             padding: "12px 20px",
             fontSize: "14px",

@@ -77,7 +77,7 @@ export default function VisualsView() {
                   color: "var(--color-text)",
                 }}
               >
-                <span style={{ color: "#3b82f6" }}>◈ crypto</span>::compare
+                <span style={{ color: "var(--color-accent-blue)" }}>◈ crypto</span>::compare
               </span>
             </Link>
             <Link
@@ -85,7 +85,7 @@ export default function VisualsView() {
               style={{
                 background: "var(--color-bg-control)",
                 color: "var(--color-text-body)",
-                border: "1px solid #334155",
+                border: "1px solid var(--color-border-muted)",
                 borderRadius: "7px",
                 padding: "10px 14px",
                 fontSize: "13px",
@@ -142,7 +142,7 @@ export default function VisualsView() {
                   height: "auto",
                   margin: "0 auto",
                   borderRadius: "10px",
-                  boxShadow: "0 4px 32px rgba(0,0,0,0.55), 0 1px 6px rgba(0,0,0,0.35)",
+                  boxShadow: "0 4px 32px var(--color-shadow-image-heavy), 0 1px 6px var(--color-shadow-image-soft)",
                 }}
               />
               <p
@@ -150,7 +150,7 @@ export default function VisualsView() {
                   margin: "10px auto 0",
                   maxWidth: "560px",
                   fontSize: "13px",
-                  color: "#64748b",
+                  color: "var(--color-text-dim)",
                   lineHeight: 1.6,
                 }}
               >
@@ -180,7 +180,7 @@ export default function VisualsView() {
           }}
         >
           <div style={{ marginBottom: "6px" }}>
-            <span style={{ color: "#60a5fa", fontWeight: 700 }}>Dataset reviewed:</span>{" "}
+            <span style={{ color: "var(--color-accent-blue-label)", fontWeight: 700 }}>Dataset reviewed:</span>{" "}
             <time dateTime="2026-03-16">March 16, 2026</time>
           </div>
           Sources: NIST FIPS, IETF RFCs, KPQC, CRYPTREC, GB/T, GOST, DSTU, ISO, Eurocrypt/CRYPTO proceedings.
