@@ -19,9 +19,9 @@ export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
   return (
     <>
       {/* Desktop table view */}
-      <div className="comparison-desktop" style={{ overflowX: "auto", borderRadius: "8px", border: "1px solid #141c2b", position: "relative" }}>
+      <div className="comparison-desktop" style={{ overflowX: "auto", borderRadius: "8px", border: "1px solid var(--color-border)", position: "relative" }}>
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "15px", minWidth: "760px" }}>
-          <caption style={{ textAlign: "left", padding: "14px 16px", color: "#d1dae6", fontSize: "15px", captionSide: "top" }}>
+          <caption style={{ textAlign: "left", padding: "14px 16px", color: "var(--color-text-caption)", fontSize: "15px", captionSide: "top" }}>
             Side-by-side comparison of the selected algorithms. Rows with differences are highlighted, and review badges show how fresh the cited entry is.
           </caption>
           <thead>
@@ -31,12 +31,12 @@ export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
                 style={{
                   textAlign: "left",
                   padding: "14px 14px",
-                  borderBottom: "2px solid #1a2540",
-                  color: "#b4c1d2",
+                  borderBottom: "2px solid var(--color-border-header)",
+                  color: "var(--color-text-label)",
                   fontWeight: 700,
                   position: "sticky",
                   left: 0,
-                  background: "#070b12",
+                  background: "var(--color-bg)",
                   zIndex: 2,
                   minWidth: "120px",
                   fontSize: "13px",
@@ -53,13 +53,13 @@ export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
                   style={{
                     textAlign: "left",
                     padding: "14px 14px",
-                    borderBottom: "2px solid #1a2540",
-                    color: "#f8fafc",
+                    borderBottom: "2px solid var(--color-border-header)",
+                    color: "var(--color-text-heading)",
                     fontWeight: 700,
                     fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
                     fontSize: "16px",
                     minWidth: "220px",
-                    background: "#070b12",
+                    background: "var(--color-bg)",
                   }}
                 >
                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -82,12 +82,12 @@ export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
                   scope="row"
                   style={{
                     padding: "12px 14px",
-                    borderBottom: "1px solid #0d1320",
-                    color: hasDiff ? "#fbbf24" : "#b4c1d2",
+                    borderBottom: "1px solid var(--color-border-row)",
+                    color: hasDiff ? "#fbbf24" : "var(--color-text-label)",
                     fontWeight: 700,
                     position: "sticky",
                     left: 0,
-                    background: i % 2 === 0 ? "#070b12" : "#090e18",
+                    background: i % 2 === 0 ? "var(--color-bg)" : "var(--color-bg-table-alt)",
                     zIndex: 1,
                     fontSize: "13px",
                     textTransform: "uppercase",
@@ -105,8 +105,8 @@ export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
                       key={`${a.id}-${row.label}`}
                       style={{
                         padding: "12px 14px",
-                        borderBottom: "1px solid #0d1320",
-                        color: "#e2e8f0",
+                        borderBottom: "1px solid var(--color-border-row)",
+                        color: "var(--color-text)",
                         verticalAlign: "top",
                         background: hasDiff
                           ? (i % 2 === 0 ? "rgba(245,158,11,0.04)" : "rgba(245,158,11,0.06)")
@@ -132,11 +132,11 @@ export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
           <div
             key={`mobile-${algo.id}`}
             style={{
-              border: "1px solid #1e293b",
+              border: "1px solid var(--color-border)",
               borderRadius: "10px",
               padding: "16px",
               marginBottom: "12px",
-              background: "#0a0f1a",
+              background: "var(--color-bg-mobile-card)",
             }}
           >
             <h3
@@ -165,12 +165,12 @@ export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
                     alignItems: "flex-start",
                     gap: "12px",
                     padding: "8px 0",
-                    borderBottom: "1px solid #111827",
+                    borderBottom: "1px solid var(--color-border-subtle)",
                   }}
                 >
                   <span
                     style={{
-                      color: "#b4c1d2",
+                      color: "var(--color-text-label)",
                       fontSize: "12px",
                       fontWeight: 700,
                       textTransform: "uppercase",
@@ -183,7 +183,7 @@ export default function ComparisonTable({ algos, rows }: ComparisonTableProps) {
                   </span>
                   <span
                     style={{
-                      color: "#e2e8f0",
+                      color: "var(--color-text)",
                       fontSize: "14px",
                       textAlign: "right",
                       lineHeight: 1.6,

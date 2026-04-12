@@ -34,7 +34,7 @@ export default function CollapsibleSection({
         <section className="panel" aria-label={sectionLabel} style={{ marginBottom: "18px" }}>
           <h2 className="panel-heading">{title}</h2>
           {description && (
-            <p style={{ color: "#93a4bb", fontSize: "13px", lineHeight: 1.6, margin: "0 0 8px" }}>
+            <p style={{ color: "var(--color-text-muted)", fontSize: "13px", lineHeight: 1.6, margin: "0 0 8px" }}>
               {description}
             </p>
           )}

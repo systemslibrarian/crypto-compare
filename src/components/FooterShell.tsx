@@ -17,7 +17,7 @@ export default function FooterShell({ trustSnapshot }: FooterShellProps) {
             gap: "12px",
             marginBottom: "12px",
             fontSize: "12px",
-            color: "#7d8a9e",
+            color: "var(--color-text-sublabel)",
           }}
           aria-label="Keyboard shortcuts"
         >
@@ -30,14 +30,14 @@ export default function FooterShell({ trustSnapshot }: FooterShellProps) {
           <span className="text-accent" style={{ fontWeight: 700 }}>Latest dataset review:</span>{" "}
           <time dateTime={trustSnapshot.latest}>{formatReviewDate(trustSnapshot.latest)}</time>
           {trustSnapshot.earliest && trustSnapshot.latest && trustSnapshot.earliest !== trustSnapshot.latest ? (
-            <span style={{ color: "#93a4bb" }}> · window starts {formatReviewDate(trustSnapshot.earliest)}</span>
+            <span style={{ color: "var(--color-text-muted)" }}> · window starts {formatReviewDate(trustSnapshot.earliest)}</span>
           ) : null}
         </div>
         Sources: NIST FIPS, IETF RFCs, KPQC, CRYPTREC, GB/T, GOST, DSTU, ISO, Eurocrypt/CRYPTO proceedings. Security estimates reflect known attacks and public literature, and should be treated as continuously updated guidance, not certification.
         <div style={{ marginTop: "10px" }}>
           <span className="text-accent" style={{ fontWeight: 700 }}>Related:</span>{" "}
-          <a href="https://github.com/systemslibrarian/crypto-compare" target="_blank" rel="noopener noreferrer" style={{ color: "#7dd3fc" }}>crypto-compare</a>{" · "}
-          <a href="https://github.com/systemslibrarian/crypto-lab-blind-oracle" target="_blank" rel="noopener noreferrer" style={{ color: "#7dd3fc" }}>blind-oracle</a>
+          <a href="https://github.com/systemslibrarian/crypto-compare" target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-text-accent-bright)" }}>crypto-compare</a>{" · "}
+          <a href="https://github.com/systemslibrarian/crypto-lab-blind-oracle" target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-text-accent-bright)" }}>blind-oracle</a>
         </div>
       </footer>
     </>

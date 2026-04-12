@@ -24,8 +24,8 @@ export default class ErrorBoundary extends Component<Props, State> {
       return (
         <div
           style={{
-            background: "#070b12",
-            color: "#e2e8f0",
+            background: "var(--color-bg)",
+            color: "var(--color-text)",
             minHeight: "100vh",
             display: "flex",
             alignItems: "center",
@@ -46,12 +46,12 @@ export default class ErrorBoundary extends Component<Props, State> {
             <h1 style={{ fontSize: "24px", fontWeight: 700, color: "#f87171", margin: "0 0 12px" }}>
               Something went wrong
             </h1>
-            <p style={{ color: "#d4deea", lineHeight: 1.7, margin: "0 0 16px" }}>
+            <p style={{ color: "var(--color-text-body)", lineHeight: 1.7, margin: "0 0 16px" }}>
               The crypto reference tool encountered an unexpected error. Try reloading the page.
             </p>
             <pre
               style={{
-                background: "#111827",
+                background: "var(--color-bg-elevated)",
                 padding: "12px",
                 borderRadius: "6px",
                 fontSize: "13px",

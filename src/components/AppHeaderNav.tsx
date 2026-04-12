@@ -39,7 +39,7 @@ export default function AppHeaderNav({
 
   return (
     <>
-      <header className="headerShell" style={{ borderBottom: "1px solid #111827", padding: "22px 0" }}>
+      <header className="headerShell" style={{ borderBottom: "1px solid var(--color-border-subtle)", padding: "22px 0" }}>
         <div className="headerRow" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px" }}>
           <div className="headerBrandBlock">
             <h1 className="headerTitle" style={{ margin: 0, fontSize: "28px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", letterSpacing: "-0.5px", display: "flex", alignItems: "center", gap: "10px" }}>
@@ -66,19 +66,19 @@ export default function AppHeaderNav({
                 <span><span style={{ color: "#3b82f6" }}>crypto</span>::compare</span>
               </button>
             </h1>
-            <p className="headerSubtitle" style={{ margin: "6px 0 0", fontSize: "16px", color: "#c4d1e3" }}>International cryptographic algorithm reference across 17 categories.</p>
+            <p className="headerSubtitle" style={{ margin: "6px 0 0", fontSize: "16px", color: "var(--color-text-secondary)" }}>International cryptographic algorithm reference across 17 categories.</p>
           </div>
           <div className="headerActions" style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
-            <span className="headerLegend" style={{ fontSize: "14px", color: "#c4d1e3", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>C = Classical, PQ = Post-Quantum</span>
+            <span className="headerLegend" style={{ fontSize: "14px", color: "var(--color-text-secondary)", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>C = Classical, PQ = Post-Quantum</span>
             {onToggleTheme && (
               <button
                 onClick={onToggleTheme}
                 className="focusRing themeToggle"
                 aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
                 style={{
-                  background: "#0e1420",
-                  color: "#d4deea",
-                  border: "1px solid #334155",
+                  background: "var(--color-bg-control)",
+                  color: "var(--color-text-body)",
+                  border: "1px solid var(--color-border-muted)",
                   borderRadius: "6px",
                   padding: "10px 14px",
                   fontSize: "16px",
@@ -98,9 +98,9 @@ export default function AppHeaderNav({
               href="/visuals"
               className="headerBtn desktopOnly focusRing"
               style={{
-                background: "#0e1420",
-                color: "#d4deea",
-                border: "1px solid #334155",
+                background: "var(--color-bg-control)",
+                color: "var(--color-text-body)",
+                border: "1px solid var(--color-border-muted)",
                 borderRadius: "6px",
                 padding: "10px 16px",
                 fontSize: "14px",
@@ -117,10 +117,9 @@ export default function AppHeaderNav({
               aria-label="Toggle category menu"
               aria-expanded={mobileNavOpen}
               style={{
-                background: mobileNavOpen ? "#1d4ed8" : "#0e1420",
-                color: mobileNavOpen ? "#fff" : "#d4deea",
-                border: `1px solid ${mobileNavOpen ? "#2563eb" : "#334155"}`,
-                borderRadius: "6px",
+                background: mobileNavOpen ? "#1d4ed8" : "var(--color-bg-control)",
+                color: mobileNavOpen ? "#fff" : "var(--color-text-body)",
+                border: `1px solid ${mobileNavOpen ? "#2563eb" : "var(--color-border-muted)"}`,                borderRadius: "6px",
                 padding: "10px 14px",
                 fontSize: "15px",
                 cursor: "pointer",
@@ -145,7 +144,7 @@ export default function AppHeaderNav({
           aria-hidden="true"
         />
       )}
-      <nav ref={mobileNavRef} aria-label="Cryptography categories" role="tablist" className={`categoryNav ${mobileNavOpen ? "mobileNavOpen" : ""}`} style={{ display: "flex", gap: 0, borderBottom: "1px solid #111827", position: "sticky", top: 0, zIndex: 10, background: "#070b12" }}>
+      <nav ref={mobileNavRef} aria-label="Cryptography categories" role="tablist" className={`categoryNav ${mobileNavOpen ? "mobileNavOpen" : ""}`} style={{ display: "flex", gap: 0, borderBottom: "1px solid var(--color-border-subtle)", position: "sticky", top: 0, zIndex: 10, background: "var(--color-bg)" }}>
         <div className="mobileNavActions" aria-hidden={!mobileNavOpen} hidden={!mobileNavOpen}>
           <Link
             href="/visuals"
@@ -191,7 +190,7 @@ export default function AppHeaderNav({
               className="focusRing categoryTab"
               style={{
                 background: "transparent",
-                color: selectedCategory === category.id ? "#f8fafc" : "#c4d1e3",
+                color: selectedCategory === category.id ? "var(--color-text-heading)" : "var(--color-text-secondary)",
                 border: "none",
                 borderBottom: selectedCategory === category.id ? `2px solid ${accent}` : "2px solid transparent",
                 padding: "14px 18px",

@@ -47,7 +47,7 @@ export default function ComparisonWorkspace({
   }, [comparing, onClose]);
 
   if (algorithms.length === 1) {
-    return <p style={{ textAlign: "center", color: "#d4deea", fontSize: "15px" }}>Select one more algorithm to compare.</p>;
+    return <p style={{ textAlign: "center", color: "var(--color-text-body)", fontSize: "15px" }}>Select one more algorithm to compare.</p>;
   }
 
   if (algorithms.length < 2) {
@@ -105,7 +105,7 @@ export default function ComparisonWorkspace({
       <div className="comparisonOverlayHeader">
         <h2 style={{ margin: 0, fontSize: "20px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", display: "flex", alignItems: "center", gap: "8px" }}>
           <span style={{ color: categoryAccent }}>▍</span>Comparison
-          <span style={{ fontSize: "14px", fontWeight: 400, color: "#93a4bb" }}>({algorithms.length} algorithms)</span>
+          <span style={{ fontSize: "14px", fontWeight: 400, color: "var(--color-text-muted)" }}>({algorithms.length} algorithms)</span>
         </h2>
         <div className="comparisonOverlayActions">
           <button className="focusRing controlBtn" onClick={onCopyLink}>

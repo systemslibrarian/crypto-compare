@@ -13,7 +13,7 @@ export default function ResultsStatus({ explainerOpen, filteredCount }: ResultsS
       ) : null}
 
       {filteredCount === 0 ? (
-        <p role="status" style={{ color: "#93a4bb" }}>
+        <p role="status" style={{ color: "var(--color-text-muted)" }}>
           No algorithms match the current filters.
         </p>
       ) : null}

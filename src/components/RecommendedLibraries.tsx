@@ -106,7 +106,7 @@ const CATEGORIES: CategorySection[] = [
   {
     icon: "🧪",
     title: "Key Derivation (KDF)",
-    color: "#7dd3fc",
+    color: "var(--color-text-accent-bright)",
     libs: [
       { name: "libsodium (crypto_kdf)", note: "BLAKE2b-based KDF. Simple API for deriving subkeys from a master key. Ideal for key separation and domain separation." },
       { name: "OpenSSL / BoringSSL", note: "HKDF (RFC 5869) using HMAC-SHA-256 or HMAC-SHA-512. The standard KDF for protocol key derivation (TLS 1.3, Signal, Noise)." },
@@ -159,11 +159,11 @@ const CATEGORIES: CategorySection[] = [
 
 const S = {
   text: "13px" as const,
-  textColor: "#c4d1e3",
-  mutedColor: "#93a4bb",
+  textColor: "var(--color-text-secondary)",
+  mutedColor: "var(--color-text-muted)",
   lineHeight: 1.7,
   listPad: "18px",
-  code: { background: "#0c1422", padding: "1px 5px", borderRadius: "3px", fontSize: "12px" } as const,
+  code: { background: "var(--color-bg-inset)", padding: "1px 5px", borderRadius: "3px", fontSize: "12px" } as const,
 };
 
 export default function RecommendedLibraries() {
@@ -205,7 +205,7 @@ export default function RecommendedLibraries() {
               style={{
                 fontSize: "12px",
                 fontWeight: 700,
-                color: "#e2e8f0",
+                color: "var(--color-text)",
                 textTransform: "uppercase",
                 letterSpacing: "0.05em",
                 marginBottom: "6px",
@@ -217,7 +217,7 @@ export default function RecommendedLibraries() {
             <ul style={{ margin: 0, paddingLeft: S.listPad, color: S.textColor, fontSize: S.text, lineHeight: S.lineHeight }}>
               {cat.libs.map((lib) => (
                 <li key={lib.name} style={{ marginBottom: "4px" }}>
-                  <strong style={{ color: "#e2e8f0" }}>{lib.name}</strong>
+                  <strong style={{ color: "var(--color-text)" }}>{lib.name}</strong>
                   {" — "}
                   {lib.note}
                 </li>
@@ -252,7 +252,7 @@ export default function RecommendedLibraries() {
       <p style={{
         margin: "16px 0 0",
         padding: "12px 14px",
-        background: "#0c1422",
+        background: "var(--color-bg-inset)",
         border: "1px solid #1e293b",
         borderLeft: "3px solid #f87171",
         borderRadius: "6px",

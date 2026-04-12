@@ -19,7 +19,7 @@ export default function TrustSnapshotPanel({
   recommendationCounts,
 }: TrustSnapshotPanelProps) {
   return (
-    <section className="panel" aria-label="Dataset trust snapshot" style={{ marginBottom: "16px", background: "linear-gradient(135deg, #08111f 0%, #0c1628 100%)" }}>
+    <section className="panel" aria-label="Dataset trust snapshot" style={{ marginBottom: "16px", background: "var(--color-bg-card)" }}>
       <h2 className="panel-heading" style={{ marginBottom: "10px" }}>Trust Snapshot</h2>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "10px", marginBottom: "10px" }}>
         <div className="trustCard">
@@ -43,7 +43,7 @@ export default function TrustSnapshotPanel({
           <div className="trustMeta">{recommendationCounts.acceptable ?? 0} acceptable · {recommendationCounts.research ?? 0} research</div>
         </div>
       </div>
-      <p style={{ margin: 0, color: "#93a4bb", fontSize: "13px", lineHeight: 1.7 }}>
+      <p style={{ margin: 0, color: "var(--color-text-muted)", fontSize: "13px", lineHeight: 1.7 }}>
         This tool is strongest when recommendation labels, cited sources, and review freshness all agree. Treat older review windows and research-grade entries as signals to verify more aggressively against your own threat model.
       </p>
     </section>

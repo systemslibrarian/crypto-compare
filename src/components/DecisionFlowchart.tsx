@@ -385,7 +385,7 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
   return (
     <div
       style={{
-        border: "1px solid #1e293b",
+        border: "1px solid var(--color-border)",
         borderRadius: "10px",
         padding: "20px 24px",
         background: "linear-gradient(135deg, #0c1222 0%, #0e1628 100%)",
@@ -401,7 +401,7 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
             fontSize: "20px",
             fontWeight: 700,
             fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-            color: "#f8fafc",
+            color: "var(--color-text-heading)",
           }}
         >
           What should I use?
@@ -412,8 +412,8 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
               onClick={goBack}
               aria-label={result ? "Back to previous question" : "Back to previous step"}
               style={{
-                background: "#0e1420",
-                color: "#d4deea",
+                background: "var(--color-bg-control)",
+                color: "var(--color-text-body)",
                 border: "1px solid #334155",
                 borderRadius: "6px",
                 padding: "10px 14px",
@@ -431,8 +431,8 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
               onClick={reset}
               aria-label="Start the decision flowchart over from the beginning"
               style={{
-                background: "#0e1420",
-                color: "#d4deea",
+                background: "var(--color-bg-control)",
+                color: "var(--color-text-body)",
                 border: "1px solid #334155",
                 borderRadius: "6px",
                 padding: "10px 14px",
@@ -453,7 +453,7 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
           <div style={{ fontSize: "13px", color: "#60a5fa", fontWeight: 700, marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
             Step {step}
           </div>
-          <div id="flowchart-question" style={{ fontSize: "17px", color: "#e2e8f0", fontWeight: 600, marginBottom: "14px", lineHeight: 1.6 }}>
+          <div id="flowchart-question" style={{ fontSize: "17px", color: "var(--color-text)", fontWeight: 600, marginBottom: "14px", lineHeight: 1.6 }}>
             {node.question}
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }} role="list" aria-labelledby="flowchart-question">
@@ -462,9 +462,9 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
                 key={option.label}
                 onClick={() => choose(option)}
                 style={{
-                  background: "#0a1018",
-                  color: "#d4deea",
-                  border: "1px solid #1e293b",
+                  background: "var(--color-bg-card)",
+                  color: "var(--color-text-body)",
+                  border: "1px solid var(--color-border)",
                   borderRadius: "8px",
                   padding: "12px 16px",
                   fontSize: "15px",
@@ -477,7 +477,7 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
                   e.currentTarget.style.borderColor = "#3b82f6";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "#1e293b";
+                  e.currentTarget.style.borderColor = "var(--color-border)";
                 }}
               >
                 {option.label}
@@ -494,7 +494,7 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
           </div>
           <div
             style={{
-              background: "#0a1018",
+              background: "var(--color-bg-card)",
               border: "1px solid #065f46",
               borderRadius: "10px",
               padding: "18px 20px",
@@ -511,7 +511,7 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
             >
               → {result.algo}
             </div>
-            <div style={{ fontSize: "15px", color: "#d4deea", lineHeight: 1.75, marginBottom: "14px" }}>
+            <div style={{ fontSize: "15px", color: "var(--color-text-body)", lineHeight: 1.75, marginBottom: "14px" }}>
               {result.reason}
             </div>
             {(resultAlgo || resultProvenance) && (
@@ -524,27 +524,27 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
                 }}
               >
                 {resultAlgo && (
-                  <div style={{ background: "#0d1626", border: "1px solid #1e293b", borderRadius: "8px", padding: "10px 12px" }}>
-                    <div style={{ fontSize: "11px", color: "#7dd3fc", textTransform: "uppercase", letterSpacing: "0.4px", fontWeight: 700, marginBottom: "6px" }}>
+                  <div style={{ background: "var(--color-bg-surface)", border: "1px solid var(--color-border)", borderRadius: "8px", padding: "10px 12px" }}>
+                    <div style={{ fontSize: "11px", color: "var(--color-text-accent-bright)", textTransform: "uppercase", letterSpacing: "0.4px", fontWeight: 700, marginBottom: "6px" }}>
                       Recommendation
                     </div>
                     <RecommendationBadge level={resultAlgo.recommendation} />
                   </div>
                 )}
-                <div style={{ background: "#0d1626", border: "1px solid #1e293b", borderRadius: "8px", padding: "10px 12px" }}>
-                  <div style={{ fontSize: "11px", color: "#7dd3fc", textTransform: "uppercase", letterSpacing: "0.4px", fontWeight: 700, marginBottom: "6px" }}>
+                <div style={{ background: "var(--color-bg-surface)", border: "1px solid var(--color-border)", borderRadius: "8px", padding: "10px 12px" }}>
+                  <div style={{ fontSize: "11px", color: "var(--color-text-accent-bright)", textTransform: "uppercase", letterSpacing: "0.4px", fontWeight: 700, marginBottom: "6px" }}>
                     Review freshness
                   </div>
                   <ReviewBadge iso={resultProvenance?.lastReviewed} />
                 </div>
-                <div style={{ background: "#0d1626", border: "1px solid #1e293b", borderRadius: "8px", padding: "10px 12px" }}>
-                  <div style={{ fontSize: "11px", color: "#7dd3fc", textTransform: "uppercase", letterSpacing: "0.4px", fontWeight: 700, marginBottom: "6px" }}>
+                <div style={{ background: "var(--color-bg-surface)", border: "1px solid var(--color-border)", borderRadius: "8px", padding: "10px 12px" }}>
+                  <div style={{ fontSize: "11px", color: "var(--color-text-accent-bright)", textTransform: "uppercase", letterSpacing: "0.4px", fontWeight: 700, marginBottom: "6px" }}>
                     Source basis
                   </div>
-                  <div style={{ fontSize: "14px", color: "#e2e8f0", fontWeight: 700 }}>
+                  <div style={{ fontSize: "14px", color: "var(--color-text)", fontWeight: 700 }}>
                     {resultProvenance?.sources.length ?? 0} cited source{(resultProvenance?.sources.length ?? 0) !== 1 ? "s" : ""}
                   </div>
-                  <div style={{ fontSize: "12px", color: "#93a4bb", marginTop: "4px" }}>
+                  <div style={{ fontSize: "12px", color: "var(--color-text-muted)", marginTop: "4px" }}>
                     {resultProvenance?.lastReviewed ? `Reviewed ${formatReviewDate(resultProvenance.lastReviewed)}` : "Review date pending"}
                   </div>
                 </div>
@@ -579,8 +579,8 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
                   URL.revokeObjectURL(url);
                 }}
                 style={{
-                  background: "#0e1420",
-                  color: "#d4deea",
+                  background: "var(--color-bg-control)",
+                  color: "var(--color-text-body)",
                   border: "1px solid #334155",
                   padding: "12px 20px",
                   borderRadius: "6px",
@@ -594,7 +594,7 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
               </button>
             </div>
             {resultAlgo && (
-              <p style={{ margin: "14px 0 0", color: "#93a4bb", fontSize: "13px", lineHeight: 1.7 }}>
+              <p style={{ margin: "14px 0 0", color: "var(--color-text-muted)", fontSize: "13px", lineHeight: 1.7 }}>
                 Treat this as a decision aid, not an automatic approval. The recommendation is strongest when the algorithm&apos;s recommendation level, cited sources, and review freshness all align with your operational constraints.
               </p>
             )}

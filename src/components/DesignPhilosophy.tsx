@@ -18,7 +18,7 @@ export default function DesignPhilosophy() {
   const listStyle = {
     margin: 0 as const,
     paddingLeft: "18px",
-    color: "#c4d1e3",
+    color: "var(--color-text-secondary)",
     fontSize: "13px" as const,
     lineHeight: 1.7,
   };
@@ -30,10 +30,10 @@ export default function DesignPhilosophy() {
         <h3 style={{ ...headingStyle, color: "#60a5fa" }}>
           <span aria-hidden="true">🎯</span> Purpose
         </h3>
-        <p style={{ margin: 0, color: "#c4d1e3", fontSize: "14px", lineHeight: 1.7 }}>
+        <p style={{ margin: 0, color: "var(--color-text-secondary)", fontSize: "14px", lineHeight: 1.7 }}>
           crypto::compare exists for one reason: to help engineers, architects, and technical decision-makers choose the right cryptographic primitives for their systems — confidently, quickly, and safely.
         </p>
-        <p style={{ margin: "8px 0 0", color: "#93a4bb", fontSize: "13px", lineHeight: 1.7 }}>
+        <p style={{ margin: "8px 0 0", color: "var(--color-text-muted)", fontSize: "13px", lineHeight: 1.7 }}>
           This is a decision-support tool. It presents curated, sourced information about cryptographic algorithms so you can evaluate tradeoffs (security level, performance, post-quantum readiness, ecosystem maturity) and make an informed choice. It does not make security decisions for you — it gives you the information to make good ones.
         </p>
       </div>
@@ -53,10 +53,10 @@ export default function DesignPhilosophy() {
 
       {/* ── Data Sources & Methodology ── */}
       <div style={sectionStyle}>
-        <h3 style={{ ...headingStyle, color: "#7dd3fc" }}>
+        <h3 style={{ ...headingStyle, color: "var(--color-text-accent-bright)" }}>
           <span aria-hidden="true">📚</span> Data Sources &amp; Methodology
         </h3>
-        <p style={{ margin: "0 0 8px", color: "#93a4bb", fontSize: "13px", lineHeight: 1.7 }}>
+        <p style={{ margin: "0 0 8px", color: "var(--color-text-muted)", fontSize: "13px", lineHeight: 1.7 }}>
           Every data point in this tool is derived from published, verifiable sources. No security claim is based on opinion alone.
         </p>
         <ul style={listStyle}>
@@ -87,7 +87,7 @@ export default function DesignPhilosophy() {
         <h3 style={{ ...headingStyle, color: "#fbbf24" }}>
           <span aria-hidden="true">🔍</span> Transparency
         </h3>
-        <p style={{ margin: "0 0 8px", color: "#93a4bb", fontSize: "13px", lineHeight: 1.7 }}>
+        <p style={{ margin: "0 0 8px", color: "var(--color-text-muted)", fontSize: "13px", lineHeight: 1.7 }}>
           Trust requires transparency. Every algorithm entry includes fields specifically designed to surface tradeoffs honestly:
         </p>
         <ul style={listStyle}>

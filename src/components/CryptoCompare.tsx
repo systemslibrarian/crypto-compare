@@ -355,6 +355,15 @@ export default function CryptoCompare() {
             onToggleFavorites={() => setFavOnly((value) => !value)}
             onActivateSearchAll={controller.activateGlobalSearch}
             onApplyPreset={applyPreset}
+            onClearAllFilters={() => {
+              setPqOnly(false);
+              setStandardOnly(false);
+              setNistOnly(false);
+              setDeployedOnly(false);
+              setShowDefaults(false);
+              setFavOnly(false);
+              setCountry("all" as CountryFilter);
+            }}
           />
 
           {showMethodology && <MethodologyPanel trustSnapshot={trustSnapshot} />}

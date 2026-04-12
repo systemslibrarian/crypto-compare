@@ -36,8 +36,8 @@ export default function VisualsView() {
   return (
     <div
       style={{
-        background: "#070b12",
-        color: "#e2e8f0",
+        background: "var(--color-bg)",
+        color: "var(--color-text)",
         minHeight: "100vh",
         fontFamily: "var(--font-ibm-plex-sans), 'IBM Plex Sans', -apple-system, sans-serif",
         lineHeight: 1.6,
@@ -54,7 +54,7 @@ export default function VisualsView() {
 
       <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
         {/* Header */}
-        <header style={{ borderBottom: "1px solid #111827", padding: "20px 0" }}>
+        <header style={{ borderBottom: "1px solid var(--color-border)", padding: "20px 0" }}>
           <div
             style={{
               display: "flex",
@@ -74,7 +74,7 @@ export default function VisualsView() {
                   fontWeight: 700,
                   fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
                   letterSpacing: "-0.5px",
-                  color: "#e2e8f0",
+                  color: "var(--color-text)",
                 }}
               >
                 <span style={{ color: "#3b82f6" }}>◈ crypto</span>::compare
@@ -83,8 +83,8 @@ export default function VisualsView() {
             <Link
               href="/"
               style={{
-                background: "#0e1420",
-                color: "#d4deea",
+                background: "var(--color-bg-control)",
+                color: "var(--color-text-body)",
                 border: "1px solid #334155",
                 borderRadius: "7px",
                 padding: "10px 14px",
@@ -108,12 +108,12 @@ export default function VisualsView() {
                 fontWeight: 700,
                 fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
                 letterSpacing: "-0.5px",
-                color: "#f8fafc",
+                color: "var(--color-text-heading)",
               }}
             >
               Visual Guide
             </h1>
-            <p style={{ margin: 0, fontSize: "15px", color: "#93a4bb", lineHeight: 1.6 }}>
+            <p style={{ margin: 0, fontSize: "15px", color: "var(--color-text-muted)", lineHeight: 1.6 }}>
               Infographics and diagrams to help understand modern cryptography concepts.
             </p>
           </div>
@@ -174,7 +174,7 @@ export default function VisualsView() {
           style={{
             paddingBottom: "28px",
             fontSize: "13px",
-            color: "#b4c1d2",
+            color: "var(--color-text-label)",
             fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
             lineHeight: 1.7,
           }}

@@ -31,7 +31,7 @@ export function Badge({ status, label }: { status: AlgorithmStatus; label: strin
 
 export function SecurityMeter({ bits, max = 256, label }: { bits: number | null | undefined; max?: number; label?: string }) {
   if (bits == null) {
-    return <span style={{ color: "#7f8ea3", fontSize: "13px" }}>TBD</span>;
+    return <span style={{ color: "var(--color-text-dim)", fontSize: "13px" }}>TBD</span>;
   }
 
   const brokenByShor = label === "PQ" && bits === 0;
@@ -39,7 +39,7 @@ export function SecurityMeter({ bits, max = 256, label }: { bits: number | null 
     return (
       <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
         {label && (
-          <span aria-hidden="true" style={{ fontSize: "14px", color: "#93a4bb", minWidth: "28px", fontWeight: 700 }}>
+          <span aria-hidden="true" style={{ fontSize: "14px", color: "var(--color-text-muted)", minWidth: "28px", fontWeight: 700 }}>
             {label}
           </span>
         )}
@@ -49,7 +49,7 @@ export function SecurityMeter({ bits, max = 256, label }: { bits: number | null 
           aria-valuenow={0}
           aria-valuemin={0}
           aria-valuemax={max}
-          style={{ flex: 1, height: "6px", background: "#141a26", borderRadius: "999px", overflow: "hidden", minWidth: "50px" }}
+          style={{ flex: 1, height: "6px", background: "var(--color-bg-meter)", borderRadius: "999px", overflow: "hidden", minWidth: "50px" }}
         >
           <div style={{ width: "0%", height: "100%", background: "#f87171", borderRadius: "2px" }} />
         </div>
@@ -71,7 +71,7 @@ export function SecurityMeter({ bits, max = 256, label }: { bits: number | null 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
       {label && (
-        <span aria-hidden="true" style={{ fontSize: "14px", color: "#93a4bb", minWidth: "28px", fontWeight: 700 }}>
+        <span aria-hidden="true" style={{ fontSize: "14px", color: "var(--color-text-muted)", minWidth: "28px", fontWeight: 700 }}>
           {label}
         </span>
       )}
@@ -81,7 +81,7 @@ export function SecurityMeter({ bits, max = 256, label }: { bits: number | null 
         aria-valuenow={bits}
         aria-valuemin={0}
         aria-valuemax={max}
-        style={{ flex: 1, height: "6px", background: "#141a26", borderRadius: "999px", overflow: "hidden", minWidth: "50px" }}
+        style={{ flex: 1, height: "6px", background: "var(--color-bg-meter)", borderRadius: "999px", overflow: "hidden", minWidth: "50px" }}
       >
         <div style={{ width: `${pct}%`, height: "100%", background: c, borderRadius: "2px", transition: "width 0.4s" }} />
       </div>

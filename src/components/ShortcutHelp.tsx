@@ -35,7 +35,7 @@ export default function ShortcutHelp({ open, onClose }: ShortcutHelpProps) {
         onClick={(e) => e.stopPropagation()}
         style={{
           background: "#0b1120",
-          border: "1px solid #1e293b",
+          border: "1px solid var(--color-border)",
           borderRadius: "12px",
           padding: "28px 32px",
           maxWidth: "440px",
@@ -44,7 +44,7 @@ export default function ShortcutHelp({ open, onClose }: ShortcutHelpProps) {
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-          <h2 style={{ margin: 0, fontSize: "18px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", color: "#f8fafc" }}>
+          <h2 style={{ margin: 0, fontSize: "18px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", color: "var(--color-text-heading)" }}>
             Keyboard Shortcuts
           </h2>
           <button
@@ -54,7 +54,7 @@ export default function ShortcutHelp({ open, onClose }: ShortcutHelpProps) {
             style={{
               background: "transparent",
               border: "none",
-              color: "#7d8a9e",
+              color: "var(--color-text-sublabel)",
               fontSize: "20px",
               cursor: "pointer",
               padding: "8px",
@@ -71,13 +71,13 @@ export default function ShortcutHelp({ open, onClose }: ShortcutHelpProps) {
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           {SHORTCUTS.map((s) => (
             <div key={s.description} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ color: "#d4deea", fontSize: "14px" }}>{s.description}</span>
+              <span style={{ color: "var(--color-text-body)", fontSize: "14px" }}>{s.description}</span>
               <div style={{ display: "flex", gap: "6px" }}>
                 {s.keys.map((k) => (
                   <kbd
                     key={k}
                     className="kbd"
-                    style={{ fontSize: "13px", padding: "4px 10px", borderRadius: "6px", background: "#11182b", border: "1px solid #1e293b", color: "#93a4bb", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}
+                    style={{ fontSize: "13px", padding: "4px 10px", borderRadius: "6px", background: "var(--color-bg-kbd)", border: "1px solid var(--color-border)", color: "var(--color-text-muted)", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}
                   >
                     {k}
                   </kbd>
@@ -86,7 +86,7 @@ export default function ShortcutHelp({ open, onClose }: ShortcutHelpProps) {
             </div>
           ))}
         </div>
-        <p style={{ marginTop: "18px", fontSize: "12px", color: "#7d8a9e", textAlign: "center" }}>
+        <p style={{ marginTop: "18px", fontSize: "12px", color: "var(--color-text-sublabel)", textAlign: "center" }}>
           Press <kbd className="kbd" style={{ fontSize: "11px", padding: "2px 6px" }}>Esc</kbd> or click outside to close
         </p>
       </div>

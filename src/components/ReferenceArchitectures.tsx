@@ -158,9 +158,9 @@ export default function ReferenceArchitectures() {
   return (
     <div>
       {ARCHITECTURES.map((arch, i) => (
-        <div key={i} style={{ borderTop: i === 0 ? "none" : "1px solid #1e293b", padding: "20px 0" }}>
+        <div key={i} style={{ borderTop: i === 0 ? "none" : "1px solid var(--color-border)", padding: "20px 0" }}>
           <h3 style={{
-            fontSize: "17px", fontWeight: 700, color: "#f8fafc", margin: "0 0 10px",
+            fontSize: "17px", fontWeight: 700, color: "var(--color-text-heading)", margin: "0 0 10px",
             fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
             display: "flex", alignItems: "center", gap: "8px",
           }}>
@@ -170,7 +170,7 @@ export default function ReferenceArchitectures() {
 
           {/* Flow diagram */}
           <div style={{
-            background: "#0a0e17", border: "1px solid #1e293b", borderRadius: "8px",
+            background: "#0a0e17", border: "1px solid var(--color-border)", borderRadius: "8px",
             padding: "12px 16px", marginBottom: "14px", overflowX: "auto",
           }}>
             <div style={{
@@ -179,7 +179,7 @@ export default function ReferenceArchitectures() {
             }}>Data Flow</div>
             <div style={{
               fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-              fontSize: "13px", color: "#93c5fd", lineHeight: 1.6, whiteSpace: "pre-wrap",
+              fontSize: "13px", color: "var(--color-text-link)", lineHeight: 1.6, whiteSpace: "pre-wrap",
             }}>
               {arch.flow}
             </div>
@@ -201,7 +201,7 @@ export default function ReferenceArchitectures() {
                     fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
                     fontSize: "12px",
                   }}>{s.label}</span>
-                  <span style={{ color: "#c4d1e3" }}>{s.value}</span>
+                  <span style={{ color: "var(--color-text-secondary)" }}>{s.value}</span>
                 </div>
               ))}
             </div>
@@ -212,7 +212,7 @@ export default function ReferenceArchitectures() {
             <div style={{ fontSize: "12px", fontWeight: 700, color: "#60a5fa", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>
               How It Works
             </div>
-            <ol style={{ margin: 0, paddingLeft: "20px", color: "#93a4bb", fontSize: "13px", lineHeight: 1.7 }}>
+            <ol style={{ margin: 0, paddingLeft: "20px", color: "var(--color-text-muted)", fontSize: "13px", lineHeight: 1.7 }}>
               {arch.explanation.map((step, j) => <li key={j} style={{ marginBottom: "4px" }}>{step}</li>)}
             </ol>
           </div>
@@ -222,7 +222,7 @@ export default function ReferenceArchitectures() {
             <div style={{ fontSize: "12px", fontWeight: 700, color: "#fbbf24", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>
               Security Properties
             </div>
-            <ul style={{ margin: 0, paddingLeft: "18px", color: "#93a4bb", fontSize: "13px", lineHeight: 1.7, listStyleType: "'✓ '" }}>
+            <ul style={{ margin: 0, paddingLeft: "18px", color: "var(--color-text-muted)", fontSize: "13px", lineHeight: 1.7, listStyleType: "'✓ '" }}>
               {arch.properties.map((prop, j) => <li key={j}>{prop}</li>)}
             </ul>
           </div>
@@ -236,7 +236,7 @@ export default function ReferenceArchitectures() {
                 style={{
                   fontSize: "11px", fontWeight: 700,
                   fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-                  color: "#7dd3fc", background: "#0c1a2e", border: "1px solid #1e3a5f",
+                  color: "var(--color-text-accent-bright)", background: "var(--color-bg-advisor)", border: "1px solid #1e3a5f",
                   borderRadius: "4px", padding: "3px 8px", textDecoration: "none",
                 }}
               >

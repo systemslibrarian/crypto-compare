@@ -24,13 +24,13 @@ export default function AdvisorCta() {
               fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
               fontSize: "19px",
               fontWeight: 700,
-              color: "#f8fafc",
+              color: "var(--color-text-heading)",
               marginBottom: "6px",
             }}
           >
             What should I use?
           </div>
-          <div style={{ fontSize: "14px", color: "#93a4bb", lineHeight: 1.5 }}>
+          <div style={{ fontSize: "14px", color: "var(--color-text-muted)", lineHeight: 1.5 }}>
             Answer a few questions to get a specific algorithm recommendation with a downloadable justification report.
           </div>
         </div>

@@ -127,10 +127,10 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
     >
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px" }}>
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: "22px", fontWeight: 700, color: "#f8fafc", marginBottom: "6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
+          <div style={{ fontSize: "22px", fontWeight: 700, color: "var(--color-text-heading)", marginBottom: "6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
             {info.title}
           </div>
-          <div style={{ fontSize: "16px", color: "#d1dae6", lineHeight: "1.7", fontStyle: "italic" }}>{info.oneLiner}</div>
+          <div style={{ fontSize: "16px", color: "var(--color-text-caption)", lineHeight: "1.7", fontStyle: "italic" }}>{info.oneLiner}</div>
         </div>
         <button
           onClick={(e) => {
@@ -141,9 +141,9 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
           aria-expanded={expanded}
           aria-label={expanded ? `Collapse ${info.title} details` : `Expand ${info.title} details`}
           style={{
-            background: expanded ? "#1a2540" : "#111d33",
-            color: expanded ? "#7dd3fc" : "#93a4bb",
-            border: `1px solid ${expanded ? "#1e3a5f" : "#1a2540"}`,
+            background: expanded ? "var(--color-border-header)" : "#111d33",
+            color: expanded ? "var(--color-text-accent-bright)" : "var(--color-text-muted)",
+            border: `1px solid ${expanded ? "#1e3a5f" : "var(--color-border-header)"}`,
             padding: "12px 16px",
             borderRadius: "5px",
             cursor: "pointer",
@@ -176,15 +176,15 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
             >
               What it does
             </div>
-            <div style={{ fontSize: "16px", color: "#e2e8f0", lineHeight: "1.85" }}>{renderText(info.explanation)}</div>
+            <div style={{ fontSize: "16px", color: "var(--color-text)", lineHeight: "1.85" }}>{renderText(info.explanation)}</div>
           </div>
 
-          <div style={{ background: "#0a1018", borderRadius: "8px", padding: "16px 18px", borderLeft: "3px solid #3b82f6" }}>
+          <div style={{ background: "var(--color-bg-card)", borderRadius: "8px", padding: "16px 18px", borderLeft: "3px solid #3b82f6" }}>
             <div
               style={{
                 fontSize: "13px",
                 fontWeight: 700,
-                color: "#7dd3fc",
+                color: "var(--color-text-accent-bright)",
                 textTransform: "uppercase",
                 letterSpacing: "1.2px",
                 marginBottom: "10px",
@@ -193,7 +193,7 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
             >
               Where you see it in the real world
             </div>
-            <div style={{ fontSize: "16px", color: "#d1dae6", lineHeight: "1.85" }}>{renderText(info.realWorld)}</div>
+            <div style={{ fontSize: "16px", color: "var(--color-text-caption)", lineHeight: "1.85" }}>{renderText(info.realWorld)}</div>
           </div>
 
           <div
@@ -222,7 +222,7 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
 
           <div
             style={{
-              background: "#0a1018",
+              background: "var(--color-bg-card)",
               borderRadius: "8px",
               padding: "16px 18px",
               borderLeft: info.projects.length > 0 ? "3px solid #34d399" : "3px solid #f87171",
@@ -255,7 +255,7 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
                       alignItems: "flex-start",
                       gap: "10px",
                       padding: "8px 10px",
-                      background: "#0c1422",
+                      background: "var(--color-bg-inset)",
                       borderRadius: "6px",
                       border: "1px solid #141c2b",
                     }}
@@ -291,7 +291,7 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
                             {project.name}
                           </a>
                         ) : (
-                          <span style={{ color: "#94a3b8", fontSize: "13px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
+                          <span style={{ color: "var(--color-text-muted)", fontSize: "13px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
                             {project.name}
                           </span>
                         )}
@@ -338,8 +338,8 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
                           </a>
                         )}
                       </div>
-                      <div style={{ fontSize: "14px", color: "#b4c1d2", marginTop: "4px" }}>{project.tech}</div>
-                      {project.note && <div style={{ fontSize: "13px", color: "#93a4bb", marginTop: "4px", fontStyle: "italic" }}>{project.note}</div>}
+                      <div style={{ fontSize: "14px", color: "var(--color-text-label)", marginTop: "4px" }}>{project.tech}</div>
+                      {project.note && <div style={{ fontSize: "13px", color: "var(--color-text-muted)", marginTop: "4px", fontStyle: "italic" }}>{project.note}</div>}
                     </div>
                   </div>
                 ))}
@@ -347,7 +347,7 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
             ) : (
               <div>
                 {info.projectIdea && (
-                  <div style={{ padding: "10px 12px", background: "#0c1422", borderRadius: "6px", border: "1px dashed #2a1a1a" }}>
+                  <div style={{ padding: "10px 12px", background: "var(--color-bg-inset)", borderRadius: "6px", border: "1px dashed #2a1a1a" }}>
                     <div style={{ fontSize: "13px", color: "#fca5a5", fontWeight: 700, marginBottom: "8px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
                       Project idea
                     </div>

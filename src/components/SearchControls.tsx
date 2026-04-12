@@ -40,6 +40,7 @@ type SearchControlsProps = {
   onToggleFavorites: () => void;
   onActivateSearchAll: () => void;
   onApplyPreset?: (preset: FilterPreset) => void;
+  onClearAllFilters?: () => void;
 };
 
 export default function SearchControls({
@@ -76,6 +77,7 @@ export default function SearchControls({
   onToggleFavorites,
   onActivateSearchAll,
   onApplyPreset,
+  onClearAllFilters,
 }: SearchControlsProps) {
   const hasActiveFilters = pqOnly || standardOnly || nistOnly || deployedOnly || showDefaults || country !== "all" || favOnly;
   const activeFilterCount = [pqOnly, standardOnly, nistOnly, deployedOnly, showDefaults, country !== "all", favOnly].filter(Boolean).length;
@@ -117,11 +119,21 @@ export default function SearchControls({
         <button className={`focusRing controlBtn filterChip ${favOnly ? "controlBtnActive" : ""}`} onClick={onToggleFavorites} aria-pressed={favOnly} aria-label={favOnly ? "Showing favorites only — click to show all" : "Show only favorited algorithms"}>
           ★ Favorites{favoritesCount > 0 ? ` (${favoritesCount})` : ""}
         </button>
+        {hasActiveFilters && onClearAllFilters && (
+          <button
+            className="focusRing controlBtn"
+            onClick={onClearAllFilters}
+            aria-label="Clear all active filters"
+            style={{ color: "#f87171", fontSize: "13px" }}
+          >
+            ✕ Clear all
+          </button>
+        )}
       </div>
 
       {onApplyPreset && (
         <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "12px" }}>
-          <span style={{ fontSize: "12px", fontWeight: 700, color: "#7dd3fc", textTransform: "uppercase", letterSpacing: "0.4px", alignSelf: "center", marginRight: "4px" }}>Presets</span>
+          <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--color-text-accent-bright)", textTransform: "uppercase", letterSpacing: "0.4px", alignSelf: "center", marginRight: "4px" }}>Presets</span>
           {FILTER_PRESETS.map((preset) => (
             <button
               key={preset.id}
@@ -150,9 +162,9 @@ export default function SearchControls({
           aria-label="Search algorithms"
           className="focusRing searchInput"
           style={{
-            background: "#0c1422",
-            color: "#e2e8f0",
-            border: "1px solid #1e293b",
+            background: "var(--color-bg-inset)",
+            color: "var(--color-text)",
+            border: "1px solid var(--color-border)",
             borderRadius: "8px",
             padding: "12px 14px",
             minWidth: "220px",
@@ -198,7 +210,7 @@ export default function SearchControls({
           <div className="filterSheet" role="dialog" aria-modal="true" aria-label="Filter options">
             <div className="filterSheetHeader">
               <h3 style={{ margin: 0, fontSize: "16px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
-                Filters {activeFilterCount > 0 && <span style={{ color: "#7dd3fc" }}>({activeFilterCount} active)</span>}
+                Filters {activeFilterCount > 0 && <span style={{ color: "var(--color-text-accent-bright)" }}>({activeFilterCount} active)</span>}
               </h3>
               <button
                 onClick={onToggleFilters}
@@ -212,10 +224,21 @@ export default function SearchControls({
             <div className="filterSheetBody">
               {filterContent}
             </div>
-            <div className="filterSheetFooter">
+            <div className="filterSheetFooter" style={{ display: "flex", gap: "8px" }}>
+              {hasActiveFilters && onClearAllFilters && (
+                <button onClick={() => { onClearAllFilters(); onToggleFilters(); }} className="focusRing" style={{
+                  background: "transparent", color: "#f87171", border: "1px solid #f8717144", padding: "14px 16px",
+                  borderRadius: "8px", fontSize: "16px", fontWeight: 700, cursor: "pointer", flex: "0 0 auto",
+                  fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+                }}
+                aria-label="Clear all filters and close"
+                >
+                  Clear all
+                </button>
+              )}
               <button onClick={onToggleFilters} className="focusRing" style={{
                 background: "#1d4ed8", color: "#fff", border: "none", padding: "14px 28px",
-                borderRadius: "8px", fontSize: "16px", fontWeight: 700, cursor: "pointer", width: "100%",
+                borderRadius: "8px", fontSize: "16px", fontWeight: 700, cursor: "pointer", flex: "1 1 auto",
                 fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
               }}>
                 Done

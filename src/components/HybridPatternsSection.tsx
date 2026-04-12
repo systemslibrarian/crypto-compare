@@ -14,13 +14,13 @@ export default function HybridPatternsSection({ isOpen, onToggle }: HybridPatter
       {isOpen && (
         <section className="panel" aria-label="Hybrid cryptography patterns" style={{ marginBottom: "18px" }}>
           <h2 className="panel-heading">Hybrid Cryptography Patterns</h2>
-          <p style={{ color: "#93a4bb", fontSize: "13px", lineHeight: 1.6, margin: "0 0 12px" }}>
+          <p style={{ color: "var(--color-text-muted)", fontSize: "13px", lineHeight: 1.6, margin: "0 0 12px" }}>
             Hybrid constructions combine classical and post-quantum algorithms so that security holds if either assumption remains valid.
           </p>
           {HYBRID_PATTERNS.map((pattern) => (
-            <div key={pattern.id} style={{ borderTop: "1px solid #1e293b", padding: "10px 0" }}>
+            <div key={pattern.id} style={{ borderTop: "1px solid var(--color-border)", padding: "10px 0" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
-                <strong style={{ color: "#e2e8f0", fontSize: "14px" }}>{pattern.name}</strong>
+                <strong style={{ color: "var(--color-text)", fontSize: "14px" }}>{pattern.name}</strong>
                 <span
                   style={{
                     fontSize: "11px",
@@ -50,22 +50,22 @@ export default function HybridPatternsSection({ isOpen, onToggle }: HybridPatter
                 >
                   {pattern.recommendation}
                 </span>
-                <span style={{ fontSize: "11px", color: "#64748b" }}>({pattern.category})</span>
+                <span style={{ fontSize: "11px", color: "var(--color-text-muted)" }}>({pattern.category})</span>
               </div>
-              <div style={{ fontSize: "13px", color: "#c4d1e3", lineHeight: 1.7 }}>
-                <div><span style={{ color: "#64748b" }}>Classical:</span> {pattern.classical}</div>
-                <div><span style={{ color: "#64748b" }}>Post-Quantum:</span> {pattern.postQuantum}</div>
-                <div><span style={{ color: "#64748b" }}>Method:</span> {pattern.combinationMethod}</div>
+              <div style={{ fontSize: "13px", color: "var(--color-text-secondary)", lineHeight: 1.7 }}>
+                <div><span style={{ color: "var(--color-text-muted)" }}>Classical:</span> {pattern.classical}</div>
+                <div><span style={{ color: "var(--color-text-muted)" }}>Post-Quantum:</span> {pattern.postQuantum}</div>
+                <div><span style={{ color: "var(--color-text-muted)" }}>Method:</span> {pattern.combinationMethod}</div>
                 <pre
                   style={{
                     background: "#0a0e17",
-                    border: "1px solid #1e293b",
+                    border: "1px solid var(--color-border)",
                     borderRadius: "6px",
                     padding: "10px 14px",
                     margin: "6px 0",
                     fontSize: "11px",
                     lineHeight: 1.5,
-                    color: "#93c5fd",
+                    color: "var(--color-text-link)",
                     fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
                     overflowX: "auto",
                     whiteSpace: "pre",
@@ -73,9 +73,9 @@ export default function HybridPatternsSection({ isOpen, onToggle }: HybridPatter
                 >
                   {pattern.diagram}
                 </pre>
-                <div><span style={{ color: "#64748b" }}>Deployed in:</span> {pattern.deployedIn.join(", ")}</div>
-                <div style={{ marginTop: "4px" }}><span style={{ color: "#64748b" }}>Rationale:</span> {pattern.rationale}</div>
-                <div><span style={{ color: "#64748b" }}>Limitations:</span> {pattern.limitations}</div>
+                <div><span style={{ color: "var(--color-text-muted)" }}>Deployed in:</span> {pattern.deployedIn.join(", ")}</div>
+                <div style={{ marginTop: "4px" }}><span style={{ color: "var(--color-text-muted)" }}>Rationale:</span> {pattern.rationale}</div>
+                <div><span style={{ color: "var(--color-text-muted)" }}>Limitations:</span> {pattern.limitations}</div>
               </div>
             </div>
           ))}

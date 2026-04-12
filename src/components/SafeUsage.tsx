@@ -4,8 +4,8 @@ const SECTION = {
   heading: "12px" as const,
   headingColor: "#60a5fa",
   text: "13px" as const,
-  textColor: "#c4d1e3",
-  mutedColor: "#93a4bb",
+  textColor: "var(--color-text-secondary)",
+  mutedColor: "var(--color-text-muted)",
   lineHeight: 1.7,
   listPad: "18px",
 };
@@ -29,12 +29,12 @@ export default function SafeUsage() {
           <li><strong style={{ color: "#f87171" }}>Never use ECB mode.</strong> ECB preserves plaintext patterns in ciphertext. The &quot;ECB penguin&quot; is a famous visual demonstration of why this is broken.</li>
           <li><strong style={{ color: "#f87171" }}>Never hard-code keys or secrets in source code.</strong> Keys in code end up in version control, CI logs, container images, and eventually in attacker hands. Use a secrets manager.</li>
           <li><strong style={{ color: "#f87171" }}>Never roll your own crypto primitives.</strong> Custom ciphers, custom ECDSA implementations, custom key exchange protocols — these always have fatal bugs. Use audited libraries.</li>
-          <li><strong style={{ color: "#f87171" }}>Never skip certificate/key verification.</strong> Setting <code style={{ background: "#0c1422", padding: "1px 5px", borderRadius: "3px", fontSize: "12px" }}>verify=False</code> or accepting all certificates defeats the entire security model of TLS.</li>
+          <li><strong style={{ color: "#f87171" }}>Never skip certificate/key verification.</strong> Setting <code style={{ background: "var(--color-bg-inset)", padding: "1px 5px", borderRadius: "3px", fontSize: "12px" }}>verify=False</code> or accepting all certificates defeats the entire security model of TLS.</li>
         </ul>
       </div>
 
       {/* ── Key Management Basics ── */}
-      <div style={{ marginBottom: "20px", borderTop: "1px solid #1e293b", paddingTop: "16px" }}>
+      <div style={{ marginBottom: "20px", borderTop: "1px solid var(--color-border)", paddingTop: "16px" }}>
         <h3 style={{
           fontSize: "15px", fontWeight: 700, color: "#34d399", margin: "0 0 8px",
           fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
@@ -43,7 +43,7 @@ export default function SafeUsage() {
           <span aria-hidden="true">🔐</span> Key Management Basics
         </h3>
         <ul style={{ margin: 0, paddingLeft: SECTION.listPad, color: SECTION.textColor, fontSize: SECTION.text, lineHeight: SECTION.lineHeight }}>
-          <li><strong>Generate keys with a CSPRNG.</strong> Use <code style={{ background: "#0c1422", padding: "1px 5px", borderRadius: "3px", fontSize: "12px" }}>crypto.getRandomValues()</code>, <code style={{ background: "#0c1422", padding: "1px 5px", borderRadius: "3px", fontSize: "12px" }}>/dev/urandom</code>, or your platform&apos;s secure random API. Never use <code style={{ background: "#0c1422", padding: "1px 5px", borderRadius: "3px", fontSize: "12px" }}>Math.random()</code> or unseeded PRNGs for cryptographic material.</li>
+          <li><strong>Generate keys with a CSPRNG.</strong> Use <code style={{ background: "var(--color-bg-inset)", padding: "1px 5px", borderRadius: "3px", fontSize: "12px" }}>crypto.getRandomValues()</code>, <code style={{ background: "var(--color-bg-inset)", padding: "1px 5px", borderRadius: "3px", fontSize: "12px" }}>/dev/urandom</code>, or your platform&apos;s secure random API. Never use <code style={{ background: "var(--color-bg-inset)", padding: "1px 5px", borderRadius: "3px", fontSize: "12px" }}>Math.random()</code> or unseeded PRNGs for cryptographic material.</li>
           <li><strong>Separate keys by purpose.</strong> Encryption keys, signing keys, and MAC keys must be different. Reusing a key across operations creates cross-protocol attacks.</li>
           <li><strong>Rotate keys on a schedule.</strong> Long-lived keys accumulate risk. TLS uses ephemeral session keys. Symmetric keys protecting active data should rotate at least annually.</li>
           <li><strong>Store keys in hardware or a secrets manager.</strong> HSMs, AWS KMS, Azure Key Vault, HashiCorp Vault, or OS keychains. Never store keys in environment variables, config files, or databases alongside the data they protect.</li>
@@ -53,9 +53,9 @@ export default function SafeUsage() {
       </div>
 
       {/* ── Library Guidance ── */}
-      <div style={{ marginBottom: "20px", borderTop: "1px solid #1e293b", paddingTop: "16px" }}>
+      <div style={{ marginBottom: "20px", borderTop: "1px solid var(--color-border)", paddingTop: "16px" }}>
         <h3 style={{
-          fontSize: "15px", fontWeight: 700, color: "#7dd3fc", margin: "0 0 8px",
+          fontSize: "15px", fontWeight: 700, color: "var(--color-text-accent-bright)", margin: "0 0 8px",
           fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
           display: "flex", alignItems: "center", gap: "8px",
         }}>
@@ -76,12 +76,12 @@ export default function SafeUsage() {
             { name: "liboqs", lang: "C", note: "Post-quantum algorithms (Open Quantum Safe)" },
           ].map((lib) => (
             <div key={lib.name} style={{
-              background: "#0c1422", border: "1px solid #1e293b", borderRadius: "6px",
+              background: "var(--color-bg-inset)", border: "1px solid var(--color-border)", borderRadius: "6px",
               padding: "10px 12px", fontSize: "13px",
             }}>
-              <div style={{ color: "#e2e8f0", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", fontSize: "12px" }}>{lib.name}</div>
-              <div style={{ color: "#64748b", fontSize: "11px", marginTop: "2px" }}>{lib.lang}</div>
-              <div style={{ color: "#93a4bb", fontSize: "12px", marginTop: "4px" }}>{lib.note}</div>
+              <div style={{ color: "var(--color-text)", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", fontSize: "12px" }}>{lib.name}</div>
+              <div style={{ color: "var(--color-text-muted)", fontSize: "11px", marginTop: "2px" }}>{lib.lang}</div>
+              <div style={{ color: "var(--color-text-muted)", fontSize: "12px", marginTop: "4px" }}>{lib.note}</div>
             </div>
           ))}
         </div>
@@ -91,7 +91,7 @@ export default function SafeUsage() {
       </div>
 
       {/* ── What This Tool Does NOT Protect You From ── */}
-      <div style={{ borderTop: "1px solid #1e293b", paddingTop: "16px" }}>
+      <div style={{ borderTop: "1px solid var(--color-border)", paddingTop: "16px" }}>
         <h3 style={{
           fontSize: "15px", fontWeight: 700, color: "#fbbf24", margin: "0 0 8px",
           fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",

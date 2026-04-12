@@ -68,7 +68,7 @@ export default function QuickStartPanel({
           style={{
             background: "transparent",
             border: "none",
-            color: "#7dd3fc",
+            color: "var(--color-text-accent-bright)",
             cursor: "pointer",
             fontWeight: 700,
             fontSize: "14px",
@@ -82,8 +82,8 @@ export default function QuickStartPanel({
           <span aria-hidden="true" style={{ fontSize: "12px" }}>{expanded ? "▾" : "▸"}</span>
           Quick Start
         </button>
-        <span style={{ color: "#64748b", fontSize: "13px" }}>—</span>
-        <span style={{ color: "#93a4bb", fontSize: "13px", flex: "1 1 auto" }}>
+        <span style={{ color: "var(--color-text-muted)", fontSize: "13px" }}>—</span>
+        <span style={{ color: "var(--color-text-muted)", fontSize: "13px", flex: "1 1 auto" }}>
           Scope → Narrow → Verify
         </span>
         <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
