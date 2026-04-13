@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { CATEGORY_ACCENT, CATEGORY_INFO } from "@/data/categories";
 import type { AlgorithmCategory } from "@/types/crypto";
 
@@ -92,13 +92,62 @@ type CategoryExplainerProps = {
 
 export default function CategoryExplainer({ category, expanded, onToggle, onNavigateCategory }: CategoryExplainerProps) {
   const info = CATEGORY_INFO[category];
+  const [whatItDoesOpen, setWhatItDoesOpen] = useState(false);
+  const [realWorldOpen, setRealWorldOpen] = useState(false);
+  const [whyItMattersOpen, setWhyItMattersOpen] = useState(false);
   const [projectsOpen, setProjectsOpen] = useState(false);
+
+  useEffect(() => {
+    setWhatItDoesOpen(false);
+    setRealWorldOpen(false);
+    setWhyItMattersOpen(false);
+    setProjectsOpen(false);
+  }, [category, expanded]);
+
   if (!info) {
     return null;
   }
 
   const renderText = (text: string) =>
     onNavigateCategory ? linkifyCategories(text, category, onNavigateCategory) : text;
+
+  const renderSectionToggle = (
+    label: string,
+    open: boolean,
+    onSectionToggle: () => void,
+    color: string,
+  ) => (
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        onSectionToggle();
+      }}
+      className="focusRing"
+      aria-expanded={open}
+      aria-label={open ? `Collapse ${label}` : `Expand ${label}`}
+      style={{
+        background: "none",
+        border: "none",
+        padding: 0,
+        cursor: "pointer",
+        fontSize: "13px",
+        fontWeight: 700,
+        color,
+        textTransform: "uppercase",
+        letterSpacing: "1.2px",
+        marginBottom: open ? "10px" : "0",
+        fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+        width: "100%",
+        textAlign: "left",
+      }}
+    >
+      <span style={{ fontSize: "12px", transition: "transform 0.15s", display: "inline-block", transform: open ? "rotate(90deg)" : "none" }}>▶</span>
+      {label}
+    </button>
+  );
 
   return (
     <div
@@ -164,37 +213,13 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
       {expanded && (
         <div style={{ marginTop: "18px", display: "flex", flexDirection: "column", gap: "18px" }}>
           <div>
-            <div
-              style={{
-                fontSize: "13px",
-                fontWeight: 700,
-                color: "var(--color-accent-blue-label)",
-                textTransform: "uppercase",
-                letterSpacing: "1.2px",
-                marginBottom: "10px",
-                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-              }}
-            >
-              What it does
-            </div>
-            <div style={{ fontSize: "16px", color: "var(--color-text)", lineHeight: "1.85" }}>{renderText(info.explanation)}</div>
+            {renderSectionToggle("What it does", whatItDoesOpen, () => setWhatItDoesOpen((open) => !open), "var(--color-accent-blue-label)")}
+            {whatItDoesOpen && <div style={{ fontSize: "16px", color: "var(--color-text)", lineHeight: "1.85" }}>{renderText(info.explanation)}</div>}
           </div>
 
           <div style={{ background: "var(--color-bg-card)", borderRadius: "8px", padding: "16px 18px", borderLeft: "3px solid var(--color-accent-blue)" }}>
-            <div
-              style={{
-                fontSize: "13px",
-                fontWeight: 700,
-                color: "var(--color-text-accent-bright)",
-                textTransform: "uppercase",
-                letterSpacing: "1.2px",
-                marginBottom: "10px",
-                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-              }}
-            >
-              Where you see it in the real world
-            </div>
-            <div style={{ fontSize: "16px", color: "var(--color-text-caption)", lineHeight: "1.85" }}>{renderText(info.realWorld)}</div>
+            {renderSectionToggle("Where you see it in the real world", realWorldOpen, () => setRealWorldOpen((open) => !open), "var(--color-text-accent-bright)")}
+            {realWorldOpen && <div style={{ fontSize: "16px", color: "var(--color-text-caption)", lineHeight: "1.85" }}>{renderText(info.realWorld)}</div>}
           </div>
 
           <div
@@ -205,20 +230,8 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
               borderLeft: "3px solid var(--color-badge-yellow-text)",
             }}
           >
-            <div
-              style={{
-                fontSize: "13px",
-                fontWeight: 700,
-                color: "var(--color-accent-yellow-label)",
-                textTransform: "uppercase",
-                letterSpacing: "1.2px",
-                marginBottom: "10px",
-                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-              }}
-            >
-              Why it matters
-            </div>
-            <div style={{ fontSize: "16px", color: "var(--color-accent-yellow-body)", lineHeight: "1.85", fontWeight: 600 }}>{renderText(info.whyItMatters)}</div>
+            {renderSectionToggle("Why it matters", whyItMattersOpen, () => setWhyItMattersOpen((open) => !open), "var(--color-accent-yellow-label)")}
+            {whyItMattersOpen && <div style={{ fontSize: "16px", color: "var(--color-accent-yellow-body)", lineHeight: "1.85", fontWeight: 600 }}>{renderText(info.whyItMatters)}</div>}
           </div>
 
           <div
