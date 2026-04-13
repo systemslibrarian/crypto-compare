@@ -1,5 +1,4 @@
-git add -A
-git commit -m "feat: Phase 4+5 — implementation map, trust signals, advisor upgrade, architecture checklist, metadata"import type { Algorithm } from "@/types/crypto";
+import type { Algorithm } from "@/types/crypto";
 
 export const ALGORITHMS: Algorithm[] = [
   // ═══════════════════════════════════════
