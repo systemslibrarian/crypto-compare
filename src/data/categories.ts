@@ -204,7 +204,7 @@ export const CATEGORY_INFO: CategoryInfoMap = {
     oneLiner:"Encrypted computation. Send your data encrypted, the server processes it encrypted, you get encrypted results back — and the server never sees your data.",
     projects:[
       { name:"Blind Oracle", tech:"TFHE-rs FHE demo — browser encrypts two numbers, Rust server adds them homomorphically, returns encrypted result. The server mathematically cannot see the data it computed.", url:"https://github.com/systemslibrarian/crypto-lab-blind-oracle", public:true },
-      { name:"CKKS Lab", tech:"CKKS approximate fully homomorphic encryption — RLWE noise management, encrypted inference on real ML workloads, and approximate arithmetic on ciphertexts", url:"https://github.com/systemslibrarian/crypto-lab-ckks-lab", public:true },
+      { name:"CKKS Lab", tech:"CKKS approximate fully homomorphic encryption — RLWE noise management, encrypted inference on real ML workloads, and approximate arithmetic on ciphertexts", url:"https://github.com/systemslibrarian/cryto-lab-ckks-lab", public:true },
       { name:"FHE Arena", tech:"BGV/BFV fully homomorphic encryption — RLWE noise budget visualization, SIMD batching, and integer arithmetic on encrypted data", url:"https://github.com/systemslibrarian/crypto-lab-fhe-arena", public:true },
     ],
     projectIdea:"Private Prayer Analytics — aggregate prayer statistics computed on fully encrypted prayer data. Churches see trends without seeing individual prayers. Pairs with PrayerWarriors.Mobi.",
