@@ -395,7 +395,8 @@ body {
   .controlBtnActive {
     background: var(--color-bg-selected) !important;
     color: var(--color-text-accent-bright) !important;
-    border-color: var(--color-border) !important;
+    border-color: var(--color-text-accent-bright) !important;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-text-accent-bright) 45%, transparent), 0 0 0 3px color-mix(in srgb, var(--color-text-accent-bright) 18%, transparent);
   }
 
   .controlSelect {
@@ -873,6 +874,21 @@ body {
 /* ─── Filter chip compact style ─── */
 .filterChip {
   white-space: nowrap;
+}
+
+.filterChipIndicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-text-accent-bright) 20%, transparent);
+  color: var(--color-text-heading);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  flex: 0 0 auto;
 }
 
 @media (max-width: 900px) {

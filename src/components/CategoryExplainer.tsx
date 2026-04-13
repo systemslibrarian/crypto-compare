@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { CATEGORY_ACCENT, CATEGORY_INFO } from "@/data/categories";
 import type { AlgorithmCategory } from "@/types/crypto";
 
@@ -92,6 +92,7 @@ type CategoryExplainerProps = {
 
 export default function CategoryExplainer({ category, expanded, onToggle, onNavigateCategory }: CategoryExplainerProps) {
   const info = CATEGORY_INFO[category];
+  const [projectsOpen, setProjectsOpen] = useState(false);
   if (!info) {
     return null;
   }
@@ -228,24 +229,34 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
               borderLeft: info.projects.length > 0 ? "3px solid var(--color-badge-green-text)" : "3px solid var(--color-badge-red-text)",
             }}
           >
-            <div
+            <button
+              onClick={(e) => { e.stopPropagation(); setProjectsOpen(!projectsOpen); }}
+              className="focusRing"
+              aria-expanded={projectsOpen}
+              aria-label={projectsOpen ? "Collapse projects" : `Expand projects (${info.projects.length})`}
               style={{
+                background: "none",
+                border: "none",
+                padding: 0,
+                cursor: "pointer",
                 fontSize: "13px",
                 fontWeight: 700,
                 color: info.projects.length > 0 ? "var(--color-accent-green-label)" : "var(--color-accent-red-label)",
                 textTransform: "uppercase",
                 letterSpacing: "1.2px",
-                marginBottom: "10px",
+                marginBottom: projectsOpen ? "10px" : "0",
                 fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
                 display: "flex",
                 alignItems: "center",
                 gap: "8px",
+                width: "100%",
               }}
             >
-              {info.projects.length > 0 ? "Your projects using this" : "Not yet in your portfolio"}
-            </div>
+              <span style={{ fontSize: "12px", transition: "transform 0.15s", display: "inline-block", transform: projectsOpen ? "rotate(90deg)" : "none" }}>▶</span>
+              {info.projects.length > 0 ? `Your projects using this (${info.projects.length})` : "Not yet in your portfolio"}
+            </button>
 
-            {info.projects.length > 0 ? (
+            {projectsOpen && info.projects.length > 0 ? (
               <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 {info.projects.map((project) => (
                   <div
@@ -344,7 +355,7 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
                   </div>
                 ))}
               </div>
-            ) : (
+            ) : projectsOpen ? (
               <div>
                 {info.projectIdea && (
                   <div style={{ padding: "10px 12px", background: "var(--color-bg-inset)", borderRadius: "6px", border: "1px dashed var(--color-border-dashed)" }}>
@@ -355,7 +366,7 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
                   </div>
                 )}
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       )}

@@ -81,10 +81,25 @@ export default function SearchControls({
 }: SearchControlsProps) {
   const hasActiveFilters = pqOnly || standardOnly || nistOnly || deployedOnly || showDefaults || country !== "all" || favOnly;
   const activeFilterCount = [pqOnly, standardOnly, nistOnly, deployedOnly, showDefaults, country !== "all", favOnly].filter(Boolean).length;
+  const activePresetId = FILTER_PRESETS.find((preset) => {
+    const filters = preset.filters;
+
+    return globalSearch === Boolean(filters.globalSearch)
+      && pqOnly === Boolean(filters.pqOnly)
+      && standardOnly === Boolean(filters.standardOnly)
+      && nistOnly === Boolean(filters.nistOnly)
+      && deployedOnly === Boolean(filters.deployedOnly)
+      && showDefaults === Boolean(filters.showDefaults)
+      && favOnly === false
+      && country === (filters.country ?? "all")
+      && sortBy === (filters.sortBy ?? "name")
+      && search === (filters.search ?? "");
+  })?.id;
 
   // Lock body scroll when filter sheet is open on mobile
   useEffect(() => {
     if (!showFilters) return;
+    if (typeof window.matchMedia !== "function") return;
     const mql = window.matchMedia("(max-width: 900px)");
     if (!mql.matches) return;
     document.body.style.overflow = "hidden";
@@ -102,21 +117,27 @@ export default function SearchControls({
           ))}
         </select>
         <button className={`focusRing controlBtn filterChip ${pqOnly ? "controlBtnActive" : ""}`} onClick={onTogglePqOnly} aria-pressed={pqOnly} aria-label={pqOnly ? "PQ-safe filter active — click to show all" : "Show only PQ-safe algorithms"}>
+          {pqOnly && <span className="filterChipIndicator" aria-hidden="true">✓</span>}
           PQ-safe only
         </button>
         <button className={`focusRing controlBtn filterChip ${standardOnly ? "controlBtnActive" : ""}`} onClick={onToggleStandardOnly} aria-pressed={standardOnly} aria-label={standardOnly ? "Standards filter active — click to show all" : "Show only standardized algorithms"}>
+          {standardOnly && <span className="filterChipIndicator" aria-hidden="true">✓</span>}
           Standards only
         </button>
         <button className={`focusRing controlBtn filterChip ${nistOnly ? "controlBtnActive" : ""}`} onClick={onToggleNistOnly} aria-pressed={nistOnly} aria-label={nistOnly ? "NIST filter active — click to show all" : "Show only NIST-standardized algorithms"}>
+          {nistOnly && <span className="filterChipIndicator" aria-hidden="true">✓</span>}
           NIST only
         </button>
         <button className={`focusRing controlBtn filterChip ${deployedOnly ? "controlBtnActive" : ""}`} onClick={onToggleDeployedOnly} aria-pressed={deployedOnly} aria-label={deployedOnly ? "Deployed filter active — click to show all" : "Show only widely deployed algorithms"}>
+          {deployedOnly && <span className="filterChipIndicator" aria-hidden="true">✓</span>}
           Widely deployed
         </button>
         <button className={`focusRing controlBtn filterChip ${showDefaults ? "controlBtnActive" : ""}`} onClick={onToggleDefaults} aria-pressed={showDefaults} aria-label={showDefaults ? "Showing recommended defaults — click to show all" : "Show only recommended default algorithms"}>
+          {showDefaults && <span className="filterChipIndicator" aria-hidden="true">✓</span>}
           Recommended defaults
         </button>
         <button className={`focusRing controlBtn filterChip ${favOnly ? "controlBtnActive" : ""}`} onClick={onToggleFavorites} aria-pressed={favOnly} aria-label={favOnly ? "Showing favorites only — click to show all" : "Show only favorited algorithms"}>
+          {favOnly && <span className="filterChipIndicator" aria-hidden="true">✓</span>}
           ★ Favorites{favoritesCount > 0 ? ` (${favoritesCount})` : ""}
         </button>
         {hasActiveFilters && onClearAllFilters && (
@@ -137,12 +158,14 @@ export default function SearchControls({
           {FILTER_PRESETS.map((preset) => (
             <button
               key={preset.id}
-              className="focusRing controlBtn"
+              className={`focusRing controlBtn ${activePresetId === preset.id ? "controlBtnActive" : ""}`}
               onClick={() => onApplyPreset(preset)}
               title={preset.description}
               aria-label={`Apply preset: ${preset.label} — ${preset.description}`}
+              aria-pressed={activePresetId === preset.id}
               style={{ fontSize: "13px", padding: "6px 12px" }}
             >
+              {activePresetId === preset.id && <span className="filterChipIndicator" aria-hidden="true">✓</span>}
               {preset.icon} {preset.label}
             </button>
           ))}
