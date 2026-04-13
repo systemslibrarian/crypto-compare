@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { RecommendationBadge, ReviewBadge, formatReviewDate } from "@/components/ui";
+import { IMPLEMENTATIONS, ECOSYSTEM_LABELS } from "@/data/implementations";
 import type { Algorithm, AlgorithmCategory, AlgorithmSource } from "@/types/crypto";
 
 type DecisionNode = {
@@ -488,119 +489,168 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
       )}
 
       {result && (
-        <div role="alert" aria-live="assertive">
-          <div style={{ fontSize: "13px", color: "var(--color-badge-green-text)", fontWeight: 700, marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
-            Recommendation
+        <ResultBlock
+          result={result}
+          resultAlgo={resultAlgo}
+          resultProvenance={resultProvenance}
+          history={history}
+          algorithms={algorithms}
+          provenance={provenance}
+          onNavigate={onNavigate}
+        />
+      )}
+    </div>
+  );
+}
+
+function ResultBlock({
+  result,
+  resultAlgo,
+  resultProvenance,
+  history,
+  algorithms,
+  provenance,
+  onNavigate,
+}: {
+  result: { algo: string; id: string; reason: string; category: AlgorithmCategory };
+  resultAlgo?: Algorithm;
+  resultProvenance?: { sources: AlgorithmSource[]; lastReviewed: string };
+  history: string[];
+  algorithms: Algorithm[];
+  provenance: Record<string, { sources: AlgorithmSource[]; lastReviewed: string }>;
+  onNavigate: (category: AlgorithmCategory, algoId: string) => void;
+}) {
+  const [copied, setCopied] = useState(false);
+  const impls = IMPLEMENTATIONS.filter((i) => i.algorithmId === result.id);
+  const ecosystems = Array.from(new Set(impls.map((i) => i.ecosystem)));
+
+  const trustBadges: { label: string; color: string }[] = [];
+  if (resultAlgo?.maturity) trustBadges.push({ label: resultAlgo.maturity, color: resultAlgo.maturity === "mature" ? "var(--color-badge-green-text, #5ce65c)" : resultAlgo.maturity === "established" ? "var(--color-badge-blue-text, #6cb6ff)" : "var(--color-badge-yellow-text, #e6c85c)" });
+  if (resultAlgo?.standardization && resultAlgo.standardization !== "none") trustBadges.push({ label: resultAlgo.standardization.toUpperCase(), color: "var(--color-text-accent-bright, #a0d0ff)" });
+  if (resultAlgo?.pqRelevance) {
+    const pqColors: Record<string, string> = { "pq-safe": "var(--color-badge-green-text, #5ce65c)", "pq-ready": "var(--color-badge-blue-text, #6cb6ff)", "pq-vulnerable": "var(--color-badge-red-text, #ff6b6b)", "pq-neutral": "var(--color-text-secondary, #aaa)" };
+    trustBadges.push({ label: resultAlgo.pqRelevance, color: pqColors[resultAlgo.pqRelevance] ?? "var(--color-text-secondary)" });
+  }
+
+  function copyAsMarkdown() {
+    const report = buildJustificationReport(result, history, algorithms, provenance, DECISION_TREE);
+    navigator.clipboard.writeText(report).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    }, () => {});
+  }
+
+  return (
+    <div role="alert" aria-live="assertive">
+      <div style={{ fontSize: "13px", color: "var(--color-badge-green-text)", fontWeight: 700, marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+        Recommended Stack
+      </div>
+      <div style={{ background: "var(--color-bg-card)", border: "1px solid var(--color-badge-green-border)", borderRadius: "10px", padding: "18px 20px" }}>
+        <div style={{ fontSize: "22px", fontWeight: 700, color: "var(--color-badge-green-text)", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", marginBottom: "4px" }}>
+          → {result.algo}
+        </div>
+        {trustBadges.length > 0 && (
+          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginBottom: "10px" }}>
+            {trustBadges.map((b, i) => (
+              <span key={i} style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", padding: "2px 8px", borderRadius: "4px", color: b.color, background: "var(--color-bg-control, #1a1a2e)", border: "1px solid var(--color-border-muted, #333)" }}>{b.label}</span>
+            ))}
           </div>
-          <div
-            style={{
-              background: "var(--color-bg-card)",
-              border: "1px solid var(--color-badge-green-border)",
-              borderRadius: "10px",
-              padding: "18px 20px",
-            }}
-          >
-            <div
-              style={{
-                fontSize: "22px",
-                fontWeight: 700,
-                color: "var(--color-badge-green-text)",
-                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-                marginBottom: "8px",
-              }}
-            >
-              → {result.algo}
-            </div>
-            <div style={{ fontSize: "15px", color: "var(--color-text-body)", lineHeight: 1.75, marginBottom: "14px" }}>
-              {result.reason}
-            </div>
-            {(resultAlgo || resultProvenance) && (
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-                  gap: "8px",
-                  marginBottom: "14px",
-                }}
-              >
-                {resultAlgo && (
-                  <div style={{ background: "var(--color-bg-surface)", border: "1px solid var(--color-border)", borderRadius: "8px", padding: "10px 12px" }}>
-                    <div style={{ fontSize: "11px", color: "var(--color-text-accent-bright)", textTransform: "uppercase", letterSpacing: "0.4px", fontWeight: 700, marginBottom: "6px" }}>
-                      Recommendation
-                    </div>
-                    <RecommendationBadge level={resultAlgo.recommendation} />
-                  </div>
-                )}
-                <div style={{ background: "var(--color-bg-surface)", border: "1px solid var(--color-border)", borderRadius: "8px", padding: "10px 12px" }}>
-                  <div style={{ fontSize: "11px", color: "var(--color-text-accent-bright)", textTransform: "uppercase", letterSpacing: "0.4px", fontWeight: 700, marginBottom: "6px" }}>
-                    Review freshness
-                  </div>
-                  <ReviewBadge iso={resultProvenance?.lastReviewed} />
-                </div>
-                <div style={{ background: "var(--color-bg-surface)", border: "1px solid var(--color-border)", borderRadius: "8px", padding: "10px 12px" }}>
-                  <div style={{ fontSize: "11px", color: "var(--color-text-accent-bright)", textTransform: "uppercase", letterSpacing: "0.4px", fontWeight: 700, marginBottom: "6px" }}>
-                    Source basis
-                  </div>
-                  <div style={{ fontSize: "14px", color: "var(--color-text)", fontWeight: 700 }}>
-                    {resultProvenance?.sources.length ?? 0} cited source{(resultProvenance?.sources.length ?? 0) !== 1 ? "s" : ""}
-                  </div>
-                  <div style={{ fontSize: "12px", color: "var(--color-text-muted)", marginTop: "4px" }}>
-                    {resultProvenance?.lastReviewed ? `Reviewed ${formatReviewDate(resultProvenance.lastReviewed)}` : "Review date pending"}
-                  </div>
-                </div>
+        )}
+
+        {/* JUSTIFICATION */}
+        <div style={{ marginBottom: "14px" }}>
+          <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--color-text-accent-bright)", textTransform: "uppercase", letterSpacing: "0.4px", marginBottom: "4px" }}>Justification</div>
+          <div style={{ fontSize: "15px", color: "var(--color-text-body)", lineHeight: 1.75 }}>{result.reason}</div>
+        </div>
+
+        {/* WHY NOT THIS */}
+        {resultAlgo?.whyNotThis && (
+          <div style={{ marginBottom: "14px" }}>
+            <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--color-badge-yellow-text)", textTransform: "uppercase", letterSpacing: "0.4px", marginBottom: "4px" }}>Why Not This?</div>
+            <div style={{ fontSize: "13px", color: "var(--color-text-warning, var(--color-text-body))", lineHeight: 1.6 }}>{resultAlgo.whyNotThis}</div>
+          </div>
+        )}
+
+        {/* RISK */}
+        {resultAlgo?.recommendationChangesWhen && (
+          <div style={{ marginBottom: "14px" }}>
+            <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--color-badge-orange-text, var(--color-text-accent-bright))", textTransform: "uppercase", letterSpacing: "0.4px", marginBottom: "4px" }}>Risk / Changes When</div>
+            <div style={{ fontSize: "13px", color: "var(--color-text-body)", lineHeight: 1.6 }}>{resultAlgo.recommendationChangesWhen}</div>
+          </div>
+        )}
+
+        {/* Info grid */}
+        {(resultAlgo || resultProvenance) && (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "8px", marginBottom: "14px" }}>
+            {resultAlgo && (
+              <div style={{ background: "var(--color-bg-surface)", border: "1px solid var(--color-border)", borderRadius: "8px", padding: "10px 12px" }}>
+                <div style={{ fontSize: "11px", color: "var(--color-text-accent-bright)", textTransform: "uppercase", letterSpacing: "0.4px", fontWeight: 700, marginBottom: "6px" }}>Recommendation</div>
+                <RecommendationBadge level={resultAlgo.recommendation} />
               </div>
             )}
-            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-              <button
-                onClick={() => onNavigate(result.category, result.id)}
-                style={{
-                  background: "var(--color-button-primary)",
-                  color: "var(--color-button-primary-text)",
-                  border: "none",
-                  padding: "12px 20px",
-                  borderRadius: "6px",
-                  fontSize: "14px",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  minHeight: "44px",
-                }}
-              >
-                View {result.algo} details →
-              </button>
-              <button
-                onClick={() => {
-                  const report = buildJustificationReport(result, history, algorithms, provenance, DECISION_TREE);
-                  const blob = new Blob([report], { type: "text/markdown" });
-                  const url = URL.createObjectURL(blob);
-                  const a = document.createElement("a");
-                  a.href = url;
-                  a.download = `justification-${result.id}.md`;
-                  a.click();
-                  URL.revokeObjectURL(url);
-                }}
-                style={{
-                  background: "var(--color-bg-control)",
-                  color: "var(--color-text-body)",
-                  border: "1px solid var(--color-border-muted)",
-                  padding: "12px 20px",
-                  borderRadius: "6px",
-                  fontSize: "14px",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  minHeight: "44px",
-                }}
-              >
-                ↓ Download Justification Report
-              </button>
+            <div style={{ background: "var(--color-bg-surface)", border: "1px solid var(--color-border)", borderRadius: "8px", padding: "10px 12px" }}>
+              <div style={{ fontSize: "11px", color: "var(--color-text-accent-bright)", textTransform: "uppercase", letterSpacing: "0.4px", fontWeight: 700, marginBottom: "6px" }}>Review freshness</div>
+              <ReviewBadge iso={resultProvenance?.lastReviewed} />
             </div>
-            {resultAlgo && (
-              <p style={{ margin: "14px 0 0", color: "var(--color-text-muted)", fontSize: "13px", lineHeight: 1.7 }}>
-                Treat this as a decision aid, not an automatic approval. The recommendation is strongest when the algorithm&apos;s recommendation level, cited sources, and review freshness all align with your operational constraints.
-              </p>
-            )}
+            <div style={{ background: "var(--color-bg-surface)", border: "1px solid var(--color-border)", borderRadius: "8px", padding: "10px 12px" }}>
+              <div style={{ fontSize: "11px", color: "var(--color-text-accent-bright)", textTransform: "uppercase", letterSpacing: "0.4px", fontWeight: 700, marginBottom: "6px" }}>Source basis</div>
+              <div style={{ fontSize: "14px", color: "var(--color-text)", fontWeight: 700 }}>{resultProvenance?.sources.length ?? 0} cited source{(resultProvenance?.sources.length ?? 0) !== 1 ? "s" : ""}</div>
+              <div style={{ fontSize: "12px", color: "var(--color-text-muted)", marginTop: "4px" }}>{resultProvenance?.lastReviewed ? `Reviewed ${formatReviewDate(resultProvenance.lastReviewed)}` : "Review date pending"}</div>
+            </div>
           </div>
+        )}
+
+        {/* IMPLEMENTATION PATH */}
+        {impls.length > 0 && (
+          <div style={{ marginBottom: "14px" }}>
+            <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--color-text-accent-bright)", textTransform: "uppercase", letterSpacing: "0.4px", marginBottom: "6px" }}>Implementation Path</div>
+            <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+              {ecosystems.map((eco) => {
+                const ecoImpls = impls.filter((i) => i.ecosystem === eco);
+                const label = ECOSYSTEM_LABELS[eco];
+                return (
+                  <span key={eco} style={{ fontSize: "12px", padding: "4px 10px", borderRadius: "6px", background: "var(--color-bg-surface)", border: "1px solid var(--color-border)", color: "var(--color-text-body)" }}>
+                    {label?.icon} {label?.label}: {ecoImpls.map((i) => i.library).join(", ")}
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Actions */}
+        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+          <button onClick={() => onNavigate(result.category, result.id)} style={{ background: "var(--color-button-primary)", color: "var(--color-button-primary-text)", border: "none", padding: "12px 20px", borderRadius: "6px", fontSize: "14px", fontWeight: 700, cursor: "pointer", minHeight: "44px" }}>
+            View {result.algo} details →
+          </button>
+          <button
+            onClick={copyAsMarkdown}
+            style={{ background: "var(--color-bg-control)", color: "var(--color-text-body)", border: "1px solid var(--color-border-muted)", padding: "12px 20px", borderRadius: "6px", fontSize: "14px", fontWeight: 700, cursor: "pointer", minHeight: "44px" }}
+          >
+            {copied ? "✓ Copied" : "📋 Copy as Markdown"}
+          </button>
+          <button
+            onClick={() => {
+              const report = buildJustificationReport(result, history, algorithms, provenance, DECISION_TREE);
+              const blob = new Blob([report], { type: "text/markdown" });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = `justification-${result.id}.md`;
+              a.click();
+              URL.revokeObjectURL(url);
+            }}
+            style={{ background: "var(--color-bg-control)", color: "var(--color-text-body)", border: "1px solid var(--color-border-muted)", padding: "12px 20px", borderRadius: "6px", fontSize: "14px", fontWeight: 700, cursor: "pointer", minHeight: "44px" }}
+          >
+            ↓ Download Report
+          </button>
         </div>
-      )}
+        {resultAlgo && (
+          <p style={{ margin: "14px 0 0", color: "var(--color-text-muted)", fontSize: "13px", lineHeight: 1.7 }}>
+            Treat this as a decision aid, not an automatic approval. The recommendation is strongest when the algorithm&apos;s recommendation level, cited sources, and review freshness all align with your operational constraints.
+          </p>
+        )}
+      </div>
     </div>
   );
 }

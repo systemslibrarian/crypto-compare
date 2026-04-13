@@ -1,4 +1,5 @@
-import type { Algorithm } from "@/types/crypto";
+git add -A
+git commit -m "feat: Phase 4+5 — implementation map, trust signals, advisor upgrade, architecture checklist, metadata"import type { Algorithm } from "@/types/crypto";
 
 export const ALGORITHMS: Algorithm[] = [
   // ═══════════════════════════════════════
@@ -19,7 +20,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"Biclique (2^254.4 — theoretical). Grover reduces to 2^128.",
     reductionQuality:"Proven secure under PRP assumption",
     performance:"~1 cycle/byte with AES-NI",
-    notes:"Ubiquitous hardware support. GCM nonce reuse is catastrophic. 128-bit PQ security after Grover's."
+    notes:"Ubiquitous hardware support. GCM nonce reuse is catastrophic. 128-bit PQ security after Grover's.",
+    maturity:"mature", standardization:"nist", pqRelevance:"pq-ready"
   },
   { id:"chacha20poly", name:"ChaCha20-Poly1305", category:"symmetric", family:"ChaCha", origin:"🇺🇸 United States",
     originDetail:"Daniel J. Bernstein.",
@@ -36,7 +38,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"No known shortcut. Full 256-bit brute force. Grover reduces to 2^128.",
     reductionQuality:"Provable Poly1305 MAC; ChaCha20 assumed hardness",
     performance:"~2-4 cycles/byte software",
-    notes:"Constant-time by construction — no lookup tables, immune to cache-timing. Preferred without AES-NI."
+    notes:"Constant-time by construction — no lookup tables, immune to cache-timing. Preferred without AES-NI.",
+    maturity:"mature", standardization:"ietf", pqRelevance:"pq-ready"
   },
   { id:"xchacha20poly", name:"XChaCha20-Poly1305", category:"symmetric", family:"ChaCha", origin:"🇺🇸 United States",
     originDetail:"Daniel J. Bernstein. Extended nonce variant.",
@@ -53,7 +56,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"Same as ChaCha20-Poly1305.",
     reductionQuality:"Reduces to HChaCha20 + ChaCha20-Poly1305",
     performance:"Negligible overhead vs ChaCha20-Poly1305",
-    notes:"192-bit nonce makes random generation safe. Strongly preferred for at-rest encryption."
+    notes:"192-bit nonce makes random generation safe. Strongly preferred for at-rest encryption.",
+    maturity:"established", standardization:"ietf", pqRelevance:"pq-ready"
   },
   { id:"camellia256", name:"Camellia-256", category:"symmetric", family:"Camellia", origin:"🇯🇵 Japan",
     originDetail:"Mitsubishi Electric & NTT. ISO/IEC 18033-3.",
@@ -156,7 +160,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"No known shortcut. Same as AES-256 — biclique (2^254.4 theoretical). Grover reduces to 2^128.",
     reductionQuality:"Proven secure under AES PRP + POLYVAL universal hash assumption",
     performance:"~2 cycles/byte with AES-NI (slightly slower than GCM due to SIV construction)",
-    notes:"Misuse-resistant: nonce reuse only reveals plaintext equality, never catastrophic key/auth compromise. Google Tink default AEAD. RFC 8452."
+    notes:"Misuse-resistant: nonce reuse only reveals plaintext equality, never catastrophic key/auth compromise. Google Tink default AEAD. RFC 8452.",
+    maturity:"established", standardization:"ietf", pqRelevance:"pq-ready"
   },
 
   // ═══════════════════════════════════════
@@ -178,7 +183,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"Classical: Pollard's rho on ECDLP in the prime-order subgroup. Quantum: Shor's algorithm.",
     reductionQuality:"Heuristic security from ECDLP hardness in a rigid prime-order curve with implementation-friendly formulas",
     performance:"Excellent software performance with ubiquitous constant-time implementations and 32-byte public keys",
-    notes:"Use the KEM and Signatures categories for protocol choices built on top of this curve family. Classical default only — not PQ-safe."
+    notes:"Use the KEM and Signatures categories for protocol choices built on top of this curve family. Classical default only — not PQ-safe.",
+    maturity:"mature", standardization:"ietf", pqRelevance:"pq-vulnerable"
   },
   { id:"ed25519", name:"Ed25519", category:"curve", family:"Twisted Edwards", origin:"🇺🇸 United States",
     originDetail:"Bernstein, Duif, Lange, Schwabe & Yang, 2011. Standardized in RFC 8032 as EdDSA over Edwards25519.",
@@ -196,7 +202,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"Classical: Pollard's rho on the underlying ECDLP. Quantum: Shor's algorithm.",
     reductionQuality:"Security tracks ECDLP hardness; complete formulas reduce implementation hazards but do not change the quantum story",
     performance:"Fast signing and verification with compact 32-byte public keys and 64-byte signatures",
-    notes:"For applied usage, see the Signatures category and FROST threshold-signature demos. Deterministic and widely deployed, but still a classical-only choice."
+    notes:"For applied usage, see the Signatures category and FROST threshold-signature demos. Deterministic and widely deployed, but still a classical-only choice.",
+    maturity:"mature", standardization:"ietf", pqRelevance:"pq-vulnerable"
   },
   { id:"p256", name:"P-256", category:"curve", family:"Short Weierstrass", origin:"🇺🇸 United States",
     originDetail:"NIST prime curve secp256r1 / prime256v1. Specified in NIST SP 800-186 and FIPS 186-5.",
@@ -361,7 +368,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"Primal lattice via BKZ (est. 2^180+)",
     reductionQuality:"Tight reduction to Module-LWE",
     performance:"~0.07ms keygen, ~0.10ms encaps",
-    notes:"NIST primary PQ KEM (Aug 2024). Deployed in Chrome/Firefox hybrid TLS."
+    notes:"NIST primary PQ KEM (Aug 2024). Deployed in Chrome/Firefox hybrid TLS.",
+    maturity:"emerging", standardization:"nist", pqRelevance:"pq-safe"
   },
   { id:"mlkem1024", name:"ML-KEM-1024 (Kyber)", category:"kem", family:"Lattice", origin:"🇪🇺 Europe",
     originDetail:"CRYSTALS team.",
@@ -378,7 +386,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"Primal lattice via BKZ (est. 2^230+)",
     reductionQuality:"Tight reduction to Module-LWE",
     performance:"~0.10ms keygen, ~0.13ms encaps",
-    notes:"Maximum security parameter set. Conservative choice."
+    notes:"Maximum security parameter set. Conservative choice.",
+    maturity:"emerging", standardization:"nist", pqRelevance:"pq-safe"
   },
   { id:"smaug_t", name:"SMAUG-T", category:"kem", family:"Lattice", origin:"🇰🇷 South Korea",
     originDetail:"Korean PQC research team. KPQC Round 2.",
@@ -412,7 +421,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"Information set decoding on quasi-cyclic codes (est. 2^128+)",
     reductionQuality:"Decisional quasi-cyclic syndrome decoding",
     performance:"~1-3ms operations",
-    notes:"Code-based alternative to lattice. If lattice problems break, HQC is unaffected."
+    notes:"Code-based alternative to lattice. If lattice problems break, HQC is unaffected.",
+    maturity:"emerging", standardization:"nist", pqRelevance:"pq-safe"
   },
   { id:"classic_mceliece", name:"Classic McEliece", category:"kem", family:"Code-based", origin:"🇺🇸/🇪🇺 International",
     originDetail:"Bernstein, Chou, Lange, et al. Based on McEliece (1978).",
@@ -484,7 +494,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"Lattice on Module-LWE/SIS (est. 2^118+)",
     reductionQuality:"Tight reduction to Module-LWE and Module-SIS",
     performance:"~0.2ms sign, ~0.1ms verify",
-    notes:"NIST primary PQ signature standard (Aug 2024)."
+    notes:"NIST primary PQ signature standard (Aug 2024).",
+    maturity:"emerging", standardization:"nist", pqRelevance:"pq-safe"
   },
   { id:"mldsa65", name:"ML-DSA-65 (Dilithium)", category:"signature", family:"Lattice", origin:"🇪🇺 Europe",
     originDetail:"CRYSTALS team.",
@@ -501,7 +512,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"Lattice on Module-LWE/SIS (est. 2^180+)",
     reductionQuality:"Tight reduction to Module-LWE and Module-SIS",
     performance:"~0.3ms sign, ~0.15ms verify",
-    notes:"Recommended default. Good balance of margin and practicality."
+    notes:"Recommended default. Good balance of margin and practicality.",
+    maturity:"emerging", standardization:"nist", pqRelevance:"pq-safe"
   },
   { id:"haetae", name:"HAETAE", category:"signature", family:"Lattice", origin:"🇰🇷 South Korea",
     originDetail:"Korean PQC research team. KPQC Round 2.",
@@ -552,7 +564,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"Generic hash attacks only (2^128).",
     reductionQuality:"Minimal — only hash function properties",
     performance:"~100ms sign, ~5ms verify",
-    notes:"Most conservative PQ assumption. Only needs hash security. Large signatures, slow signing."
+    notes:"Most conservative PQ assumption. Only needs hash security. Large signatures, slow signing.",
+    maturity:"emerging", standardization:"nist", pqRelevance:"pq-safe"
   },
   { id:"xmss", name:"XMSS", category:"signature", family:"Hash-based", origin:"🇩🇪 Germany",
     originDetail:"Hülsing, Butin, Gazdag, et al. BSI/ANSSI recommended.",
@@ -607,7 +620,9 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"No practical attacks. Collision at 2^128.",
     reductionQuality:"N/A",
     performance:"~3-6 cycles/byte (SHA-NI: ~1)",
-    notes:"Ubiquitous. Hardware-accelerated. Vulnerable to length extension (use HMAC)."
+    notes:"Ubiquitous. Hardware-accelerated. Vulnerable to length extension (use HMAC).",
+    wrongChoiceConsequence:[{scenario:"Using SHA-256 directly for password storage",consequence:"A single commodity GPU can test billions of SHA-256 hashes per second. After a database breach, most user passwords would be recovered within hours. SHA-256 has no cost factor, no memory hardness, and no salting by default — it is the wrong tool for passwords.",severity:"critical"},{scenario:"Using bare SHA-256 for message authentication",consequence:"SHA-256 is vulnerable to length extension attacks. An attacker who knows H(secret || message) can compute H(secret || message || padding || attacker_data) without knowing the secret. Use HMAC-SHA-256 for authentication.",severity:"high"}],
+    maturity:"mature", standardization:"nist", pqRelevance:"pq-ready"
   },
   { id:"sha512", name:"SHA-512", category:"hash", family:"SHA-2", origin:"🇺🇸 United States",
     originDetail:"NSA design, NIST standard.",
@@ -624,7 +639,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"No practical attacks.",
     reductionQuality:"N/A",
     performance:"~2-4 cycles/byte 64-bit (faster than SHA-256 on 64-bit)",
-    notes:"Faster than SHA-256 on 64-bit CPUs using native 64-bit operations."
+    notes:"Faster than SHA-256 on 64-bit CPUs using native 64-bit operations.",
+    maturity:"mature", standardization:"nist", pqRelevance:"pq-ready"
   },
   { id:"sha3_256", name:"SHA-3-256 (Keccak)", category:"hash", family:"SHA-3", origin:"🇧🇪 Belgium",
     originDetail:"Bertoni, Daemen, Peeters, Van Assche.",
@@ -641,7 +657,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"No practical attacks.",
     reductionQuality:"N/A — sponge with wide state",
     performance:"~5-10 cycles/byte software",
-    notes:"Different design from SHA-2. If SHA-2 breaks, SHA-3 is unaffected. No length extension. Same team as AES."
+    notes:"Different design from SHA-2. If SHA-2 breaks, SHA-3 is unaffected. No length extension. Same team as AES.",
+    maturity:"mature", standardization:"nist", pqRelevance:"pq-ready"
   },
   { id:"blake2b", name:"BLAKE2b", category:"hash", family:"BLAKE", origin:"🇨🇭 Switzerland",
     originDetail:"Aumasson (CH), Neves (PT), Wilcox-O'Hearn, Winnerlein.",
@@ -658,7 +675,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"No practical attacks.",
     reductionQuality:"Based on ChaCha permutation",
     performance:"~1-3 cycles/byte (faster than SHA-256 in software)",
-    notes:"Built-in keyed hashing and personalization. Inside Argon2."
+    notes:"Built-in keyed hashing and personalization. Inside Argon2.",
+    maturity:"mature", standardization:"ietf", pqRelevance:"pq-ready"
   },
   { id:"blake3", name:"BLAKE3", category:"hash", family:"BLAKE", origin:"🇺🇸/🇨🇭 International",
     originDetail:"O'Connor, Aumasson (CH), Neves (PT), Wilcox-O'Hearn.",
@@ -747,7 +765,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"Security reduces to underlying HMAC/hash. No independent attacks.",
     reductionQuality:"Proven secure extract-then-expand under random oracle model",
     performance:"Near-native hash speed — negligible overhead",
-    notes:"Two-phase: Extract (condense entropy) + Expand (derive keys). Supports domain separation labels. NOT for passwords — needs high-entropy input."
+    notes:"Two-phase: Extract (condense entropy) + Expand (derive keys). Supports domain separation labels. NOT for passwords — needs high-entropy input.",
+    maturity:"mature", standardization:"ietf", pqRelevance:"pq-ready"
   },
   { id:"argon2_kdf", name:"Argon2 (KDF mode)", category:"kdf", family:"Memory-hard", origin:"🇱🇺 Luxembourg",
     originDetail:"Alex Biryukov, Daniel Dinu, Dmitry Khovratovich. PHC winner 2015.",
@@ -764,7 +783,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"Memory-hardness limits ASIC/GPU acceleration. Time-memory tradeoff attacks partially mitigated by Argon2id.",
     reductionQuality:"Proven memory-hardness bounds",
     performance:"Tunable — typically 0.5-2 seconds per derivation",
-    notes:"Argon2id recommended (hybrid of side-channel resistant Argon2i and tradeoff-resistant Argon2d). Use for password → key derivation."
+    notes:"Argon2id recommended (hybrid of side-channel resistant Argon2i and tradeoff-resistant Argon2d). Use for password → key derivation.",
+    maturity:"established", standardization:"ietf", pqRelevance:"pq-ready"
   },
   { id:"scrypt_kdf", name:"scrypt", category:"kdf", family:"Memory-hard", origin:"🇨🇦 Canada",
     originDetail:"Colin Percival. IETF RFC 7914.",
@@ -836,7 +856,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"No attacks beyond generic birthday (2^128). Security reduces to hash.",
     reductionQuality:"Proven secure under PRF assumption on compression function",
     performance:"Same as underlying SHA-256",
-    notes:"Workhorse MAC. Works with any hash. PQ-safe because it only relies on hash security."
+    notes:"Workhorse MAC. Works with any hash. PQ-safe because it only relies on hash security.",
+    maturity:"mature", standardization:"ietf", pqRelevance:"pq-ready"
   },
   { id:"cmac_aes", name:"CMAC-AES-256", category:"mac", family:"Block cipher MAC", origin:"🇺🇸 United States",
     originDetail:"NIST SP 800-38B. Based on OMAC by Iwata & Kurosawa (Japan).",
@@ -870,7 +891,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"No known attacks beyond generic.",
     reductionQuality:"Direct Keccak sponge construction — no need for HMAC wrapper",
     performance:"Same as SHA-3",
-    notes:"Native MAC from Keccak — no HMAC-style double-hash needed. Built-in domain separation and customization string."
+    notes:"Native MAC from Keccak — no HMAC-style double-hash needed. Built-in domain separation and customization string.",
+    maturity:"mature", standardization:"nist", pqRelevance:"pq-ready"
   },
   { id:"poly1305", name:"Poly1305", category:"mac", family:"Polynomial MAC", origin:"🇺🇸 United States",
     originDetail:"Daniel J. Bernstein.",
@@ -925,7 +947,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"Memory-hardness limits GPU/ASIC. Hybrid mode resists both side-channel and TMTO attacks.",
     reductionQuality:"Proven memory-hardness bounds. Hybrid of Argon2i (side-channel safe) + Argon2d (TMTO resistant)",
     performance:"Tunable: recommended ≥64 MiB memory, ≥0.5s on target hardware",
-    notes:"Current gold standard for password hashing. Three tuning parameters: memory, iterations, parallelism. OWASP first recommendation."
+    notes:"Current gold standard for password hashing. Three tuning parameters: memory, iterations, parallelism. OWASP first recommendation.",
+    maturity:"established", standardization:"ietf", pqRelevance:"pq-ready"
   },
   { id:"bcrypt", name:"bcrypt", category:"password", family:"Blowfish-based", origin:"🇨🇦 Canada",
     originDetail:"Niels Provos & David Mazières. OpenBSD.",
@@ -942,7 +965,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"GPU-parallelizable but Blowfish's expensive key schedule provides some resistance. ~100x harder to GPU-crack than PBKDF2.",
     reductionQuality:"Eksblowfish key schedule with cost factor",
     performance:"Tunable cost factor — typically 100-400ms",
-    notes:"72-byte password limit (truncates silently). Not memory-hard but still decent GPU resistance. Acceptable if Argon2 unavailable."
+    notes:"72-byte password limit (truncates silently). Not memory-hard but still decent GPU resistance. Acceptable if Argon2 unavailable.",
+    wrongChoiceConsequence:[{scenario:"Assuming bcrypt handles long passwords safely",consequence:"bcrypt silently truncates passwords at 72 bytes. Two passwords that share the first 72 bytes are treated as identical. Users with long passphrases get less security than they expect. Argon2id has no such limit.",severity:"medium"},{scenario:"Using bcrypt with very low cost factor",consequence:"A cost factor below 10 on modern hardware allows millions of bcrypt guesses per second on GPU clusters. OWASP recommends a minimum cost factor of 10, targeting 250ms+ on the authentication server.",severity:"high"}]
   },
   { id:"scrypt_pw", name:"scrypt", category:"password", family:"Memory-hard", origin:"🇨🇦 Canada",
     originDetail:"Colin Percival.",
@@ -976,7 +1000,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"Trivially GPU-parallelizable. Billions of guesses/sec on commodity hardware.",
     reductionQuality:"Simple iterated PRF",
     performance:"Tunable iterations only",
-    notes:"DO NOT use for new systems. GPU farms destroy PBKDF2 at any iteration count. Only acceptable with 600,000+ iterations (OWASP 2023) and only if nothing else is available."
+    notes:"DO NOT use for new systems. GPU farms destroy PBKDF2 at any iteration count. Only acceptable with 600,000+ iterations (OWASP 2023) and only if nothing else is available.",
+    wrongChoiceConsequence:[{scenario:"Choosing PBKDF2 for new password storage",consequence:"PBKDF2 is not memory-hard. A GPU farm can test ~1M PBKDF2-SHA256 guesses/sec at 600K iterations. After a database breach, common passwords fall in minutes. Argon2id's memory-hardness makes the same attack orders of magnitude more expensive.",severity:"critical"},{scenario:"Using low iteration count (< 600K)",consequence:"OWASP 2023 recommends at least 600,000 iterations for PBKDF2-SHA256. Legacy systems often use 10,000-100,000 iterations, which are cracked trivially on modern hardware. Each halving of iterations doubles attacker throughput.",severity:"high"}]
   },
   { id:"balloon_pw", name:"Balloon Hashing", category:"password", family:"Memory-hard", origin:"🇺🇸 United States",
     originDetail:"Boneh, Corrigan-Gibbs, Schechter. Stanford.",
@@ -1014,7 +1039,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"Information-theoretically secure with t-1 shares — no computational attack possible.",
     reductionQuality:"Perfect secrecy: t-1 shares reveal zero information about the secret",
     performance:"O(n·t) computation — very fast",
-    notes:"Used in Quantum Vault. t-of-n threshold: any t shares reconstruct, t-1 shares reveal nothing. Works over finite fields (typically GF(256) or prime fields). PQ-safe by nature — no algebraic structure to attack."
+    notes:"Used in Quantum Vault. t-of-n threshold: any t shares reconstruct, t-1 shares reveal nothing. Works over finite fields (typically GF(256) or prime fields). PQ-safe by nature — no algebraic structure to attack.",
+    maturity:"mature", standardization:"none", pqRelevance:"pq-neutral"
   },
   { id:"blakley", name:"Blakley's Scheme", category:"sharing", family:"Geometric", origin:"🇺🇸 United States",
     originDetail:"George Blakley, 1979.",
@@ -1082,7 +1108,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"Information-theoretically secure. ALL shares required — loss of one share destroys the secret.",
     reductionQuality:"Perfect secrecy: n-1 shares reveal nothing",
     performance:"O(n) — trivial computation",
-    notes:"Simplest scheme: secret = sum of all shares. n-of-n only (no threshold). Foundation of additive-sharing MPC. PQ-safe by nature."
+    notes:"Simplest scheme: secret = sum of all shares. n-of-n only (no threshold). Foundation of additive-sharing MPC. PQ-safe by nature.",
+    maturity:"mature", standardization:"none", pqRelevance:"pq-neutral"
   },
 
   // ═══════════════════════════════════════
@@ -1209,7 +1236,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"Only relies on collision-resistant hashing — no algebraic attacks.",
     reductionQuality:"Based only on hash function collision resistance — minimal assumptions",
     performance:"Larger proofs and slower verification than SNARKs, but no trusted setup.",
-    notes:"PQ-SAFE. No trusted setup (transparent). Proofs are much larger than SNARKs. Prover is fast. Ideal when trust assumptions must be minimal."
+    notes:"PQ-SAFE. No trusted setup (transparent). Proofs are much larger than SNARKs. Prover is fast. Ideal when trust assumptions must be minimal.",
+    maturity:"emerging", standardization:"none", pqRelevance:"pq-safe"
   },
   { id:"bulletproofs", name:"Bulletproofs", category:"zkp", family:"Discrete-log based", origin:"🇬🇧/🇺🇸 UK/US",
     originDetail:"Bünz (US), Bootle (UK), et al. Stanford / UCL, 2018.",
@@ -1391,7 +1419,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"General Number Field Sieve (GNFS). Classical: 2^112 equivalent. Shor's algorithm: polynomial time.",
     reductionQuality:"Proven secure under RSA assumption with random oracle (OAEP — Bellare & Rogaway 1995)",
     performance:"~1ms decrypt / ~0.1ms encrypt (2048-bit, with CRT optimization)",
-    notes:"OAEP padding (RFC 8017) is mandatory — never use raw RSA or PKCS#1 v1.5. NIST deprecates 112-bit security after 2030. Not PQ-safe."
+    notes:"OAEP padding (RFC 8017) is mandatory — never use raw RSA or PKCS#1 v1.5. NIST deprecates 112-bit security after 2030. Not PQ-safe.",
+    wrongChoiceConsequence:[{scenario:"Using RSA-2048 for new long-term encryption",consequence:"RSA-2048 provides only 112-bit classical security — below the 128-bit minimum for long-term systems. NIST will deprecate 112-bit security after 2030. Shor's algorithm reduces RSA to polynomial time, providing 0-bit post-quantum security.",severity:"high"},{scenario:"Using PKCS#1 v1.5 padding instead of OAEP",consequence:"PKCS#1 v1.5 is vulnerable to Bleichenbacher's adaptive chosen-ciphertext attack (1998). An attacker can decrypt arbitrary ciphertexts by sending ~1M queries to a padding oracle. This attack has been demonstrated against real TLS implementations (ROBOT attack, 2018).",severity:"critical"},{scenario:"Using RSA for static key exchange (no forward secrecy)",consequence:"If the server's RSA private key is compromised — by theft, legal order, or vulnerability like Heartbleed — all past sessions encrypted under that key can be decrypted retroactively. Ephemeral ECDHE key exchange eliminates this risk.",severity:"high"}]
   },
   { id:"rsa_oaep_4096", name:"RSA-OAEP-4096", category:"asymmetric", family:"RSA", origin:"🇺🇸 United States",
     originDetail:"RSA Security LLC. RSA Laboratories. Standardized by NIST and IETF.",
@@ -1548,7 +1577,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"CNN-based deep learning detectors (SRNet, SiaStegNet) at embedding rates above ~0.4 bpp.",
     reductionQuality:"No formal proof — empirically best-in-class against SRM-based steganalysis (2012–2024)",
     performance:"~milliseconds per image (wavelet filter computation)",
-    notes:"State of practice for spatial-domain image steganography. HUGO is a comparable alternative. Neural-network steganography (SteganoGAN) is the emerging frontier but not yet standardized or widely peer-reviewed."
+    notes:"State of practice for spatial-domain image steganography. HUGO is a comparable alternative. Neural-network steganography (SteganoGAN) is the emerging frontier but not yet standardized or widely peer-reviewed.",
+    maturity:"established", standardization:"none", pqRelevance:"pq-neutral"
   },
 
   // ═══════════════════════════════════════
@@ -1569,7 +1599,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"Shor's algorithm solves DL in polynomial time. Classical: Pollard's rho at 2^128.",
     reductionQuality:"Proven secure under DL assumption and random oracle (RFC 9591)",
     performance:"2 rounds; O(t) communication. ~1–5ms per party on modern hardware.",
-    notes:"First threshold signature scheme with an IETF RFC. Used in cryptocurrency custody (Fireblocks uses FROST variants). Not PQ-safe. Key is never reconstructed — distinct from Shamir secret sharing."
+    notes:"First threshold signature scheme with an IETF RFC. Used in cryptocurrency custody (Fireblocks uses FROST variants). Not PQ-safe. Key is never reconstructed — distinct from Shamir secret sharing.",
+    maturity:"established", standardization:"ietf", pqRelevance:"pq-vulnerable"
   },
   { id:"gg20", name:"GG20", category:"threshold_sig", family:"ECDSA-based", origin:"🇺🇸 United States",
     originDetail:"Rosario Gennaro & Steven Goldfeder. CCS 2020. ePrint 2020/540.",
@@ -1658,7 +1689,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"No known attacks. Security requires strong entropy seed. Grover provides at most 2^128 quantum state search.",
     reductionQuality:"Proven secure under HMAC-PRF assumption (SP 800-90A Rev 1)",
     performance:"~100–200 MB/s throughput (HMAC-SHA-256 bound)",
-    notes:"The 2008 Debian OpenSSL incident (predictable keys from a broken entropy pool) illustrates that CSPRNG quality is meaningless without adequate entropy seeding. HMAC-DRBG itself was not at fault — only the entropy source was broken."
+    notes:"The 2008 Debian OpenSSL incident (predictable keys from a broken entropy pool) illustrates that CSPRNG quality is meaningless without adequate entropy seeding. HMAC-DRBG itself was not at fault — only the entropy source was broken.",
+    maturity:"mature", standardization:"nist", pqRelevance:"pq-ready"
   },
   { id:"ctr_drbg", name:"CTR-DRBG (AES-256)", category:"csprng", family:"NIST DRBG", origin:"🇺🇸 United States",
     originDetail:"NIST SP 800-90A Rev 1.",
@@ -1675,7 +1707,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"No known attacks. Grover quadratic speedup on AES-256 key space: 2^128.",
     reductionQuality:"Proven secure under PRP assumption on AES (SP 800-90A Rev 1)",
     performance:"~1–2 GB/s with AES-NI — fastest NIST-approved DRBG on modern hardware",
-    notes:"Default DRBG in Windows CNG and many HSMs. Requires adequate entropy for initial seeding. AES-NI acceleration provides timing-safe operations on supported hardware."
+    notes:"Default DRBG in Windows CNG and many HSMs. Requires adequate entropy for initial seeding. AES-NI acceleration provides timing-safe operations on supported hardware.",
+    maturity:"mature", standardization:"nist", pqRelevance:"pq-ready"
   },
   { id:"hash_drbg", name:"Hash-DRBG", category:"csprng", family:"NIST DRBG", origin:"🇺🇸 United States",
     originDetail:"NIST SP 800-90A Rev 1.",
@@ -1709,7 +1742,8 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"No known attacks on ChaCha20. Grover quantum key search: 2^128.",
     reductionQuality:"Proven secure under ChaCha20 PRF assumption (inherits from RFC 8439)",
     performance:"~1–3 GB/s in software — fastest software DRBG. Preferred over HMAC-DRBG on non-AES-NI platforms.",
-    notes:"Linux ≥ 5.17 default kernel CSPRNG. Constant-time — no lookup tables. Cannot be used in FIPS 140-2/3 compliant deployments: use HMAC-DRBG or CTR-DRBG for FIPS."
+    notes:"Linux ≥ 5.17 default kernel CSPRNG. Constant-time — no lookup tables. Cannot be used in FIPS 140-2/3 compliant deployments: use HMAC-DRBG or CTR-DRBG for FIPS.",
+    maturity:"established", standardization:"none", pqRelevance:"pq-ready"
   },
   { id:"fortuna", name:"Fortuna", category:"csprng", family:"Pool-based DRBG", origin:"🇺🇸 United States",
     originDetail:"Niels Ferguson & Bruce Schneier. 'Practical Cryptography' (Wiley, 2003). Chapters 9–10.",
@@ -1726,6 +1760,7 @@ export const ALGORITHMS: Algorithm[] = [
     bestAttack:"No known attacks. AES-256 CTR mode with 32-pool catastrophic reseed recovery.",
     reductionQuality:"Proven secure under AES-256 PRF assumption with pool-based reseed recovery design",
     performance:"~1–2 GB/s AES-NI backed — fast OS CSPRNG",
-    notes:"Key innovation: 32 entropy pools — even full state compromise is eventually recovered as independent sources refill the pools. Used in FreeBSD and macOS. Not NIST-approved. Ferguson & Schneier designed it to be 'the last PRNG you will ever need.'"
+    notes:"Key innovation: 32 entropy pools — even full state compromise is eventually recovered as independent sources refill the pools. Used in FreeBSD and macOS. Not NIST-approved. Ferguson & Schneier designed it to be 'the last PRNG you will ever need.'",
+    maturity:"established", standardization:"none", pqRelevance:"pq-ready"
   },
 ];

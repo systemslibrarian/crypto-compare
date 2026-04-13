@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Badge, RecommendationBadge, ReviewBadge, SecurityMeter, recommendationText } from "@/components/ui";
 import { CATEGORY_ACCENT } from "@/data/categories";
+import { IMPLEMENTATIONS, ECOSYSTEM_LABELS, type ImplementationEntry } from "@/data/implementations";
 import type { Algorithm } from "@/types/crypto";
 
 type AlgoCardProps = {
@@ -152,6 +153,9 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
           <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--color-badge-green-text)", background: "var(--color-badge-green-bg)", border: "1px solid var(--color-badge-green-border)", padding: "2px 8px", borderRadius: "4px", letterSpacing: "0.4px", textTransform: "uppercase" }}>Advisor pick</span>
         )}
       </div>
+      {(algo.maturity || algo.standardization || algo.pqRelevance) && (
+        <TrustBadges maturity={algo.maturity} standardization={algo.standardization} pqRelevance={algo.pqRelevance} />
+      )}
       <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px", flexWrap: "wrap" }}>
         <span
           style={{
@@ -200,6 +204,10 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
           <span style={{ color: "var(--color-text-warning)" }}>{algo.whyNotThis}</span>
         </div>
       )}
+      {algo.wrongChoiceConsequence && algo.wrongChoiceConsequence.length > 0 && (
+        <WrongChoiceSection consequences={algo.wrongChoiceConsequence} />
+      )}
+      <ImplementationsSection algoId={algo.id} />
       {detailOpen && (
         <div
           onClick={(e) => e.stopPropagation()}
@@ -251,6 +259,149 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function WrongChoiceSection({ consequences }: { consequences: NonNullable<Algorithm["wrongChoiceConsequence"]> }) {
+  const [open, setOpen] = useState(false);
+  const severityColor: Record<string, string> = {
+    critical: "var(--color-badge-red-text, #ff6b6b)",
+    high: "var(--color-badge-orange-text, #ffaa44)",
+    medium: "var(--color-badge-yellow-text)",
+    low: "var(--color-text-secondary)",
+  };
+  return (
+    <div style={{ marginTop: "10px" }}>
+      <button
+        type="button"
+        onClick={(e) => { e.stopPropagation(); setOpen((v) => !v); }}
+        aria-expanded={open}
+        className="focusRing"
+        style={{
+          background: "none",
+          border: "none",
+          color: "var(--color-badge-orange-text, var(--color-text-link))",
+          cursor: "pointer",
+          fontSize: "12px",
+          fontWeight: 700,
+          padding: "4px 0",
+          fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+          letterSpacing: "0.3px",
+        }}
+      >
+        <span aria-hidden="true" style={{ fontSize: "11px", display: "inline-block", transition: "transform 0.15s", transform: open ? "rotate(90deg)" : "none", marginRight: "6px" }}>▶</span>
+        {open ? "Hide wrong-choice consequences" : `⚠ ${consequences.length} wrong-choice consequence${consequences.length !== 1 ? "s" : ""}`}
+      </button>
+      {open && (
+        <div onClick={(e) => e.stopPropagation()} style={{ marginTop: "8px", display: "flex", flexDirection: "column", gap: "8px" }}>
+          {consequences.map((c, i) => (
+            <div key={i} style={{ padding: "10px 12px", borderRadius: "6px", background: "var(--color-bg-warning)", border: "1px solid var(--color-badge-yellow-border)", fontSize: "13px", lineHeight: 1.6 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
+                <span style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", color: severityColor[c.severity] }}>{c.severity}</span>
+                <strong style={{ color: "var(--color-text-heading)", fontSize: "13px" }}>{c.scenario}</strong>
+              </div>
+              <span style={{ color: "var(--color-text-warning, var(--color-text-body))" }}>{c.consequence}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ImplementationsSection({ algoId }: { algoId: string }) {
+  const [open, setOpen] = useState(false);
+  const impls = IMPLEMENTATIONS.filter((i) => i.algorithmId === algoId);
+  if (impls.length === 0) return null;
+  const byEco: Record<string, ImplementationEntry[]> = {};
+  for (const impl of impls) {
+    if (!byEco[impl.ecosystem]) byEco[impl.ecosystem] = [];
+    byEco[impl.ecosystem].push(impl);
+  }
+  const auditColor: Record<string, string> = {
+    audited: "var(--color-badge-green-text, #5ce65c)",
+    unaudited: "var(--color-badge-red-text, #ff6b6b)",
+    unknown: "var(--color-badge-yellow-text, #e6c85c)",
+  };
+  return (
+    <div style={{ marginTop: "10px" }}>
+      <button
+        type="button"
+        onClick={(e) => { e.stopPropagation(); setOpen((v) => !v); }}
+        aria-expanded={open}
+        className="focusRing"
+        style={{
+          background: "none",
+          border: "none",
+          color: "var(--color-text-link)",
+          cursor: "pointer",
+          fontSize: "12px",
+          fontWeight: 700,
+          padding: "4px 0",
+          fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+          letterSpacing: "0.3px",
+        }}
+      >
+        <span aria-hidden="true" style={{ fontSize: "11px", display: "inline-block", transition: "transform 0.15s", transform: open ? "rotate(90deg)" : "none", marginRight: "6px" }}>▶</span>
+        {open ? "Hide implementations" : `🔧 ${impls.length} implementation${impls.length !== 1 ? "s" : ""} across ${Object.keys(byEco).length} ecosystem${Object.keys(byEco).length !== 1 ? "s" : ""}`}
+      </button>
+      {open && (
+        <div onClick={(e) => e.stopPropagation()} style={{ marginTop: "8px", display: "flex", flexDirection: "column", gap: "10px" }}>
+          {Object.entries(byEco).map(([eco, list]) => (
+            <div key={eco}>
+              <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", color: "var(--color-text-accent-bright)", marginBottom: "4px" }}>
+                {ECOSYSTEM_LABELS[eco as keyof typeof ECOSYSTEM_LABELS]?.icon} {ECOSYSTEM_LABELS[eco as keyof typeof ECOSYSTEM_LABELS]?.label}
+              </div>
+              {list.map((impl, idx) => (
+                <div key={idx} style={{ padding: "8px 10px", borderRadius: "6px", background: "var(--color-bg-card)", border: "1px solid var(--color-border-subtle)", fontSize: "12px", lineHeight: 1.6, marginBottom: "4px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
+                    <strong style={{ color: "var(--color-text-heading)" }}>{impl.library}</strong>
+                    <span style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", color: auditColor[impl.auditStatus] }}>{impl.auditStatus}</span>
+                  </div>
+                  <span style={{ color: "var(--color-text-muted)" }}>{impl.notes}</span>
+                  {impl.warning && <div style={{ color: "var(--color-badge-yellow-text)", fontSize: "11px", marginTop: "2px" }}>⚠ {impl.warning}</div>}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function TrustBadges({ maturity, standardization, pqRelevance }: { maturity?: string; standardization?: string; pqRelevance?: string }) {
+  const badges: { label: string; color: string; bg: string; border: string }[] = [];
+  if (maturity) {
+    const m: Record<string, { color: string; bg: string; border: string }> = {
+      mature: { color: "var(--color-badge-green-text, #5ce65c)", bg: "var(--color-badge-green-bg, #143d1a)", border: "var(--color-badge-green-border, #2a7d2a)" },
+      established: { color: "var(--color-badge-blue-text, #6cb6ff)", bg: "var(--color-badge-blue-bg, #14293d)", border: "var(--color-badge-blue-border, #2a5a7d)" },
+      emerging: { color: "var(--color-badge-yellow-text, #e6c85c)", bg: "var(--color-badge-yellow-bg, #3d3414)", border: "var(--color-badge-yellow-border, #7d6e2a)" },
+      experimental: { color: "var(--color-badge-red-text, #ff6b6b)", bg: "var(--color-badge-red-bg, #3d1414)", border: "var(--color-badge-red-border, #7d2a2a)" },
+    };
+    const s = m[maturity] ?? m.experimental;
+    badges.push({ label: maturity, ...s });
+  }
+  if (standardization && standardization !== "none") {
+    badges.push({ label: standardization.toUpperCase(), color: "var(--color-text-accent-bright, #a0d0ff)", bg: "var(--color-bg-control, #1a1a2e)", border: "var(--color-border-muted, #333)" });
+  }
+  if (pqRelevance) {
+    const p: Record<string, { label: string; color: string; bg: string; border: string }> = {
+      "pq-safe": { label: "PQ-safe", color: "var(--color-badge-green-text, #5ce65c)", bg: "var(--color-badge-green-bg, #143d1a)", border: "var(--color-badge-green-border, #2a7d2a)" },
+      "pq-ready": { label: "PQ-ready", color: "var(--color-badge-blue-text, #6cb6ff)", bg: "var(--color-badge-blue-bg, #14293d)", border: "var(--color-badge-blue-border, #2a5a7d)" },
+      "pq-vulnerable": { label: "PQ-vulnerable", color: "var(--color-badge-red-text, #ff6b6b)", bg: "var(--color-badge-red-bg, #3d1414)", border: "var(--color-badge-red-border, #7d2a2a)" },
+      "pq-neutral": { label: "PQ-neutral", color: "var(--color-text-secondary, #aaa)", bg: "transparent", border: "var(--color-border-muted, #333)" },
+    };
+    const b = p[pqRelevance] ?? p["pq-neutral"];
+    badges.push(b);
+  }
+  if (badges.length === 0) return null;
+  return (
+    <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginBottom: "8px" }}>
+      {badges.map((b, i) => (
+        <span key={i} style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", padding: "2px 8px", borderRadius: "4px", color: b.color, background: b.bg, border: `1px solid ${b.border}` }}>{b.label}</span>
+      ))}
     </div>
   );
 }

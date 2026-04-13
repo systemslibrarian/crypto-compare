@@ -101,6 +101,14 @@ export type AlgorithmBase = {
   countryTag?: string;
   sources?: AlgorithmSource[];
   lastReviewed?: string;
+  wrongChoiceConsequence?: {
+    scenario: string;
+    consequence: string;
+    severity: 'critical' | 'high' | 'medium' | 'low';
+  }[];
+  maturity?: 'mature' | 'established' | 'emerging' | 'experimental';
+  standardization?: 'nist' | 'ietf' | 'iso' | 'candidate' | 'none';
+  pqRelevance?: 'pq-safe' | 'pq-ready' | 'pq-vulnerable' | 'pq-neutral';
 };
 
 export type SymmetricAlgorithm = AlgorithmBase & {

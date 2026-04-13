@@ -112,6 +112,74 @@ export default function AppHeaderNav({
               Safe Defaults
             </Link>
             <Link
+              href="/stacks"
+              className="headerBtn desktopOnly focusRing"
+              style={{
+                background: "var(--color-bg-control)",
+                color: "var(--color-text-body)",
+                border: "1px solid var(--color-border-muted)",
+                borderRadius: "6px",
+                padding: "10px 16px",
+                fontSize: "14px",
+                fontWeight: 700,
+                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+                textDecoration: "none",
+              }}
+            >
+              Stacks
+            </Link>
+            <Link
+              href="/migrate"
+              className="headerBtn desktopOnly focusRing"
+              style={{
+                background: "var(--color-bg-control)",
+                color: "var(--color-text-body)",
+                border: "1px solid var(--color-border-muted)",
+                borderRadius: "6px",
+                padding: "10px 16px",
+                fontSize: "14px",
+                fontWeight: 700,
+                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+                textDecoration: "none",
+              }}
+            >
+              Migrate
+            </Link>
+            <Link
+              href="/implementations"
+              className="headerBtn desktopOnly focusRing"
+              style={{
+                background: "var(--color-bg-control)",
+                color: "var(--color-text-body)",
+                border: "1px solid var(--color-border-muted)",
+                borderRadius: "6px",
+                padding: "10px 16px",
+                fontSize: "14px",
+                fontWeight: 700,
+                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+                textDecoration: "none",
+              }}
+            >
+              Implementations
+            </Link>
+            <Link
+              href="/checklist"
+              className="headerBtn desktopOnly focusRing"
+              style={{
+                background: "var(--color-bg-control)",
+                color: "var(--color-text-body)",
+                border: "1px solid var(--color-border-muted)",
+                borderRadius: "6px",
+                padding: "10px 16px",
+                fontSize: "14px",
+                fontWeight: 700,
+                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+                textDecoration: "none",
+              }}
+            >
+              Checklist
+            </Link>
+            <Link
               href="/visuals"
               className="headerBtn desktopOnly focusRing"
               style={{
@@ -170,6 +238,38 @@ export default function AppHeaderNav({
             style={{ textDecoration: "none" }}
           >
             🛡️ Safe Defaults
+          </Link>
+          <Link
+            href="/stacks"
+            className="focusRing mobileNavActionBtn"
+            onClick={onCloseMobileNav}
+            style={{ textDecoration: "none" }}
+          >
+            🧱 Stacks
+          </Link>
+          <Link
+            href="/migrate"
+            className="focusRing mobileNavActionBtn"
+            onClick={onCloseMobileNav}
+            style={{ textDecoration: "none" }}
+          >
+            🔄 Migrate
+          </Link>
+          <Link
+            href="/implementations"
+            className="focusRing mobileNavActionBtn"
+            onClick={onCloseMobileNav}
+            style={{ textDecoration: "none" }}
+          >
+            🔧 Implementations
+          </Link>
+          <Link
+            href="/checklist"
+            className="focusRing mobileNavActionBtn"
+            onClick={onCloseMobileNav}
+            style={{ textDecoration: "none" }}
+          >
+            ✅ Checklist
           </Link>
           <Link
             href="/visuals"

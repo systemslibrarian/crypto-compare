@@ -57,6 +57,14 @@ const AlgorithmBaseSchema = z.object({
   countryTag: z.string().optional(),
   sources: z.array(AlgorithmSourceSchema).optional(),
   lastReviewed: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Must be YYYY-MM-DD format").optional(),
+  wrongChoiceConsequence: z.array(z.object({
+    scenario: z.string().min(1),
+    consequence: z.string().min(1),
+    severity: z.enum(["critical", "high", "medium", "low"]),
+  })).optional(),
+  maturity: z.enum(["mature", "established", "emerging", "experimental"]).optional(),
+  standardization: z.enum(["nist", "ietf", "iso", "candidate", "none"]).optional(),
+  pqRelevance: z.enum(["pq-safe", "pq-ready", "pq-vulnerable", "pq-neutral"]).optional(),
 });
 
 const SymmetricSchema = AlgorithmBaseSchema.extend({

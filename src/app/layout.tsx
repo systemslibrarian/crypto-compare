@@ -17,7 +17,7 @@ const jetBrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "crypto::compare — Cryptographic Algorithm Reference",
   description:
-    "Interactive reference tool for 97 cryptographic algorithms across 17 categories. Compare security levels, key sizes, performance, and attack complexity.",
+    "Choose cryptography with evidence, tradeoffs, and safe defaults. 97 algorithms · 17 categories · real-world recommendations · implementation maps · architecture checklists.",
   keywords: ["cryptography", "post-quantum", "NIST", "ML-KEM", "ML-DSA", "AES", "ChaCha20", "SHA-3", "Argon2", "algorithm comparison", "PQC", "lattice", "hash-based", "KEM", "digital signatures"],
   robots: { index: true, follow: true },
   authors: [{ name: "crypto::compare contributors" }],
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/crypto-compare" },
   openGraph: {
     title: "crypto::compare — Cryptographic Algorithm Reference",
-    description: "Interactive reference for 97 cryptographic algorithms — 17 categories, post-quantum, international standards. Compare side by side.",
+    description: "Choose cryptography with evidence, tradeoffs, and safe defaults. 97 algorithms · 17 categories · real-world recommendations.",
     type: "website",
     siteName: "crypto::compare",
     locale: "en_US",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "crypto::compare",
-    description: "Interactive cryptographic algorithm reference — 17 categories, 97 algorithms, PQ-safe recommendations.",
+    description: "Cryptographic algorithm reference — 97 algorithms, 17 categories, safe defaults, implementation maps, and architecture checklists.",
   },
   icons: {
     icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◈</text></svg>",
@@ -62,7 +62,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebApplication",
               name: "crypto::compare",
-              description: "Interactive reference tool for 97 cryptographic algorithms across 17 categories.",
+              description: "Choose cryptography with evidence, tradeoffs, and safe defaults. 97 algorithms · 17 categories · real-world recommendations · implementation maps.",
               applicationCategory: "ReferenceApplication",
               operatingSystem: "Any",
               browserRequirements: "Requires JavaScript",
