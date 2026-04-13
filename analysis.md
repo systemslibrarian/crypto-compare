@@ -7,6 +7,7 @@ Current-state coverage analysis for crypto::compare category project mappings ve
 ## Executive Summary
 
 - There is no longer a broad demo-mapping gap.
+- crypto-lab README demo count basis: **67** (69 links minus 2 non-demo index links)
 - Live crypto-lab index demos: **64**
 - crypto-lab demos mapped in `src/data/categories.ts`: **65**
 - Live demos not mapped: **0**
@@ -27,6 +28,28 @@ Counts were derived from:
 ---
 
 ## Coverage Reconciliation
+
+### README-Based Count (Your Counting Method)
+
+From `https://github.com/systemslibrarian/crypto-lab/blob/main/README.md`:
+
+- Total GitHub Pages links listed: **69**
+- Non-demo links in that set:
+	- `https://systemslibrarian.github.io/crypto-compare/`
+	- `https://systemslibrarian.github.io/crypto-lab/`
+- Demo links by README method: **67**
+
+This is the correct reconciliation for the "67 demos" statement.
+
+### Source-Set Differences From README
+
+- README includes `cryto-lab-ckks-lab` (typoed slug)
+- Category mapping uses corrected `crypto-lab-ckks-lab`
+- Category mapping includes `meow-decoder`, which is not currently in crypto-lab README demo links
+
+### Live Index Snapshot (Runtime HTML Parse)
+
+At analysis time, the published crypto-lab index page rendered fewer cards than the README link list. Treat README as the portfolio intent list, and live index as deployment/render state.
 
 | Metric | Count |
 |---|---:|
