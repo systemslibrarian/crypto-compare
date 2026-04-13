@@ -175,8 +175,8 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
       tabIndex={expanded ? undefined : 0}
       aria-label={expanded ? undefined : `Expand ${info.title} details`}
     >
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px" }}>
-        <div style={{ flex: 1 }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", flexWrap: "wrap" }}>
+        <div style={{ flex: "1 1 320px", minWidth: 0 }}>
           <div style={{ fontSize: "22px", fontWeight: 700, color: "var(--color-text-heading)", marginBottom: "6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
             {info.title}
           </div>
@@ -202,6 +202,7 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
             fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
             whiteSpace: "nowrap",
             flexShrink: 0,
+            marginLeft: "auto",
             transition: "all 0.15s",
             minHeight: "44px",
           }}

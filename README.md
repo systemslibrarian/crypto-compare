@@ -2,7 +2,7 @@
 
 **Cryptographic algorithm decision system for engineers, architects, and technical decision-makers.**
 
-97 algorithms. 17 categories. Sourced recommendations. Safe-usage guidance. Reference architectures. Post-quantum migration context.
+97 algorithms. 17 categories. 68 linked public demos. Sourced recommendations. Safe-usage guidance. Reference architectures. Post-quantum migration context.
 
 🌐 **[Live Site →](https://systemslibrarian.github.io/crypto-compare/)**
 
@@ -304,7 +304,7 @@ That honesty is part of the trust model, not a weakness in spite of it.
 | **Download justification reports** | Markdown output for architecture reviews and design discussion |
 | **Filter and sort** | PQ-safe, standards-track, NIST status, deployment, origin, size, and security dimensions |
 | **Review hybrid patterns** | Classical-plus-PQ constructions for practical migration planning |
-| **Explore linked demo projects** | Each category links to working open-source projects that demonstrate the underlying cryptographic concepts in practice |
+| **Explore linked demo projects** | 68 linked public demos across the mapped categories, with per-category project context in the explainer panels |
 | **Read safety and architecture guidance** | Use-case content, pitfalls, library direction, and system-level flows |
 
 ### Coverage Snapshot
@@ -398,6 +398,12 @@ High-value files:
 ## Related Projects
 
 Each category in the app links to working demo projects that illustrate the cryptographic concepts in practice.
+
+- Full live crypto-lab index: [systemslibrarian.github.io/crypto-lab](https://systemslibrarian.github.io/crypto-lab/)
+- App mapping source of truth: [src/data/categories.ts](/workspaces/crypto-compare/src/data/categories.ts)
+- Current mapped public demos: **68** (including crypto-lab and non-crypto-lab public repos)
+
+The list below is representative rather than exhaustive.
 
 | Project | Focus |
 |---------|-------|
