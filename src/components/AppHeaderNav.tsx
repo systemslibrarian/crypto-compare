@@ -95,6 +95,23 @@ export default function AppHeaderNav({
               </button>
             )}
             <Link
+              href="/safe-defaults"
+              className="headerBtn desktopOnly focusRing"
+              style={{
+                background: "var(--color-bg-control)",
+                color: "var(--color-text-body)",
+                border: "1px solid var(--color-border-muted)",
+                borderRadius: "6px",
+                padding: "10px 16px",
+                fontSize: "14px",
+                fontWeight: 700,
+                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+                textDecoration: "none",
+              }}
+            >
+              Safe Defaults
+            </Link>
+            <Link
               href="/visuals"
               className="headerBtn desktopOnly focusRing"
               style={{
@@ -146,6 +163,14 @@ export default function AppHeaderNav({
       )}
       <nav ref={mobileNavRef} aria-label="Cryptography categories" role="tablist" className={`categoryNav ${mobileNavOpen ? "mobileNavOpen" : ""}`} style={{ display: "flex", gap: 0, borderBottom: "1px solid var(--color-border-subtle)", position: "sticky", top: 0, zIndex: 10, background: "var(--color-bg)" }}>
         <div className="mobileNavActions" aria-hidden={!mobileNavOpen} hidden={!mobileNavOpen}>
+          <Link
+            href="/safe-defaults"
+            className="focusRing mobileNavActionBtn"
+            onClick={onCloseMobileNav}
+            style={{ textDecoration: "none" }}
+          >
+            🛡️ Safe Defaults
+          </Link>
           <Link
             href="/visuals"
             className="focusRing mobileNavActionBtn"

@@ -1,12 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import AdvisorCta from "@/components/AdvisorCta";
 import AlgoCard from "@/components/AlgoCard";
 import AppHeaderNav from "@/components/AppHeaderNav";
 import CategoryExplainer from "@/components/CategoryExplainer";
 import ComparisonWorkspace from "@/components/ComparisonWorkspace";
 import FooterShell from "@/components/FooterShell";
 import HeroOverview from "@/components/HeroOverview";
+import IntentCards from "@/components/IntentCards";
 import KnowledgeSections from "@/components/KnowledgeSections";
 import MethodologyPanel from "@/components/MethodologyPanel";
 import QuickStartPanel from "@/components/QuickStartPanel";
@@ -314,6 +316,10 @@ export default function CryptoCompare() {
             trustSnapshot={trustSnapshot}
             totalSources={trustSnapshot.totalSources}
           />
+
+          <IntentCards />
+
+          <AdvisorCta />
 
           <QuickStartPanel
             showMethodology={showMethodology}
