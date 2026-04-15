@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import AdvisorCta from "@/components/AdvisorCta";
 import AlgoCard from "@/components/AlgoCard";
+import { CounselButton } from "@/components/CounselButton";
 import AppHeaderNav from "@/components/AppHeaderNav";
 import CategoryExplainer from "@/components/CategoryExplainer";
 import ComparisonWorkspace from "@/components/ComparisonWorkspace";
@@ -420,6 +421,7 @@ export default function CryptoCompare() {
 
         <FooterShell trustSnapshot={trustSnapshot} />
       </div>
+      <CounselButton variant="floating" ariaLabel="Open Crypto Counsel AI advisor" />
     </div>
   );
 }
