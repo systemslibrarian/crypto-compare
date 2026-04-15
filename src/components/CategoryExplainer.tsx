@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { CATEGORY_ACCENT, CATEGORY_INFO } from "@/data/categories";
+import { CounselButton } from "@/components/CounselButton";
 import type { AlgorithmCategory } from "@/types/crypto";
 
 /**
@@ -181,6 +182,11 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
             {info.title}
           </div>
           <div style={{ fontSize: "16px", color: "var(--color-text-caption)", lineHeight: "1.7", fontStyle: "italic" }}>{info.oneLiner}</div>
+          <CounselButton
+            variant="category"
+            question={`Which ${info.title} algorithm should I use and why?`}
+            ariaLabel={`Ask Counsel which ${info.title} algorithm to use`}
+          />
         </div>
         <button
           onClick={(e) => {
