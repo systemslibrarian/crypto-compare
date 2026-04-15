@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Badge, RecommendationBadge, ReviewBadge, SecurityMeter, recommendationText } from "@/components/ui";
+import { CounselButton } from "@/components/CounselButton";
 import { CATEGORY_ACCENT } from "@/data/categories";
 import { IMPLEMENTATIONS, ECOSYSTEM_LABELS, type ImplementationEntry } from "@/data/implementations";
 import type { Algorithm } from "@/types/crypto";
@@ -186,6 +187,11 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
           <span style={{ color: "var(--color-text-accent-bright)", fontWeight: 600 }}>{algo.sources.length} source{algo.sources.length !== 1 ? "s" : ""}</span>
           <span>·</span>
           <span>{algo.status === "standard" ? "Standards-backed" : "Candidate / emerging"}</span>
+          <CounselButton
+            variant="inline"
+            question={`Tell me about ${algo.name}`}
+            ariaLabel={`Ask Counsel about ${algo.name}`}
+          />
         </div>
       )}
       {(algo.recommendation === "legacy" || algo.recommendation === "avoid") && (
