@@ -1,0 +1,157 @@
+name: Data Freshness Check
+
+on:
+  # Run on the 1st and 15th of every month at 09:00 UTC
+  schedule:
+    - cron: "0 9 1,15 * *"
+  # Allow manual trigger from Actions tab
+  workflow_dispatch:
+    inputs:
+      stale_days:
+        description: "Flag entries older than N days"
+        default: "180"
+      check_links:
+        description: "Also check source URLs for dead links"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  refresh-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run data validation
+        run: npm run validate
+
+      - name: Run freshness check
+        id: refresh
+        env:
+          REPORT_PATH: refresh-report.json
+        run: |
+          ARGS="--stale-days=${{ inputs.stale_days || '180' }}"
+          if [ "${{ inputs.check_links }}" = "true" ]; then
+            ARGS="$ARGS --check-links"
+          fi
+          npx tsx scripts/refresh-data.ts $ARGS || echo "HAS_ISSUES=true" >> "$GITHUB_ENV"
+
+      - name: Upload report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: refresh-report
+          path: refresh-report.json
+
+      - name: Create or update issue if stale
+        if: env.HAS_ISSUES == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('refresh-report.json', 'utf8'));
+
+            let body = `## 🔄 Automated Data Freshness Report\n\n`;
+            body += `**Generated:** ${report.generated}\n`;
+            body += `**Threshold:** entries older than ${report.staleDays} days\n`;
+            body += `**Total algorithms:** ${report.totalAlgorithms}\n\n`;
+
+            if (report.staleEntries.length > 0) {
+              body += `### ⚠️ Stale Entries (${report.staleEntries.length})\n\n`;
+              body += `| Algorithm | ID | Last Reviewed | Days Ago |\n`;
+              body += `|-----------|----|--------------|---------|\n`;
+              for (const e of report.staleEntries) {
+                body += `| ${e.name} | \`${e.id}\` | ${e.lastReviewed} | ${e.daysAgo} |\n`;
+              }
+              body += `\n`;
+            }
+
+            if (report.missingProvenance.length > 0) {
+              body += `### ❌ Missing Provenance\n\n`;
+              for (const id of report.missingProvenance) {
+                body += `- \`${id}\`\n`;
+              }
+              body += `\n`;
+            }
+
+            if (report.deadLinks.length > 0) {
+              body += `### 🔗 Dead Links (${report.deadLinks.length})\n\n`;
+              body += `| Algorithm | Source | URL | Status |\n`;
+              body += `|-----------|--------|-----|--------|\n`;
+              for (const d of report.deadLinks) {
+                body += `| \`${d.algorithmId}\` | ${d.label} | ${d.url} | ${d.status} |\n`;
+              }
+              body += `\n`;
+            }
+
+            if (report.upstreamNotices.length > 0) {
+              body += `### 📡 Upstream Activity\n\n`;
+              for (const n of report.upstreamNotices) {
+                body += `- **[${n.source}]** ${n.title}\n`;
+                body += `  Affects: ${n.relevant.map(r => '`' + r + '`').join(', ')}\n`;
+                body += `  [View source](${n.url})\n\n`;
+              }
+            }
+
+            body += `---\n`;
+            body += `*To resolve, review and update the flagged entries in \`src/data/algorithms.ts\` and \`src/data/provenance.ts\`, then update the \`lastReviewed\` date.*\n`;
+            body += `*Run locally: \`npx tsx scripts/refresh-data.ts --check-links\`*`;
+
+            // Find existing open issue with our label
+            const label = 'data-freshness';
+            const { data: existingIssues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: label,
+              state: 'open',
+            });
+
+            // Ensure the label exists
+            try {
+              await github.rest.issues.getLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: label,
+              });
+            } catch {
+              await github.rest.issues.createLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: label,
+                color: 'f9d0c4',
+                description: 'Automated data freshness alerts',
+              });
+            }
+
+            if (existingIssues.length > 0) {
+              // Update existing issue
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssues[0].number,
+                body,
+              });
+              console.log(`Updated existing issue #${existingIssues[0].number}`);
+            } else {
+              // Create new issue
+              const { data: issue } = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: '🔄 Data freshness review needed',
+                body,
+                labels: [label],
+              });
+              console.log(`Created issue #${issue.number}`);
+            }

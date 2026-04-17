@@ -11,7 +11,8 @@
     "type-check": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "validate": "tsx scripts/validate-data.ts"
+    "validate": "tsx scripts/validate-data.ts",
+    "refresh": "tsx scripts/refresh-data.ts"
   },
   "dependencies": {
     "next": "^15.1.0",
