@@ -6,7 +6,6 @@ import { CRYPTO_STACKS, type CryptoStack } from "@/data/stacks";
 
 function StackCard({ stack }: { stack: CryptoStack }) {
   const [expanded, setExpanded] = useState(false);
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
   return (
     <div
@@ -64,7 +63,7 @@ function StackCard({ stack }: { stack: CryptoStack }) {
               }}
             >
               <Link
-                href={`${basePath}/?sel=${p.algorithmId}&from=stacks`}
+                href={`/?sel=${p.algorithmId}&from=stacks`}
                 style={{
                   color: "var(--color-text-link)",
                   textDecoration: "none",
@@ -200,11 +199,10 @@ function StackCard({ stack }: { stack: CryptoStack }) {
 }
 
 export default function StacksView() {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   return (
     <div style={{ maxWidth: "900px", margin: "0 auto", padding: "48px 24px" }}>
       <Link
-        href={basePath || "/"}
+        href="/"
         style={{ fontSize: "14px", color: "var(--color-text-link)", textDecoration: "none", marginBottom: "24px", display: "inline-block" }}
       >
         ← Back to main
@@ -246,7 +244,7 @@ export default function StacksView() {
           Need to migrate from a legacy algorithm?
         </p>
         <Link
-          href={`${basePath}/migrate`}
+          href="/migrate"
           className="focusRing"
           style={{
             display: "inline-block",

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Badge, RecommendationBadge, ReviewBadge, SecurityMeter, recommendationText } from "@/components/ui";
 import { CounselButton } from "@/components/CounselButton";
 import { CATEGORY_ACCENT } from "@/data/categories";
+import { ALGORITHM_DEMOS } from "@/data/demoResources";
 import { IMPLEMENTATIONS, ECOSYSTEM_LABELS, type ImplementationEntry } from "@/data/implementations";
 import type { Algorithm } from "@/types/crypto";
 
@@ -16,6 +17,7 @@ type AlgoCardProps = {
 
 export default function AlgoCard({ algo, selected, onToggle, favorited, onToggleFavorite, advisorPick }: AlgoCardProps) {
   const accent = CATEGORY_ACCENT[algo.category];
+  const demos = ALGORITHM_DEMOS[algo.id] ?? [];
   const [detailOpen, setDetailOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -85,11 +87,12 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
           aria-label={detailOpen ? `Hide ${algo.name} details` : `Show ${algo.name} details`}
           aria-expanded={detailOpen}
           style={{
-            background: detailOpen ? "var(--color-bg-detail-toggle)" : "transparent",
-            border: "none",
+            background: detailOpen ? "var(--color-bg-detail-toggle)" : "var(--color-bg-control)",
+            border: "1px solid var(--color-border-subtle)",
             cursor: "pointer",
-            fontSize: "16px",
-            padding: "8px",
+            fontSize: "12px",
+            fontWeight: 700,
+            padding: "8px 10px",
             minWidth: "44px",
             minHeight: "44px",
             display: "flex",
@@ -97,10 +100,12 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
             justifyContent: "center",
             color: detailOpen ? "var(--color-text-accent-bright)" : "var(--color-text-ghost)",
             transition: "color 0.15s",
-            borderRadius: "6px",
+            borderRadius: "999px",
+            gap: "6px",
           }}
         >
-          ℹ
+          <span aria-hidden="true">ℹ</span>
+          <span>{detailOpen ? "Hide details" : "Details"}</span>
         </button>
         {onToggleFavorite && (
           <button
@@ -146,7 +151,7 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
           </div>
         )}
       </div>
-      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px", flexWrap: "wrap", paddingRight: "48px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px", flexWrap: "wrap", paddingRight: "132px" }}>
         <span style={{ fontSize: "18px", fontWeight: 700, color: "var(--color-text-heading)", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", overflowWrap: "break-word", wordBreak: "break-word" }}>{algo.name}</span>
         <Badge status={algo.status} label={algo.statusLabel} />
         <RecommendationBadge level={algo.recommendation} />
@@ -247,6 +252,18 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
                 {algo.sources.map((s) => (
                   <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} style={{ color: "var(--color-text-link)", fontSize: "12px", textDecoration: "none", lineHeight: 1.5 }}>
                     {s.label} <span style={{ color: "var(--color-text-ghost)" }}>— {s.note}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+          {demos.length > 0 && (
+            <div style={{ marginTop: algo.sources && algo.sources.length > 0 ? "12px" : "0" }}>
+              <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--color-text-accent-bright)", textTransform: "uppercase", letterSpacing: "0.4px", marginBottom: "6px" }}>Demos</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                {demos.map((demo) => (
+                  <a key={demo.url} href={demo.url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} style={{ color: "var(--color-text-link)", fontSize: "12px", textDecoration: "none", lineHeight: 1.5 }}>
+                    {demo.title} <span style={{ color: "var(--color-text-ghost)" }}>— {demo.note}</span>
                   </a>
                 ))}
               </div>

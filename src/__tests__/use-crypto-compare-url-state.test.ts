@@ -72,6 +72,6 @@ describe("useCryptoCompareUrlState helpers", () => {
       favOnly: true,
     });
 
-    expect(queryString).toBe("cat=symmetric&cmp=1&sel=aes256gcm%2Cxchacha20poly&q=chacha&pq=1&nist=1&country=Japan&sort=security&defaults=1&fav=1");
+    expect(queryString).toBe("cmp=1&sel=aes256gcm%2Cxchacha20poly&q=chacha&pq=1&nist=1&country=Japan&sort=security&defaults=1&fav=1");
   });
 });

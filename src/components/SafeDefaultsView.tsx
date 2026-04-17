@@ -172,7 +172,6 @@ function CopyButton({ text }: { text: string }) {
 
 function DefaultCard({ item }: { item: SafeDefault }) {
   const [expanded, setExpanded] = useState(false);
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
   const markdownSummary = [
     `## ${item.useCase}`,
@@ -236,7 +235,7 @@ function DefaultCard({ item }: { item: SafeDefault }) {
         }}
       >
         <Link
-          href={`${basePath}/?sel=${item.algorithmId}&from=advisor`}
+          href={`/?sel=${item.algorithmId}&from=advisor`}
           style={{
             display: "inline-flex",
             alignItems: "center",
@@ -407,7 +406,6 @@ function DefaultCard({ item }: { item: SafeDefault }) {
 }
 
 export default function SafeDefaultsView() {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
   return (
     <div className="cryptoCompareRoot">
@@ -441,7 +439,7 @@ export default function SafeDefaultsView() {
                 }}
               >
                 <Link
-                  href={basePath || "/"}
+                  href="/"
                   style={{
                     color: "inherit",
                     textDecoration: "none",
@@ -467,7 +465,7 @@ export default function SafeDefaultsView() {
               aria-label="Page navigation"
             >
               <Link
-                href={basePath || "/"}
+                href="/"
                 className="focusRing controlBtn"
                 style={{
                   textDecoration: "none",
@@ -641,7 +639,7 @@ export default function SafeDefaultsView() {
           >
             <p style={{ margin: "0 0 8px" }}>
               <Link
-                href={basePath || "/"}
+                href="/"
                 style={{
                   color: "var(--color-text-link)",
                   textDecoration: "none",

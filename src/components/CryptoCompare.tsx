@@ -13,10 +13,10 @@ import IntentCards from "@/components/IntentCards";
 import KnowledgeSections from "@/components/KnowledgeSections";
 import MethodologyPanel from "@/components/MethodologyPanel";
 import QuickStartPanel from "@/components/QuickStartPanel";
+import ReferenceGuidePanel from "@/components/ReferenceGuidePanel";
 import ResultsStatus from "@/components/ResultsStatus";
 import SearchControls from "@/components/SearchControls";
 import ShortcutHelp from "@/components/ShortcutHelp";
-import SourceCitationsPanel from "@/components/SourceCitationsPanel";
 import { ALGORITHMS } from "@/data/algorithms";
 import { CATEGORIES, CATEGORY_ACCENT } from "@/data/categories";
 import type { FilterPreset } from "@/data/filterPresets";
@@ -401,7 +401,7 @@ export default function CryptoCompare() {
             onExportJson={() => exportComparison("json")}
           />
 
-          <SourceCitationsPanel algorithms={selAlgos} />
+          <ReferenceGuidePanel algorithms={filtered} />
 
           <KnowledgeSections
             showHybrid={showHybrid}

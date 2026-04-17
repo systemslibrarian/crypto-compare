@@ -483,9 +483,9 @@ describe("URL State Hydration", () => {
   it("default state produces minimal URL params", async () => {
     const CryptoCompare = (await import("@/components/CryptoCompare")).default;
     const { unmount } = render(<CryptoCompare />);
-    // Default state writes cat=symmetric
+    // Default state omits cat=symmetric (it is the default)
     const params = new URLSearchParams(window.location.search);
-    expect(params.get("cat")).toBe("symmetric");
+    expect(params.get("cat")).toBeNull();
     // No optional filters set
     expect(params.get("cmp")).toBeNull();
     expect(params.get("pq")).toBeNull();

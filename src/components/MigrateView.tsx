@@ -27,7 +27,6 @@ const PRIORITY_STYLES: Record<MigrationPath["priority"], { bg: string; text: str
 
 function MigrationCard({ path }: { path: MigrationPath }) {
   const [expanded, setExpanded] = useState(false);
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const style = PRIORITY_STYLES[path.priority];
 
   return (
@@ -79,7 +78,7 @@ function MigrationCard({ path }: { path: MigrationPath }) {
 
       <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "14px" }}>
         <Link
-          href={`${basePath}/?sel=${path.toAlgorithmId}&from=migrate`}
+          href={`/?sel=${path.toAlgorithmId}&from=migrate`}
           style={{
             display: "inline-flex",
             alignItems: "center",
@@ -215,11 +214,10 @@ function MigrationCard({ path }: { path: MigrationPath }) {
 }
 
 export default function MigrateView() {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   return (
     <div style={{ maxWidth: "900px", margin: "0 auto", padding: "48px 24px" }}>
       <Link
-        href={basePath || "/"}
+        href="/"
         style={{ fontSize: "14px", color: "var(--color-text-link)", textDecoration: "none", marginBottom: "24px", display: "inline-block" }}
       >
         ← Back to main
@@ -261,7 +259,7 @@ export default function MigrateView() {
           See how these algorithms fit into complete stacks.
         </p>
         <Link
-          href={`${basePath}/stacks`}
+          href="/stacks"
           className="focusRing"
           style={{
             display: "inline-block",

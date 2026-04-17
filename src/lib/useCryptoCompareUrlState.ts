@@ -82,9 +82,11 @@ export function parseCryptoCompareQueryState<Country extends string, Sort extend
   return parsed;
 }
 
+export const DEFAULT_CATEGORY: AlgorithmCategory = "symmetric";
+
 export function buildCryptoCompareQueryString<Country extends string, Sort extends string>(state: UrlState<Country, Sort>) {
   const params = new URLSearchParams();
-  params.set("cat", state.cat);
+  if (state.cat !== DEFAULT_CATEGORY) params.set("cat", state.cat);
   if (state.cmp && state.sel.length >= 2) params.set("cmp", "1");
   if (state.sel.length > 0) params.set("sel", state.sel.join(","));
   if (state.search) params.set("q", state.search);
@@ -173,6 +175,6 @@ export function useCryptoCompareUrlState<Country extends string, Sort extends st
       showDefaults,
       favOnly,
     });
-    window.history.replaceState({}, "", `?${queryString}`);
+    window.history.replaceState({}, "", queryString ? `?${queryString}` : window.location.pathname);
   }, [cat, cmp, sel, search, pqOnly, standardOnly, nistOnly, deployedOnly, country, sortBy, showDefaults, favOnly]);
 }

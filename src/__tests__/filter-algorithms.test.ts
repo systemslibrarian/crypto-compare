@@ -38,6 +38,7 @@ const algorithms: Algorithm[] = [
     nistStandardized: true,
     widelyDeployed: true,
     countryTag: "Europe",
+    pqRelevance: "pq-ready",
   },
   {
     id: "xchacha20poly",
@@ -74,6 +75,7 @@ const algorithms: Algorithm[] = [
     nistStandardized: false,
     widelyDeployed: false,
     countryTag: "USA",
+    pqRelevance: "pq-safe",
   },
 ];
 
@@ -116,5 +118,25 @@ describe("filterAlgorithms", () => {
 
     expect(filtered).toHaveLength(1);
     expect(filtered[0].id).toBe("aes256gcm");
+  });
+
+  it("keeps only explicitly PQ-safe entries when PQ-only is enabled", () => {
+    const filtered = filterAlgorithms(algorithms, {
+      category: "symmetric",
+      globalSearch: false,
+      showDefaults: false,
+      favoritesOnly: false,
+      favorites: [],
+      search: "",
+      pqOnly: true,
+      standardOnly: false,
+      nistOnly: false,
+      deployedOnly: false,
+      country: "all",
+      sortBy: "name",
+    });
+
+    expect(filtered).toHaveLength(1);
+    expect(filtered[0].id).toBe("xchacha20poly");
   });
 });

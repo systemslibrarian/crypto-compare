@@ -36,7 +36,7 @@ export function filterAlgorithms(algorithms: Algorithm[], options: FilterAlgorit
     items = items.filter((algorithm) => `${algorithm.name} ${algorithm.family} ${algorithm.useCases} ${algorithm.origin} ${algorithm.statusLabel} ${algorithm.category}`.toLowerCase().includes(query));
   }
 
-  if (options.pqOnly) items = items.filter((algorithm) => algorithm.pqSecurityBits >= 128);
+  if (options.pqOnly) items = items.filter((algorithm) => algorithm.pqRelevance === "pq-safe");
   if (options.standardOnly) items = items.filter((algorithm) => algorithm.standardized);
   if (options.nistOnly) items = items.filter((algorithm) => algorithm.nistStandardized);
   if (options.deployedOnly) items = items.filter((algorithm) => algorithm.widelyDeployed);
