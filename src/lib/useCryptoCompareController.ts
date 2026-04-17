@@ -25,6 +25,7 @@ type UseCryptoCompareControllerArgs = {
   setShowArchitectures: (value: boolean) => void;
   setShowPhilosophy: (value: boolean) => void;
   setShowLibraries: (value: boolean) => void;
+  setShowResources: (value: boolean) => void;
   setShowFilters: (value: boolean) => void;
   setGlobalSearch: (value: boolean) => void;
   setFavOnly: (value: boolean) => void;
@@ -52,6 +53,7 @@ export function useCryptoCompareController({
   setShowArchitectures,
   setShowPhilosophy,
   setShowLibraries,
+  setShowResources,
   setShowFilters,
   setGlobalSearch,
   setFavOnly,
@@ -111,6 +113,7 @@ export function useCryptoCompareController({
     setShowArchitectures(false);
     setShowPhilosophy(false);
     setShowLibraries(false);
+    setShowResources(false);
     setShowFilters(false);
     setGlobalSearch(false);
     setFavOnly(false);
@@ -136,6 +139,7 @@ export function useCryptoCompareController({
     setShowArchitectures,
     setShowPhilosophy,
     setShowLibraries,
+    setShowResources,
     setShowFilters,
     setGlobalSearch,
     setFavOnly,

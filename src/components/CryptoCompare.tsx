@@ -69,6 +69,7 @@ export default function CryptoCompare() {
   const [showArchitectures, setShowArchitectures] = useState(false);
   const [showPhilosophy, setShowPhilosophy] = useState(false);
   const [showLibraries, setShowLibraries] = useState(false);
+  const [showResources, setShowResources] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [globalSearch, setGlobalSearch] = useState(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
@@ -99,6 +100,7 @@ export default function CryptoCompare() {
     setShowArchitectures,
     setShowPhilosophy,
     setShowLibraries,
+    setShowResources,
     setShowFilters,
     setGlobalSearch,
     setFavOnly,
@@ -410,12 +412,14 @@ export default function CryptoCompare() {
             showArchitectures={showArchitectures}
             showLibraries={showLibraries}
             showPhilosophy={showPhilosophy}
+            showResources={showResources}
             onToggleHybrid={() => setShowHybrid((value) => !value)}
             onToggleGuide={() => setShowGuide((value) => !value)}
             onToggleSafeUsage={() => setShowSafeUsage((value) => !value)}
             onToggleArchitectures={() => setShowArchitectures((value) => !value)}
             onToggleLibraries={() => setShowLibraries((value) => !value)}
             onTogglePhilosophy={() => setShowPhilosophy((value) => !value)}
+            onToggleResources={() => setShowResources((value) => !value)}
           />
         </main>
 

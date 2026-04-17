@@ -1,4 +1,5 @@
 import CollapsibleSection from "@/components/CollapsibleSection";
+import CryptoResources from "@/components/CryptoResources";
 import DesignPhilosophy from "@/components/DesignPhilosophy";
 import HybridPatternsSection from "@/components/HybridPatternsSection";
 import RecommendedLibraries from "@/components/RecommendedLibraries";
@@ -13,12 +14,14 @@ type KnowledgeSectionsProps = {
   showArchitectures: boolean;
   showLibraries: boolean;
   showPhilosophy: boolean;
+  showResources: boolean;
   onToggleHybrid: () => void;
   onToggleGuide: () => void;
   onToggleSafeUsage: () => void;
   onToggleArchitectures: () => void;
   onToggleLibraries: () => void;
   onTogglePhilosophy: () => void;
+  onToggleResources: () => void;
 };
 
 export default function KnowledgeSections({
@@ -28,12 +31,14 @@ export default function KnowledgeSections({
   showArchitectures,
   showLibraries,
   showPhilosophy,
+  showResources,
   onToggleHybrid,
   onToggleGuide,
   onToggleSafeUsage,
   onToggleArchitectures,
   onToggleLibraries,
   onTogglePhilosophy,
+  onToggleResources,
 }: KnowledgeSectionsProps) {
   return (
     <>
@@ -91,6 +96,17 @@ export default function KnowledgeSections({
         description="Why this tool exists, how recommendations are derived, and what it intentionally does not do."
       >
         <DesignPhilosophy />
+      </CollapsibleSection>
+
+      <CollapsibleSection
+        isOpen={showResources}
+        onToggle={onToggleResources}
+        buttonLabel="Cryptography Resources &amp; Further Reading"
+        sectionLabel="Cryptography resources"
+        title="Cryptography Resources &amp; Further Reading"
+        description="Primary sources, communities, newsletters, and tools for staying current with cryptographic developments. Go straight to the source."
+      >
+        <CryptoResources />
       </CollapsibleSection>
     </>
   );
