@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { ALGORITHMS } from "@/data/algorithms";
 import { ALGORITHM_DEMOS } from "@/data/demoResources";
+import { extractLocalSlugs } from "@/lib/demoSync";
 
 const LIVE_DEMO_URL_PATTERN = /^https:\/\/systemslibrarian\.github\.io\/crypto-lab-[a-z0-9-]+\/$/;
 
@@ -36,5 +39,16 @@ describe("demo resource dataset", () => {
       expect(Array.isArray(demos)).toBe(true);
       expect(typeof algorithmId).toBe("string");
     }
+  });
+
+  it("keeps README demo count in sync with mapped crypto-lab slugs", () => {
+    const readme = readFileSync(join(process.cwd(), "README.md"), "utf8");
+    const match = readme.match(/Current mapped crypto-lab demos:\s*\*\*(\d+)\*\*/);
+    expect(match).not.toBeNull();
+
+    const readmeCount = Number.parseInt(match![1], 10);
+    const localSlugCount = extractLocalSlugs(ALGORITHM_DEMOS).slugs.length;
+
+    expect(readmeCount).toBe(localSlugCount);
   });
 });
