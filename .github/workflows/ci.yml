@@ -20,8 +20,8 @@ jobs:
         run: npm ci
       - name: Type check
         run: npm run type-check
-      - name: Validate data
-        run: npm run validate
+      - name: Validate data and demo sync
+        run: npm run validate:full
       - name: Test
         run: npm run test
       - name: Lint

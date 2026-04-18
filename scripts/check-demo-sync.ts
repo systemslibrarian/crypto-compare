@@ -16,6 +16,8 @@ const LIVE_CATALOG_URL = "https://systemslibrarian.github.io/crypto-lab/";
 const LIVE_SLUG_REGEX = /https:\/\/systemslibrarian\.github\.io\/(crypto-lab-[a-z0-9-]+)\//g;
 const LOCAL_URL_REGEX = /^https:\/\/systemslibrarian\.github\.io\/(crypto-lab-[a-z0-9-]+)\/$/;
 const STRICT_MODE = process.argv.includes("--strict");
+const FETCH_TIMEOUT_MS = 15_000;
+const MAX_RETRIES = 3;
 
 type SyncResult = {
   liveSlugs: string[];
@@ -25,16 +27,41 @@ type SyncResult = {
   invalidLocalUrls: Array<{ algorithmId: string; url: string }>;
 };
 
-async function fetchLiveSlugs(): Promise<string[]> {
-  const res = await fetch(LIVE_CATALOG_URL, {
-    headers: { "User-Agent": "crypto-compare-demo-sync-check/1.0" },
-  });
+async function fetchLiveCatalogHtml(): Promise<string> {
+  let lastError: Error | null = null;
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch live catalog: HTTP ${res.status}`);
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt += 1) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+
+    try {
+      const res = await fetch(LIVE_CATALOG_URL, {
+        headers: { "User-Agent": "crypto-compare-demo-sync-check/1.0" },
+        signal: controller.signal,
+      });
+      clearTimeout(timeout);
+
+      if (!res.ok) {
+        throw new Error(`Failed to fetch live catalog: HTTP ${res.status}`);
+      }
+
+      return await res.text();
+    } catch (error) {
+      clearTimeout(timeout);
+      const message = error instanceof Error ? error.message : "Unknown fetch error";
+      lastError = new Error(`Attempt ${attempt}/${MAX_RETRIES} failed: ${message}`);
+
+      if (attempt < MAX_RETRIES) {
+        await new Promise((resolve) => setTimeout(resolve, attempt * 500));
+      }
+    }
   }
 
-  const html = await res.text();
+  throw new Error(lastError?.message ?? "Unable to fetch live catalog");
+}
+
+async function fetchLiveSlugs(): Promise<string[]> {
+  const html = await fetchLiveCatalogHtml();
   const slugs = new Set<string>();
   let match: RegExpExecArray | null = LIVE_SLUG_REGEX.exec(html);
 
