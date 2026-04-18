@@ -9,17 +9,20 @@
  *   npx tsx scripts/check-demo-sync.ts
  *   npx tsx scripts/check-demo-sync.ts --strict
  *   npx tsx scripts/check-demo-sync.ts --json
+ *   npx tsx scripts/check-demo-sync.ts --live-html-path=/tmp/crypto-lab.html --strict
  */
 
 import { ALGORITHM_DEMOS } from "../src/data/demoResources";
 import { diffDemoSlugs, extractLiveSlugsFromHtml, extractLocalSlugs } from "../src/lib/demoSync";
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 
 const LIVE_CATALOG_URL = "https://systemslibrarian.github.io/crypto-lab/";
 const STRICT_MODE = process.argv.includes("--strict");
 const JSON_MODE = process.argv.includes("--json");
 const REPORT_PATH_ARG = process.argv.find((arg) => arg.startsWith("--report-path="));
 const REPORT_PATH = REPORT_PATH_ARG ? REPORT_PATH_ARG.split("=")[1] : null;
+const LIVE_HTML_PATH_ARG = process.argv.find((arg) => arg.startsWith("--live-html-path="));
+const LIVE_HTML_PATH = LIVE_HTML_PATH_ARG ? LIVE_HTML_PATH_ARG.split("=")[1] : null;
 const FETCH_TIMEOUT_MS = 15_000;
 const MAX_RETRIES = 3;
 
@@ -37,6 +40,10 @@ type SyncReport = SyncResult & {
 };
 
 async function fetchLiveCatalogHtml(): Promise<string> {
+  if (LIVE_HTML_PATH) {
+    return readFileSync(LIVE_HTML_PATH, "utf8");
+  }
+
   let lastError: Error | null = null;
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt += 1) {

@@ -372,6 +372,9 @@ Open <http://localhost:3000>.
 | `npm run check:demos:report` | Write demo sync JSON report to demo-sync-report.json |
 | `npm run validate:full` | Run dataset validation plus strict live demo sync check |
 
+Offline audit option:
+Run `npx tsx scripts/check-demo-sync.ts --live-html-path=/tmp/crypto-lab.html --strict` to compare against a saved catalog snapshot.
+
 ---
 
 ## Project Structure
