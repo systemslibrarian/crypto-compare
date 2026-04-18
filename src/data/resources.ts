@@ -50,7 +50,7 @@ export const RESOURCES: Resource[] = [
   },
   {
     title: "IETF CFRG Working Group",
-    url: "https://datatracker.ietf.org/wg/cfrg/documents/",
+    url: "https://datatracker.ietf.org/group/cfrg/documents/",
     description:
       "Crypto Forum Research Group — the specific IETF group that evaluates cryptographic algorithms for protocol adoption. Tracks curve selections, AEAD recommendations, and PQ transitions.",
     category: "primary",
@@ -74,7 +74,7 @@ export const RESOURCES: Resource[] = [
   },
   {
     title: "BSI Technical Guidelines (Germany)",
-    url: "https://www.bsi.bund.de/EN/Themen/Unternehmen-und-Organisationen/Standards-und-Zulassung/Technische-Richtlinien/technische-richtlinien_node.html",
+    url: "https://www.bsi.bund.de/EN/Themen/Unternehmen-und-Organisationen/Standards-und-Zertifizierung/Technische-Richtlinien/technische-richtlinien_node.html",
     description:
       "German Federal Office for Information Security. TR-02102 series covers recommended algorithms and key lengths — often more conservative than NIST.",
     category: "primary",
@@ -217,10 +217,10 @@ export const RESOURCES: Resource[] = [
     tag: "Interactive",
   },
   {
-    title: "KeyTool.dev",
-    url: "https://keytool.dev/",
+    title: "mkjwk.org",
+    url: "https://mkjwk.org/",
     description:
-      "Visualize and generate cryptographic key material in the browser. Supports JWK, PEM, and various key types. Useful for understanding key formats.",
+      "Generate and inspect JWK key material in-browser. Useful for understanding JOSE key formats and quick interoperability checks.",
     category: "tool",
     tag: "Keys",
   },

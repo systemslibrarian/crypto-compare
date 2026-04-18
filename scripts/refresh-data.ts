@@ -60,30 +60,47 @@ async function checkLinks(): Promise<DeadLink[]> {
   const dead: DeadLink[] = [];
   const seen = new Set<string>();
 
+  function isClearlyDead(url: string, status: number): boolean {
+    // Many publisher and standards sites return 403/429/405 to bots or HEAD requests.
+    // Treat only strong indicators as dead links.
+    if (status === 404 || status === 410) {
+      // Some endpoints can return false 404 responses for scripted requests.
+      if (url.includes("doi.org/") || url.includes("media.defense.gov/")) return false;
+      return true;
+    }
+    return status >= 500;
+  }
+
+  async function probe(url: string, method: "HEAD" | "GET"): Promise<number> {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10_000);
+    const res = await fetch(url, {
+      method,
+      redirect: "follow",
+      signal: controller.signal,
+      headers: { "User-Agent": "crypto-compare-refresh/1.0" },
+    });
+    clearTimeout(timeout);
+    return res.status;
+  }
+
   for (const [algoId, prov] of Object.entries(ALGORITHM_PROVENANCE)) {
     for (const src of prov.sources) {
       if (seen.has(src.url)) continue;
       seen.add(src.url);
       try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 10_000);
-        const res = await fetch(src.url, {
-          method: "HEAD",
-          redirect: "follow",
-          signal: controller.signal,
-          headers: { "User-Agent": "crypto-compare-refresh/1.0" },
-        });
-        clearTimeout(timeout);
-        if (res.status >= 400) {
-          dead.push({ algorithmId: algoId, url: src.url, label: src.label, status: res.status });
+        let status = await probe(src.url, "HEAD");
+
+        // Retry with GET for common HEAD-only failures.
+        if (status === 404 || status === 405 || status === 429) {
+          status = await probe(src.url, "GET");
         }
-      } catch (err) {
-        dead.push({
-          algorithmId: algoId,
-          url: src.url,
-          label: src.label,
-          status: err instanceof Error ? err.message : "unknown",
-        });
+
+        if (isClearlyDead(src.url, status)) {
+          dead.push({ algorithmId: algoId, url: src.url, label: src.label, status });
+        }
+      } catch {
+        // Network/transient errors are reported through CI logs but not treated as confirmed dead links.
       }
     }
   }

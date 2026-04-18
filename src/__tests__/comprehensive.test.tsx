@@ -153,7 +153,7 @@ describe("Exact Export Content", () => {
 
     it("CSV contains Last Reviewed in Month Year format", () => {
       const csv = exportToCSV(rows, [aes]);
-      expect(csv).toContain("March 2026");
+      expect(csv).toContain("April 2026");
     });
 
     it("CSV contains assumptions text", () => {
@@ -177,7 +177,7 @@ describe("Exact Export Content", () => {
       expect(md).toContain("| Recommendation | Recommended default |");
       expect(md).toContain("| Classical | 256 bits |");
       expect(md).toContain("| PQ | 128 bits |");
-      expect(md).toContain("| Last Reviewed | March 2026 |");
+      expect(md).toContain("| Last Reviewed | April 2026 |");
       expect(md).not.toContain("[object Object]");
     });
   });
@@ -219,7 +219,7 @@ describe("Exact Export Content", () => {
     it("Markdown has correct table structure", () => {
       const md = exportToMarkdown(rows, [mlkem]);
       expect(md).toContain("| Recommendation | Recommended default |");
-      expect(md).toContain("| Last Reviewed | March 2026 |");
+      expect(md).toContain("| Last Reviewed | April 2026 |");
       expect(md).not.toContain("[object Object]");
     });
   });
@@ -247,7 +247,7 @@ describe("Exact Export Content", () => {
     it("CSV contains source labels and Last Reviewed", () => {
       const csv = exportToCSV(rows, [sha]);
       expect(csv).toContain("NIST FIPS 180-4");
-      expect(csv).toContain("March 2026");
+      expect(csv).toContain("April 2026");
     });
 
     it("Markdown export has all required fields", () => {
@@ -256,7 +256,7 @@ describe("Exact Export Content", () => {
       expect(md).toContain("| Recommendation | Recommended default |");
       expect(md).toContain("| Justification |");
       expect(md).toContain("| Sources |");
-      expect(md).toContain("| Last Reviewed | March 2026 |");
+      expect(md).toContain("| Last Reviewed | April 2026 |");
       expect(md).toContain("| Assumptions |");
       expect(md).not.toContain("[object Object]");
     });

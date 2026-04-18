@@ -63,7 +63,7 @@ Trust still has limits here:
 
 ### Freshness Snapshot
 
-- provenance entries currently carry review dates spanning **2026-03-16** through **2026-04-07**
+- provenance entries currently carry review dates spanning **2026-04-18** through **2026-04-18**
 - each algorithm record includes a `lastReviewed` value in the dataset provenance
 - recommendation confidence should drop as that review window gets older relative to new cryptanalysis, standards work, or deployment changes
 
