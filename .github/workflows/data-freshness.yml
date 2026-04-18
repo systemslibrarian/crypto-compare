@@ -34,8 +34,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run data validation
-        run: npm run validate
+      - name: Run data and demo validation
+        run: npm run validate:full
 
       - name: Run freshness check
         id: refresh
