@@ -191,7 +191,7 @@ export const CATEGORY_INFO: CategoryInfoMap = {
     projects:[
       { name:"Quantum Vault KPQC", tech:"Shamir secret sharing over GF(256) for threshold key recovery", url:"https://github.com/systemslibrarian/crypto-lab-quantum-vault-kpqc", public:true },
       { name:"Shamir Gate", tech:"Interactive Shamir's Secret Sharing — split a secret into n shares, reconstruct from any k", url:"https://github.com/systemslibrarian/crypto-lab-shamir-gate", public:true },
-      { name:"Shamir Visual", tech:"Interactive polynomial graph, live Lagrange interpolation stepper, share checkboxes, and wrong-polynomial demo for the under-threshold case", url:"https://github.com/systemslibrarian/crypto-lab-shamir-visual", public:true },
+
       { name:"VSS Gate", tech:"Feldman and Pedersen VSS — commitment verification, cheating detection, and verifiable secret sharing with live share distribution and reconstruction", url:"https://github.com/systemslibrarian/crypto-lab-vss-gate", public:true },
       { name:"Threshold Decrypt", tech:"ElGamal over P-256 — distributed key generation, verifiable partial decryptions with NIZK proofs, and t-of-n combination without any party holding the full private key", url:"https://github.com/systemslibrarian/crypto-lab-threshold-decrypt", public:true },
     ],

@@ -2,7 +2,7 @@
 
 **Cryptographic algorithm decision system for engineers, architects, and technical decision-makers.**
 
-97 algorithms. 17 categories. 68 linked public demos. Sourced recommendations. Safe-usage guidance. Reference architectures. Post-quantum migration context.
+97 algorithms. 17 categories. 65+ linked public demos. Sourced recommendations. Safe-usage guidance. Reference architectures. Post-quantum migration context.
 
 🌐 **[Live Site →](https://systemslibrarian.github.io/crypto-compare/)**
 

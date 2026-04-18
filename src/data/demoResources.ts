@@ -95,13 +95,7 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       note: "Compares HMAC, CMAC, Poly1305, and GHASH with common failure modes.",
     },
   ],
-  shamir: [
-    {
-      title: "Shamir Visual",
-      url: "https://github.com/systemslibrarian/crypto-lab-shamir-visual",
-      note: "Interactive polynomial graph and live reconstruction stepper for threshold recovery.",
-    },
-  ],
+  shamir: [],
   tfhe: [
     {
       title: "Blind Oracle",
