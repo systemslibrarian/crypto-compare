@@ -97,6 +97,13 @@ type SyncResult = {
 type SyncReport = SyncResult & {
   generatedAt: string;
   hasIssues: boolean;
+  summary: {
+    liveSlugCount: number;
+    localSlugCount: number;
+    missingCount: number;
+    localOnlyCount: number;
+    invalidUrlCount: number;
+  };
 };
 
 async function fetchLiveCatalogHtml(options: CliOptions): Promise<string> {
@@ -219,6 +226,13 @@ async function main() {
       ...result,
       generatedAt: new Date().toISOString(),
       hasIssues,
+      summary: {
+        liveSlugCount: result.liveSlugs.length,
+        localSlugCount: result.localSlugs.length,
+        missingCount: result.missingFromLocal.length,
+        localOnlyCount: result.onlyInLocal.length,
+        invalidUrlCount: result.invalidLocalUrls.length,
+      },
     };
 
     printResult(report, options);

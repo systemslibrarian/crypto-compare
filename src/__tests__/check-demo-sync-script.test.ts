@@ -78,12 +78,24 @@ describe("check-demo-sync script", () => {
         hasIssues?: boolean;
         liveSlugs?: string[];
         localSlugs?: string[];
+        summary?: {
+          liveSlugCount?: number;
+          localSlugCount?: number;
+          missingCount?: number;
+          localOnlyCount?: number;
+          invalidUrlCount?: number;
+        };
       };
 
       expect(typeof report.generatedAt).toBe("string");
       expect(report.hasIssues).toBe(false);
       expect(report.liveSlugs?.length).toBe(localSlugs.length);
       expect(report.localSlugs?.length).toBe(localSlugs.length);
+      expect(report.summary?.liveSlugCount).toBe(localSlugs.length);
+      expect(report.summary?.localSlugCount).toBe(localSlugs.length);
+      expect(report.summary?.missingCount).toBe(0);
+      expect(report.summary?.localOnlyCount).toBe(0);
+      expect(report.summary?.invalidUrlCount).toBe(0);
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
