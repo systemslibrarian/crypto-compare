@@ -14,6 +14,7 @@
     "check:demos": "tsx scripts/check-demo-sync.ts",
     "check:demos:strict": "tsx scripts/check-demo-sync.ts --strict",
     "validate": "tsx scripts/validate-data.ts",
+    "validate:full": "npm run validate && npm run check:demos:strict",
     "refresh": "tsx scripts/refresh-data.ts"
   },
   "dependencies": {

@@ -367,6 +367,8 @@ Open <http://localhost:3000>.
 | `npm run test` | Run the automated test suite |
 | `npm run type-check` | Run the TypeScript checker |
 | `npm run lint` | Run linting |
+| `npm run check:demos` | Compare local demo mappings to the live crypto-lab catalog |
+| `npm run validate:full` | Run dataset validation plus strict live demo sync check |
 
 ---
 
