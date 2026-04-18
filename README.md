@@ -365,6 +365,7 @@ Open <http://localhost:3000>.
 | `npm run dev` | Start the local development server |
 | `npm run build` | Build the static export |
 | `npm run test` | Run the automated test suite |
+| `npm run test:demos` | Run demo-sync and demo-resource integrity tests |
 | `npm run type-check` | Run the TypeScript checker |
 | `npm run lint` | Run linting |
 | `npm run check:demos` | Compare local demo mappings to the live crypto-lab catalog |

@@ -11,6 +11,7 @@
     "type-check": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:demos": "vitest run src/__tests__/demo-resources.test.ts src/__tests__/demo-sync-lib.test.ts src/__tests__/check-demo-sync-script.test.ts",
     "check:demos": "tsx scripts/check-demo-sync.ts",
     "check:demos:strict": "tsx scripts/check-demo-sync.ts --strict",
     "check:demos:json": "tsx scripts/check-demo-sync.ts --json",
