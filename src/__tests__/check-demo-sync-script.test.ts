@@ -115,4 +115,17 @@ describe("check-demo-sync script", () => {
     expect(result.status).not.toBe(0);
     expect(result.stderr).toContain("Invalid --max-retries");
   });
+
+  it("shows help and exits successfully", () => {
+    const result = runDemoSync(["--help"]);
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain("Usage:");
+    expect(result.stdout).toContain("--strict");
+  });
+
+  it("fails cleanly on unknown options", () => {
+    const result = runDemoSync(["--wat"]);
+    expect(result.status).not.toBe(0);
+    expect(result.stderr).toContain("Unknown option: --wat");
+  });
 });

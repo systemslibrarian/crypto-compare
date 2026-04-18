@@ -18,14 +18,28 @@ import { diffDemoSlugs, extractLiveSlugsFromHtml, extractLocalSlugs } from "../s
 import { readFileSync, writeFileSync } from "node:fs";
 
 const LIVE_CATALOG_URL = "https://systemslibrarian.github.io/crypto-lab/";
-const STRICT_MODE = process.argv.includes("--strict");
-const JSON_MODE = process.argv.includes("--json");
-const REPORT_PATH_ARG = process.argv.find((arg) => arg.startsWith("--report-path="));
-const REPORT_PATH = REPORT_PATH_ARG ? REPORT_PATH_ARG.split("=")[1] : null;
-const LIVE_HTML_PATH_ARG = process.argv.find((arg) => arg.startsWith("--live-html-path="));
-const LIVE_HTML_PATH = LIVE_HTML_PATH_ARG ? LIVE_HTML_PATH_ARG.split("=")[1] : null;
-const FETCH_TIMEOUT_MS_ARG = process.argv.find((arg) => arg.startsWith("--timeout-ms="));
-const MAX_RETRIES_ARG = process.argv.find((arg) => arg.startsWith("--max-retries="));
+const HELP_TEXT = `
+Usage:
+  npx tsx scripts/check-demo-sync.ts [options]
+
+Options:
+  --strict                       Exit with code 1 when sync issues are found
+  --json                         Print report as JSON to stdout
+  --report-path=<path>           Write JSON report to file
+  --live-html-path=<path>        Read live catalog HTML from local file (offline mode)
+  --timeout-ms=<n>               Fetch timeout in ms (default: 15000)
+  --max-retries=<n>              Number of fetch attempts (default: 3)
+  --help, -h                     Show this help text
+`.trim();
+
+type CliOptions = {
+  strict: boolean;
+  json: boolean;
+  reportPath: string | null;
+  liveHtmlPath: string | null;
+  timeoutMs: number;
+  maxRetries: number;
+};
 
 function parsePositiveInt(value: string | undefined, fallback: number, flagName: string): number {
   if (!value) return fallback;
@@ -36,8 +50,41 @@ function parsePositiveInt(value: string | undefined, fallback: number, flagName:
   return parsed;
 }
 
-const FETCH_TIMEOUT_MS = parsePositiveInt(FETCH_TIMEOUT_MS_ARG?.split("=")[1], 15_000, "--timeout-ms");
-const MAX_RETRIES = parsePositiveInt(MAX_RETRIES_ARG?.split("=")[1], 3, "--max-retries");
+function parseOptionValue(args: string[], prefix: string): string | undefined {
+  const match = args.find((arg) => arg.startsWith(prefix));
+  if (!match) return undefined;
+  return match.slice(prefix.length);
+}
+
+function isKnownOption(arg: string): boolean {
+  return (
+    arg === "--strict" ||
+    arg === "--json" ||
+    arg === "--help" ||
+    arg === "-h" ||
+    arg.startsWith("--report-path=") ||
+    arg.startsWith("--live-html-path=") ||
+    arg.startsWith("--timeout-ms=") ||
+    arg.startsWith("--max-retries=")
+  );
+}
+
+function parseCliOptions(args: string[]): CliOptions {
+  for (const arg of args) {
+    if (arg.startsWith("--") && !isKnownOption(arg)) {
+      throw new Error(`Unknown option: ${arg}`);
+    }
+  }
+
+  return {
+    strict: args.includes("--strict"),
+    json: args.includes("--json"),
+    reportPath: parseOptionValue(args, "--report-path=") ?? null,
+    liveHtmlPath: parseOptionValue(args, "--live-html-path=") ?? null,
+    timeoutMs: parsePositiveInt(parseOptionValue(args, "--timeout-ms="), 15_000, "--timeout-ms"),
+    maxRetries: parsePositiveInt(parseOptionValue(args, "--max-retries="), 3, "--max-retries"),
+  };
+}
 
 type SyncResult = {
   liveSlugs: string[];
@@ -52,16 +99,16 @@ type SyncReport = SyncResult & {
   hasIssues: boolean;
 };
 
-async function fetchLiveCatalogHtml(): Promise<string> {
-  if (LIVE_HTML_PATH) {
-    return readFileSync(LIVE_HTML_PATH, "utf8");
+async function fetchLiveCatalogHtml(options: CliOptions): Promise<string> {
+  if (options.liveHtmlPath) {
+    return readFileSync(options.liveHtmlPath, "utf8");
   }
 
   let lastError: Error | null = null;
 
-  for (let attempt = 1; attempt <= MAX_RETRIES; attempt += 1) {
+  for (let attempt = 1; attempt <= options.maxRetries; attempt += 1) {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+    const timeout = setTimeout(() => controller.abort(), options.timeoutMs);
 
     try {
       const res = await fetch(LIVE_CATALOG_URL, {
@@ -78,9 +125,9 @@ async function fetchLiveCatalogHtml(): Promise<string> {
     } catch (error) {
       clearTimeout(timeout);
       const message = error instanceof Error ? error.message : "Unknown fetch error";
-      lastError = new Error(`Attempt ${attempt}/${MAX_RETRIES} failed: ${message}`);
+      lastError = new Error(`Attempt ${attempt}/${options.maxRetries} failed: ${message}`);
 
-      if (attempt < MAX_RETRIES) {
+      if (attempt < options.maxRetries) {
         await new Promise((resolve) => setTimeout(resolve, attempt * 500));
       }
     }
@@ -89,13 +136,13 @@ async function fetchLiveCatalogHtml(): Promise<string> {
   throw new Error(lastError?.message ?? "Unable to fetch live catalog");
 }
 
-async function fetchLiveSlugs(): Promise<string[]> {
-  const html = await fetchLiveCatalogHtml();
+async function fetchLiveSlugs(options: CliOptions): Promise<string[]> {
+  const html = await fetchLiveCatalogHtml(options);
   return extractLiveSlugsFromHtml(html);
 }
 
-function printResult(result: SyncReport) {
-  if (JSON_MODE) {
+function printResult(result: SyncReport, options: CliOptions) {
+  if (options.json) {
     console.log(JSON.stringify(result, null, 2));
     return;
   }
@@ -134,17 +181,24 @@ function printResult(result: SyncReport) {
   }
 }
 
-function writeReport(report: SyncReport) {
-  if (!REPORT_PATH) return;
-  writeFileSync(REPORT_PATH, JSON.stringify(report, null, 2));
-  if (!JSON_MODE) {
-    console.log(`\nReport written to ${REPORT_PATH}`);
+function writeReport(report: SyncReport, options: CliOptions) {
+  if (!options.reportPath) return;
+  writeFileSync(options.reportPath, JSON.stringify(report, null, 2));
+  if (!options.json) {
+    console.log(`\nReport written to ${options.reportPath}`);
   }
 }
 
 async function main() {
   try {
-    const liveSlugs = await fetchLiveSlugs();
+    const rawArgs = process.argv.slice(2);
+    if (rawArgs.includes("--help") || rawArgs.includes("-h")) {
+      console.log(HELP_TEXT);
+      return;
+    }
+
+    const options = parseCliOptions(rawArgs);
+    const liveSlugs = await fetchLiveSlugs(options);
     const { slugs: localSlugs, invalidLocalUrls } = extractLocalSlugs(ALGORITHM_DEMOS);
     const { missingFromLocal, onlyInLocal } = diffDemoSlugs(liveSlugs, localSlugs);
 
@@ -167,10 +221,10 @@ async function main() {
       hasIssues,
     };
 
-    printResult(report);
-    writeReport(report);
+    printResult(report, options);
+    writeReport(report, options);
 
-    if (STRICT_MODE && hasIssues) {
+    if (options.strict && hasIssues) {
       process.exit(1);
     }
   } catch (error) {
