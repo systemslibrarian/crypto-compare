@@ -402,8 +402,8 @@ High-value files:
 Each category in the app links to working demo projects that illustrate the cryptographic concepts in practice.
 
 - Full live crypto-lab index: [systemslibrarian.github.io/crypto-lab](https://systemslibrarian.github.io/crypto-lab/)
-- App mapping source of truth: [src/data/categories.ts](/workspaces/crypto-compare/src/data/categories.ts)
-- Current mapped public demos: **68** (including crypto-lab and non-crypto-lab public repos)
+- App mapping source of truth: [src/data/demoResources.ts](/workspaces/crypto-compare/src/data/demoResources.ts)
+- Current mapped crypto-lab demos: **76** (kept in sync with the live crypto-lab catalog)
 
 The list below is representative rather than exhaustive.
 
