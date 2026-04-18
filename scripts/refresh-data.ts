@@ -111,7 +111,7 @@ const KEYWORD_MAP: Record<string, string[]> = {
   "Dilithium": ["mldsa44", "mldsa65"],
   "FALCON": ["falcon512"],
   "HQC": ["hqc"],
-  "McEliece": ["mceliece"],
+  "McEliece": ["classic_mceliece"],
   "BIKE": ["bike"],
   "XMSS": ["xmss"],
   "AES-GCM": ["aes256gcm", "aes256gcmsiv"],
@@ -124,6 +124,12 @@ const KEYWORD_MAP: Record<string, string[]> = {
   "X25519": ["curve25519"],
   "Curve25519": ["curve25519"],
 };
+
+const KNOWN_ALGORITHM_IDS = new Set(ALGORITHMS.map((algorithm) => algorithm.id));
+
+function onlyKnownAlgorithmIds(ids: string[]): string[] {
+  return ids.filter((id) => KNOWN_ALGORITHM_IDS.has(id));
+}
 
 async function fetchPageText(url: string): Promise<string | null> {
   try {
@@ -153,7 +159,7 @@ async function checkUpstreamPublications(): Promise<UpstreamNotice[]> {
           source: "NIST CSRC",
           title: `Mention of "${keyword}" found on NIST recent news`,
           url: NIST_CSRC_RECENT,
-          relevant: algoIds,
+          relevant: onlyKnownAlgorithmIds(algoIds),
         });
       }
     }
@@ -170,7 +176,7 @@ async function checkUpstreamPublications(): Promise<UpstreamNotice[]> {
           source: "NIST PQC Project",
           title: `PQC project page mentions "${kw}"`,
           url: NIST_PQC_URL,
-          relevant: ["mlkem768", "mlkem1024", "mldsa44", "mldsa65", "slh_dsa", "falcon512", "hqc", "mceliece", "bike"],
+          relevant: onlyKnownAlgorithmIds(["mlkem768", "mlkem1024", "mldsa44", "mldsa65", "slh_dsa", "falcon512", "hqc", "classic_mceliece", "bike"]),
         });
         break; // one notice is enough for this source
       }
@@ -186,7 +192,7 @@ async function checkUpstreamPublications(): Promise<UpstreamNotice[]> {
           source: "IETF CFRG",
           title: `CFRG documents mention "${keyword}"`,
           url: IETF_CFRG_URL,
-          relevant: algoIds,
+          relevant: onlyKnownAlgorithmIds(algoIds),
         });
       }
     }
