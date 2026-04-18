@@ -11,10 +11,9 @@
  */
 
 import { ALGORITHM_DEMOS } from "../src/data/demoResources";
+import { diffDemoSlugs, extractLiveSlugsFromHtml, extractLocalSlugs } from "../src/lib/demoSync";
 
 const LIVE_CATALOG_URL = "https://systemslibrarian.github.io/crypto-lab/";
-const LIVE_SLUG_REGEX = /https:\/\/systemslibrarian\.github\.io\/(crypto-lab-[a-z0-9-]+)\//g;
-const LOCAL_URL_REGEX = /^https:\/\/systemslibrarian\.github\.io\/(crypto-lab-[a-z0-9-]+)\/$/;
 const STRICT_MODE = process.argv.includes("--strict");
 const FETCH_TIMEOUT_MS = 15_000;
 const MAX_RETRIES = 3;
@@ -62,43 +61,7 @@ async function fetchLiveCatalogHtml(): Promise<string> {
 
 async function fetchLiveSlugs(): Promise<string[]> {
   const html = await fetchLiveCatalogHtml();
-  const slugs = new Set<string>();
-  let match: RegExpExecArray | null = LIVE_SLUG_REGEX.exec(html);
-
-  while (match) {
-    slugs.add(match[1]);
-    match = LIVE_SLUG_REGEX.exec(html);
-  }
-
-  return Array.from(slugs).sort();
-}
-
-function getLocalSlugs(): { slugs: string[]; invalidLocalUrls: Array<{ algorithmId: string; url: string }> } {
-  const slugs = new Set<string>();
-  const invalidLocalUrls: Array<{ algorithmId: string; url: string }> = [];
-
-  for (const [algorithmId, demos] of Object.entries(ALGORITHM_DEMOS)) {
-    for (const demo of demos) {
-      const match = demo.url.match(LOCAL_URL_REGEX);
-      if (!match) {
-        invalidLocalUrls.push({ algorithmId, url: demo.url });
-        continue;
-      }
-      slugs.add(match[1]);
-    }
-  }
-
-  return { slugs: Array.from(slugs).sort(), invalidLocalUrls };
-}
-
-function diffSlugs(liveSlugs: string[], localSlugs: string[]) {
-  const liveSet = new Set(liveSlugs);
-  const localSet = new Set(localSlugs);
-
-  const missingFromLocal = liveSlugs.filter((slug) => !localSet.has(slug));
-  const onlyInLocal = localSlugs.filter((slug) => !liveSet.has(slug));
-
-  return { missingFromLocal, onlyInLocal };
+  return extractLiveSlugsFromHtml(html);
 }
 
 function printResult(result: SyncResult) {
@@ -139,8 +102,8 @@ function printResult(result: SyncResult) {
 async function main() {
   try {
     const liveSlugs = await fetchLiveSlugs();
-    const { slugs: localSlugs, invalidLocalUrls } = getLocalSlugs();
-    const { missingFromLocal, onlyInLocal } = diffSlugs(liveSlugs, localSlugs);
+    const { slugs: localSlugs, invalidLocalUrls } = extractLocalSlugs(ALGORITHM_DEMOS);
+    const { missingFromLocal, onlyInLocal } = diffDemoSlugs(liveSlugs, localSlugs);
 
     const result: SyncResult = {
       liveSlugs,
