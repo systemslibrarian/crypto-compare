@@ -8,6 +8,7 @@
  * Run:
  *   npx tsx scripts/check-demo-sync.ts
  *   npx tsx scripts/check-demo-sync.ts --strict
+ *   npx tsx scripts/check-demo-sync.ts --json
  */
 
 import { ALGORITHM_DEMOS } from "../src/data/demoResources";
@@ -15,6 +16,7 @@ import { diffDemoSlugs, extractLiveSlugsFromHtml, extractLocalSlugs } from "../s
 
 const LIVE_CATALOG_URL = "https://systemslibrarian.github.io/crypto-lab/";
 const STRICT_MODE = process.argv.includes("--strict");
+const JSON_MODE = process.argv.includes("--json");
 const FETCH_TIMEOUT_MS = 15_000;
 const MAX_RETRIES = 3;
 
@@ -65,6 +67,11 @@ async function fetchLiveSlugs(): Promise<string[]> {
 }
 
 function printResult(result: SyncResult) {
+  if (JSON_MODE) {
+    console.log(JSON.stringify(result, null, 2));
+    return;
+  }
+
   console.log("\nDemo catalog sync check");
   console.log(`Live slugs:  ${result.liveSlugs.length}`);
   console.log(`Local slugs: ${result.localSlugs.length}`);
