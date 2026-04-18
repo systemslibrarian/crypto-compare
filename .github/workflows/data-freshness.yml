@@ -37,6 +37,9 @@ jobs:
       - name: Run data and demo validation
         run: npm run validate:full
 
+      - name: Generate demo sync report
+        run: npm run check:demos:report
+
       - name: Run freshness check
         id: refresh
         env:
@@ -54,6 +57,13 @@ jobs:
         with:
           name: refresh-report
           path: refresh-report.json
+
+      - name: Upload demo sync report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: demo-sync-report
+          path: demo-sync-report.json
 
       - name: Create or update issue if stale
         if: env.HAS_ISSUES == 'true'
