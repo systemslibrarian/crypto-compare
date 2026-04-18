@@ -10,6 +10,7 @@
  *   npx tsx scripts/check-demo-sync.ts --strict
  *   npx tsx scripts/check-demo-sync.ts --json
  *   npx tsx scripts/check-demo-sync.ts --live-html-path=/tmp/crypto-lab.html --strict
+ *   npx tsx scripts/check-demo-sync.ts --timeout-ms=10000 --max-retries=2
  */
 
 import { ALGORITHM_DEMOS } from "../src/data/demoResources";
@@ -23,8 +24,20 @@ const REPORT_PATH_ARG = process.argv.find((arg) => arg.startsWith("--report-path
 const REPORT_PATH = REPORT_PATH_ARG ? REPORT_PATH_ARG.split("=")[1] : null;
 const LIVE_HTML_PATH_ARG = process.argv.find((arg) => arg.startsWith("--live-html-path="));
 const LIVE_HTML_PATH = LIVE_HTML_PATH_ARG ? LIVE_HTML_PATH_ARG.split("=")[1] : null;
-const FETCH_TIMEOUT_MS = 15_000;
-const MAX_RETRIES = 3;
+const FETCH_TIMEOUT_MS_ARG = process.argv.find((arg) => arg.startsWith("--timeout-ms="));
+const MAX_RETRIES_ARG = process.argv.find((arg) => arg.startsWith("--max-retries="));
+
+function parsePositiveInt(value: string | undefined, fallback: number, flagName: string): number {
+  if (!value) return fallback;
+  const parsed = Number.parseInt(value, 10);
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    throw new Error(`Invalid ${flagName}: expected a positive integer, got "${value}"`);
+  }
+  return parsed;
+}
+
+const FETCH_TIMEOUT_MS = parsePositiveInt(FETCH_TIMEOUT_MS_ARG?.split("=")[1], 15_000, "--timeout-ms");
+const MAX_RETRIES = parsePositiveInt(MAX_RETRIES_ARG?.split("=")[1], 3, "--max-retries");
 
 type SyncResult = {
   liveSlugs: string[];

@@ -374,6 +374,8 @@ Open <http://localhost:3000>.
 
 Offline audit option:
 Run `npx tsx scripts/check-demo-sync.ts --live-html-path=/tmp/crypto-lab.html --strict` to compare against a saved catalog snapshot.
+Advanced options:
+Use `--timeout-ms=<n>` and `--max-retries=<n>` to tune network behavior for constrained CI or unreliable connections.
 
 ---
 

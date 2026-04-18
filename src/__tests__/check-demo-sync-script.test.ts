@@ -88,4 +88,31 @@ describe("check-demo-sync script", () => {
       rmSync(dir, { recursive: true, force: true });
     }
   });
+
+  it("accepts custom timeout and retry flags", () => {
+    const localSlugs = extractLocalSlugs(ALGORITHM_DEMOS).slugs;
+    const dir = mkdtempSync(join(tmpdir(), "demo-sync-flags-"));
+    const htmlPath = join(dir, "live.html");
+
+    try {
+      writeFileSync(htmlPath, htmlForSlugs(localSlugs));
+      const result = runDemoSync([
+        `--live-html-path=${htmlPath}`,
+        "--strict",
+        "--timeout-ms=5000",
+        "--max-retries=2",
+      ]);
+
+      expect(result.status).toBe(0);
+      expect(result.stdout).toContain("All demo slugs are in sync");
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("fails with invalid numeric flag values", () => {
+    const result = runDemoSync(["--max-retries=0"]);
+    expect(result.status).not.toBe(0);
+    expect(result.stderr).toContain("Invalid --max-retries");
+  });
 });
