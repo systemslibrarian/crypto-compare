@@ -29,6 +29,8 @@ jobs:
         with:
           name: demo-sync-report
           path: demo-sync-report.json
+      - name: Test demo sync CLI
+        run: npm run test -- src/__tests__/check-demo-sync-script.test.ts
       - name: Test
         run: npm run test
       - name: Lint
