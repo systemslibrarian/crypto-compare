@@ -7,11 +7,17 @@ describe("demoSync helpers", () => {
       <a href="https://systemslibrarian.github.io/crypto-lab-aes-modes/">AES</a>
       <a href="https://systemslibrarian.github.io/crypto-lab-aes-modes/">AES duplicate</a>
       <a href="https://systemslibrarian.github.io/crypto-lab-kyber-vault/">Kyber</a>
+      <a href="https://systemslibrarian.github.io/crypto-lab-shadow-vault">No trailing slash</a>
+      <a href="https://systemslibrarian.github.io/crypto-lab-stark-tower?x=1">With query</a>
+      <a href="https://systemslibrarian.github.io/crypto-lab-snark-arena#overview">With hash</a>
     `;
 
     expect(extractLiveSlugsFromHtml(html)).toEqual([
       "crypto-lab-aes-modes",
       "crypto-lab-kyber-vault",
+      "crypto-lab-shadow-vault",
+      "crypto-lab-snark-arena",
+      "crypto-lab-stark-tower",
     ]);
   });
 

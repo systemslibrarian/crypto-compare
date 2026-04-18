@@ -35,7 +35,7 @@ jobs:
         run: npm ci
 
       - name: Run data and demo validation
-        run: npm run validate:full
+        run: npm run validate:full || echo "HAS_ISSUES=true" >> "$GITHUB_ENV"
 
       - name: Generate demo sync report
         run: npm run check:demos:report
