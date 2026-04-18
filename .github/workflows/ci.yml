@@ -22,6 +22,13 @@ jobs:
         run: npm run type-check
       - name: Validate data and demo sync
         run: npm run validate:full
+      - name: Generate demo sync report
+        run: npm run check:demos:report
+      - name: Upload demo sync report
+        uses: actions/upload-artifact@v4
+        with:
+          name: demo-sync-report
+          path: demo-sync-report.json
       - name: Test
         run: npm run test
       - name: Lint

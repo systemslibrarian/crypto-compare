@@ -369,6 +369,7 @@ Open <http://localhost:3000>.
 | `npm run lint` | Run linting |
 | `npm run check:demos` | Compare local demo mappings to the live crypto-lab catalog |
 | `npm run check:demos:json` | Output demo sync report as JSON for automation |
+| `npm run check:demos:report` | Write demo sync JSON report to demo-sync-report.json |
 | `npm run validate:full` | Run dataset validation plus strict live demo sync check |
 
 ---

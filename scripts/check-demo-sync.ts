@@ -13,10 +13,13 @@
 
 import { ALGORITHM_DEMOS } from "../src/data/demoResources";
 import { diffDemoSlugs, extractLiveSlugsFromHtml, extractLocalSlugs } from "../src/lib/demoSync";
+import { writeFileSync } from "node:fs";
 
 const LIVE_CATALOG_URL = "https://systemslibrarian.github.io/crypto-lab/";
 const STRICT_MODE = process.argv.includes("--strict");
 const JSON_MODE = process.argv.includes("--json");
+const REPORT_PATH_ARG = process.argv.find((arg) => arg.startsWith("--report-path="));
+const REPORT_PATH = REPORT_PATH_ARG ? REPORT_PATH_ARG.split("=")[1] : null;
 const FETCH_TIMEOUT_MS = 15_000;
 const MAX_RETRIES = 3;
 
@@ -26,6 +29,11 @@ type SyncResult = {
   missingFromLocal: string[];
   onlyInLocal: string[];
   invalidLocalUrls: Array<{ algorithmId: string; url: string }>;
+};
+
+type SyncReport = SyncResult & {
+  generatedAt: string;
+  hasIssues: boolean;
 };
 
 async function fetchLiveCatalogHtml(): Promise<string> {
@@ -66,7 +74,7 @@ async function fetchLiveSlugs(): Promise<string[]> {
   return extractLiveSlugsFromHtml(html);
 }
 
-function printResult(result: SyncResult) {
+function printResult(result: SyncReport) {
   if (JSON_MODE) {
     console.log(JSON.stringify(result, null, 2));
     return;
@@ -106,6 +114,14 @@ function printResult(result: SyncResult) {
   }
 }
 
+function writeReport(report: SyncReport) {
+  if (!REPORT_PATH) return;
+  writeFileSync(REPORT_PATH, JSON.stringify(report, null, 2));
+  if (!JSON_MODE) {
+    console.log(`\nReport written to ${REPORT_PATH}`);
+  }
+}
+
 async function main() {
   try {
     const liveSlugs = await fetchLiveSlugs();
@@ -120,12 +136,19 @@ async function main() {
       invalidLocalUrls,
     };
 
-    printResult(result);
-
     const hasIssues =
       result.invalidLocalUrls.length > 0 ||
       result.missingFromLocal.length > 0 ||
       result.onlyInLocal.length > 0;
+
+    const report: SyncReport = {
+      ...result,
+      generatedAt: new Date().toISOString(),
+      hasIssues,
+    };
+
+    printResult(report);
+    writeReport(report);
 
     if (STRICT_MODE && hasIssues) {
       process.exit(1);
