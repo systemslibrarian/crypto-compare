@@ -7,6 +7,7 @@ describe("demoSync helpers", () => {
       <a href="https://crypto-lab.systemslibrarian.dev/crypto-lab-aes-modes/">AES</a>
       <a href="https://crypto-lab.systemslibrarian.dev/crypto-lab-aes-modes/">AES duplicate</a>
       <a href="https://crypto-lab.systemslibrarian.dev/crypto-lab-kyber-vault/">Kyber</a>
+      <a href="https://systemslibrarian.github.io/crypto-lab-vrf-gate/">VRF</a>
       <a href="https://crypto-lab.systemslibrarian.dev/crypto-lab-shadow-vault">No trailing slash</a>
       <a href="https://crypto-lab.systemslibrarian.dev/crypto-lab-stark-tower?x=1">With query</a>
       <a href="https://crypto-lab.systemslibrarian.dev/crypto-lab-snark-arena#overview">With hash</a>
@@ -18,6 +19,7 @@ describe("demoSync helpers", () => {
       "crypto-lab-shadow-vault",
       "crypto-lab-snark-arena",
       "crypto-lab-stark-tower",
+      "crypto-lab-vrf-gate",
     ]);
   });
 
@@ -30,11 +32,15 @@ describe("demoSync helpers", () => {
       mlkem768: [
         { title: "Kyber", url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-kyber-vault/", note: "ok" },
       ],
+      vrf: [
+        { title: "VRF", url: "https://systemslibrarian.github.io/crypto-lab-vrf-gate/", note: "ok" },
+      ],
     });
 
     expect(result.slugs).toEqual([
       "crypto-lab-aes-modes",
       "crypto-lab-kyber-vault",
+      "crypto-lab-vrf-gate",
     ]);
     expect(result.invalidLocalUrls).toEqual([
       {

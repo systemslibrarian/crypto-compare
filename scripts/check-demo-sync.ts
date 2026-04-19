@@ -2,7 +2,7 @@
 /**
  * Demo catalog sync check.
  *
- * Compares live demo slugs from https://crypto-lab.systemslibrarian.dev/crypto-lab/
+ * Compares live demo slugs from the crypto-lab catalog
  * with local demo URLs in src/data/demoResources.ts.
  *
  * Run:
@@ -17,7 +17,10 @@ import { ALGORITHM_DEMOS } from "../src/data/demoResources";
 import { diffDemoSlugs, extractLiveSlugsFromHtml, extractLocalSlugs } from "../src/lib/demoSync";
 import { readFileSync, writeFileSync } from "node:fs";
 
-const LIVE_CATALOG_URL = "https://crypto-lab.systemslibrarian.dev/crypto-lab/";
+const LIVE_CATALOG_URLS = [
+  "https://crypto-lab.systemslibrarian.dev/",
+  "https://crypto-lab.systemslibrarian.dev/crypto-lab/",
+];
 const HELP_TEXT = `
 Usage:
   npx tsx scripts/check-demo-sync.ts [options]
@@ -114,29 +117,31 @@ async function fetchLiveCatalogHtml(options: CliOptions): Promise<string> {
   let lastError: Error | null = null;
 
   for (let attempt = 1; attempt <= options.maxRetries; attempt += 1) {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), options.timeoutMs);
+    for (const liveCatalogUrl of LIVE_CATALOG_URLS) {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), options.timeoutMs);
 
-    try {
-      const res = await fetch(LIVE_CATALOG_URL, {
-        headers: { "User-Agent": "crypto-compare-demo-sync-check/1.0" },
-        signal: controller.signal,
-      });
-      clearTimeout(timeout);
+      try {
+        const res = await fetch(liveCatalogUrl, {
+          headers: { "User-Agent": "crypto-compare-demo-sync-check/1.0" },
+          signal: controller.signal,
+        });
+        clearTimeout(timeout);
 
-      if (!res.ok) {
-        throw new Error(`Failed to fetch live catalog: HTTP ${res.status}`);
+        if (!res.ok) {
+          throw new Error(`Failed to fetch live catalog ${liveCatalogUrl}: HTTP ${res.status}`);
+        }
+
+        return await res.text();
+      } catch (error) {
+        clearTimeout(timeout);
+        const message = error instanceof Error ? error.message : "Unknown fetch error";
+        lastError = new Error(`Attempt ${attempt}/${options.maxRetries} failed: ${message}`);
       }
+    }
 
-      return await res.text();
-    } catch (error) {
-      clearTimeout(timeout);
-      const message = error instanceof Error ? error.message : "Unknown fetch error";
-      lastError = new Error(`Attempt ${attempt}/${options.maxRetries} failed: ${message}`);
-
-      if (attempt < options.maxRetries) {
-        await new Promise((resolve) => setTimeout(resolve, attempt * 500));
-      }
+    if (attempt < options.maxRetries) {
+      await new Promise((resolve) => setTimeout(resolve, attempt * 500));
     }
   }
 

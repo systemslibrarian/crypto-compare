@@ -1,7 +1,8 @@
 import type { DemoResource } from "@/data/demoResources";
 
-const LIVE_SLUG_PATTERN = /https:\/\/crypto-lab\.systemslibrarian\.dev\/(crypto-lab-[a-z0-9-]+)(?=\/|["'?#\s<])/g;
-const LOCAL_URL_PATTERN = /^https:\/\/crypto-lab\.systemslibrarian\.dev\/(crypto-lab-[a-z0-9-]+)\/$/;
+const LIVE_SLUG_PATTERN = /\/(crypto-lab-[a-z0-9-]+)(?=\/|["'?#\s<])/g;
+const LOCAL_URL_PATTERN =
+  /^https:\/\/(?:crypto-lab\.systemslibrarian\.dev|systemslibrarian\.github\.io)\/(crypto-lab-[a-z0-9-]+)\/$/;
 
 export type InvalidLocalDemoUrl = {
   algorithmId: string;
