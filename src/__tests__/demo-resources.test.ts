@@ -5,7 +5,7 @@ import { ALGORITHMS } from "@/data/algorithms";
 import { ALGORITHM_DEMOS } from "@/data/demoResources";
 import { extractLocalSlugs } from "@/lib/demoSync";
 
-const LIVE_DEMO_URL_PATTERN = /^https:\/\/systemslibrarian\.github\.io\/crypto-lab-[a-z0-9-]+\/$/;
+const LIVE_DEMO_URL_PATTERN = /^https:\/\/crypto-lab\.systemslibrarian\.dev\/crypto-lab-[a-z0-9-]+\/$/;
 
 describe("demo resource dataset", () => {
   it("only uses live crypto-lab URLs", () => {

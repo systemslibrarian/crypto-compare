@@ -260,7 +260,7 @@ function buildJustificationReport(
   lines.push("# Cryptographic Algorithm Justification Report");
   lines.push("");
   lines.push(`**Generated**: ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`);
-  lines.push(`**Tool**: crypto::compare (https://systemslibrarian.github.io/crypto-compare/)`);
+  lines.push(`**Tool**: crypto::compare (https://crypto-compare.systemslubrarian.dev/)`);
   lines.push("");
 
   // Decision path

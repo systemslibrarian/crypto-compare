@@ -17,7 +17,7 @@ function runDemoSync(args: string[]) {
 
 function htmlForSlugs(slugs: string[]) {
   const links = slugs
-    .map((slug) => `<a href="https://systemslibrarian.github.io/${slug}/">${slug}</a>`)
+    .map((slug) => `<a href="https://crypto-lab.systemslibrarian.dev/${slug}/">${slug}</a>`)
     .join("\n");
   return `<!doctype html><html><body>${links}</body></html>`;
 }

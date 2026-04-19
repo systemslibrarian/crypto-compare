@@ -2,7 +2,7 @@
 /**
  * Demo catalog sync check.
  *
- * Compares live demo slugs from https://systemslibrarian.github.io/crypto-lab/
+ * Compares live demo slugs from https://crypto-lab.systemslibrarian.dev/crypto-lab/
  * with local demo URLs in src/data/demoResources.ts.
  *
  * Run:
@@ -17,7 +17,7 @@ import { ALGORITHM_DEMOS } from "../src/data/demoResources";
 import { diffDemoSlugs, extractLiveSlugsFromHtml, extractLocalSlugs } from "../src/lib/demoSync";
 import { readFileSync, writeFileSync } from "node:fs";
 
-const LIVE_CATALOG_URL = "https://systemslibrarian.github.io/crypto-lab/";
+const LIVE_CATALOG_URL = "https://crypto-lab.systemslibrarian.dev/crypto-lab/";
 const HELP_TEXT = `
 Usage:
   npx tsx scripts/check-demo-sync.ts [options]

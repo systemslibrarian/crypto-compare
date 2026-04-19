@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   authors: [{ name: "crypto::compare contributors" }],
   creator: "crypto::compare",
-  metadataBase: new URL("https://systemslibrarian.github.io"),
+  metadataBase: new URL("https://crypto-compare.systemslubrarian.dev"),
   alternates: { canonical: "/crypto-compare" },
   openGraph: {
     title: "crypto::compare — Cryptographic Algorithm Reference",

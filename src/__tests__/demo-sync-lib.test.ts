@@ -4,12 +4,12 @@ import { diffDemoSlugs, extractLiveSlugsFromHtml, extractLocalSlugs } from "@/li
 describe("demoSync helpers", () => {
   it("extracts unique live slugs from html", () => {
     const html = `
-      <a href="https://systemslibrarian.github.io/crypto-lab-aes-modes/">AES</a>
-      <a href="https://systemslibrarian.github.io/crypto-lab-aes-modes/">AES duplicate</a>
-      <a href="https://systemslibrarian.github.io/crypto-lab-kyber-vault/">Kyber</a>
-      <a href="https://systemslibrarian.github.io/crypto-lab-shadow-vault">No trailing slash</a>
-      <a href="https://systemslibrarian.github.io/crypto-lab-stark-tower?x=1">With query</a>
-      <a href="https://systemslibrarian.github.io/crypto-lab-snark-arena#overview">With hash</a>
+      <a href="https://crypto-lab.systemslibrarian.dev/crypto-lab-aes-modes/">AES</a>
+      <a href="https://crypto-lab.systemslibrarian.dev/crypto-lab-aes-modes/">AES duplicate</a>
+      <a href="https://crypto-lab.systemslibrarian.dev/crypto-lab-kyber-vault/">Kyber</a>
+      <a href="https://crypto-lab.systemslibrarian.dev/crypto-lab-shadow-vault">No trailing slash</a>
+      <a href="https://crypto-lab.systemslibrarian.dev/crypto-lab-stark-tower?x=1">With query</a>
+      <a href="https://crypto-lab.systemslibrarian.dev/crypto-lab-snark-arena#overview">With hash</a>
     `;
 
     expect(extractLiveSlugsFromHtml(html)).toEqual([
@@ -24,11 +24,11 @@ describe("demoSync helpers", () => {
   it("extracts local slugs and tracks invalid local urls", () => {
     const result = extractLocalSlugs({
       aes256gcm: [
-        { title: "AES Modes", url: "https://systemslibrarian.github.io/crypto-lab-aes-modes/", note: "ok" },
+        { title: "AES Modes", url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-aes-modes/", note: "ok" },
         { title: "Bad", url: "https://github.com/systemslibrarian/crypto-lab-aes-modes", note: "legacy" },
       ],
       mlkem768: [
-        { title: "Kyber", url: "https://systemslibrarian.github.io/crypto-lab-kyber-vault/", note: "ok" },
+        { title: "Kyber", url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-kyber-vault/", note: "ok" },
       ],
     });
 

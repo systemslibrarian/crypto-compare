@@ -2,9 +2,9 @@
 
 **Cryptographic algorithm decision system for engineers, architects, and technical decision-makers.**
 
-97 algorithms. 17 categories. 65+ linked public demos. Sourced recommendations. Safe-usage guidance. Reference architectures. Post-quantum migration context.
+97 algorithms. 17 categories. 85+ linked public demos. Sourced recommendations. Safe-usage guidance. Reference architectures. Post-quantum migration context.
 
-🌐 **[Live Site →](https://systemslibrarian.github.io/crypto-compare/)**
+🌐 **[Live Site →](https://crypto-compare.systemslubrarian.dev/)**
 
 > *So whether you eat or drink or whatever you do, do it all for the glory of God.* — 1 Corinthians 10:31
 
@@ -410,7 +410,7 @@ High-value files:
 
 Each category in the app links to working demo projects that illustrate the cryptographic concepts in practice.
 
-- Full live crypto-lab index: [systemslibrarian.github.io/crypto-lab](https://systemslibrarian.github.io/crypto-lab/)
+- Full live crypto-lab index: [crypto-lab.systemslibrarian.dev/crypto-lab](https://crypto-lab.systemslibrarian.dev/crypto-lab/)
 - App mapping source of truth: [src/data/demoResources.ts](/workspaces/crypto-compare/src/data/demoResources.ts)
 - Current mapped crypto-lab demos: **76** (kept in sync with the live crypto-lab catalog)
 
