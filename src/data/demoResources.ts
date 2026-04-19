@@ -12,6 +12,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       note: "Compares ECB, CBC, CTR, GCM, and CCM with attack demos and mode visualizations.",
     },
     {
+      title: "AEGIS Gate",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-aegis-gate/",
+      note: "AEAD walkthrough comparing nonce handling and throughput tradeoffs in modern authenticated encryption.",
+    },
+    {
       title: "Format Ward",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-format-ward/",
       note: "Format-preserving encryption playground for structured fields and tokens.",
@@ -47,6 +52,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "ChaCha20 Stream",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-chacha20-stream/",
       note: "Quarter-round stepper, keystream visualizer, nonce-reuse demo, and encrypt/decrypt playground.",
+    },
+    {
+      title: "Ascon",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-ascon/",
+      note: "Lightweight cryptography lab covering AEAD, hashing, and constrained-device design tradeoffs.",
     },
     {
       title: "Nonce Guard",
@@ -125,6 +135,27 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       note: "Certificate-chain and trust-anchor mechanics for signature verification workflows.",
     },
   ],
+  p256: [
+    {
+      title: "ECDSA Forge",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-ecdsa-forge/",
+      note: "ECDSA signing and verification flow with nonce-discipline and verification-failure intuition.",
+    },
+  ],
+  secp256k1: [
+    {
+      title: "ECDSA Forge",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-ecdsa-forge/",
+      note: "ECDSA workflow and nonce-misuse intuition in the curve family used by blockchain wallets and custody systems.",
+    },
+  ],
+  curve448_ed448: [
+    {
+      title: "Curve448",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-curve448/",
+      note: "High-security curve walkthrough for X448 and Ed448 style key agreement and signatures.",
+    },
+  ],
   mlkem768: [
     {
       title: "Kyber Vault",
@@ -162,9 +193,29 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       note: "Implementation-fault and decryption-failure intuition for lattice systems.",
     },
     {
+      title: "KyberSlash",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-kyberslash/",
+      note: "Side-channel walkthrough showing why constant-time ML-KEM implementations matter.",
+    },
+    {
       title: "LLL Break",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-lll-break/",
       note: "Lattice reduction intuition and parameter-safety implications.",
+    },
+    {
+      title: "Harvest Timeline",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-harvest-timeline/",
+      note: "Migration-planning view for harvest-now decrypt-later risk and post-quantum rollout timing.",
+    },
+    {
+      title: "PQ Rotation",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-pq-rotation/",
+      note: "Operational rotation planning for moving production key exchange and data protection to PQ-safe systems.",
+    },
+    {
+      title: "PQ TLS Handshake",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-pq-tls-handshake/",
+      note: "Hybrid TLS handshake walkthrough showing where ML-KEM fits into post-quantum transport migration.",
     },
   ],
   mlkem1024: [
@@ -173,6 +224,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-kyber-vault/",
       note: "Interactive ML-KEM demo useful for comparing higher-security parameter sets.",
     },
+    {
+      title: "S-Cloud+ Vault",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-scloud-vault/",
+      note: "Post-quantum KEM workflow for long-lived cloud storage and envelope-encryption planning.",
+    },
   ],
   smaug_t: [
     {
@@ -180,12 +236,22 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-quantum-vault-kpqc/",
       note: "KPQC candidate lab including comparison views for regional post-quantum schemes.",
     },
+    {
+      title: "NTRU Classic",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-ntru-classic/",
+      note: "Lattice-encryption intuition builder for NTRU-style designs and their deployment tradeoffs.",
+    },
   ],
   hqc: [
     {
       title: "HQC Vault",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-hqc-vault/",
       note: "Code-based KEM flow and tradeoff walkthrough for HQC.",
+    },
+    {
+      title: "HQC Timing Break",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-hqc-timing-break/",
+      note: "Side-channel demo showing timing-sensitive failure modes in post-quantum KEM implementations.",
     },
   ],
   classic_mceliece: [
@@ -215,6 +281,21 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-dilithium-seal/",
       note: "Demonstrates ML-DSA signing and verification flow with lattice-based signatures.",
     },
+    {
+      title: "Dilithium Reject",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-dilithium-reject/",
+      note: "ML-DSA internals lab focused on rejection sampling and signing-loop behavior.",
+    },
+    {
+      title: "Hybrid Sign",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-hybrid-sign/",
+      note: "Composite-signature workflow combining classical and post-quantum authenticity guarantees.",
+    },
+    {
+      title: "Threshold ML-DSA",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-threshold-mldsa/",
+      note: "Threshold post-quantum signing walkthrough for distributed ML-DSA key ownership.",
+    },
   ],
   mldsa65: [
     {
@@ -223,9 +304,24 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       note: "Hands-on ML-DSA demo for signature generation and verification.",
     },
     {
+      title: "Dilithium Reject",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-dilithium-reject/",
+      note: "ML-DSA internals lab focused on rejection sampling and signing-loop behavior.",
+    },
+    {
+      title: "Hybrid Sign",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-hybrid-sign/",
+      note: "Composite-signature workflow for pairing PQ signatures with a classical signature during migration.",
+    },
+    {
       title: "MPCitH Sign",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-mpcith-sign/",
       note: "Post-quantum signature design intuition from MPC-in-the-head constructions.",
+    },
+    {
+      title: "Threshold ML-DSA",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-threshold-mldsa/",
+      note: "Threshold post-quantum signing workflow for higher-assurance distributed signature deployments.",
     },
   ],
   falcon512: [
@@ -233,6 +329,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Falcon Seal",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-falcon-seal/",
       note: "Lattice signature demo focused on compact signatures and implementation caveats.",
+    },
+    {
+      title: "HAWK",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-hawk/",
+      note: "Alternative post-quantum signature lab for compact-signature tradeoffs and deployment comparisons.",
     },
   ],
   slh_dsa: [
@@ -247,11 +348,23 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       note: "Post-quantum signature design intuition from MPC-in-the-head constructions.",
     },
   ],
+  xmss: [
+    {
+      title: "LMS/XMSS",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-lms-xmss/",
+      note: "Stateful hash-based signature comparison centered on XMSS and LMS lifecycle management.",
+    },
+  ],
   lms_hss: [
     {
       title: "LMS Ledger",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-lms-ledger/",
       note: "Stateful hash-based signatures with Merkle authentication path intuition.",
+    },
+    {
+      title: "LMS/XMSS",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-lms-xmss/",
+      note: "Compares stateful hash-based signature families and the operational risks of one-time key reuse.",
     },
     {
       title: "Merkle Vault",
@@ -549,12 +662,36 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-oblivious-shelf/",
       note: "Private retrieval and access-pattern leakage intuition.",
     },
+    {
+      title: "ORAM Vault",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-oram-vault/",
+      note: "Access-pattern privacy walkthrough showing where PIR and ORAM solve different leakage problems.",
+    },
   ],
   it_pir: [
     {
       title: "Oblivious Shelf",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-oblivious-shelf/",
       note: "Private retrieval and access-pattern leakage intuition.",
+    },
+    {
+      title: "ORAM Vault",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-oram-vault/",
+      note: "Access-pattern privacy walkthrough for stronger hiding guarantees in repeated query settings.",
+    },
+  ],
+  aby: [
+    {
+      title: "PSI Gate",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-psi-gate/",
+      note: "Private set intersection workflow built from practical two-party secure computation patterns.",
+    },
+  ],
+  elgamal: [
+    {
+      title: "ElGamal Plain",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-elgamal-plain/",
+      note: "Public-key encryption walkthrough for multiplicative homomorphism and ciphertext expansion tradeoffs.",
     },
   ],
   rsa_oaep_2048: [
@@ -616,9 +753,21 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       note: "Threshold ECDSA signing with coordinator flow and abort handling.",
     },
     {
+      title: "Paillier Gate",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-paillier-gate/",
+      note: "Additive homomorphic encryption walkthrough for the Paillier building blocks used in threshold ECDSA systems.",
+    },
+    {
       title: "Threshold Decrypt",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-threshold-decrypt/",
       note: "Multi-party threshold workflow intuition for distributed wallet operations.",
+    },
+  ],
+  dkls23: [
+    {
+      title: "Paillier Gate",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-paillier-gate/",
+      note: "Additive homomorphic encryption context for the arithmetic and proof machinery behind modern threshold ECDSA.",
     },
   ],
   hmac_drbg: [
@@ -683,6 +832,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Pairing Gate",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-pairing-gate/",
       note: "Pairing-friendly curve intuition and protocol use in advanced signatures.",
+    },
+    {
+      title: "IBE Gate",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-ibe-gate/",
+      note: "Identity-based encryption walkthrough rooted in pairing-based public-key constructions.",
     },
   ],
   bls_threshold: [

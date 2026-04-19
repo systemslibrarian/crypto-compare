@@ -2,7 +2,7 @@
 
 **Cryptographic algorithm decision system for engineers, architects, and technical decision-makers.**
 
-97 algorithms. 17 categories. 85+ linked public demos. Sourced recommendations. Safe-usage guidance. Reference architectures. Post-quantum migration context.
+97 algorithms. 17 categories. 97 unique linked public demos. Sourced recommendations. Safe-usage guidance. Reference architectures. Post-quantum migration context.
 
 🌐 **[Live Site →](https://crypto-compare.systemslubrarian.dev/)**
 
@@ -304,7 +304,7 @@ That honesty is part of the trust model, not a weakness in spite of it.
 | **Download justification reports** | Markdown output for architecture reviews and design discussion |
 | **Filter and sort** | PQ-safe, standards-track, NIST status, deployment, origin, size, and security dimensions |
 | **Review hybrid patterns** | Classical-plus-PQ constructions for practical migration planning |
-| **Explore linked demo projects** | 68 linked public demos across the mapped categories, with per-category project context in the explainer panels |
+| **Explore linked demo projects** | 97 unique linked public demos across the mapped categories, with per-category project context in the explainer panels |
 | **Read safety and architecture guidance** | Use-case content, pitfalls, library direction, and system-level flows |
 
 ### Coverage Snapshot
@@ -412,7 +412,7 @@ Each category in the app links to working demo projects that illustrate the cryp
 
 - Full live crypto-lab index: [crypto-lab.systemslibrarian.dev/crypto-lab](https://crypto-lab.systemslibrarian.dev/crypto-lab/)
 - App mapping source of truth: [src/data/demoResources.ts](/workspaces/crypto-compare/src/data/demoResources.ts)
-- Current mapped crypto-lab demos: **76** (kept in sync with the live crypto-lab catalog)
+- Current mapped crypto-lab demos: **97** unique slugs (kept in sync with the live crypto-lab catalog)
 
 The list below is representative rather than exhaustive.
 
