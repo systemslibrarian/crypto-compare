@@ -22,8 +22,8 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   authors: [{ name: "crypto::compare contributors" }],
   creator: "crypto::compare",
-  metadataBase: new URL("https://crypto-compare.systemslubrarian.dev"),
-  alternates: { canonical: "/crypto-compare" },
+  metadataBase: new URL("https://crypto-compare.systemslibrarian.dev"),
+  alternates: { canonical: "/" },
   openGraph: {
     title: "crypto::compare — Cryptographic Algorithm Reference",
     description: "Choose cryptography with evidence, tradeoffs, and safe defaults. 97 algorithms · 17 categories · real-world recommendations.",
