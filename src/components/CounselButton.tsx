@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-const COUNSEL_BASE = 'https://systemslibrarian.github.io/crypto-counsel/';
+const COUNSEL_BASE = 'https://crypto-counsel.systemslibrarian.dev/';
 
 interface CounselButtonProps {
   /** Pre-filled question. If omitted, opens the counsel homepage. */
