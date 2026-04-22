@@ -4,7 +4,7 @@
 
 97 algorithms. 17 categories. 97 unique linked public demos. Sourced recommendations. Safe-usage guidance. Reference architectures. Post-quantum migration context.
 
-🌐 **[Live Site →](https://crypto-compare.systemslubrarian.dev/)**
+🌐 **[Live Site →](https://crypto-compare.systemslibrarian.dev/)**
 
 > *So whether you eat or drink or whatever you do, do it all for the glory of God.* — 1 Corinthians 10:31
 
