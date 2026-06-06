@@ -46,6 +46,16 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-dead-sea-cipher/",
       note: "Historical cipher lab for context on modern symmetric design goals.",
     },
+    {
+      title: "Envelope KMS",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-envelope-kms/",
+      note: "RFC 3394/5649 AES key wrap with DEK/KEK hierarchy, KMS-style rotation, and a hash-chained audit log.",
+    },
+    {
+      title: "Kerberos v5",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-kerberos/",
+      note: "RFC 4120 AS/TGS/AP exchange walkthrough with AES-256-CTS-HMAC-SHA1-96 ticket encryption and the Lowe attack.",
+    },
   ],
   chacha20poly: [
     {
@@ -107,6 +117,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-isogeny-gate/",
       note: "Post-quantum key-exchange history and assumptions in context with modern curves.",
     },
+    {
+      title: "MLS Group",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-mls-group/",
+      note: "RFC 9420 Messaging Layer Security with TreeKEM ratchet tree, epoch key schedule, and group forward secrecy.",
+    },
   ],
   ed25519: [
     {
@@ -141,12 +156,22 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-ecdsa-forge/",
       note: "ECDSA signing and verification flow with nonce-discipline and verification-failure intuition.",
     },
+    {
+      title: "Nonce Lattice",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-nonce-lattice/",
+      note: "ECDSA nonce-bias lattice attack on P-256 — Hidden Number Problem, in-browser LLL reduction, private-key recovery.",
+    },
   ],
   secp256k1: [
     {
       title: "ECDSA Forge",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-ecdsa-forge/",
       note: "ECDSA workflow and nonce-misuse intuition in the curve family used by blockchain wallets and custody systems.",
+    },
+    {
+      title: "Nonce Lattice",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-nonce-lattice/",
+      note: "ECDSA nonce-bias lattice attack on secp256k1 — Hidden Number Problem and LLL reduction recovering the private key.",
     },
   ],
   curve448_ed448: [
@@ -619,6 +644,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
     },
   ],
   bulletproofs: [
+    {
+      title: "Bulletproofs",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-bulletproofs/",
+      note: "ZK range proofs on ristretto255 — 64-bit Pedersen commitments, aggregate proofs, and the inner-product argument.",
+    },
     {
       title: "ZK Proof Lab",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-zk-proof-lab/",
