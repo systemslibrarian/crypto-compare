@@ -26,6 +26,23 @@ for (const id of Array.from(provenanceIds)) {
   }
 }
 
+// Citation policy: every algorithm must have at least one primary source
+// (a "standard" — NIST/IETF/ISO/national standard — or "analysis" — peer-reviewed paper).
+// "deployment" and "benchmark" sources alone are not enough.
+const PRIMARY_SOURCE_KINDS = new Set(["standard", "analysis"]);
+for (const [id, entry] of Object.entries(ALGORITHM_PROVENANCE)) {
+  if (!entry.sources || entry.sources.length === 0) {
+    errors.push(`Provenance ${id}: no sources cited`);
+    continue;
+  }
+  const hasPrimary = entry.sources.some((s) => PRIMARY_SOURCE_KINDS.has(s.kind));
+  if (!hasPrimary) {
+    errors.push(
+      `Provenance ${id}: needs at least one primary source (kind="standard" or "analysis"), found only [${entry.sources.map((s) => s.kind).join(", ")}]`,
+    );
+  }
+}
+
 // Validate hybrid patterns
 const patternIds = new Set<string>();
 for (const p of HYBRID_PATTERNS) {

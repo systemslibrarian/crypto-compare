@@ -88,3 +88,39 @@ Two algorithms carry explicit trust caveats in the tool:
 - **Streebog** (Russia) — Same S-box transparency concern as Kuznyechik.
 
 These caveats are noted in each algorithm's description within the tool.
+
+## Citation Policy
+
+Every algorithm in `src/data/provenance.ts` MUST cite at least one
+**primary source** — that is, a source entry with
+`kind: "standard"` (NIST FIPS/SP, IETF RFC, ISO/IEC, or national
+standard like GOST/GB/KS/DSTU) **or** `kind: "analysis"` (a
+peer-reviewed paper from IACR ePrint, Eurocrypt, CRYPTO, Asiacrypt,
+or equivalent venue).
+
+`kind: "deployment"` (a library or protocol implementation) and
+`kind: "benchmark"` are accepted as supplementary citations but are
+not, on their own, sufficient grounds for a claim about the
+algorithm's design or security.
+
+This rule is enforced at build time by
+[`scripts/validate-data.ts`](../scripts/validate-data.ts); the CI
+job fails when any algorithm is missing a primary source.
+
+### Source precedence
+
+When sources disagree, we apply this precedence order:
+
+1. **Current standard** — the active version of the relevant FIPS,
+   RFC, or ISO publication.
+2. **Peer-reviewed cryptanalysis** — IACR papers superseding older
+   estimates.
+3. **NIST PQC round reports** — the most recent round result.
+4. **National standards** — for region-specific algorithms (GOST,
+   GB/T, KPQC) we use the national publication as primary.
+5. **Library documentation** — only for deployment notes (e.g.,
+   nonce sizes used in libsodium), not for security claims.
+
+Every algorithm carries a `lastReviewed` date; the
+[data-freshness workflow](../.github/workflows/data-freshness.yml)
+opens an issue when entries age past the configured threshold.
