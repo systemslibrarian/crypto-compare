@@ -7,11 +7,13 @@ import { ALGORITHM_DEMOS } from "@/data/demoResources";
 import { extractLocalSlugs } from "@/lib/demoSync";
 
 function runDemoSync(args: string[]) {
-  const tsxBin = join(process.cwd(), "node_modules", ".bin", "tsx");
+  const tsxBinName = process.platform === "win32" ? "tsx.cmd" : "tsx";
+  const tsxBin = join(process.cwd(), "node_modules", ".bin", tsxBinName);
   const scriptPath = join(process.cwd(), "scripts", "check-demo-sync.ts");
   return spawnSync(tsxBin, [scriptPath, ...args], {
     cwd: process.cwd(),
     encoding: "utf8",
+    shell: process.platform === "win32",
   });
 }
 
