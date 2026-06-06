@@ -39,6 +39,25 @@ When adding or modifying algorithm data:
 - **Use the exact parameter names** from the TypeScript types in `src/types/crypto.ts`.
 - **Run `npm run test`** — the dataset validation tests will catch missing fields, duplicate IDs, and orphaned provenance entries.
 
+## Dataset Versioning
+
+The dataset is published both in-app and as static JSON under
+`public/data/` (see [docs/data-api.md](docs/data-api.md)). Its version
+lives in `package.json` and is shown in the site footer.
+
+Follow [Semantic Versioning](https://semver.org/) for the dataset:
+
+- **MAJOR** — breaking schema change: a required field is renamed,
+  removed, or changes type in a way that breaks consumers.
+- **MINOR** — additive schema or content change: new algorithm
+  entries, new optional fields, new files in the JSON export.
+- **PATCH** — content correction only: refreshed `lastReviewed`,
+  corrected typo, swapped a dead source URL.
+
+Bump the version in `package.json` as part of the PR, add a
+matching `CHANGELOG.md` entry, and tag the release after merge
+(`git tag dataset-v$VERSION && git push --tags`).
+
 ## Code Style
 
 - TypeScript strict mode — no `any`, no type assertions without justification
