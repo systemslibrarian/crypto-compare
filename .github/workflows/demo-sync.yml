@@ -1,0 +1,130 @@
+name: Demo Catalog Sync Check
+
+on:
+  schedule:
+    # Weekly, Monday 08:00 UTC
+    - cron: "0 8 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  demo-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate demo sync report
+        run: npm run check:demos:report
+
+      - name: Upload demo sync report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: demo-sync-report
+          path: demo-sync-report.json
+
+      - name: Open or update issue when sync drifts
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('demo-sync-report.json', 'utf8'));
+
+            if (!report.hasIssues) {
+              console.log('Demo catalog is in sync — no issue needed.');
+              return;
+            }
+
+            const label = 'demo-sync';
+
+            // Ensure label exists
+            try {
+              await github.rest.issues.getLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: label,
+              });
+            } catch {
+              await github.rest.issues.createLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: label,
+                color: 'c5def5',
+                description: 'crypto-lab demo catalog drift',
+              });
+            }
+
+            let body = `## Demo catalog sync drift\n\n`;
+            body += `**Generated:** ${report.generatedAt}\n`;
+            body += `**Live slugs:** ${report.summary.liveSlugCount}\n`;
+            body += `**Local slugs:** ${report.summary.localSlugCount}\n\n`;
+
+            if (report.missingFromLocal.length > 0) {
+              body += `### Missing from local (${report.missingFromLocal.length})\n\n`;
+              body += `New crypto-lab demos that need an entry in \`src/data/demoResources.ts\`:\n\n`;
+              for (const slug of report.missingFromLocal) {
+                body += `- \`${slug}\` — https://crypto-lab.systemslibrarian.dev/${slug}/\n`;
+              }
+              body += `\n`;
+            }
+
+            if (report.onlyInLocal.length > 0) {
+              body += `### Only in local (${report.onlyInLocal.length})\n\n`;
+              body += `Slugs the local catalog references but the live site no longer lists:\n\n`;
+              for (const slug of report.onlyInLocal) {
+                body += `- \`${slug}\`\n`;
+              }
+              body += `\n`;
+            }
+
+            if (report.invalidLocalUrls.length > 0) {
+              body += `### Invalid local demo URLs (${report.invalidLocalUrls.length})\n\n`;
+              for (const entry of report.invalidLocalUrls) {
+                body += `- \`${entry.algorithmId}\` — ${entry.url}\n`;
+              }
+              body += `\n`;
+            }
+
+            body += `---\n`;
+            body += `Run \`npm run check:demos\` locally to reproduce. Update \`src/data/demoResources.ts\` and the README demo count to resolve.\n`;
+
+            const { data: existingIssues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: label,
+              state: 'open',
+            });
+
+            if (existingIssues.length > 0) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssues[0].number,
+                body,
+              });
+              console.log(`Updated existing issue #${existingIssues[0].number}`);
+            } else {
+              const { data: issue } = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: 'Demo catalog out of sync with crypto-lab',
+                body,
+                labels: [label],
+              });
+              console.log(`Created issue #${issue.number}`);
+            }
+
+      - name: Fail job when sync drifts
+        run: npm run check:demos:strict
