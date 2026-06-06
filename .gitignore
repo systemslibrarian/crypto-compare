@@ -7,3 +7,4 @@ next-env.d.ts
 .env*.local
 refresh-report.json
 demo-sync-report.json
+public/data/
