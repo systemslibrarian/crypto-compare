@@ -8,3 +8,10 @@ next-env.d.ts
 refresh-report.json
 demo-sync-report.json
 public/data/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/.playwright/
+lighthouse-report.json

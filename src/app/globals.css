@@ -446,8 +446,24 @@ body {
     @apply rounded-xl p-4 mb-4;
     background: var(--color-bg-card);
     border: 1px solid var(--color-border);
-    box-shadow: 0 14px 34px rgba(2, 8, 23, 0.22);
-    backdrop-filter: blur(10px);
+    /* A flat, cheap shadow. The previous large-radius shadow + backdrop-filter
+       blur(10px) cost a lot of paint/layout on every panel for almost no visual
+       gain (panels sit on a near-opaque background). */
+    box-shadow: 0 4px 16px rgba(2, 8, 23, 0.18);
+  }
+
+  /* Skip layout/paint for off-screen content. The browser remembers each
+     element's last rendered size (auto) and uses the fallback before first
+     paint, so scrollbars stay stable while initial Style & Layout drops sharply
+     on a large DOM. */
+  .algoCard {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 340px;
+  }
+
+  .deferBelowFold {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 600px;
   }
 
   .panel-inner {

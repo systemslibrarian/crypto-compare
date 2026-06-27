@@ -26,7 +26,7 @@ Every file uses the same wrapper:
 ```jsonc
 {
   "$schema": "https://crypto-compare.systemslibrarian.dev/data/schema/<name>.json",
-  "version": "1.0.0",          // semver of the dataset (package.json version)
+  "version": "1.1.0",          // semver of the dataset (package.json version)
   "generatedAt": "2026-06-06T18:00:00.000Z",
   "data": /* type-specific payload */
 }

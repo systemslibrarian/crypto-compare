@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { formatReviewDate } from "@/components/ui";
 import type { TrustSnapshot } from "@/lib/trust";
 import { CHANGELOG_URL, DATASET_VERSION } from "@/lib/datasetVersion";
@@ -46,6 +47,10 @@ export default function FooterShell({ trustSnapshot }: FooterShellProps) {
           </span>
         </div>
         Sources: NIST FIPS, IETF RFCs, KPQC, CRYPTREC, GB/T, GOST, DSTU, ISO, Eurocrypt/CRYPTO proceedings. Security estimates reflect known attacks and public literature, and should be treated as continuously updated guidance, not certification.
+        <div style={{ marginTop: "10px" }}>
+          <Link href="/about" style={{ color: "var(--color-text-accent-bright)" }}>About &amp; methodology</Link>{" · "}
+          <Link href="/labs" style={{ color: "var(--color-text-accent-bright)" }}>Interactive labs</Link>
+        </div>
         <div style={{ marginTop: "10px" }}>
           <span className="text-accent" style={{ fontWeight: 700 }}>Related:</span>{" "}
           <a href="https://github.com/systemslibrarian/crypto-compare" target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-text-accent-bright)" }}>crypto-compare</a>{" · "}

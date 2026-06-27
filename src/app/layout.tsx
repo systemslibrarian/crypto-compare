@@ -27,14 +27,24 @@ export const metadata: Metadata = {
   openGraph: {
     title: "crypto::compare — Cryptographic Algorithm Reference",
     description: "Choose cryptography with evidence, tradeoffs, and safe defaults. 97 algorithms · 17 categories · real-world recommendations.",
+    url: "/",
     type: "website",
     siteName: "crypto::compare",
     locale: "en_US",
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "crypto::compare — Cryptographic Algorithm Reference. 97 algorithms, 17 categories, 123 linked labs.",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "crypto::compare",
     description: "Cryptographic algorithm reference — 97 algorithms, 17 categories, safe defaults, implementation maps, and architecture checklists.",
+    images: ["/og.png"],
   },
   icons: {
     icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◈</text></svg>",

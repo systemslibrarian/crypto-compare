@@ -1,22 +1,30 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import AdvisorCta from "@/components/AdvisorCta";
 import AlgoCard from "@/components/AlgoCard";
 import { CounselButton } from "@/components/CounselButton";
 import AppHeaderNav from "@/components/AppHeaderNav";
 import CategoryExplainer from "@/components/CategoryExplainer";
-import ComparisonWorkspace from "@/components/ComparisonWorkspace";
 import FooterShell from "@/components/FooterShell";
 import HeroOverview from "@/components/HeroOverview";
 import IntentCards from "@/components/IntentCards";
-import KnowledgeSections from "@/components/KnowledgeSections";
-import MethodologyPanel from "@/components/MethodologyPanel";
 import QuickStartPanel from "@/components/QuickStartPanel";
 import ReferenceGuidePanel from "@/components/ReferenceGuidePanel";
 import ResultsStatus from "@/components/ResultsStatus";
 import SearchControls from "@/components/SearchControls";
-import ShortcutHelp from "@/components/ShortcutHelp";
+
+// Below-the-fold and interaction-only UI is code-split so it stays out of the
+// initial JS bundle and off the hydration critical path. None of these are
+// needed for first paint or SEO.
+const ComparisonWorkspace = dynamic(() => import("@/components/ComparisonWorkspace"), { ssr: false });
+const KnowledgeSections = dynamic(() => import("@/components/KnowledgeSections"), {
+  ssr: false,
+  loading: () => <div className="deferBelowFold" aria-hidden="true" style={{ minHeight: "320px" }} />,
+});
+const MethodologyPanel = dynamic(() => import("@/components/MethodologyPanel"), { ssr: false });
+const ShortcutHelp = dynamic(() => import("@/components/ShortcutHelp"), { ssr: false });
 import { ALGORITHMS } from "@/data/algorithms";
 import { CATEGORIES, CATEGORY_ACCENT } from "@/data/categories";
 import type { FilterPreset } from "@/data/filterPresets";
@@ -403,7 +411,9 @@ export default function CryptoCompare() {
             onExportJson={() => exportComparison("json")}
           />
 
-          <ReferenceGuidePanel algorithms={filtered} />
+          <div className="deferBelowFold">
+            <ReferenceGuidePanel algorithms={filtered} />
+          </div>
 
           <KnowledgeSections
             showHybrid={showHybrid}

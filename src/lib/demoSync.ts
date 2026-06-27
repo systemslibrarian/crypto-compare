@@ -4,6 +4,12 @@ const LIVE_SLUG_PATTERN = /\/(crypto-lab-[a-z0-9-]+)(?=\/|["'?#\s<])/g;
 const LOCAL_URL_PATTERN =
   /^https:\/\/(?:crypto-lab\.systemslibrarian\.dev|systemslibrarian\.github\.io)\/(crypto-lab-[a-z0-9-]+)\/$/;
 
+// Slugs that live on the catalog domain but are not teaching labs (award badges,
+// landing pages, etc.) and therefore have no algorithm to map to.
+const NON_LAB_SLUGS = new Set<string>([
+  "crypto-lab-2026", // 2026 Cybersecurity Excellence Awards badge link, not a lab
+]);
+
 export type InvalidLocalDemoUrl = {
   algorithmId: string;
   url: string;
@@ -12,6 +18,7 @@ export type InvalidLocalDemoUrl = {
 export function extractLiveSlugsFromHtml(html: string): string[] {
   const slugs = new Set<string>();
   for (const match of html.matchAll(LIVE_SLUG_PATTERN)) {
+    if (NON_LAB_SLUGS.has(match[1])) continue;
     slugs.add(match[1]);
   }
   return Array.from(slugs).sort();

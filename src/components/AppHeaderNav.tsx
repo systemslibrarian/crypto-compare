@@ -196,6 +196,23 @@ export default function AppHeaderNav({
             >
               Visual Guide
             </Link>
+            <Link
+              href="/labs"
+              className="headerBtn desktopOnly focusRing"
+              style={{
+                background: "var(--color-bg-control)",
+                color: "var(--color-text-body)",
+                border: "1px solid var(--color-border-muted)",
+                borderRadius: "6px",
+                padding: "10px 16px",
+                fontSize: "14px",
+                fontWeight: 700,
+                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+                textDecoration: "none",
+              }}
+            >
+              Labs
+            </Link>
             <button
               className="focusRing mobileMenuBtn"
               onClick={onToggleMobileNav}
@@ -278,6 +295,14 @@ export default function AppHeaderNav({
             style={{ textDecoration: "none" }}
           >
             📊 Visual Guide
+          </Link>
+          <Link
+            href="/labs"
+            className="focusRing mobileNavActionBtn"
+            onClick={onCloseMobileNav}
+            style={{ textDecoration: "none" }}
+          >
+            🧪 Labs
           </Link>
           {onShowDefaults && (
             <button

@@ -38,6 +38,32 @@ jobs:
       - name: Build
         run: npm run build
 
+  e2e:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+      - name: Install
+        run: npm ci
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+      - name: Build
+        run: npm run build
+      - name: Run end-to-end tests
+        run: npm run test:e2e
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
   lighthouse:
     runs-on: ubuntu-latest
     needs: build
@@ -58,12 +84,45 @@ jobs:
           sleep 3
           npx lighthouse http://localhost:3000 \
             --chrome-flags="--headless --no-sandbox" \
-            --only-categories=accessibility,best-practices \
+            --only-categories=accessibility,best-practices,performance \
             --output=json --output-path=./lighthouse-report.json \
             --quiet
-          SCORE=$(node -e "const r=require('./lighthouse-report.json');const a=r.categories.accessibility.score*100;console.log(a)")
-          echo "Accessibility score: $SCORE"
-          if [ "$SCORE" -lt 90 ]; then
-            echo "::error::Accessibility score $SCORE is below 90"
-            exit 1
-          fi
+          node -e '
+            const r = require("./lighthouse-report.json");
+            const cat = r.categories;
+            const score = (key) => Math.round((cat[key]?.score ?? 0) * 100);
+            const a = score("accessibility");
+            const p = score("performance");
+            const bp = score("best-practices");
+            const audits = r.audits;
+            const cls = audits["cumulative-layout-shift"]?.numericValue ?? 1;
+            const cwv = (key) => audits[key]?.displayValue ?? "n/a";
+            console.log(`Accessibility ${a} | Performance ${p} | Best-practices ${bp}`);
+            console.log(`LCP ${cwv("largest-contentful-paint")} | CLS ${cwv("cumulative-layout-shift")} | TBT ${cwv("total-blocking-time")}`);
+            // Hard gates: things that should always hold. Accessibility and
+            // best-practices are mature; CLS is a stable Core Web Vital here.
+            const hard = {
+              "accessibility >= 90": a >= 90,
+              "best-practices >= 90": bp >= 90,
+              "CLS < 0.1": cls < 0.1,
+              // Regression floor for performance; raise toward 90 as the home
+              // bundle / TBT is optimized. Today the page scores ~67.
+              "performance >= 55": p >= 55,
+            };
+            const failed = Object.entries(hard).filter(([, ok]) => !ok).map(([k]) => k);
+            if (failed.length) {
+              console.error(`::error::Lighthouse gate failed: ${failed.join(", ")}`);
+              process.exit(1);
+            }
+            if (p < 90) {
+              console.log(`::warning::Performance ${p} is below the 90 target (TBT/bundle weight on the home page).`);
+            }
+            console.log("Lighthouse gates passed.");
+          '
+      - name: Upload Lighthouse report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: lighthouse-report.json
+          retention-days: 7

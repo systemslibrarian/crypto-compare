@@ -1,6 +1,6 @@
 {
   "name": "crypto-compare",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Interactive cryptographic algorithm reference — 17 categories, 97 algorithms, international",
   "private": true,
   "scripts": {
@@ -13,6 +13,7 @@
     "type-check": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:e2e": "playwright test",
     "test:demos": "vitest run src/__tests__/demo-resources.test.ts src/__tests__/demo-sync-lib.test.ts src/__tests__/check-demo-sync-script.test.ts",
     "check:demos": "tsx scripts/check-demo-sync.ts",
     "check:demos:strict": "tsx scripts/check-demo-sync.ts --strict",
@@ -30,6 +31,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@playwright/test": "^1.49.0",
     "@testing-library/jest-dom": "^6.6.0",
     "@testing-library/react": "^16.1.0",
     "@types/node": "^20.14.0",

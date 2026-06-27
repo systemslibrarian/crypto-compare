@@ -56,6 +56,16 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-kerberos/",
       note: "RFC 4120 AS/TGS/AP exchange walkthrough with AES-256-CTS-HMAC-SHA1-96 ticket encryption and the Lowe attack.",
     },
+    {
+      title: "Enigma Forge",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-enigma-forge/",
+      note: "Full mechanical Enigma with rotors, plugboard, and reflector, plus the crib-based Bombe break exploiting the no-letter-maps-to-itself flaw.",
+    },
+    {
+      title: "Vigenère Break",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-vigenere-break/",
+      note: "Recovers a repeating-key Vigenère cipher with Kasiski examination, the index of coincidence, and per-column frequency analysis.",
+    },
   ],
   chacha20poly: [
     {
@@ -72,6 +82,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Nonce Guard",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-nonce-guard/",
       note: "Demonstrates nonce-misuse failures and how modern AEAD usage avoids them.",
+    },
+    {
+      title: "OTP Vault",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-otp-vault/",
+      note: "One-time pad with provable perfect secrecy, then the two-time-pad break recovering both plaintexts from a reused keystream.",
     },
   ],
   xchacha20poly: [
@@ -122,6 +137,16 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-mls-group/",
       note: "RFC 9420 Messaging Layer Security with TreeKEM ratchet tree, epoch key schedule, and group forward secrecy.",
     },
+    {
+      title: "Key Exchange",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-key-exchange/",
+      note: "Walkthrough of key exchange from Diffie-Hellman to modern hybrid post-quantum handshakes, with assumptions and threat models per era.",
+    },
+    {
+      title: "SSH Handshake",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-ssh-handshake/",
+      note: "SSH transport handshake with ephemeral X25519/ECDH, Ed25519 signatures over the exchange hash, and TOFU host-key pinning.",
+    },
   ],
   ed25519: [
     {
@@ -149,6 +174,16 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-pki-chain/",
       note: "Certificate-chain and trust-anchor mechanics for signature verification workflows.",
     },
+    {
+      title: "Web of Trust",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-web-of-trust/",
+      note: "PGP-style trust graph for signing keys and walking introduction chains, showing how trust flows without a central authority.",
+    },
+    {
+      title: "SSH Handshake",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-ssh-handshake/",
+      note: "SSH transport handshake using Ed25519 host-key signatures over the exchange hash with TOFU known_hosts pinning.",
+    },
   ],
   p256: [
     {
@@ -161,6 +196,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-nonce-lattice/",
       note: "ECDSA nonce-bias lattice attack on P-256 — Hidden Number Problem, in-browser LLL reduction, private-key recovery.",
     },
+    {
+      title: "WebAuthn",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-webauthn/",
+      note: "Passwordless FIDO2/WebAuthn authentication with ES256 (P-256) keys, covering attestation, assertion, and platform vs cross-platform authenticators.",
+    },
   ],
   secp256k1: [
     {
@@ -172,6 +212,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Nonce Lattice",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-nonce-lattice/",
       note: "ECDSA nonce-bias lattice attack on secp256k1 — Hidden Number Problem and LLL reduction recovering the private key.",
+    },
+    {
+      title: "Bitcoin Wallet",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-bitcoin-wallet/",
+      note: "secp256k1 key derivation to P2PKH and P2WPKH addresses via HASH160, with BIP-39 mnemonics, PBKDF2 seed stretching, and BIP-32 hardened child derivation.",
     },
   ],
   curve448_ed448: [
@@ -242,6 +287,31 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-pq-tls-handshake/",
       note: "Hybrid TLS handshake walkthrough showing where ML-KEM fits into post-quantum transport migration.",
     },
+    {
+      title: "Ciphertext Mirror",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-ciphertext-mirror/",
+      note: "ML-KEM side-channel walkthrough across the Fujisaki-Okamoto transform, LDPC decoder behavior, and NTT blinding countermeasures.",
+    },
+    {
+      title: "Hybrid Guide",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-hybrid-guide/",
+      note: "Guide to hybrid post-quantum key exchange where a KEM combiner pairs X25519 with ML-KEM-768 so the session key holds if either half survives.",
+    },
+    {
+      title: "LWE Hints",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-lwe-hints/",
+      note: "Approximate-hint LWE secret recovery on sparse ternary secrets, counting how many hints collapse the underlying lattice problem.",
+    },
+    {
+      title: "PQ Families",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-pq-families/",
+      note: "Guided tour of the five post-quantum families — lattice, code-based, hash-based, multivariate, and isogeny — with assumptions and standardization status.",
+    },
+    {
+      title: "E91",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-e91/",
+      note: "Entanglement-based quantum key distribution using the CHSH Bell test, where an eavesdropper is caught by collapsing the Bell inequality.",
+    },
   ],
   mlkem1024: [
     {
@@ -253,6 +323,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "S-Cloud+ Vault",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-scloud-vault/",
       note: "Post-quantum KEM workflow for long-lived cloud storage and envelope-encryption planning.",
+    },
+    {
+      title: "Ciphertext Mirror",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-ciphertext-mirror/",
+      note: "ML-KEM side-channel walkthrough across the Fujisaki-Okamoto transform, decoder behavior, and NTT blinding countermeasures.",
     },
   ],
   smaug_t: [
@@ -278,6 +353,16 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-hqc-timing-break/",
       note: "Side-channel demo showing timing-sensitive failure modes in post-quantum KEM implementations.",
     },
+    {
+      title: "HQC Timing",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-hqc-timing/",
+      note: "Timing leak in HQC's BCH decoder and how constant-time mitigations reshape the attack surface against the code-based KEM.",
+    },
+    {
+      title: "Syndrome Drain",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-syndrome-drain/",
+      note: "How code-based KEMs erode below NIST Level 1 when one key derives many session keys, with DOOM decoding one of D syndromes √D faster.",
+    },
   ],
   classic_mceliece: [
     {
@@ -298,6 +383,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "BIKE Vault",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-bike-vault/",
       note: "Code-based BIKE internals, parameter intuition, and attack surface overview.",
+    },
+    {
+      title: "Syndrome Drain",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-syndrome-drain/",
+      note: "Multi-instance degradation of code-based KEMs, where DOOM lets an attacker decode one of D syndromes √D faster as one key derives many sessions.",
     },
   ],
   mldsa44: [
@@ -320,6 +410,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Threshold ML-DSA",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-threshold-mldsa/",
       note: "Threshold post-quantum signing walkthrough for distributed ML-DSA key ownership.",
+    },
+    {
+      title: "Broken Trust",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-broken-trust/",
+      note: "Shows how leaking one bit of ML-DSA's per-signature masking randomness enables hill-climbing secret-key recovery without lattice reduction.",
     },
   ],
   mldsa65: [
@@ -348,6 +443,16 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-threshold-mldsa/",
       note: "Threshold post-quantum signing workflow for higher-assurance distributed signature deployments.",
     },
+    {
+      title: "Broken Trust",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-broken-trust/",
+      note: "Leakage-cryptanalysis lab recovering an ML-DSA secret subkey by hill-climbing on a single leaked bit of per-signature masking randomness.",
+    },
+    {
+      title: "Multivariate UOV",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-multivariate/",
+      note: "Real Unbalanced Oil-and-Vinegar signatures over GF(256), showing the MQ trapdoor and the 2022 Beullens attack that broke Rainbow.",
+    },
   ],
   falcon512: [
     {
@@ -371,6 +476,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "MPCitH Sign",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-mpcith-sign/",
       note: "Post-quantum signature design intuition from MPC-in-the-head constructions.",
+    },
+    {
+      title: "Jevil",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-jevil/",
+      note: "Hash-based few-time signature scheme over the Goldilocks field using Lagrange interpolation for bounded-use signing with reusable verification keys.",
     },
   ],
   xmss: [
@@ -413,6 +523,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-phantom-vault/",
       note: "Hashing and key-derivation pitfalls visualized in a practical data-protection workflow.",
     },
+    {
+      title: "Collision Vault",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-collision-vault/",
+      note: "Verifies real published MD5 and SHA-1 collision pairs (SHAttered, chosen-prefix) in-browser and shows SHA-256 resisting the same attack.",
+    },
   ],
   sha512: [
     {
@@ -420,12 +535,22 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-hash-zoo/",
       note: "Comparative hashing lab for collision and preimage intuition.",
     },
+    {
+      title: "Collision Vault",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-collision-vault/",
+      note: "Replays known MD5 and SHA-1 collisions and contrasts them with the collision resistance of the SHA-2 family.",
+    },
   ],
   sha3_256: [
     {
       title: "Babel Hash",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-babel-hash/",
       note: "Hash family explorer with sponge-vs-Merkle-Damgard mental models.",
+    },
+    {
+      title: "Collision Vault",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-collision-vault/",
+      note: "Demonstrates MD5/SHA-1 collision pairs and shows the SHA-3 sponge construction resisting the same identical- and chosen-prefix attacks.",
     },
   ],
   blake2b: [
@@ -487,6 +612,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Timing Oracle",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-timing-oracle/",
       note: "Side-channel timing intuition and constant-time verification discipline.",
+    },
+    {
+      title: "JWT Forge",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-jwt-forge/",
+      note: "Tamper with JWT claims and swap algorithms to watch alg:none and HS/RS key-confusion attacks succeed against a vulnerable verifier and fail against a correct one.",
     },
   ],
   cmac_aes: [
@@ -628,6 +758,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-snark-arena/",
       note: "Groth16 and PLONK trusted-setup workflow, proof generation, and verification comparison.",
     },
+    {
+      title: "ZK Arena",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-zk-arena/",
+      note: "Side-by-side comparison of zk-SNARK and zk-STARK proof systems across setup phases, proving overhead, and verification cost.",
+    },
   ],
   plonk: [
     {
@@ -635,12 +770,22 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-snark-arena/",
       note: "Universal setup and proof system comparison centered on PLONK and Groth16.",
     },
+    {
+      title: "ZK Arena",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-zk-arena/",
+      note: "Side-by-side comparison of zk-SNARK and zk-STARK proof systems, contrasting PLONK's universal setup with transparent STARKs.",
+    },
   ],
   zk_stark: [
     {
       title: "STARK Tower",
       url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-stark-tower/",
       note: "Transparent zk-STARK proving flow with AIR and FRI components explained.",
+    },
+    {
+      title: "ZK Arena",
+      url: "https://crypto-lab.systemslibrarian.dev/crypto-lab-zk-arena/",
+      note: "Side-by-side comparison of zk-SNARK and zk-STARK proof systems, weighing transparent STARKs against trusted-setup SNARKs.",
     },
   ],
   bulletproofs: [
