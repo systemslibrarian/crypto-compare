@@ -16,7 +16,7 @@ describe("lab index", () => {
     for (const lab of labs) {
       expect(lab.algorithms.length).toBeGreaterThan(0);
       expect(lab.categories.length).toBeGreaterThan(0);
-      expect(lab.url).toMatch(/^https:\/\/crypto-lab\.systemslibrarian\.dev\/crypto-lab-[a-z0-9-]+\/$/);
+      expect(lab.url).toMatch(/^https:\/\/systemslibrarian\.github\.io\/crypto-lab-[a-z0-9-]+\/$/);
       expect(lab.title.length).toBeGreaterThan(0);
       expect(lab.note.length).toBeGreaterThan(0);
     }

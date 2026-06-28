@@ -179,7 +179,7 @@ export default function AboutView() {
                 Security policy ↗
               </a>
               {" · "}
-              <a href="https://crypto-lab.systemslibrarian.dev/crypto-lab/" target="_blank" rel="noopener noreferrer" style={linkStyle}>
+              <a href="https://crypto-lab.systemslibrarian.dev/" target="_blank" rel="noopener noreferrer" style={linkStyle}>
                 Interactive lab catalog ↗
               </a>
             </p>

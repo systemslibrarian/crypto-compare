@@ -7,7 +7,7 @@ import { CATEGORY_ACCENT } from "@/data/categories";
 import type { AlgorithmCategory } from "@/types/crypto";
 
 const LABS = buildLabIndex();
-const CATALOG_URL = "https://crypto-lab.systemslibrarian.dev/crypto-lab/";
+const CATALOG_URL = "https://crypto-lab.systemslibrarian.dev/";
 
 // Categories that actually have at least one linked lab, in display order.
 const LAB_CATEGORIES = Array.from(
