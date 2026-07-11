@@ -147,6 +147,26 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-ssh-handshake/",
       note: "SSH transport handshake with ephemeral X25519/ECDH, Ed25519 signatures over the exchange hash, and TOFU host-key pinning.",
     },
+    {
+      title: "Point Arithmetic",
+      url: "https://systemslibrarian.github.io/crypto-lab-ec-point-arithmetic/",
+      note: "Interactive elliptic-curve point addition and scalar multiplication over both the reals and a finite field, building the ECDLP intuition beneath ECDH and ECDSA.",
+    },
+    {
+      title: "DH MITM",
+      url: "https://systemslibrarian.github.io/crypto-lab-diffie-hellman-mitm/",
+      note: "Classic Diffie-Hellman key exchange with a live man-in-the-middle attack on the unauthenticated channel, and an ECDSA-signed fix that fails closed.",
+    },
+    {
+      title: "PAKE Gate",
+      url: "https://systemslibrarian.github.io/crypto-lab-pake-gate/",
+      note: "Side-by-side tour of the SRP-6a, J-PAKE, CPace, and Dragonfly PAKEs, deriving a strong shared key from a low-entropy password that never crosses the wire.",
+    },
+    {
+      title: "TLS Handshake",
+      url: "https://systemslibrarian.github.io/crypto-lab-tls-handshake/",
+      note: "Full TLS 1.3 handshake with X25519 key exchange, Ed25519 authentication, the HKDF key schedule, and AES-GCM records, including a blocked man-in-the-middle.",
+    },
   ],
   ed25519: [
     {
@@ -217,6 +237,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Bitcoin Wallet",
       url: "https://systemslibrarian.github.io/crypto-lab-bitcoin-wallet/",
       note: "secp256k1 key derivation to P2PKH and P2WPKH addresses via HASH160, with BIP-39 mnemonics, PBKDF2 seed stretching, and BIP-32 hardened child derivation.",
+    },
+    {
+      title: "Bitcoin Script",
+      url: "https://systemslibrarian.github.io/crypto-lab-bitcoin-script/",
+      note: "Steps a real P2PKH spend through the Bitcoin Script stack machine with secp256k1 ECDSA and HASH160, covering wrong-key, forged-signature, and tampered scenarios.",
     },
   ],
   curve448_ed448: [
@@ -311,6 +336,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "E91",
       url: "https://systemslibrarian.github.io/crypto-lab-e91/",
       note: "Entanglement-based quantum key distribution using the CHSH Bell test, where an eavesdropper is caught by collapsing the Bell inequality.",
+    },
+    {
+      title: "Hybrid PQC",
+      url: "https://systemslibrarian.github.io/crypto-lab-hybrid-pqc/",
+      note: "Compares classical, post-quantum, and hybrid key exchange with X25519 and ML-KEM-768 behind an HKDF combiner, breaking one half to show the hybrid survive.",
     },
   ],
   mlkem1024: [
@@ -453,6 +483,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-multivariate/",
       note: "Real Unbalanced Oil-and-Vinegar signatures over GF(256), showing the MQ trapdoor and the 2022 Beullens attack that broke Rainbow.",
     },
+    {
+      title: "Hybrid PQC",
+      url: "https://systemslibrarian.github.io/crypto-lab-hybrid-pqc/",
+      note: "Composite Ed25519 + ML-DSA-65 signatures verified with AND, shown alongside classical and post-quantum signing so a single broken assumption still verifies.",
+    },
   ],
   falcon512: [
     {
@@ -527,6 +562,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Collision Vault",
       url: "https://systemslibrarian.github.io/crypto-lab-collision-vault/",
       note: "Verifies real published MD5 and SHA-1 collision pairs (SHAttered, chosen-prefix) in-browser and shows SHA-256 resisting the same attack.",
+    },
+    {
+      title: "Merkle Proofs",
+      url: "https://systemslibrarian.github.io/crypto-lab-merkle-proofs/",
+      note: "Builds Merkle trees on SHA-256, generates inclusion proofs, and replays the RFC 6962 second-preimage and CVE-2012-2459 attacks with domain-separation defenses.",
     },
   ],
   sha512: [
@@ -618,6 +658,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-jwt-forge/",
       note: "Tamper with JWT claims and swap algorithms to watch alg:none and HS/RS key-confusion attacks succeed against a vulnerable verifier and fail against a correct one.",
     },
+    {
+      title: "Timing Side-Channel",
+      url: "https://systemslibrarian.github.io/crypto-lab-timing-sidechannel/",
+      note: "Recovers a secret one byte at a time from an early-exit comparison, then flattens the leak with a constant-time compare — the discipline behind MAC verification.",
+    },
   ],
   cmac_aes: [
     {
@@ -683,6 +728,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Threshold Decrypt",
       url: "https://systemslibrarian.github.io/crypto-lab-threshold-decrypt/",
       note: "Distributed decryption workflow with quorum requirements and availability tradeoffs.",
+    },
+    {
+      title: "Shamir vs FROST",
+      url: "https://systemslibrarian.github.io/crypto-lab-shamir-vs-frost/",
+      note: "Contrasts Shamir secret-sharing reconstruction, which forms the key in memory, against FROST threshold signing, which never reconstructs it.",
     },
   ],
   feldman_vss: [
@@ -885,6 +935,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-padding-oracle/",
       note: "Oracle-attack walkthrough showing why modern authenticated schemes are required.",
     },
+    {
+      title: "Educational RSA",
+      url: "https://systemslibrarian.github.io/crypto-lab-rsa-educational/",
+      note: "Textbook RSA key generation, encryption, and signatures on small numbers, factoring a weak key and contrasting deterministic textbook ciphertext with RSA-OAEP.",
+    },
   ],
   rsa_oaep_4096: [
     {
@@ -919,6 +974,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "FROST Threshold",
       url: "https://systemslibrarian.github.io/crypto-lab-frost-threshold/",
       note: "Threshold signing workflow and signer-coordination model for Schnorr systems.",
+    },
+    {
+      title: "Shamir vs FROST",
+      url: "https://systemslibrarian.github.io/crypto-lab-shamir-vs-frost/",
+      note: "Compares FROST threshold Schnorr signing against Shamir secret sharing, showing the signing key never exists on any single machine.",
     },
   ],
   gg20: [
@@ -960,6 +1020,16 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Corrupted Oracle",
       url: "https://systemslibrarian.github.io/crypto-lab-corrupted-oracle/",
       note: "Entropy failure scenarios and state compromise impact in randomness pipelines.",
+    },
+    {
+      title: "VDF",
+      url: "https://systemslibrarian.github.io/crypto-lab-vdf/",
+      note: "Verifiable Delay Function via repeated modular squaring with a Wesolowski proof — slow sequential evaluation, instant verification, for randomness beacons.",
+    },
+    {
+      title: "Time-Lock Puzzle",
+      url: "https://systemslibrarian.github.io/crypto-lab-time-lock-puzzle/",
+      note: "RSW time-lock puzzle sealing a message behind fixed sequential squaring work, with a fail-closed cheat check and the creator's instant factorization trapdoor.",
     },
   ],
   ctr_drbg: [
