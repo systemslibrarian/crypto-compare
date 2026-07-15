@@ -66,6 +66,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-vigenere-break/",
       note: "Recovers a repeating-key Vigenère cipher with Kasiski examination, the index of coincidence, and per-column frequency analysis.",
     },
+    {
+      title: "Nonce Collision",
+      url: "https://systemslibrarian.github.io/crypto-lab-nonce-collision/",
+      note: "Reuses one nonce under one key across AES-CTR, AES-GCM, ChaCha20-Poly1305, and AES-CBC, crib-dragging plaintext from XORed keystreams and running the GHASH forbidden attack to forge tags the real verifier accepts.",
+    },
   ],
   chacha20poly: [
     {
@@ -87,6 +92,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "OTP Vault",
       url: "https://systemslibrarian.github.io/crypto-lab-otp-vault/",
       note: "One-time pad with provable perfect secrecy, then the two-time-pad break recovering both plaintexts from a reused keystream.",
+    },
+    {
+      title: "Nonce Collision",
+      url: "https://systemslibrarian.github.io/crypto-lab-nonce-collision/",
+      note: "Reuses a single nonce across four AEAD and stream constructions, recovering the Poly1305 one-time key from repeated ChaCha20-Poly1305 tags to forge a valid tag — without ever recovering the ChaCha20 encryption key.",
     },
   ],
   xchacha20poly: [
@@ -204,6 +214,16 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-ssh-handshake/",
       note: "SSH transport handshake using Ed25519 host-key signatures over the exchange hash with TOFU known_hosts pinning.",
     },
+    {
+      title: "Signed Bytes",
+      url: "https://systemslibrarian.github.io/crypto-lab-signed-bytes/",
+      note: "Signs JSON with Ed25519 to show a signature binds exact bytes, not meaning — breaking key order, Unicode, and duplicate-key parsing, then applying JCS (RFC 8785) canonicalization to see which failures it fixes and which it refuses.",
+    },
+    {
+      title: "Time Trust",
+      url: "https://systemslibrarian.github.io/crypto-lab-time-trust/",
+      note: "Drives real Ed25519 certificate and token verification from one movable clock, showing which security decisions silently depend on time — an input a signature cannot authenticate — while the signature itself verifies at every clock position.",
+    },
   ],
   p256: [
     {
@@ -220,6 +240,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "WebAuthn",
       url: "https://systemslibrarian.github.io/crypto-lab-webauthn/",
       note: "Passwordless FIDO2/WebAuthn authentication with ES256 (P-256) keys, covering attestation, assertion, and platform vs cross-platform authenticators.",
+    },
+    {
+      title: "Chain of Trust",
+      url: "https://systemslibrarian.github.io/crypto-lab-chain-of-trust/",
+      note: "Builds and validates X.509 chains by hand on a cross-signed ECDSA P-256 hierarchy, showing that path building and RFC 5280 path validation are different problems and that cryptographically valid signatures can still be correctly rejected.",
     },
   ],
   secp256k1: [
@@ -341,6 +366,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Hybrid PQC",
       url: "https://systemslibrarian.github.io/crypto-lab-hybrid-pqc/",
       note: "Compares classical, post-quantum, and hybrid key exchange with X25519 and ML-KEM-768 behind an HKDF combiner, breaking one half to show the hybrid survive.",
+    },
+    {
+      title: "KEM Trap",
+      url: "https://systemslibrarian.github.io/crypto-lab-kem-trap/",
+      note: "Shows FIPS 203 implicit rejection — a bit-flipped ML-KEM-768 ciphertext still returns 32 bytes, and a caller that drops the return code or skips key confirmation turns silent decapsulation failure into a plaintext-checking oracle.",
     },
   ],
   mlkem1024: [
@@ -662,6 +692,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Timing Side-Channel",
       url: "https://systemslibrarian.github.io/crypto-lab-timing-sidechannel/",
       note: "Recovers a secret one byte at a time from an early-exit comparison, then flattens the leak with a constant-time compare — the discipline behind MAC verification.",
+    },
+    {
+      title: "Time Trust",
+      url: "https://systemslibrarian.github.io/crypto-lab-time-trust/",
+      note: "Movable-clock lab where valid HMAC-SHA-256 JWTs and RFC 6238 TOTP codes are accepted or rejected purely by the verifier's clock, demonstrating split-brain expiry, replay windows, and rolled-back-clock credential resurrection.",
     },
   ],
   cmac_aes: [

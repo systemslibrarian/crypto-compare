@@ -413,7 +413,7 @@ Each category in the app links to working demo projects that illustrate the cryp
 
 - Full live crypto-lab index: [crypto-lab.systemslibrarian.dev](https://crypto-lab.systemslibrarian.dev/)
 - App mapping source of truth: [src/data/demoResources.ts](/workspaces/crypto-compare/src/data/demoResources.ts)
-- Current mapped crypto-lab demos: **135** unique slugs (kept in sync with the live crypto-lab catalog)
+- Current mapped crypto-lab demos: **140** unique slugs (kept in sync with the live crypto-lab catalog)
 
 The list below is representative rather than exhaustive.
 
