@@ -7,6 +7,21 @@ export type DemoResource = {
 export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
   aes256gcm: [
     {
+      title: "Salamander",
+      url: "https://systemslibrarian.github.io/crypto-lab-salamander/",
+      note: "Invisible-salamanders key-commitment attack: one AES-GCM ciphertext that opens to two valid plaintexts under two keys.",
+    },
+    {
+      title: "Power Trace",
+      url: "https://systemslibrarian.github.io/crypto-lab-power-trace/",
+      note: "Recovers an AES-128 key byte with CPA/DPA power side-channel analysis against a correct, constant-time cipher.",
+    },
+    {
+      title: "Traitor Trace",
+      url: "https://systemslibrarian.github.io/crypto-lab-traitor-trace/",
+      note: "NNL subset-cover broadcast encryption with AES-256-GCM key wraps, revocation without rekeying, and black-box traitor tracing.",
+    },
+    {
       title: "AES Modes",
       url: "https://systemslibrarian.github.io/crypto-lab-aes-modes/",
       note: "Compares ECB, CBC, CTR, GCM, and CCM with attack demos and mode visualizations.",
@@ -113,6 +128,26 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
   ],
   curve25519: [
     {
+      title: "Protocol Checker",
+      url: "https://systemslibrarian.github.io/crypto-lab-protocol-checker/",
+      note: "Dolev-Yao symbolic model checker that rediscovers the Diffie-Hellman MITM and Lowe's Needham-Schroeder attack, then closes each with one fix.",
+    },
+    {
+      title: "Blind Hello",
+      url: "https://systemslibrarian.github.io/crypto-lab-blind-hello/",
+      note: "Encrypted Client Hello (ECH) built on HPKE over X25519, hiding the SNI from on-path network observers.",
+    },
+    {
+      title: "Blind Relay",
+      url: "https://systemslibrarian.github.io/crypto-lab-blind-relay/",
+      note: "Oblivious HTTP relay/gateway split using HPKE so no single party sees both client identity and request content.",
+    },
+    {
+      title: "HPKE Envelope",
+      url: "https://systemslibrarian.github.io/crypto-lab-hpke-envelope/",
+      note: "RFC 9180 HPKE hybrid public-key encryption with X25519, HKDF, and an AEAD envelope.",
+    },
+    {
       title: "Curve Lens",
       url: "https://systemslibrarian.github.io/crypto-lab-curve-lens/",
       note: "Interactive point addition, scalar multiplication, and ECDH exploration across major curves.",
@@ -179,6 +214,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
     },
   ],
   ed25519: [
+    {
+      title: "SPAKE Gate",
+      url: "https://systemslibrarian.github.io/crypto-lab-spake-gate/",
+      note: "SPAKE2 balanced PAKE that establishes a shared key from a low-entropy password without leaking it.",
+    },
     {
       title: "Ed25519 Forge",
       url: "https://systemslibrarian.github.io/crypto-lab-ed25519-forge/",
@@ -277,6 +317,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
     },
   ],
   mlkem768: [
+    {
+      title: "Downgrade Wire",
+      url: "https://systemslibrarian.github.io/crypto-lab-downgrade-wire/",
+      note: "Downgrade attack on hybrid post-quantum key exchange that strips the PQ half back to classical-only.",
+    },
     {
       title: "Kyber Vault",
       url: "https://systemslibrarian.github.io/crypto-lab-kyber-vault/",
@@ -574,6 +619,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
   ],
   sha256: [
     {
+      title: "Key Mirror",
+      url: "https://systemslibrarian.github.io/crypto-lab-key-mirror/",
+      note: "Key transparency with a Merkle-tree append-only log and consistency/inclusion proofs for auditable key directories.",
+    },
+    {
       title: "Hash Zoo",
       url: "https://systemslibrarian.github.io/crypto-lab-hash-zoo/",
       note: "Comparative hashing lab for collision and preimage intuition.",
@@ -755,6 +805,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
   ],
   shamir: [
     {
+      title: "Reshare Circle",
+      url: "https://systemslibrarian.github.io/crypto-lab-reshare-circle/",
+      note: "Proactive secret sharing that reshares Shamir shares to refresh them without changing the underlying secret.",
+    },
+    {
       title: "Shamir Gate",
       url: "https://systemslibrarian.github.io/crypto-lab-shamir-gate/",
       note: "Threshold splitting and reconstruction flow with share-loss failure modes.",
@@ -874,6 +929,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
     },
   ],
   bulletproofs: [
+    {
+      title: "Frozen Heart",
+      url: "https://systemslibrarian.github.io/crypto-lab-frozen-heart/",
+      note: "Weak Fiat-Shamir \"Frozen Heart\" forgeries that fake zero-knowledge proofs when the challenge omits public inputs.",
+    },
     {
       title: "Bulletproofs",
       url: "https://systemslibrarian.github.io/crypto-lab-bulletproofs/",
@@ -1042,6 +1102,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
   ],
   hmac_drbg: [
     {
+      title: "Entropy Collapse",
+      url: "https://systemslibrarian.github.io/crypto-lab-entropy-collapse/",
+      note: "Seed-provenance and RNG state-duplication failures against a correct HMAC_DRBG (NIST SP 800-90A/B/C).",
+    },
+    {
       title: "DRBG Arena",
       url: "https://systemslibrarian.github.io/crypto-lab-drbg-arena/",
       note: "State evolution, reseeding, and backtracking-resistance comparison across DRBGs.",
@@ -1090,12 +1155,22 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
   ],
   fortuna: [
     {
+      title: "Quantum Entropy",
+      url: "https://systemslibrarian.github.io/crypto-lab-quantum-entropy/",
+      note: "Beam-splitter QRNG with min-entropy accounting, von Neumann debiasing, and a Toeplitz extractor feeding a DRBG seed per NIST SP 800-90B/C.",
+    },
+    {
       title: "DRBG Arena",
       url: "https://systemslibrarian.github.io/crypto-lab-drbg-arena/",
       note: "State evolution, reseeding, and backtracking-resistance comparison across DRBGs.",
     },
   ],
   spdz: [
+    {
+      title: "SPDZ Forge",
+      url: "https://systemslibrarian.github.io/crypto-lab-spdz-forge/",
+      note: "Malicious-secure SPDZ with Beaver triples and information-theoretic MACs that abort on a tampered share under a dishonest majority.",
+    },
     {
       title: "Silent Tally",
       url: "https://systemslibrarian.github.io/crypto-lab-silent-tally/",
@@ -1108,6 +1183,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
     },
   ],
   bls12_381_curve: [
+    {
+      title: "Credential Veil",
+      url: "https://systemslibrarian.github.io/crypto-lab-credential-veil/",
+      note: "BBS+ anonymous credentials over BLS12-381 with selective disclosure, unlinkable presentations, and an over-18 range proof.",
+    },
     {
       title: "Pairing Gate",
       url: "https://systemslibrarian.github.io/crypto-lab-pairing-gate/",
