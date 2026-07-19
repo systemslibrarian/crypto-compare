@@ -605,6 +605,8 @@ describe("Compare Mode State Transitions", () => {
   it("clicking an algorithm card toggles selection", async () => {
     const CryptoCompare = (await import("@/components/CryptoCompare")).default;
     const { unmount } = render(<CryptoCompare />);
+    // The grid is gated behind a first interaction; enter browse via a category tab.
+    fireEvent.click(screen.getByRole("tab", { name: /\bSymmetric\b/i }));
     // Click first algorithm card (aria-label: "Select <name> for comparison")
     const cards = screen.getAllByRole("button", { name: /Select .+ for comparison/i });
     expect(cards.length).toBeGreaterThan(0);
@@ -618,6 +620,8 @@ describe("Compare Mode State Transitions", () => {
   it("selecting 2 algorithms shows compare button", async () => {
     const CryptoCompare = (await import("@/components/CryptoCompare")).default;
     const { unmount } = render(<CryptoCompare />);
+    // The grid is gated behind a first interaction; enter browse via a category tab.
+    fireEvent.click(screen.getByRole("tab", { name: /\bSymmetric\b/i }));
     // Select first two algorithms
     const cards = screen.getAllByRole("button", { name: /Select .+ for comparison/i });
     fireEvent.click(cards[0]);

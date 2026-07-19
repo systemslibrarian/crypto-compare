@@ -82,6 +82,11 @@ export default function CryptoCompare() {
   const [favOnly, setFavOnly] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [advisorHighlight, setAdvisorHighlight] = useState<string | null>(null);
+  // The full algorithm grid stays hidden on the landing view until the visitor
+  // actively picks a category / searches / filters — so they choose first
+  // instead of being dropped into an endlessly scrolling wall of cards.
+  const [browseStarted, setBrowseStarted] = useState(false);
+  const startBrowse = useCallback(() => setBrowseStarted(true), []);
   const mobileNavRef = useRef<HTMLElement>(null);
   const controller = useCryptoCompareController({
     searchRef,
@@ -123,6 +128,10 @@ export default function CryptoCompare() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
+    // A deep link that encodes any browse state (shared comparison, advisor
+    // pick, category link) should open straight into the grid, skipping the gate.
+    const browseKeys = ["cat", "sel", "cmp", "q", "pq", "std", "nist", "dep", "country", "sort", "defaults", "fav", "algo", "from"];
+    if (browseKeys.some((key) => params.has(key))) setBrowseStarted(true);
     if (params.get("from") === "advisor") {
       const selParam = params.get("sel");
       if (selParam) {
@@ -210,7 +219,10 @@ export default function CryptoCompare() {
 
   const kbHandlers = useMemo(
     () => ({
-      onFocusSearch: () => searchRef.current?.focus(),
+      onFocusSearch: () => {
+        startBrowse();
+        searchRef.current?.focus();
+      },
       onToggleMethodology: () => setShowMethodology((v) => !v),
       onToggleShortcuts: () => setShowShortcuts((v) => !v),
       onEscape: () => {
@@ -220,14 +232,20 @@ export default function CryptoCompare() {
       },
       onNextCategory: () => {
         const idx = CATEGORIES.findIndex((c) => c.id === cat);
-        if (idx < CATEGORIES.length - 1) controller.switchCategory(CATEGORIES[idx + 1].id);
+        if (idx < CATEGORIES.length - 1) {
+          startBrowse();
+          controller.switchCategory(CATEGORIES[idx + 1].id);
+        }
       },
       onPrevCategory: () => {
         const idx = CATEGORIES.findIndex((c) => c.id === cat);
-        if (idx > 0) controller.switchCategory(CATEGORIES[idx - 1].id);
+        if (idx > 0) {
+          startBrowse();
+          controller.switchCategory(CATEGORIES[idx - 1].id);
+        }
       },
     }),
-    [cat, controller],
+    [cat, controller, startBrowse],
   );
   useKeyboardShortcuts(kbHandlers);
 
@@ -302,11 +320,15 @@ export default function CryptoCompare() {
           onToggleMobileNav={() => setMobileNavOpen((value) => !value)}
           onCloseMobileNav={() => setMobileNavOpen(false)}
           onSelectCategory={(category) => {
+            startBrowse();
             controller.switchCategory(category);
             setMobileNavOpen(false);
             setGlobalSearch(false);
           }}
-          onShowDefaults={controller.showRecommendedDefaults}
+          onShowDefaults={() => {
+            startBrowse();
+            controller.showRecommendedDefaults();
+          }}
           onShowSafeUsage={() => setShowSafeUsage(true)}
           onToggleMethodology={() => setShowMethodology((value) => !value)}
         />
@@ -321,16 +343,7 @@ export default function CryptoCompare() {
             </p>
           </div>
 
-          <HeroOverview
-            selectedCategoryLabel={selectedCategoryLabel}
-            globalSearch={globalSearch}
-            datasetSize={dataset.length}
-            filteredCount={filtered.length}
-            recommendationCounts={filteredRecommendationCounts}
-            trustSnapshot={trustSnapshot}
-            totalSources={trustSnapshot.totalSources}
-          />
-
+          <div onClickCapture={startBrowse} onFocusCapture={startBrowse}>
           <SearchControls
             searchRef={searchRef}
             search={search}
@@ -375,36 +388,65 @@ export default function CryptoCompare() {
               setCountry("all" as CountryFilter);
             }}
           />
+          </div>
 
           {showMethodology && <MethodologyPanel trustSnapshot={trustSnapshot} />}
 
-          <CategoryExplainer category={cat} expanded={explainerOpen} onToggle={() => setExplainerOpen(!explainerOpen)} onNavigateCategory={controller.switchCategory} />
+          {browseStarted ? (
+            <>
+              <HeroOverview
+                selectedCategoryLabel={selectedCategoryLabel}
+                globalSearch={globalSearch}
+                datasetSize={dataset.length}
+                filteredCount={filtered.length}
+                recommendationCounts={filteredRecommendationCounts}
+                trustSnapshot={trustSnapshot}
+                totalSources={trustSnapshot.totalSources}
+              />
 
-          <ResultsStatus explainerOpen={explainerOpen} filteredCount={filtered.length} />
+              <CategoryExplainer category={cat} expanded={explainerOpen} onToggle={() => setExplainerOpen(!explainerOpen)} onNavigateCategory={controller.switchCategory} />
 
-          <section aria-label={`${globalSearch ? "All categories" : selectedCategoryLabel} algorithms`} className="algoGrid" style={{ marginBottom: "18px" }}>
-            {filtered.map((a) => (
-              <AlgoCard key={a.id} algo={a} selected={sel.includes(a.id)} onToggle={() => controller.toggleSelection(a.id)} favorited={favorites.includes(a.id)} onToggleFavorite={() => toggleFavorite(a.id)} advisorPick={advisorHighlight === a.id} />
-            ))}
-          </section>
+              <ResultsStatus explainerOpen={explainerOpen} filteredCount={filtered.length} />
 
-          <ComparisonWorkspace
-            algorithms={selAlgos}
-            comparing={cmp}
-            categoryAccent={CATEGORY_ACCENT[cat]}
-            rows={rows}
-            onStartCompare={() => setCmp(true)}
-            onClose={() => setCmp(false)}
-            onCopyLink={controller.copyComparisonLink}
-            onClearSelection={controller.clearComparison}
-            onExportCsv={() => exportComparison("csv")}
-            onExportMarkdown={() => exportComparison("markdown")}
-            onExportJson={() => exportComparison("json")}
-          />
+              <section aria-label={`${globalSearch ? "All categories" : selectedCategoryLabel} algorithms`} className="algoGrid" style={{ marginBottom: "18px" }}>
+                {filtered.map((a) => (
+                  <AlgoCard key={a.id} algo={a} selected={sel.includes(a.id)} onToggle={() => controller.toggleSelection(a.id)} favorited={favorites.includes(a.id)} onToggleFavorite={() => toggleFavorite(a.id)} advisorPick={advisorHighlight === a.id} />
+                ))}
+              </section>
 
-          <div className="deferBelowFold">
-            <ReferenceGuidePanel algorithms={filtered} />
-          </div>
+              <ComparisonWorkspace
+                algorithms={selAlgos}
+                comparing={cmp}
+                categoryAccent={CATEGORY_ACCENT[cat]}
+                rows={rows}
+                onStartCompare={() => setCmp(true)}
+                onClose={() => setCmp(false)}
+                onCopyLink={controller.copyComparisonLink}
+                onClearSelection={controller.clearComparison}
+                onExportCsv={() => exportComparison("csv")}
+                onExportMarkdown={() => exportComparison("markdown")}
+                onExportJson={() => exportComparison("json")}
+              />
+
+              <div className="deferBelowFold">
+                <ReferenceGuidePanel algorithms={filtered} />
+              </div>
+            </>
+          ) : (
+            <div className="browsePrompt" role="note">
+              <p className="browsePromptTitle">Pick a category to load the catalog</p>
+              <p className="browsePromptBody">
+                Choose a category tab above, run a search, or start from a use case — the comparison grid opens once you do, so you&apos;re not dropped into an endless list.
+              </p>
+              <button
+                type="button"
+                className="focusRing browsePromptBtn"
+                onClick={() => startBrowse()}
+              >
+                Browse {selectedCategoryLabel} algorithms →
+              </button>
+            </div>
+          )}
 
           <KnowledgeSections
             showHybrid={showHybrid}
