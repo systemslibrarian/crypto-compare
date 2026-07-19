@@ -532,11 +532,11 @@ body {
   }
 
   .homeHeroTitle {
-    margin: 0 0 14px;
-    font-size: clamp(2.4rem, 5vw, 3.4rem);
-    line-height: 1.02;
+    margin: 0 0 12px;
+    font-size: clamp(1.6rem, 3vw, 2.1rem);
+    line-height: 1.12;
     font-weight: 500;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.02em;
     color: var(--color-text-heading);
     font-family: var(--font-serif);
     text-wrap: balance;
@@ -590,6 +590,212 @@ body {
 
   .homeHeroTask:hover {
     border-color: var(--color-accent-blue);
+    color: var(--color-text-heading);
+  }
+
+  /* ─── Slim header + slide-out menu (crypto-lab pattern) ─── */
+  .siteHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .siteBrand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.3px;
+    color: var(--color-text-heading);
+  }
+
+  .siteBrand .brandMark {
+    color: var(--color-accent-blue);
+  }
+
+  .siteBrandAccent {
+    color: var(--color-accent-blue);
+  }
+
+  .siteHeaderActions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .siteHeaderLink {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  }
+
+  .siteHeaderLink:hover {
+    color: var(--color-text-heading);
+  }
+
+  .menuBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--color-border-muted);
+    background: var(--color-bg-control);
+    color: var(--color-text-body);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    min-height: 42px;
+    font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  }
+
+  .menuBtn:hover {
+    border-color: var(--color-accent-blue);
+    color: var(--color-text-heading);
+  }
+
+  .currentCategoryBar {
+    margin: 12px 0 0;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  }
+
+  .navMenuBackdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(2px);
+  }
+
+  .navMenu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 50;
+    width: min(380px, 90vw);
+    height: 100dvh;
+    padding: 20px;
+    overflow-y: auto;
+    background: var(--color-bg-elevated);
+    border-left: 1px solid var(--color-border);
+    box-shadow: -24px 0 60px rgba(0, 0, 0, 0.45);
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform 0.24s ease, visibility 0.24s ease;
+  }
+
+  .navMenu.navMenuOpen {
+    transform: translateX(0);
+    visibility: visible;
+  }
+
+  .navMenuHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .navMenuTitle {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    color: var(--color-text-heading);
+  }
+
+  .navMenuClose {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid var(--color-border-muted);
+    background: var(--color-bg-control);
+    color: var(--color-text-body);
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .navMenuSection {
+    margin-bottom: 24px;
+  }
+
+  .navMenuLabel {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  }
+
+  .navCategoryList {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .navCategory {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-card);
+    color: var(--color-text-secondary);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  }
+
+  .navCategory:hover {
+    border-color: var(--color-border-muted);
+    color: var(--color-text-heading);
+  }
+
+  .navCategoryIcon {
+    flex-shrink: 0;
+  }
+
+  .navLinkList {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .navLink {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  }
+
+  .navLink:hover {
+    background: var(--color-bg-control);
     color: var(--color-text-heading);
   }
 

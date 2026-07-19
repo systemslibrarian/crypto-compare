@@ -6,9 +6,7 @@ test.describe("crypto::compare core journeys", () => {
 
     await expect(page.getByRole("button", { name: "Back to main menu" })).toBeVisible();
 
-    // The algorithm grid is gated behind a first interaction; enter browse by
-    // picking the default "Symmetric" category, then assert the grid appears.
-    await page.getByRole("tab", { name: /Symmetric/i }).first().click();
+    // Grid loads with the default category; the first card should be present.
     await expect(page.getByText("AES-256-GCM").first()).toBeVisible();
 
     // Default category is "symmetric"; search is scoped to it. Filter to ChaCha
