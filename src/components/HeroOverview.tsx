@@ -11,6 +11,10 @@ type HeroOverviewProps = {
   totalSources: number;
 };
 
+/**
+ * Catalog status row: current scope, result count, recommended count, source
+ * count, and review recency in one quiet line under the toolbar.
+ */
 export default function HeroOverview({
   selectedCategoryLabel,
   globalSearch,
@@ -21,18 +25,14 @@ export default function HeroOverview({
   totalSources,
 }: HeroOverviewProps) {
   return (
-    <section className="contextBar" aria-label="Dataset context">
-      <div className="contextBarPills">
-        <span className="contextPill contextPillAccent">
-          {globalSearch ? "All categories" : selectedCategoryLabel}
-        </span>
-        <span className="contextPill">{filteredCount} shown / {datasetSize} total</span>
-        <span className="contextPill">{recommendationCounts.recommended ?? 0} recommended</span>
-        <span className="contextPill">{totalSources} sources cited</span>
-        {trustSnapshot.latest && (
-          <span className="contextPill">Reviewed {formatReviewDate(trustSnapshot.latest)}</span>
-        )}
-      </div>
-    </section>
+    <div className="statusRow" aria-label="Catalog status">
+      <span className="statusScope">{globalSearch ? "All categories" : selectedCategoryLabel}</span>
+      <span className="statusItem"><strong>{filteredCount}</strong> shown / {datasetSize} total</span>
+      <span className="statusItem"><strong>{recommendationCounts.recommended ?? 0}</strong> recommended</span>
+      <span className="statusItem"><strong>{totalSources}</strong> sources cited</span>
+      {trustSnapshot.latest && (
+        <span className="statusItem">Reviewed {formatReviewDate(trustSnapshot.latest)}</span>
+      )}
+    </div>
   );
 }

@@ -6,6 +6,7 @@ import AlgoCard from "@/components/AlgoCard";
 import { CounselButton } from "@/components/CounselButton";
 import AppHeaderNav from "@/components/AppHeaderNav";
 import CategoryExplainer from "@/components/CategoryExplainer";
+import CategoryStrip from "@/components/CategoryStrip";
 import FooterShell from "@/components/FooterShell";
 import HeroOverview from "@/components/HeroOverview";
 import HomeHero from "@/components/HomeHero";
@@ -203,6 +204,13 @@ export default function CryptoCompare() {
 
   const selAlgos = useMemo(() => filtered.filter((a) => sel.includes(a.id)), [filtered, sel]);
   const rows = useMemo(() => buildRows(cat), [cat]);
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const algorithm of dataset) {
+      counts[algorithm.category] = (counts[algorithm.category] ?? 0) + 1;
+    }
+    return counts;
+  }, [dataset]);
   const trustSnapshot = useMemo(() => summarizeReviewWindow(dataset), [dataset]);
   const filteredRecommendationCounts = useMemo(() => countRecommendations(filtered), [filtered]);
 
@@ -290,7 +298,6 @@ export default function CryptoCompare() {
         Skip to main content
       </a>
       <ShortcutHelp open={showShortcuts} onClose={() => setShowShortcuts(false)} />
-      <div className="headerGradientBar" aria-hidden="true" />
       <div className="pageShell">
         <AppHeaderNav
           categories={CATEGORIES}
@@ -312,14 +319,29 @@ export default function CryptoCompare() {
         />
 
         <main id="main-content" className="cryptoCompareMain" aria-label={`${globalSearch ? "All categories" : selectedCategoryLabel} algorithms`}>
-          <HomeHero />
+          <HomeHero
+            datasetSize={dataset.length}
+            categoryCount={CATEGORIES.length}
+            totalSources={trustSnapshot.totalSources}
+          />
 
           <div className="browseHeading">
-            <h2 className="browseHeadingTitle">Browse &amp; compare the full catalog</h2>
-            <p className="browseHeadingLede">
-              Every algorithm across {CATEGORIES.length} categories — filter, sort, and compare side by side.
-            </p>
+            <h2 className="browseHeadingTitle">Browse the catalog</h2>
+            <p className="browseHeadingLede">Filter, sort, and compare side by side.</p>
           </div>
+
+          <CategoryStrip
+            categories={CATEGORIES}
+            counts={categoryCounts}
+            selectedCategory={cat}
+            globalSearch={globalSearch}
+            datasetSize={dataset.length}
+            onSelectCategory={(category) => {
+              controller.switchCategory(category);
+              setGlobalSearch(false);
+            }}
+            onSelectAll={controller.activateGlobalSearch}
+          />
 
           <SearchControls
             searchRef={searchRef}
@@ -380,7 +402,7 @@ export default function CryptoCompare() {
 
           <CategoryExplainer category={cat} expanded={explainerOpen} onToggle={() => setExplainerOpen(!explainerOpen)} onNavigateCategory={controller.switchCategory} />
 
-          <ResultsStatus explainerOpen={explainerOpen} filteredCount={filtered.length} />
+          <ResultsStatus filteredCount={filtered.length} />
 
           <section aria-label={`${globalSearch ? "All categories" : selectedCategoryLabel} algorithms`} className="algoGrid" style={{ marginBottom: "18px" }}>
             {filtered.map((a) => (

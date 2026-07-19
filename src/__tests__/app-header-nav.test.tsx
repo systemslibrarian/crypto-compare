@@ -26,7 +26,7 @@ describe("AppHeaderNav", () => {
     );
 
     fireEvent.click(screen.getByRole("button", { name: /back to main menu/i }));
-    fireEvent.click(screen.getByRole("tab", { name: /kem/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^kem$/i }));
 
     expect(onReset).toHaveBeenCalledTimes(1);
     expect(onSelectCategory).toHaveBeenCalledWith("kem");

@@ -409,7 +409,7 @@ export default function SafeDefaultsView() {
 
   return (
     <div className="cryptoCompareRoot">
-      <div className="headerGradientBar" aria-hidden="true" />
+
       <div className="pageShell">
         <header
           className="headerShell"

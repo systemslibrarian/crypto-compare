@@ -10,7 +10,6 @@ type FooterShellProps = {
 export default function FooterShell({ trustSnapshot }: FooterShellProps) {
   return (
     <>
-      <div className="footerGradientBar" aria-hidden="true" />
       <footer className="site-footer">
         <div className="footerMeta">
           <span>Reviewed <time dateTime={trustSnapshot.latest}>{formatReviewDate(trustSnapshot.latest)}</time></span>

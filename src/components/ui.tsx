@@ -2,31 +2,19 @@ import type { AlgorithmStatus, RecommendationLevel, SourceKind } from "@/types/c
 
 const REVIEW_MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-const STATUS_COLORS: Record<AlgorithmStatus, { bg: string; text: string; border: string }> = {
-  standard: { bg: "var(--color-badge-green-bg)", text: "var(--color-badge-green-text)", border: "var(--color-badge-green-border)" },
-  candidate: { bg: "var(--color-badge-yellow-bg)", text: "var(--color-badge-yellow-text)", border: "var(--color-badge-yellow-border)" },
+type BadgeTone = "green" | "yellow" | "red" | "purple" | "neutral";
+
+function toneClass(tone: BadgeTone): string {
+  return `badge badge--${tone}`;
+}
+
+const STATUS_TONES: Record<AlgorithmStatus, BadgeTone> = {
+  standard: "green",
+  candidate: "yellow",
 };
 
 export function Badge({ status, label }: { status: AlgorithmStatus; label: string }) {
-  const s = STATUS_COLORS[status] || STATUS_COLORS.standard;
-  return (
-    <span
-      style={{
-        background: s.bg,
-        color: s.text,
-        border: `1px solid ${s.border}`,
-        padding: "3px 10px",
-        borderRadius: "4px",
-        fontSize: "13px",
-        fontWeight: 700,
-        letterSpacing: "0.4px",
-        textTransform: "uppercase",
-        whiteSpace: "nowrap",
-      }}
-    >
-      {label}
-    </span>
-  );
+  return <span className={toneClass(STATUS_TONES[status] ?? "neutral")}>{label}</span>;
 }
 
 export function SecurityMeter({ bits, max = 256, label }: { bits: number | null | undefined; max?: number; label?: string }) {
@@ -34,29 +22,24 @@ export function SecurityMeter({ bits, max = 256, label }: { bits: number | null 
     return <span style={{ color: "var(--color-text-dim)", fontSize: "13px" }}>TBD</span>;
   }
 
+  const fullLabel = label === "C" ? "Classical" : label === "PQ" ? "Post-Quantum" : label || "Security";
+
   const brokenByShor = label === "PQ" && bits === 0;
   if (brokenByShor) {
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-        {label && (
-          <span aria-hidden="true" style={{ fontSize: "14px", color: "var(--color-text-muted)", minWidth: "28px", fontWeight: 700 }}>
-            {label}
-          </span>
-        )}
+      <div className="meter">
+        {label && <span aria-hidden="true" className="meterLabel">{label}</span>}
         <div
           role="meter"
           aria-label="Post-Quantum security: Broken by Shor's algorithm"
           aria-valuenow={0}
           aria-valuemin={0}
           aria-valuemax={max}
-          style={{ flex: 1, height: "6px", background: "var(--color-bg-meter)", borderRadius: "999px", overflow: "hidden", minWidth: "50px" }}
+          className="meterTrack"
         >
-          <div style={{ width: "0%", height: "100%", background: "var(--color-badge-red-text)", borderRadius: "2px" }} />
+          <div className="meterFill" style={{ width: "0%" }} />
         </div>
-        <span
-          aria-hidden="true"
-          style={{ color: "var(--color-badge-red-text)", fontSize: "13px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", fontWeight: 700, minWidth: "112px", textAlign: "right" }}
-        >
+        <span aria-hidden="true" className="meterValue" style={{ color: "var(--color-badge-red-text)", minWidth: "100px" }}>
           Broken (Shor)
         </span>
       </div>
@@ -64,31 +47,24 @@ export function SecurityMeter({ bits, max = 256, label }: { bits: number | null 
   }
 
   const pct = Math.min((bits / max) * 100, 100);
-  const c = bits >= 192 ? "var(--color-badge-green-text)" : bits >= 128 ? "var(--color-accent-blue)" : bits >= 112 ? "var(--color-badge-yellow-text)" : "var(--color-badge-red-text)";
+  // Restrained scale: teal for standard-or-better, amber for moderate, crimson for weak.
+  const c = bits >= 128 ? "var(--color-text-accent-bright)" : bits >= 112 ? "var(--color-badge-yellow-text)" : "var(--color-badge-red-text)";
   const levelLabel = bits >= 192 ? "high" : bits >= 128 ? "standard" : bits >= 112 ? "moderate" : "low";
-  const fullLabel = label === "C" ? "Classical" : label === "PQ" ? "Post-Quantum" : label || "Security";
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-      {label && (
-        <span aria-hidden="true" style={{ fontSize: "14px", color: "var(--color-text-muted)", minWidth: "28px", fontWeight: 700 }}>
-          {label}
-        </span>
-      )}
+    <div className="meter">
+      {label && <span aria-hidden="true" className="meterLabel">{label}</span>}
       <div
         role="meter"
         aria-label={`${fullLabel} security: ${bits} bits (${levelLabel})`}
         aria-valuenow={bits}
         aria-valuemin={0}
         aria-valuemax={max}
-        style={{ flex: 1, height: "6px", background: "var(--color-bg-meter)", borderRadius: "999px", overflow: "hidden", minWidth: "50px" }}
+        className="meterTrack"
       >
-        <div style={{ width: `${pct}%`, height: "100%", background: c, borderRadius: "2px", transition: "width 0.4s" }} />
+        <div className="meterFill" style={{ width: `${pct}%`, background: c }} />
       </div>
-      <span
-        aria-hidden="true"
-        style={{ color: c, fontSize: "15px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", fontWeight: 700, minWidth: "38px" }}
-      >
+      <span aria-hidden="true" className="meterValue" style={{ color: c }}>
         {bits}
       </span>
     </div>
@@ -113,44 +89,31 @@ export function formatReviewDate(iso: string | undefined): string {
   return `${REVIEW_MONTHS[monthIndex]} ${year}`;
 }
 
-function getReviewFreshness(iso: string | undefined): { label: string; color: string; bg: string; border: string } {
+function getReviewFreshness(iso: string | undefined): { label: string; tone: BadgeTone } {
   if (!iso) {
-    return { label: "Review pending", color: "var(--color-badge-yellow-text)", bg: "var(--color-badge-yellow-bg)", border: "var(--color-badge-yellow-border)" };
+    return { label: "Review pending", tone: "yellow" };
   }
 
   const reviewedAt = new Date(`${iso}T00:00:00Z`).getTime();
   if (Number.isNaN(reviewedAt)) {
-    return { label: "Review date invalid", color: "var(--color-badge-red-text)", bg: "var(--color-badge-red-bg)", border: "var(--color-badge-red-border)" };
+    return { label: "Review date invalid", tone: "red" };
   }
 
   const ageDays = Math.floor((Date.now() - reviewedAt) / (1000 * 60 * 60 * 24));
   if (ageDays <= 45) {
-    return { label: "Fresh review", color: "var(--color-badge-green-text)", bg: "var(--color-badge-green-bg)", border: "var(--color-badge-green-border)" };
+    return { label: "Fresh review", tone: "green" };
   }
   if (ageDays <= 120) {
-    return { label: "Review aging", color: "var(--color-badge-yellow-text)", bg: "var(--color-badge-yellow-bg)", border: "var(--color-badge-yellow-border)" };
+    return { label: "Review aging", tone: "yellow" };
   }
-  return { label: "Needs review", color: "var(--color-badge-red-text)", bg: "var(--color-badge-red-bg)", border: "var(--color-badge-red-border)" };
+  return { label: "Needs review", tone: "red" };
 }
 
 export function ReviewBadge({ iso }: { iso: string | undefined }) {
   const freshness = getReviewFreshness(iso);
   return (
     <span
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: "4px",
-        background: freshness.bg,
-        color: freshness.color,
-        border: `1px solid ${freshness.border}`,
-        padding: "2px 8px",
-        borderRadius: "4px",
-        fontSize: "11px",
-        fontWeight: 700,
-        letterSpacing: "0.3px",
-        whiteSpace: "nowrap",
-      }}
+      className={toneClass(freshness.tone)}
       title={iso ? `${freshness.label} · ${formatReviewDate(iso)}` : freshness.label}
     >
       {iso ? formatReviewDate(iso) : freshness.label}
@@ -158,36 +121,19 @@ export function ReviewBadge({ iso }: { iso: string | undefined }) {
   );
 }
 
-const RECOMMENDATION_CONFIG: Record<RecommendationLevel, { icon: string; label: string; color: string; bg: string; border: string }> = {
-  recommended: { icon: "✅", label: "Recommended default", color: "var(--color-badge-green-text)", bg: "var(--color-badge-green-bg)", border: "var(--color-badge-green-border)" },
-  acceptable: { icon: "⚠️", label: "Acceptable (constrained)", color: "var(--color-badge-yellow-text)", bg: "var(--color-badge-yellow-bg)", border: "var(--color-badge-yellow-border)" },
-  legacy: { icon: "🔄", label: "Legacy / compatibility only", color: "var(--color-badge-orange-text)", bg: "var(--color-badge-orange-bg)", border: "var(--color-badge-orange-border)" },
-  research: { icon: "🔬", label: "Research / niche", color: "var(--color-badge-purple-text)", bg: "var(--color-badge-purple-bg)", border: "var(--color-badge-purple-border)" },
-  avoid: { icon: "❌", label: "Do not use in new systems", color: "var(--color-badge-red-text)", bg: "var(--color-badge-red-bg)", border: "var(--color-badge-red-border)" },
+const RECOMMENDATION_CONFIG: Record<RecommendationLevel, { short: string; label: string; tone: BadgeTone }> = {
+  recommended: { short: "Recommended", label: "Recommended default", tone: "green" },
+  acceptable: { short: "Acceptable", label: "Acceptable (constrained)", tone: "yellow" },
+  legacy: { short: "Legacy", label: "Legacy / compatibility only", tone: "yellow" },
+  research: { short: "Research", label: "Research / niche", tone: "purple" },
+  avoid: { short: "Avoid", label: "Do not use in new systems", tone: "red" },
 };
 
-export function RecommendationBadge({ level }: { level: RecommendationLevel }) {
+export function RecommendationBadge({ level, compact }: { level: RecommendationLevel; compact?: boolean }) {
   const cfg = RECOMMENDATION_CONFIG[level];
   return (
-    <span
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: "5px",
-        background: cfg.bg,
-        color: cfg.color,
-        border: `1px solid ${cfg.border}`,
-        padding: "3px 10px",
-        borderRadius: "4px",
-        fontSize: "12px",
-        fontWeight: 700,
-        letterSpacing: "0.3px",
-        whiteSpace: "nowrap",
-      }}
-      title={cfg.label}
-    >
-      <span aria-hidden="true">{cfg.icon}</span>
-      <span>{cfg.label}</span>
+    <span className={toneClass(cfg.tone)} title={cfg.label}>
+      {compact ? cfg.short : cfg.label}
     </span>
   );
 }
@@ -196,34 +142,17 @@ export function recommendationText(level: RecommendationLevel): string {
   return RECOMMENDATION_CONFIG[level].label;
 }
 
-const SOURCE_KIND_CONFIG: Record<SourceKind, { icon: string; label: string; color: string; bg: string; border: string }> = {
-  standard: { icon: "📜", label: "Standard", color: "var(--color-badge-green-text)", bg: "var(--color-badge-green-bg)", border: "var(--color-badge-green-border)" },
-  analysis: { icon: "🔍", label: "Analysis", color: "var(--color-badge-blue-text)", bg: "var(--color-badge-blue-bg)", border: "var(--color-badge-blue-border)" },
-  deployment: { icon: "🚀", label: "Deployment", color: "var(--color-badge-purple-text)", bg: "var(--color-badge-purple-bg)", border: "var(--color-badge-purple-border)" },
-  benchmark: { icon: "⏱️", label: "Benchmark", color: "var(--color-badge-yellow-text)", bg: "var(--color-badge-yellow-bg)", border: "var(--color-badge-yellow-border)" },
+const SOURCE_KIND_CONFIG: Record<SourceKind, { label: string; tone: BadgeTone }> = {
+  standard: { label: "Standard", tone: "green" },
+  analysis: { label: "Analysis", tone: "neutral" },
+  deployment: { label: "Deployment", tone: "purple" },
+  benchmark: { label: "Benchmark", tone: "yellow" },
 };
 
 export function SourceKindBadge({ kind }: { kind: SourceKind }) {
   const cfg = SOURCE_KIND_CONFIG[kind];
   return (
-    <span
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: "4px",
-        background: cfg.bg,
-        color: cfg.color,
-        border: `1px solid ${cfg.border}`,
-        padding: "2px 8px",
-        borderRadius: "4px",
-        fontSize: "11px",
-        fontWeight: 700,
-        letterSpacing: "0.3px",
-        whiteSpace: "nowrap",
-      }}
-      title={cfg.label}
-    >
-      <span aria-hidden="true">{cfg.icon}</span>
+    <span className={toneClass(cfg.tone)} title={cfg.label}>
       {cfg.label}
     </span>
   );

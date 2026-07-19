@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Badge, RecommendationBadge, ReviewBadge, SecurityMeter, recommendationText } from "@/components/ui";
+import { RecommendationBadge, SecurityMeter, formatReviewDate, recommendationText } from "@/components/ui";
 import { CounselButton } from "@/components/CounselButton";
 import { CATEGORY_ACCENT } from "@/data/categories";
 import { ALGORITHM_DEMOS } from "@/data/demoResources";
@@ -15,9 +15,17 @@ type AlgoCardProps = {
   advisorPick?: boolean;
 };
 
+/**
+ * A scannable algorithm record. Primary scan path (always visible):
+ * name → recommendation → family/origin/standardization/maturity → use case →
+ * classical/PQ security → provenance summary. Everything heavier (sources,
+ * implementations, wrong-choice consequences, demos, rationale) lives behind
+ * the Details disclosure.
+ */
 export default function AlgoCard({ algo, selected, onToggle, favorited, onToggleFavorite, advisorPick }: AlgoCardProps) {
   const accent = CATEGORY_ACCENT[algo.category];
   const demos = ALGORITHM_DEMOS[algo.id] ?? [];
+  const impls = IMPLEMENTATIONS.filter((i) => i.algorithmId === algo.id);
   const [detailOpen, setDetailOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -40,6 +48,11 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
     });
   }
 
+  const metaBits: string[] = [algo.origin, algo.statusLabel];
+  if (algo.maturity) metaBits.push(algo.maturity);
+  if (algo.standardization && algo.standardization !== "none") metaBits.push(algo.standardization.toUpperCase());
+  if (algo.pqRelevance) metaBits.push(algo.pqRelevance.replace("pq-", "PQ-"));
+
   return (
     <div
       id={`algo-${algo.id}`}
@@ -54,188 +67,85 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
       tabIndex={0}
       aria-pressed={selected}
       aria-label={`${selected ? "Deselect" : "Select"} ${algo.name} for comparison`}
-      className="focusRing algoCard"
-      style={{
-        background: advisorPick ? "var(--color-bg-advisor)" : selected ? "var(--color-bg-selected)" : "var(--color-bg-card)",
-        border: `1.5px solid ${advisorPick ? "var(--color-badge-green-text)" : selected ? accent : "var(--color-border)"}`,
-        borderLeft: `3px solid ${advisorPick ? "var(--color-badge-green-text)" : selected ? accent : `${accent}55`}`,
-        borderRadius: "10px",
-        padding: "20px 22px",
-        cursor: "pointer",
-        transition: "all 0.2s ease",
-        position: "relative",
-        boxShadow: selected ? `0 0 16px ${accent}18` : "none",
-      }}
-      onMouseEnter={(e) => {
-        if (!selected) {
-          e.currentTarget.style.borderColor = `${accent}88`;
-          e.currentTarget.style.boxShadow = `0 0 12px ${accent}12`;
-        }
-      }}
-      onMouseLeave={(e) => {
-        if (!selected) {
-          e.currentTarget.style.borderColor = "var(--color-border)";
-          e.currentTarget.style.borderLeftColor = `${accent}55`;
-          e.currentTarget.style.boxShadow = "none";
-        }
-      }}
+      className={`focusRing algoCard${advisorPick ? " algoCardAdvisor" : ""}`}
+      style={{ borderLeft: `3px solid ${advisorPick ? "var(--color-badge-green-text)" : selected ? accent : `${accent}55`}` }}
     >
-      <div style={{ position: "absolute", top: "8px", right: "10px", display: "flex", gap: "6px", alignItems: "center" }}>
+      <div className="recordTop">
+        <div className="recordTitleWrap">
+          <span className="recordName">{algo.name}</span>
+          <RecommendationBadge level={algo.recommendation} compact />
+          {advisorPick && <span className="badge badge--green">Advisor pick</span>}
+        </div>
+        <div className="recordActions">
+          {selected && <span className="recordCheck" aria-hidden="true">✓</span>}
+          {onToggleFavorite && (
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}
+              aria-label={favorited ? `Remove ${algo.name} from favorites` : `Add ${algo.name} to favorites`}
+              className={`focusRing recordIconBtn${favorited ? " isActive" : ""}`}
+            >
+              {favorited ? "★" : "☆"}
+            </button>
+          )}
+        </div>
+      </div>
+
+      <div className="recordMeta">
+        <span className="recordFamily" style={{ color: accent }}>{algo.family}</span>
+        {metaBits.map((bit) => (
+          <span key={bit} className="recordMetaBit">
+            <span className="sep" aria-hidden="true">·</span> {bit}
+          </span>
+        ))}
+      </div>
+
+      <p className="recordSummary">{algo.useCases}</p>
+
+      {(algo.recommendation === "legacy" || algo.recommendation === "avoid") && (
+        <div className={`recordWarn${algo.recommendation === "avoid" ? " recordWarnCritical" : ""}`}>
+          <strong>{algo.recommendation === "legacy" ? "Migrate" : "Do not use"}</strong>
+          <span>{algo.whyNotThis}</span>
+        </div>
+      )}
+
+      <div className="recordFacts">
+        <SecurityMeter bits={algo.securityBits} label="C" />
+        <SecurityMeter bits={algo.pqSecurityBits} label="PQ" />
+      </div>
+
+      <div className="recordFoot">
+        {algo.sources && algo.sources.length > 0 && (
+          <span>{algo.sources.length} source{algo.sources.length !== 1 ? "s" : ""}</span>
+        )}
+        {impls.length > 0 && <span>{impls.length} implementation{impls.length !== 1 ? "s" : ""}</span>}
+        <span>{formatReviewDate(algo.lastReviewed)}</span>
+        <span style={{ flex: "1 1 auto" }} />
         <button
           type="button"
           onClick={(e) => { e.stopPropagation(); setDetailOpen((v) => !v); }}
           aria-label={detailOpen ? `Hide ${algo.name} details` : `Show ${algo.name} details`}
           aria-expanded={detailOpen}
-          style={{
-            background: detailOpen ? "var(--color-bg-detail-toggle)" : "var(--color-bg-control)",
-            border: "1px solid var(--color-border-subtle)",
-            cursor: "pointer",
-            fontSize: "12px",
-            fontWeight: 700,
-            padding: "8px 10px",
-            minWidth: "44px",
-            minHeight: "44px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: detailOpen ? "var(--color-text-accent-bright)" : "var(--color-text-ghost)",
-            transition: "color 0.15s",
-            borderRadius: "999px",
-            gap: "6px",
-          }}
+          className="focusRing recordFootBtn"
         >
-          <span aria-hidden="true">ℹ</span>
-          <span>{detailOpen ? "Hide details" : "Details"}</span>
+          {detailOpen ? "Hide details" : "Details"}
         </button>
-        {onToggleFavorite && (
-          <button
-            type="button"
-            onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}
-            aria-label={favorited ? `Remove ${algo.name} from favorites` : `Add ${algo.name} to favorites`}
-            className="favBtn"
-            style={{
-              background: "transparent",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "18px",
-              padding: "8px",
-              minWidth: "44px",
-              minHeight: "44px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: favorited ? "var(--color-dot-private)" : "var(--color-text-ghost)",
-              transition: "color 0.15s",
-            }}
-          >
-            {favorited ? "★" : "☆"}
-          </button>
-        )}
-        {selected && (
-          <div
-            aria-hidden="true"
-            style={{
-              width: "18px",
-              height: "18px",
-              borderRadius: "50%",
-              background: accent,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "11px",
-              color: "var(--color-button-primary-text)",
-              fontWeight: 700,
-            }}
-          >
-            ✓
-          </div>
-        )}
       </div>
-      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px", flexWrap: "wrap", paddingRight: "132px" }}>
-        <span style={{ fontSize: "18px", fontWeight: 700, color: "var(--color-text-heading)", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", overflowWrap: "break-word", wordBreak: "break-word" }}>{algo.name}</span>
-        <Badge status={algo.status} label={algo.statusLabel} />
-        <RecommendationBadge level={algo.recommendation} />
-        {advisorPick && (
-          <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--color-badge-green-text)", background: "var(--color-badge-green-bg)", border: "1px solid var(--color-badge-green-border)", padding: "2px 8px", borderRadius: "4px", letterSpacing: "0.4px", textTransform: "uppercase" }}>Advisor pick</span>
-        )}
-      </div>
-      {(algo.maturity || algo.standardization || algo.pqRelevance) && (
-        <TrustBadges maturity={algo.maturity} standardization={algo.standardization} pqRelevance={algo.pqRelevance} />
-      )}
-      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px", flexWrap: "wrap" }}>
-        <span
-          style={{
-            fontSize: "11px",
-            fontWeight: 700,
-            fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-            color: accent,
-            background: `${accent}15`,
-            border: `1px solid ${accent}30`,
-            padding: "2px 8px",
-            borderRadius: "4px",
-            letterSpacing: "0.5px",
-            textTransform: "uppercase",
-          }}
-        >
-          {algo.family}
-        </span>
-        <span style={{ fontSize: "14px", color: "var(--color-text-muted)" }}>·</span>
-        <span style={{ fontSize: "14px", color: "var(--color-text-secondary)" }}>{algo.origin}</span>
-        <ReviewBadge iso={algo.lastReviewed} />
-      </div>
-      <p style={{ fontSize: "15px", color: "var(--color-text-body)", lineHeight: "1.7", margin: "0 0 12px" }}>{algo.useCases}</p>
-      <SecurityMeter bits={algo.securityBits} label="C" />
-      <div style={{ height: "6px" }} />
-      <SecurityMeter bits={algo.pqSecurityBits} label="PQ" />
-      {algo.sources && algo.sources.length > 0 && (
-        <div style={{ marginTop: "10px", fontSize: "12px", color: "var(--color-text-sublabel)", display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-          <span style={{ color: "var(--color-text-accent-bright)", fontWeight: 600 }}>{algo.sources.length} source{algo.sources.length !== 1 ? "s" : ""}</span>
-          <span>·</span>
-          <span>{algo.status === "standard" ? "Standards-backed" : "Candidate / emerging"}</span>
-          <CounselButton
-            variant="inline"
-            question={`Tell me about ${algo.name}`}
-            ariaLabel={`Ask Counsel about ${algo.name}`}
-          />
-        </div>
-      )}
-      {(algo.recommendation === "legacy" || algo.recommendation === "avoid") && (
-        <div style={{
-          marginTop: "10px",
-          padding: "10px 12px",
-          borderRadius: "6px",
-          background: "var(--color-bg-warning)",
-          border: "1px solid var(--color-badge-yellow-border)",
-          fontSize: "13px",
-          lineHeight: 1.6,
-        }}>
-          <strong style={{ color: "var(--color-badge-yellow-text)", display: "block", marginBottom: "4px" }}>
-            ⚠ {algo.recommendation === "legacy" ? "Migration recommended" : "Do not use"}
-          </strong>
-          <span style={{ color: "var(--color-text-warning)" }}>{algo.whyNotThis}</span>
-        </div>
-      )}
-      {algo.wrongChoiceConsequence && algo.wrongChoiceConsequence.length > 0 && (
-        <WrongChoiceSection consequences={algo.wrongChoiceConsequence} />
-      )}
-      <ImplementationsSection algoId={algo.id} />
+
       {detailOpen && (
-        <div
-          onClick={(e) => e.stopPropagation()}
-          style={{ marginTop: "14px", paddingTop: "14px", borderTop: "1px solid var(--color-border)", fontSize: "13px", color: "var(--color-text-body)", lineHeight: 1.7 }}
-        >
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "10px", marginBottom: "12px" }}>
+        <div onClick={(e) => e.stopPropagation()} className="recordDetails">
+          <div className="recordDetailGrid">
             <DetailField label="Best known attack" value={algo.bestAttack} />
             <DetailField label="Performance" value={algo.performance} />
             <DetailField label="Reduction quality" value={algo.reductionQuality} />
             <DetailField label="Assumptions" value={algo.assumptions} />
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "10px", marginBottom: "12px" }}>
-            <DetailField label="Recommendation" value={`${algo.recommendation} — ${algo.recommendationRationale}`} />
+          <div className="recordDetailGrid">
+            <DetailField label="Recommendation" value={`${recommendationText(algo.recommendation)} — ${algo.recommendationRationale}`} />
             <DetailField label="Changes when" value={algo.recommendationChangesWhen} />
             {algo.whyNotThis && <DetailField label="Why not this" value={algo.whyNotThis} />}
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "10px", marginBottom: "12px" }}>
+          <div className="recordDetailGrid">
             <DetailField label="Classical estimate" value={`${algo.estimationMethodology.classicalBasis}: ${algo.estimationMethodology.classicalNote}`} />
             <DetailField label="Quantum estimate" value={`${algo.estimationMethodology.quantumBasis}: ${algo.estimationMethodology.quantumNote}`} />
             <DetailField label="Origin" value={algo.originDetail} />
@@ -245,40 +155,56 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
               <DetailField label="Notes" value={algo.notes} />
             </div>
           )}
+
+          {algo.wrongChoiceConsequence && algo.wrongChoiceConsequence.length > 0 && (
+            <DetailSection label="Wrong-choice consequences">
+              {algo.wrongChoiceConsequence.map((c, i) => (
+                <div key={i} className="recordSubItem">
+                  <strong style={{ color: c.severity === "critical" ? "var(--color-badge-red-text)" : c.severity === "high" ? "var(--color-badge-orange-text)" : "var(--color-badge-yellow-text)", textTransform: "uppercase", fontSize: "10.5px", letterSpacing: "0.08em", marginRight: "8px" }}>{c.severity}</strong>
+                  <strong style={{ color: "var(--color-text-heading)" }}>{c.scenario}</strong>
+                  <div style={{ color: "var(--color-text-secondary)" }}>{c.consequence}</div>
+                </div>
+              ))}
+            </DetailSection>
+          )}
+
+          {impls.length > 0 && <ImplementationList impls={impls} />}
+
           {algo.sources && algo.sources.length > 0 && (
-            <div>
-              <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--color-text-accent-bright)", textTransform: "uppercase", letterSpacing: "0.4px", marginBottom: "6px" }}>Sources</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                {algo.sources.map((s) => (
-                  <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} style={{ color: "var(--color-text-link)", fontSize: "12px", textDecoration: "none", lineHeight: 1.5 }}>
-                    {s.label} <span style={{ color: "var(--color-text-ghost)" }}>— {s.note}</span>
-                  </a>
-                ))}
-              </div>
-            </div>
+            <DetailSection label="Sources">
+              {algo.sources.map((s) => (
+                <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="recordLink" style={{ display: "block" }}>
+                  {s.label} <span className="note">— {s.note}</span>
+                </a>
+              ))}
+            </DetailSection>
           )}
+
           {demos.length > 0 && (
-            <div style={{ marginTop: algo.sources && algo.sources.length > 0 ? "12px" : "0" }}>
-              <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--color-text-accent-bright)", textTransform: "uppercase", letterSpacing: "0.4px", marginBottom: "6px" }}>Demos</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                {demos.map((demo) => (
-                  <a key={demo.url} href={demo.url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} style={{ color: "var(--color-text-link)", fontSize: "12px", textDecoration: "none", lineHeight: 1.5 }}>
-                    {demo.title} <span style={{ color: "var(--color-text-ghost)" }}>— {demo.note}</span>
-                  </a>
-                ))}
-              </div>
-            </div>
+            <DetailSection label="Demos">
+              {demos.map((demo) => (
+                <a key={demo.url} href={demo.url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="recordLink" style={{ display: "block" }}>
+                  {demo.title} <span className="note">— {demo.note}</span>
+                </a>
+              ))}
+            </DetailSection>
           )}
-          <div style={{ marginTop: "12px", display: "flex", gap: "8px" }}>
+
+          <div style={{ marginTop: "12px", display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" }}>
             <button
               type="button"
               onClick={copyRecommendation}
               className="focusRing controlBtn"
-              style={{ fontSize: "12px", padding: "6px 12px" }}
+              style={{ fontSize: "12px", padding: "6px 12px", minHeight: "34px" }}
               aria-label={`Copy ${algo.name} recommendation summary to clipboard`}
             >
-              {copied ? "✓ Copied" : "📋 Copy recommendation"}
+              {copied ? "Copied" : "Copy recommendation"}
             </button>
+            <CounselButton
+              variant="inline"
+              question={`Tell me about ${algo.name}`}
+              ariaLabel={`Ask Counsel about ${algo.name}`}
+            />
           </div>
         </div>
       )}
@@ -286,154 +212,52 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
   );
 }
 
-function WrongChoiceSection({ consequences }: { consequences: NonNullable<Algorithm["wrongChoiceConsequence"]> }) {
-  const [open, setOpen] = useState(false);
-  const severityColor: Record<string, string> = {
-    critical: "var(--color-badge-red-text, #ff6b6b)",
-    high: "var(--color-badge-orange-text, #ffaa44)",
-    medium: "var(--color-badge-yellow-text)",
-    low: "var(--color-text-secondary)",
-  };
+function DetailSection({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div style={{ marginTop: "10px" }}>
-      <button
-        type="button"
-        onClick={(e) => { e.stopPropagation(); setOpen((v) => !v); }}
-        aria-expanded={open}
-        className="focusRing"
-        style={{
-          background: "none",
-          border: "none",
-          color: "var(--color-badge-orange-text, var(--color-text-link))",
-          cursor: "pointer",
-          fontSize: "12px",
-          fontWeight: 700,
-          padding: "4px 0",
-          fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-          letterSpacing: "0.3px",
-        }}
-      >
-        <span aria-hidden="true" style={{ fontSize: "11px", display: "inline-block", transition: "transform 0.15s", transform: open ? "rotate(90deg)" : "none", marginRight: "6px" }}>▶</span>
-        {open ? "Hide wrong-choice consequences" : `⚠ ${consequences.length} wrong-choice consequence${consequences.length !== 1 ? "s" : ""}`}
-      </button>
-      {open && (
-        <div onClick={(e) => e.stopPropagation()} style={{ marginTop: "8px", display: "flex", flexDirection: "column", gap: "8px" }}>
-          {consequences.map((c, i) => (
-            <div key={i} style={{ padding: "10px 12px", borderRadius: "6px", background: "var(--color-bg-warning)", border: "1px solid var(--color-badge-yellow-border)", fontSize: "13px", lineHeight: 1.6 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
-                <span style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", color: severityColor[c.severity] }}>{c.severity}</span>
-                <strong style={{ color: "var(--color-text-heading)", fontSize: "13px" }}>{c.scenario}</strong>
-              </div>
-              <span style={{ color: "var(--color-text-warning, var(--color-text-body))" }}>{c.consequence}</span>
-            </div>
-          ))}
-        </div>
-      )}
+    <div style={{ marginBottom: "12px" }}>
+      <div className="recordDetailLabel">{label}</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>{children}</div>
     </div>
   );
 }
 
-function ImplementationsSection({ algoId }: { algoId: string }) {
-  const [open, setOpen] = useState(false);
-  const impls = IMPLEMENTATIONS.filter((i) => i.algorithmId === algoId);
-  if (impls.length === 0) return null;
+function ImplementationList({ impls }: { impls: ImplementationEntry[] }) {
   const byEco: Record<string, ImplementationEntry[]> = {};
   for (const impl of impls) {
     if (!byEco[impl.ecosystem]) byEco[impl.ecosystem] = [];
     byEco[impl.ecosystem].push(impl);
   }
   const auditColor: Record<string, string> = {
-    audited: "var(--color-badge-green-text, #5ce65c)",
-    unaudited: "var(--color-badge-red-text, #ff6b6b)",
-    unknown: "var(--color-badge-yellow-text, #e6c85c)",
+    audited: "var(--color-badge-green-text)",
+    unaudited: "var(--color-badge-red-text)",
+    unknown: "var(--color-badge-yellow-text)",
   };
   return (
-    <div style={{ marginTop: "10px" }}>
-      <button
-        type="button"
-        onClick={(e) => { e.stopPropagation(); setOpen((v) => !v); }}
-        aria-expanded={open}
-        className="focusRing"
-        style={{
-          background: "none",
-          border: "none",
-          color: "var(--color-text-link)",
-          cursor: "pointer",
-          fontSize: "12px",
-          fontWeight: 700,
-          padding: "4px 0",
-          fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-          letterSpacing: "0.3px",
-        }}
-      >
-        <span aria-hidden="true" style={{ fontSize: "11px", display: "inline-block", transition: "transform 0.15s", transform: open ? "rotate(90deg)" : "none", marginRight: "6px" }}>▶</span>
-        {open ? "Hide implementations" : `🔧 ${impls.length} implementation${impls.length !== 1 ? "s" : ""} across ${Object.keys(byEco).length} ecosystem${Object.keys(byEco).length !== 1 ? "s" : ""}`}
-      </button>
-      {open && (
-        <div onClick={(e) => e.stopPropagation()} style={{ marginTop: "8px", display: "flex", flexDirection: "column", gap: "10px" }}>
-          {Object.entries(byEco).map(([eco, list]) => (
-            <div key={eco}>
-              <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", color: "var(--color-text-accent-bright)", marginBottom: "4px" }}>
-                {ECOSYSTEM_LABELS[eco as keyof typeof ECOSYSTEM_LABELS]?.icon} {ECOSYSTEM_LABELS[eco as keyof typeof ECOSYSTEM_LABELS]?.label}
-              </div>
-              {list.map((impl, idx) => (
-                <div key={idx} style={{ padding: "8px 10px", borderRadius: "6px", background: "var(--color-bg-card)", border: "1px solid var(--color-border-subtle)", fontSize: "12px", lineHeight: 1.6, marginBottom: "4px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-                    <strong style={{ color: "var(--color-text-heading)" }}>{impl.library}</strong>
-                    <span style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", color: auditColor[impl.auditStatus] }}>{impl.auditStatus}</span>
-                  </div>
-                  <span style={{ color: "var(--color-text-muted)" }}>{impl.notes}</span>
-                  {impl.warning && <div style={{ color: "var(--color-badge-yellow-text)", fontSize: "11px", marginTop: "2px" }}>⚠ {impl.warning}</div>}
-                </div>
-              ))}
+    <DetailSection label="Implementations">
+      {Object.entries(byEco).map(([eco, list]) => (
+        <div key={eco}>
+          <div style={{ fontSize: "11px", fontWeight: 500, letterSpacing: "0.06em", color: "var(--color-text-secondary)", marginBottom: "4px" }}>
+            {ECOSYSTEM_LABELS[eco as keyof typeof ECOSYSTEM_LABELS]?.label ?? eco}
+          </div>
+          {list.map((impl, idx) => (
+            <div key={idx} className="recordSubItem">
+              <strong style={{ color: "var(--color-text-heading)" }}>{impl.library}</strong>
+              <span style={{ fontSize: "10.5px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.06em", color: auditColor[impl.auditStatus], marginLeft: "8px" }}>{impl.auditStatus}</span>
+              <div style={{ color: "var(--color-text-muted)" }}>{impl.notes}</div>
+              {impl.warning && <div style={{ color: "var(--color-badge-yellow-text)", fontSize: "11.5px", marginTop: "2px" }}>{impl.warning}</div>}
             </div>
           ))}
         </div>
-      )}
-    </div>
-  );
-}
-
-function TrustBadges({ maturity, standardization, pqRelevance }: { maturity?: string; standardization?: string; pqRelevance?: string }) {
-  const badges: { label: string; color: string; bg: string; border: string }[] = [];
-  if (maturity) {
-    const m: Record<string, { color: string; bg: string; border: string }> = {
-      mature: { color: "var(--color-badge-green-text, #5ce65c)", bg: "var(--color-badge-green-bg, #143d1a)", border: "var(--color-badge-green-border, #2a7d2a)" },
-      established: { color: "var(--color-badge-blue-text, #6cb6ff)", bg: "var(--color-badge-blue-bg, #14293d)", border: "var(--color-badge-blue-border, #2a5a7d)" },
-      emerging: { color: "var(--color-badge-yellow-text, #e6c85c)", bg: "var(--color-badge-yellow-bg, #3d3414)", border: "var(--color-badge-yellow-border, #7d6e2a)" },
-      experimental: { color: "var(--color-badge-red-text, #ff6b6b)", bg: "var(--color-badge-red-bg, #3d1414)", border: "var(--color-badge-red-border, #7d2a2a)" },
-    };
-    const s = m[maturity] ?? m.experimental;
-    badges.push({ label: maturity, ...s });
-  }
-  if (standardization && standardization !== "none") {
-    badges.push({ label: standardization.toUpperCase(), color: "var(--color-text-accent-bright, #a0d0ff)", bg: "var(--color-bg-control, #1a1a2e)", border: "var(--color-border-muted, #333)" });
-  }
-  if (pqRelevance) {
-    const p: Record<string, { label: string; color: string; bg: string; border: string }> = {
-      "pq-safe": { label: "PQ-safe", color: "var(--color-badge-green-text, #5ce65c)", bg: "var(--color-badge-green-bg, #143d1a)", border: "var(--color-badge-green-border, #2a7d2a)" },
-      "pq-ready": { label: "PQ-ready", color: "var(--color-badge-blue-text, #6cb6ff)", bg: "var(--color-badge-blue-bg, #14293d)", border: "var(--color-badge-blue-border, #2a5a7d)" },
-      "pq-vulnerable": { label: "PQ-vulnerable", color: "var(--color-badge-red-text, #ff6b6b)", bg: "var(--color-badge-red-bg, #3d1414)", border: "var(--color-badge-red-border, #7d2a2a)" },
-      "pq-neutral": { label: "PQ-neutral", color: "var(--color-text-secondary, #aaa)", bg: "transparent", border: "var(--color-border-muted, #333)" },
-    };
-    const b = p[pqRelevance] ?? p["pq-neutral"];
-    badges.push(b);
-  }
-  if (badges.length === 0) return null;
-  return (
-    <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginBottom: "8px" }}>
-      {badges.map((b, i) => (
-        <span key={i} style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", padding: "2px 8px", borderRadius: "4px", color: b.color, background: b.bg, border: `1px solid ${b.border}` }}>{b.label}</span>
       ))}
-    </div>
+    </DetailSection>
   );
 }
 
 function DetailField({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--color-text-accent-bright)", textTransform: "uppercase", letterSpacing: "0.4px", marginBottom: "4px" }}>{label}</div>
-      <div style={{ fontSize: "13px", color: "var(--color-text-body)", lineHeight: 1.6 }}>{value}</div>
+      <div className="recordDetailLabel">{label}</div>
+      <div className="recordDetailValue">{value}</div>
     </div>
   );
 }

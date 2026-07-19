@@ -4,19 +4,19 @@ import Link from "next/link";
 import type { Ref } from "react";
 import type { AlgorithmCategory, CategoryDefinition } from "@/types/crypto";
 
-type NavLink = { href: string; label: string; icon: string };
+type NavLink = { href: string; label: string };
 
-/** Site page links, shown in the slide-out menu (mirrors crypto-lab's nav). */
+/** Site page links, shown in the slide-out menu. */
 const NAV_LINKS: NavLink[] = [
-  { href: "/safe-defaults", label: "Safe Defaults", icon: "🛡️" },
-  { href: "/advisor", label: "Advisor", icon: "🧭" },
-  { href: "/stacks", label: "Stacks", icon: "🧱" },
-  { href: "/migrate", label: "Migrate", icon: "🔄" },
-  { href: "/implementations", label: "Implementations", icon: "🔧" },
-  { href: "/checklist", label: "Checklist", icon: "✅" },
-  { href: "/visuals", label: "Visual Guide", icon: "📊" },
-  { href: "/labs", label: "Labs", icon: "🧪" },
-  { href: "/about", label: "About", icon: "ℹ️" },
+  { href: "/safe-defaults", label: "Safe Defaults" },
+  { href: "/advisor", label: "Advisor" },
+  { href: "/stacks", label: "Stacks" },
+  { href: "/migrate", label: "Migrate" },
+  { href: "/implementations", label: "Implementations" },
+  { href: "/checklist", label: "Checklist" },
+  { href: "/visuals", label: "Visual Guide" },
+  { href: "/labs", label: "Labs" },
+  { href: "/about", label: "About" },
 ];
 
 type AppHeaderNavProps = {
@@ -45,8 +45,6 @@ export default function AppHeaderNav({
   onCloseMobileNav,
   onSelectCategory,
 }: AppHeaderNavProps) {
-  const selected = categories.find((category) => category.id === selectedCategory);
-
   return (
     <>
       <header className="siteHeader">
@@ -94,20 +92,18 @@ export default function AppHeaderNav({
 
         <div className="navMenuSection">
           <span className="navMenuLabel">Categories</span>
-          <div role="tablist" aria-label="Cryptography categories" className="navCategoryList">
+          <div className="navCategoryList">
             {categories.map((category) => {
               const isSelected = selectedCategory === category.id;
               return (
                 <button
                   key={category.id}
                   type="button"
-                  role="tab"
-                  aria-selected={isSelected}
+                  aria-pressed={isSelected}
                   className="focusRing navCategory"
                   onClick={() => onSelectCategory(category.id)}
                   style={isSelected ? { borderColor: categoryAccent[category.id], color: "var(--color-text-heading)" } : undefined}
                 >
-                  <span aria-hidden="true" className="navCategoryIcon">{category.icon}</span>
                   {category.label}
                 </button>
               );
@@ -120,19 +116,12 @@ export default function AppHeaderNav({
           <div className="navLinkList">
             {NAV_LINKS.map((link) => (
               <Link key={link.href} href={link.href} className="focusRing navLink" onClick={onCloseMobileNav}>
-                <span aria-hidden="true">{link.icon}</span>
                 {link.label}
               </Link>
             ))}
           </div>
         </div>
       </aside>
-
-      {selected ? (
-        <p className="currentCategoryBar" aria-hidden="true">
-          <span aria-hidden="true">{selected.icon}</span> {selected.label}
-        </p>
-      ) : null}
     </>
   );
 }
