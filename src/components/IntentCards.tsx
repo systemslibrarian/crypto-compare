@@ -82,18 +82,7 @@ export default function IntentCards() {
             lineHeight: 1.6,
           }}
         >
-          Choose your use case for safe defaults, or{" "}
-          <Link
-            href="/advisor"
-            style={{
-              color: "var(--color-text-link)",
-              textDecoration: "underline",
-              textUnderlineOffset: "3px",
-            }}
-          >
-            use the decision wizard
-          </Link>{" "}
-          for a tailored recommendation.
+          Pick a use case to jump straight to its safe defaults.
         </p>
       </div>
       <div

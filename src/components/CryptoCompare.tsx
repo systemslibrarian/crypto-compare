@@ -2,15 +2,13 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import AdvisorCta from "@/components/AdvisorCta";
 import AlgoCard from "@/components/AlgoCard";
 import { CounselButton } from "@/components/CounselButton";
 import AppHeaderNav from "@/components/AppHeaderNav";
 import CategoryExplainer from "@/components/CategoryExplainer";
 import FooterShell from "@/components/FooterShell";
 import HeroOverview from "@/components/HeroOverview";
-import IntentCards from "@/components/IntentCards";
-import QuickStartPanel from "@/components/QuickStartPanel";
+import HomeHero from "@/components/HomeHero";
 import ReferenceGuidePanel from "@/components/ReferenceGuidePanel";
 import ResultsStatus from "@/components/ResultsStatus";
 import SearchControls from "@/components/SearchControls";
@@ -318,6 +316,15 @@ export default function CryptoCompare() {
         />
 
         <main id="main-content" className="cryptoCompareMain" aria-label={`${globalSearch ? "All categories" : selectedCategoryLabel} algorithms`}>
+          <HomeHero />
+
+          <div className="browseHeading">
+            <h2 className="browseHeadingTitle">Browse &amp; compare the full catalog</h2>
+            <p className="browseHeadingLede">
+              Every algorithm across {CATEGORIES.length} categories — filter, sort, and compare side by side.
+            </p>
+          </div>
+
           <HeroOverview
             selectedCategoryLabel={selectedCategoryLabel}
             globalSearch={globalSearch}
@@ -326,18 +333,6 @@ export default function CryptoCompare() {
             recommendationCounts={filteredRecommendationCounts}
             trustSnapshot={trustSnapshot}
             totalSources={trustSnapshot.totalSources}
-          />
-
-          <IntentCards />
-
-          <AdvisorCta />
-
-          <QuickStartPanel
-            showMethodology={showMethodology}
-            onToggleMethodology={() => setShowMethodology((value) => !value)}
-            onShowDefaults={controller.showRecommendedDefaults}
-            onSearchAll={controller.activateGlobalSearch}
-            onShowSafeUsage={() => setShowSafeUsage(true)}
           />
 
           <SearchControls

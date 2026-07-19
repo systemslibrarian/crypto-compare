@@ -555,6 +555,101 @@ body {
     color: #7dd3fc;
   }
 
+  /* Single guided-entry hero at the top of the homepage. */
+  .homeHero {
+    margin: 8px 0 28px;
+  }
+
+  .homeHeroEyebrow {
+    margin: 0 0 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  }
+
+  .homeHeroTitle {
+    margin: 0 0 12px;
+    font-size: 30px;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--color-text-heading);
+    font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  }
+
+  .homeHeroLede {
+    margin: 0 0 24px;
+    max-width: 68ch;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--color-text-secondary);
+  }
+
+  .homeHeroLink {
+    color: var(--color-text-link);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* Divider heading that frames the browse/compare tool below the hero. */
+  .browseHeading {
+    margin: 8px 0 14px;
+    padding-top: 22px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .browseHeadingTitle {
+    margin: 0 0 4px;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  }
+
+  .browseHeadingLede {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--color-text-muted);
+  }
+
+  /* Desktop header "Menu" dropdown. */
+  .headerMenuPanel {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    z-index: 30;
+    min-width: 210px;
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    background: var(--color-bg-elevated, var(--color-bg-card));
+    border: 1px solid var(--color-border-muted);
+    border-radius: 10px;
+    box-shadow: 0 12px 30px rgba(2, 8, 23, 0.35);
+  }
+
+  .headerMenuItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text-body);
+    text-decoration: none;
+    font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  }
+
+  .headerMenuItem:hover {
+    background: var(--color-bg-control);
+    color: var(--color-text-heading);
+  }
+
   @media (min-width: 901px) {
     .categoryNav {
       display: flex;

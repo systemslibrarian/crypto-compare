@@ -1,6 +1,23 @@
+"use client";
+
 import Link from "next/link";
-import type { Ref } from "react";
+import { useEffect, useRef, useState, type Ref } from "react";
 import type { AlgorithmCategory, CategoryDefinition } from "@/types/crypto";
+
+type NavLink = { href: string; label: string; icon: string };
+
+/** Single source of truth for the site's page navigation. */
+const NAV_LINKS: NavLink[] = [
+  { href: "/safe-defaults", label: "Safe Defaults", icon: "🛡️" },
+  { href: "/advisor", label: "Advisor", icon: "🧭" },
+  { href: "/stacks", label: "Stacks", icon: "🧱" },
+  { href: "/migrate", label: "Migrate", icon: "🔄" },
+  { href: "/implementations", label: "Implementations", icon: "🔧" },
+  { href: "/checklist", label: "Checklist", icon: "✅" },
+  { href: "/visuals", label: "Visual Guide", icon: "📊" },
+  { href: "/labs", label: "Labs", icon: "🧪" },
+  { href: "/about", label: "About", icon: "ℹ️" },
+];
 
 type AppHeaderNavProps = {
   categories: CategoryDefinition[];
@@ -36,6 +53,27 @@ export default function AppHeaderNav({
   onToggleTheme,
 }: AppHeaderNavProps) {
   const selected = categories.find((category) => category.id === selectedCategory);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close the desktop menu on outside click or Escape.
+  useEffect(() => {
+    if (!menuOpen) return;
+    function onDocClick(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") setMenuOpen(false);
+    }
+    document.addEventListener("mousedown", onDocClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDocClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
 
   return (
     <>
@@ -94,125 +132,48 @@ export default function AppHeaderNav({
                 {theme === "dark" ? "☀️" : "🌙"}
               </button>
             )}
-            <Link
-              href="/safe-defaults"
-              className="headerBtn desktopOnly focusRing"
-              style={{
-                background: "var(--color-bg-control)",
-                color: "var(--color-text-body)",
-                border: "1px solid var(--color-border-muted)",
-                borderRadius: "6px",
-                padding: "10px 16px",
-                fontSize: "14px",
-                fontWeight: 700,
-                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-                textDecoration: "none",
-              }}
-            >
-              Safe Defaults
-            </Link>
-            <Link
-              href="/stacks"
-              className="headerBtn desktopOnly focusRing"
-              style={{
-                background: "var(--color-bg-control)",
-                color: "var(--color-text-body)",
-                border: "1px solid var(--color-border-muted)",
-                borderRadius: "6px",
-                padding: "10px 16px",
-                fontSize: "14px",
-                fontWeight: 700,
-                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-                textDecoration: "none",
-              }}
-            >
-              Stacks
-            </Link>
-            <Link
-              href="/migrate"
-              className="headerBtn desktopOnly focusRing"
-              style={{
-                background: "var(--color-bg-control)",
-                color: "var(--color-text-body)",
-                border: "1px solid var(--color-border-muted)",
-                borderRadius: "6px",
-                padding: "10px 16px",
-                fontSize: "14px",
-                fontWeight: 700,
-                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-                textDecoration: "none",
-              }}
-            >
-              Migrate
-            </Link>
-            <Link
-              href="/implementations"
-              className="headerBtn desktopOnly focusRing"
-              style={{
-                background: "var(--color-bg-control)",
-                color: "var(--color-text-body)",
-                border: "1px solid var(--color-border-muted)",
-                borderRadius: "6px",
-                padding: "10px 16px",
-                fontSize: "14px",
-                fontWeight: 700,
-                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-                textDecoration: "none",
-              }}
-            >
-              Implementations
-            </Link>
-            <Link
-              href="/checklist"
-              className="headerBtn desktopOnly focusRing"
-              style={{
-                background: "var(--color-bg-control)",
-                color: "var(--color-text-body)",
-                border: "1px solid var(--color-border-muted)",
-                borderRadius: "6px",
-                padding: "10px 16px",
-                fontSize: "14px",
-                fontWeight: 700,
-                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-                textDecoration: "none",
-              }}
-            >
-              Checklist
-            </Link>
-            <Link
-              href="/visuals"
-              className="headerBtn desktopOnly focusRing"
-              style={{
-                background: "var(--color-bg-control)",
-                color: "var(--color-text-body)",
-                border: "1px solid var(--color-border-muted)",
-                borderRadius: "6px",
-                padding: "10px 16px",
-                fontSize: "14px",
-                fontWeight: 700,
-                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-                textDecoration: "none",
-              }}
-            >
-              Visual Guide
-            </Link>
-            <Link
-              href="/labs"
-              className="headerBtn desktopOnly focusRing"
-              style={{
-                background: "var(--color-bg-control)",
-                color: "var(--color-text-body)",
-                border: "1px solid var(--color-border-muted)",
-                borderRadius: "6px",
-                padding: "10px 16px",
-                fontSize: "14px",
-                fontWeight: 700,
-                fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
-                textDecoration: "none",
-              }}
-            >
-              Labs
-            </Link>
+            <div className="headerMenu desktopOnly" ref={menuRef} style={{ position: "relative" }}>
+              <button
+                type="button"
+                className="focusRing headerBtn"
+                aria-haspopup="menu"
+                aria-expanded={menuOpen}
+                onClick={() => setMenuOpen((open) => !open)}
+                style={{
+                  background: menuOpen ? "var(--color-button-primary)" : "var(--color-bg-control)",
+                  color: menuOpen ? "var(--color-button-primary-text)" : "var(--color-text-body)",
+                  border: `1px solid ${menuOpen ? "var(--color-button-primary-hover)" : "var(--color-border-muted)"}`,
+                  borderRadius: "6px",
+                  padding: "10px 16px",
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
+                  cursor: "pointer",
+                  minHeight: "44px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                Menu <span aria-hidden="true" style={{ fontSize: "11px" }}>{menuOpen ? "▲" : "▼"}</span>
+              </button>
+              {menuOpen && (
+                <div role="menu" className="headerMenuPanel">
+                  {NAV_LINKS.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      role="menuitem"
+                      className="focusRing headerMenuItem"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <span aria-hidden="true">{link.icon}</span>
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
             <button
               className="focusRing mobileMenuBtn"
               onClick={onToggleMobileNav}
@@ -248,62 +209,17 @@ export default function AppHeaderNav({
       )}
       <nav ref={mobileNavRef} aria-label="Cryptography categories" role="tablist" className={`categoryNav ${mobileNavOpen ? "mobileNavOpen" : ""}`} style={{ display: "flex", gap: 0, borderBottom: "1px solid var(--color-border-subtle)", position: "sticky", top: 0, zIndex: 10, background: "var(--color-bg)" }}>
         <div className="mobileNavActions" aria-hidden={!mobileNavOpen} hidden={!mobileNavOpen}>
-          <Link
-            href="/safe-defaults"
-            className="focusRing mobileNavActionBtn"
-            onClick={onCloseMobileNav}
-            style={{ textDecoration: "none" }}
-          >
-            🛡️ Safe Defaults
-          </Link>
-          <Link
-            href="/stacks"
-            className="focusRing mobileNavActionBtn"
-            onClick={onCloseMobileNav}
-            style={{ textDecoration: "none" }}
-          >
-            🧱 Stacks
-          </Link>
-          <Link
-            href="/migrate"
-            className="focusRing mobileNavActionBtn"
-            onClick={onCloseMobileNav}
-            style={{ textDecoration: "none" }}
-          >
-            🔄 Migrate
-          </Link>
-          <Link
-            href="/implementations"
-            className="focusRing mobileNavActionBtn"
-            onClick={onCloseMobileNav}
-            style={{ textDecoration: "none" }}
-          >
-            🔧 Implementations
-          </Link>
-          <Link
-            href="/checklist"
-            className="focusRing mobileNavActionBtn"
-            onClick={onCloseMobileNav}
-            style={{ textDecoration: "none" }}
-          >
-            ✅ Checklist
-          </Link>
-          <Link
-            href="/visuals"
-            className="focusRing mobileNavActionBtn"
-            onClick={onCloseMobileNav}
-            style={{ textDecoration: "none" }}
-          >
-            📊 Visual Guide
-          </Link>
-          <Link
-            href="/labs"
-            className="focusRing mobileNavActionBtn"
-            onClick={onCloseMobileNav}
-            style={{ textDecoration: "none" }}
-          >
-            🧪 Labs
-          </Link>
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="focusRing mobileNavActionBtn"
+              onClick={onCloseMobileNav}
+              style={{ textDecoration: "none" }}
+            >
+              {link.icon} {link.label}
+            </Link>
+          ))}
           {onShowDefaults && (
             <button
               onClick={() => { onShowDefaults(); onCloseMobileNav(); }}
