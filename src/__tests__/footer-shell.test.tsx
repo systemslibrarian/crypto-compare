@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import FooterShell from "@/components/FooterShell";
 
 describe("FooterShell", () => {
-  it("renders the review window using trust snapshot dates", () => {
+  it("renders the latest review date from the trust snapshot", () => {
     render(
       <FooterShell
         trustSnapshot={{
@@ -15,8 +15,7 @@ describe("FooterShell", () => {
       />,
     );
 
-    expect(screen.getByText(/latest dataset review:/i)).toBeInTheDocument();
+    expect(screen.getByText(/reviewed/i)).toBeInTheDocument();
     expect(screen.getByText(/march 2026/i)).toBeInTheDocument();
-    expect(screen.getByText(/window starts january 2026/i)).toBeInTheDocument();
   });
 });

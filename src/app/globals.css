@@ -398,11 +398,44 @@ body {
 
   /* Footer area */
   .site-footer {
-    @apply text-sm leading-relaxed;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 24px;
     border-top: 1px solid var(--color-border);
-    padding: 20px 0 28px;
-    color: var(--color-text-label);
+    padding: 18px 0 28px;
+    color: var(--color-text-muted);
     font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+    font-size: 12px;
+  }
+
+  .footerMeta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-text-muted);
+  }
+
+  .footerMeta a {
+    color: var(--color-text-accent-bright);
+    text-decoration: none;
+  }
+
+  .footerLinks {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+
+  .footerLinks a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+  }
+
+  .footerLinks a:hover {
+    color: var(--color-text-accent-bright);
   }
 
   /* Keyboard shortcut key */

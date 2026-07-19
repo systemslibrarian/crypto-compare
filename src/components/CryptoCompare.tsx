@@ -329,7 +329,10 @@ export default function CryptoCompare() {
             startBrowse();
             controller.showRecommendedDefaults();
           }}
-          onShowSafeUsage={() => setShowSafeUsage(true)}
+          onShowSafeUsage={() => {
+            startBrowse();
+            setShowSafeUsage(true);
+          }}
           onToggleMethodology={() => setShowMethodology((value) => !value)}
         />
 
@@ -431,6 +434,23 @@ export default function CryptoCompare() {
               <div className="deferBelowFold">
                 <ReferenceGuidePanel algorithms={filtered} />
               </div>
+
+              <KnowledgeSections
+                showHybrid={showHybrid}
+                showGuide={showGuide}
+                showSafeUsage={showSafeUsage}
+                showArchitectures={showArchitectures}
+                showLibraries={showLibraries}
+                showPhilosophy={showPhilosophy}
+                showResources={showResources}
+                onToggleHybrid={() => setShowHybrid((value) => !value)}
+                onToggleGuide={() => setShowGuide((value) => !value)}
+                onToggleSafeUsage={() => setShowSafeUsage((value) => !value)}
+                onToggleArchitectures={() => setShowArchitectures((value) => !value)}
+                onToggleLibraries={() => setShowLibraries((value) => !value)}
+                onTogglePhilosophy={() => setShowPhilosophy((value) => !value)}
+                onToggleResources={() => setShowResources((value) => !value)}
+              />
             </>
           ) : (
             <div className="browsePrompt" role="note">
@@ -447,23 +467,6 @@ export default function CryptoCompare() {
               </button>
             </div>
           )}
-
-          <KnowledgeSections
-            showHybrid={showHybrid}
-            showGuide={showGuide}
-            showSafeUsage={showSafeUsage}
-            showArchitectures={showArchitectures}
-            showLibraries={showLibraries}
-            showPhilosophy={showPhilosophy}
-            showResources={showResources}
-            onToggleHybrid={() => setShowHybrid((value) => !value)}
-            onToggleGuide={() => setShowGuide((value) => !value)}
-            onToggleSafeUsage={() => setShowSafeUsage((value) => !value)}
-            onToggleArchitectures={() => setShowArchitectures((value) => !value)}
-            onToggleLibraries={() => setShowLibraries((value) => !value)}
-            onTogglePhilosophy={() => setShowPhilosophy((value) => !value)}
-            onToggleResources={() => setShowResources((value) => !value)}
-          />
         </main>
 
         <FooterShell trustSnapshot={trustSnapshot} />
