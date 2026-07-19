@@ -2,114 +2,140 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Theme CSS Custom Properties ─── */
+/* ─── Theme CSS Custom Properties ───
+   Palette ported from crypto-lab (the sibling reference site): deep blue-black
+   backgrounds, a single muted teal accent, soft desaturated text, and near-
+   invisible borders. The neon blue/green/yellow of the old theme is retired in
+   favour of teal / amber / crimson / violet used sparingly and semantically. */
 :root {
+  /* Fonts */
+  --font-serif: var(--font-fraunces), "Fraunces", Georgia, serif;
+
   /* Backgrounds */
-  --color-bg: #070b12;
-  --color-bg-card: #0b0f17;
-  --color-bg-surface: #0e1628;
-  --color-bg-control: #0e1420;
-  --color-bg-elevated: #111827;
-  --color-bg-inset: #0c1422;
-  --color-bg-hover: #111827;
-  --color-bg-meter: #141a26;
-  --color-bg-selected: #0e1628;
-  --color-bg-advisor: #0c1a2e;
-  --color-bg-mobile-card: #0a0f1a;
-  --color-bg-detail-toggle: #1e293b;
-  --color-bg-kbd: #11182b;
-  --color-bg-warning: #1a1207;
-  --color-bg-table-alt: #090e18;
+  --color-bg: #071016;
+  --color-bg-card: #0b1821;
+  --color-bg-surface: #0d1d27;
+  --color-bg-control: #0b1821;
+  --color-bg-elevated: #0d1d27;
+  --color-bg-inset: #09141b;
+  --color-bg-hover: #10222c;
+  --color-bg-meter: #10222c;
+  --color-bg-selected: #0e2229;
+  --color-bg-advisor: #0c1f24;
+  --color-bg-mobile-card: #0a171f;
+  --color-bg-detail-toggle: #16303a;
+  --color-bg-kbd: #0d1d27;
+  --color-bg-warning: #221803;
+  --color-bg-table-alt: #081219;
 
   /* Borders */
-  --color-border: #1e293b;
-  --color-border-subtle: #111827;
-  --color-border-muted: #334155;
-  --color-border-row: #0d1320;
-  --color-border-header: #1a2540;
+  --color-border: rgba(99, 128, 146, 0.2);
+  --color-border-subtle: rgba(99, 128, 146, 0.12);
+  --color-border-muted: rgba(99, 128, 146, 0.34);
+  --color-border-row: rgba(99, 128, 146, 0.1);
+  --color-border-header: rgba(99, 128, 146, 0.24);
 
   /* Text */
-  --color-text: #e2e8f0;
-  --color-text-body: #d4deea;
-  --color-text-secondary: #c4d1e3;
-  --color-text-heading: #f8fafc;
-  --color-text-muted: #93a4bb;
-  --color-text-dim: #7a8ba3;
-  --color-text-ghost: #475569;
-  --color-text-label: #b4c1d2;
-  --color-text-sublabel: #7d8a9e;
-  --color-text-caption: #d1dae6;
-  --color-text-accent-bright: #7dd3fc;
-  --color-text-link: #93c5fd;
-  --color-text-warning: #e2c97e;
+  --color-text: #c8d9e5;
+  --color-text-body: #c8d9e5;
+  --color-text-secondary: #a9bccb;
+  --color-text-heading: #f2f8fb;
+  --color-text-muted: #7e98aa;
+  --color-text-dim: #6d879a;
+  --color-text-ghost: #4a5f6e;
+  --color-text-label: #a9bccb;
+  --color-text-sublabel: #7e98aa;
+  --color-text-caption: #b9cbd8;
+  --color-text-accent-bright: #35d6bb;
+  --color-text-link: #35d6bb;
+  --color-text-warning: #ffb84d;
 
-  /* Semantic badge colors */
-  --color-badge-green-bg: #0d3320;
-  --color-badge-green-text: #34d399;
-  --color-badge-green-border: #065f46;
-  --color-badge-yellow-bg: #312e2a;
-  --color-badge-yellow-text: #fbbf24;
-  --color-badge-yellow-border: #78350f;
-  --color-badge-red-bg: #2d1215;
-  --color-badge-red-text: #f87171;
-  --color-badge-red-border: #7f1d1d;
-  --color-badge-orange-bg: #2d1f0e;
-  --color-badge-orange-text: #f97316;
-  --color-badge-orange-border: #7c3a0a;
-  --color-badge-purple-bg: #1e1633;
-  --color-badge-purple-text: #a78bfa;
-  --color-badge-purple-border: #4c1d95;
-  --color-badge-blue-bg: #0c2d4a;
-  --color-badge-blue-text: #38bdf8;
-  --color-badge-blue-border: #0e4f82;
+  /* Semantic badge colors (teal / amber / crimson / violet) */
+  --color-badge-green-bg: rgba(53, 214, 187, 0.1);
+  --color-badge-green-text: #35d6bb;
+  --color-badge-green-border: rgba(53, 214, 187, 0.32);
+  --color-badge-yellow-bg: rgba(255, 184, 77, 0.1);
+  --color-badge-yellow-text: #ffb84d;
+  --color-badge-yellow-border: rgba(255, 184, 77, 0.32);
+  --color-badge-red-bg: rgba(255, 107, 127, 0.1);
+  --color-badge-red-text: #ff6b7f;
+  --color-badge-red-border: rgba(255, 107, 127, 0.32);
+  --color-badge-orange-bg: rgba(255, 184, 77, 0.1);
+  --color-badge-orange-text: #ffb84d;
+  --color-badge-orange-border: rgba(255, 184, 77, 0.32);
+  --color-badge-purple-bg: rgba(159, 136, 255, 0.1);
+  --color-badge-purple-text: #9f88ff;
+  --color-badge-purple-border: rgba(159, 136, 255, 0.32);
+  --color-badge-blue-bg: rgba(53, 214, 187, 0.1);
+  --color-badge-blue-text: #35d6bb;
+  --color-badge-blue-border: rgba(53, 214, 187, 0.32);
 
   /* Panel / gradient backgrounds */
-  --color-bg-panel-gradient-from: #0c1222;
-  --color-bg-panel-gradient-to: #0e1628;
-  --color-bg-panel-border: #1a2540;
-  --color-bg-code: #0a0e17;
-  --color-bg-overlay: rgba(15, 23, 42, 0.95);
-  --color-bg-modal: #0b1120;
-  --color-bg-error: #0c0f18;
+  --color-bg-panel-gradient-from: rgba(8, 17, 24, 0.92);
+  --color-bg-panel-gradient-to: rgba(8, 17, 24, 0.82);
+  --color-bg-panel-border: rgba(99, 128, 146, 0.2);
+  --color-bg-code: #09141b;
+  --color-bg-overlay: rgba(7, 16, 22, 0.95);
+  --color-bg-modal: #0b1821;
+  --color-bg-error: #0b1219;
 
   /* Button / accent */
-  --color-button-primary: #1d4ed8;
-  --color-button-primary-hover: #2563eb;
-  --color-accent-blue: #3b82f6;
-  --color-accent-blue-label: #60a5fa;
-  --color-accent-yellow-label: #fcd34d;
-  --color-accent-yellow-body: #fde68a;
-  --color-accent-green-label: #6ee7b7;
-  --color-accent-red-label: #fca5a5;
-  --color-accent-red-body: #e8b4b4;
+  --color-button-primary: #35d6bb;
+  --color-button-primary-hover: #2bbfa6;
+  --color-accent-blue: #35d6bb;
+  --color-accent-blue-label: #5fe0cb;
+  --color-accent-yellow-label: #ffb84d;
+  --color-accent-yellow-body: #ffcf85;
+  --color-accent-green-label: #5fe0cb;
+  --color-accent-red-label: #ff9aa7;
+  --color-accent-red-body: #f0b8bf;
 
   /* Project dot colors */
-  --color-dot-public: #34d399;
-  --color-dot-private: #fbbf24;
+  --color-dot-public: #35d6bb;
+  --color-dot-private: #ffb84d;
 
   /* Interactive borders */
-  --color-border-accent: #1e3a5f;
-  --color-border-interactive: #141c2b;
-  --color-border-app: #2e1065;
-  --color-border-dashed: #2a1a1a;
-  --color-border-error: #991b1b;
+  --color-border-accent: rgba(53, 214, 187, 0.4);
+  --color-border-interactive: rgba(99, 128, 146, 0.16);
+  --color-border-app: rgba(159, 136, 255, 0.4);
+  --color-border-dashed: rgba(99, 128, 146, 0.3);
+  --color-border-error: rgba(255, 107, 127, 0.5);
 
   /* Overlay / shadow */
-  --color-overlay-backdrop: rgba(0, 0, 0, 0.5);
-  --color-shadow-overlay: rgba(0, 0, 0, 0.4);
-  --color-border-bar: rgba(255, 255, 255, 0.1);
-  --color-button-primary-text: #ffffff;
+  --color-overlay-backdrop: rgba(0, 0, 0, 0.55);
+  --color-shadow-overlay: rgba(0, 0, 0, 0.45);
+  --color-border-bar: rgba(255, 255, 255, 0.08);
+  --color-button-primary-text: #05231d;
   --color-bg-table-diff: rgba(255, 255, 255, 0.015);
-  --color-diff-border: rgba(245, 158, 11, 0.27);
-  --color-diff-bg-even: rgba(245, 158, 11, 0.04);
-  --color-diff-bg-odd: rgba(245, 158, 11, 0.06);
+  --color-diff-border: rgba(255, 184, 77, 0.27);
+  --color-diff-bg-even: rgba(255, 184, 77, 0.04);
+  --color-diff-bg-odd: rgba(255, 184, 77, 0.06);
   --color-shadow-image-heavy: rgba(0, 0, 0, 0.55);
   --color-shadow-image-soft: rgba(0, 0, 0, 0.35);
-  --color-accent-blue-tint: rgba(59, 130, 246, 0.08);
+  --color-accent-blue-tint: rgba(53, 214, 187, 0.08);
 
   /* Body background gradient */
-  --color-bg-gradient-1: rgba(29, 78, 216, 0.12);
-  --color-bg-gradient-2: rgba(14, 165, 233, 0.1);
+  --color-bg-gradient-1: rgba(53, 214, 187, 0.12);
+  --color-bg-gradient-2: rgba(159, 136, 255, 0.08);
+}
+
+/* Deep blue-black background with a soft teal glow (crypto-lab signature). */
+body {
+  background:
+    radial-gradient(circle at top center, var(--color-bg-gradient-1), transparent 34%),
+    radial-gradient(circle at 85% 12%, var(--color-bg-gradient-2), transparent 26%),
+    linear-gradient(180deg, #081016 0%, #071016 55%, #060d13 100%);
+  background-attachment: fixed;
+}
+
+/* Serif display headings — the core "professional / editorial" signal. */
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--color-text-heading);
 }
 
 
@@ -453,23 +479,34 @@ body {
   }
 
   .homeHeroEyebrow {
-    margin: 0 0 8px;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1.6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 16px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--color-text-muted);
+    color: var(--color-accent-yellow-label);
     font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
   }
 
+  .homeHeroEyebrow::before {
+    content: "";
+    width: 34px;
+    height: 1px;
+    background: currentColor;
+  }
+
   .homeHeroTitle {
-    margin: 0 0 12px;
-    font-size: 30px;
-    line-height: 1.2;
-    font-weight: 700;
-    letter-spacing: -0.5px;
+    margin: 0 0 14px;
+    font-size: clamp(2.4rem, 5vw, 3.4rem);
+    line-height: 1.02;
+    font-weight: 500;
+    letter-spacing: -0.03em;
     color: var(--color-text-heading);
-    font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+    font-family: var(--font-serif);
+    text-wrap: balance;
   }
 
   .homeHeroLede {
@@ -532,10 +569,11 @@ body {
 
   .browseHeadingTitle {
     margin: 0 0 4px;
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
     color: var(--color-text-heading);
-    font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+    font-family: var(--font-serif);
   }
 
   .browseHeadingLede {
@@ -561,10 +599,11 @@ body {
 
   .browsePromptTitle {
     margin: 0;
-    font-size: 17px;
-    font-weight: 700;
+    font-size: 21px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
     color: var(--color-text-heading);
-    font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+    font-family: var(--font-serif);
   }
 
   .browsePromptBody {

@@ -1,17 +1,22 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans, JetBrains_Mono } from "next/font/google";
+import { DM_Mono, Fraunces } from "next/font/google";
 import "./globals.css";
 
-const ibmPlexSans = IBM_Plex_Sans({
+// Design language ported from the sibling reference site crypto-lab:
+// DM Mono for body/UI/labels, Fraunces (serif) for display headings.
+// The mono keeps the old CSS variable name so existing inline
+// `var(--font-jetbrains-mono)` references resolve to DM Mono without edits.
+const dmMono = DM_Mono({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-ibm-plex-sans",
+  weight: ["300", "400", "500"],
+  variable: "--font-jetbrains-mono",
 });
 
-const jetBrainsMono = JetBrains_Mono({
+const fraunces = Fraunces({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  variable: "--font-jetbrains-mono",
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-fraunces",
 });
 
 export const metadata: Metadata = {
@@ -50,7 +55,7 @@ export const metadata: Metadata = {
     icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◈</text></svg>",
   },
   other: {
-    "theme-color": "#070b12",
+    "theme-color": "#071016",
     "color-scheme": "dark",
   },
 };
@@ -63,7 +68,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${ibmPlexSans.className} ${ibmPlexSans.variable} ${jetBrainsMono.variable} min-h-screen font-sans antialiased`}
+        className={`${dmMono.className} ${dmMono.variable} ${fraunces.variable} min-h-screen antialiased`}
       >
         <script
           type="application/ld+json"
