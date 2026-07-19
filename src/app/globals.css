@@ -473,7 +473,7 @@ body {
   }
 
   .homeHeroLede {
-    margin: 0 0 24px;
+    margin: 0 0 18px;
     max-width: 68ch;
     font-size: 16px;
     line-height: 1.65;
@@ -484,6 +484,43 @@ body {
     color: var(--color-text-link);
     text-decoration: underline;
     text-underline-offset: 3px;
+  }
+
+  /* Compact one-line row of use-case links (replaces the old 6-card grid). */
+  .homeHeroTasks {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .homeHeroTasksLabel {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+    margin-right: 2px;
+  }
+
+  .homeHeroTask {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-bg-card);
+    color: var(--color-text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .homeHeroTask:hover {
+    border-color: var(--color-accent-blue);
+    color: var(--color-text-heading);
   }
 
   /* Divider heading that frames the browse/compare tool below the hero. */
