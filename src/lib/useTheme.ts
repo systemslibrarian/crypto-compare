@@ -8,7 +8,8 @@ function getStoredTheme(): Theme {
   if (typeof window === "undefined") return "dark";
   const stored = localStorage.getItem("crypto-compare-theme");
   if (stored === "light" || stored === "dark") return stored;
-  if (typeof window.matchMedia === "function" && window.matchMedia("(prefers-color-scheme: light)").matches) return "light";
+  // Default to dark regardless of the OS `prefers-color-scheme`. The site is
+  // designed dark-first; light is opt-in via the header toggle only.
   return "dark";
 }
 
