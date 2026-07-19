@@ -112,114 +112,6 @@
   --color-bg-gradient-2: rgba(14, 165, 233, 0.1);
 }
 
-[data-theme="light"] {
-  /* Backgrounds */
-  --color-bg: #f8fafc;
-  --color-bg-card: #ffffff;
-  --color-bg-surface: #f1f5f9;
-  --color-bg-control: #ffffff;
-  --color-bg-elevated: #f8fafc;
-  --color-bg-inset: #ffffff;
-  --color-bg-hover: #f1f5f9;
-  --color-bg-meter: #e2e8f0;
-  --color-bg-selected: #eff6ff;
-  --color-bg-advisor: #f0fdf4;
-  --color-bg-mobile-card: #ffffff;
-  --color-bg-detail-toggle: #e2e8f0;
-  --color-bg-kbd: #f1f5f9;
-  --color-bg-warning: #fffbeb;
-  --color-bg-table-alt: #f8fafc;
-
-  /* Borders */
-  --color-border: #e2e8f0;
-  --color-border-subtle: #f1f5f9;
-  --color-border-muted: #cbd5e1;
-  --color-border-row: #e2e8f0;
-  --color-border-header: #cbd5e1;
-
-  /* Text */
-  --color-text: #1e293b;
-  --color-text-body: #334155;
-  --color-text-secondary: #475569;
-  --color-text-heading: #0f172a;
-  --color-text-muted: #64748b;
-  --color-text-dim: #94a3b8;
-  --color-text-ghost: #94a3b8;
-  --color-text-label: #64748b;
-  --color-text-sublabel: #64748b;
-  --color-text-caption: #475569;
-  --color-text-accent-bright: #0284c7;
-  --color-text-link: #2563eb;
-  --color-text-warning: #92400e;
-
-  /* Semantic badge colors */
-  --color-badge-green-bg: #dcfce7;
-  --color-badge-green-text: #166534;
-  --color-badge-green-border: #86efac;
-  --color-badge-yellow-bg: #fef9c3;
-  --color-badge-yellow-text: #854d0e;
-  --color-badge-yellow-border: #fde047;
-  --color-badge-red-bg: #fee2e2;
-  --color-badge-red-text: #991b1b;
-  --color-badge-red-border: #fca5a5;
-  --color-badge-orange-bg: #ffedd5;
-  --color-badge-orange-text: #9a3412;
-  --color-badge-orange-border: #fdba74;
-  --color-badge-purple-bg: #ede9fe;
-  --color-badge-purple-text: #5b21b6;
-  --color-badge-purple-border: #c4b5fd;
-  --color-badge-blue-bg: #dbeafe;
-  --color-badge-blue-text: #1e40af;
-  --color-badge-blue-border: #93c5fd;
-
-  /* Panel / gradient backgrounds */
-  --color-bg-panel-gradient-from: #f1f5f9;
-  --color-bg-panel-gradient-to: #f8fafc;
-  --color-bg-panel-border: #cbd5e1;
-  --color-bg-code: #f1f5f9;
-  --color-bg-overlay: rgba(248, 250, 252, 0.95);
-  --color-bg-modal: #ffffff;
-  --color-bg-error: #fef2f2;
-
-  /* Button / accent */
-  --color-button-primary: #2563eb;
-  --color-button-primary-hover: #1d4ed8;
-  --color-accent-blue: #3b82f6;
-  --color-accent-blue-label: #1d4ed8;
-  --color-accent-yellow-label: #92400e;
-  --color-accent-yellow-body: #78350f;
-  --color-accent-green-label: #166534;
-  --color-accent-red-label: #991b1b;
-  --color-accent-red-body: #7f1d1d;
-
-  /* Project dot colors */
-  --color-dot-public: #16a34a;
-  --color-dot-private: #ca8a04;
-
-  /* Interactive borders */
-  --color-border-accent: #93c5fd;
-  --color-border-interactive: #e2e8f0;
-  --color-border-app: #c4b5fd;
-  --color-border-dashed: #e2e8f0;
-  --color-border-error: #f87171;
-
-  /* Overlay / shadow */
-  --color-overlay-backdrop: rgba(0, 0, 0, 0.3);
-  --color-shadow-overlay: rgba(0, 0, 0, 0.15);
-  --color-border-bar: rgba(0, 0, 0, 0.1);
-  --color-button-primary-text: #ffffff;
-  --color-bg-table-diff: rgba(0, 0, 0, 0.02);
-  --color-diff-border: rgba(245, 158, 11, 0.35);
-  --color-diff-bg-even: rgba(245, 158, 11, 0.06);
-  --color-diff-bg-odd: rgba(245, 158, 11, 0.08);
-  --color-shadow-image-heavy: rgba(0, 0, 0, 0.15);
-  --color-shadow-image-soft: rgba(0, 0, 0, 0.08);
-  --color-accent-blue-tint: rgba(59, 130, 246, 0.05);
-
-  /* Body background gradient */
-  --color-bg-gradient-1: rgba(59, 130, 246, 0.06);
-  --color-bg-gradient-2: rgba(14, 165, 233, 0.04);
-}
 
 html,
 body {
@@ -916,33 +808,6 @@ body {
   }
 }
 
-/* ─── Light theme: additional overrides ─── */
-/* Most light-mode theming is handled by CSS custom properties in :root / [data-theme="light"] above. */
-/* These rules cover selectors that need !important or structural changes beyond variable swaps. */
-
-[data-theme="light"] .algoCard:hover {
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
-}
-
-[data-theme="light"] .searchInput,
-[data-theme="light"] input[aria-label="Search algorithms"] {
-  background: var(--color-bg-inset) !important;
-  color: var(--color-text) !important;
-  border-color: var(--color-border-muted) !important;
-}
-
-[data-theme="light"] .headerGradientBar {
-  opacity: 0.7;
-}
-
-[data-theme="light"] .categoryTab:hover {
-  color: var(--color-text-heading) !important;
-}
-
-[data-theme="light"] .categoryNav .categoryTab[aria-selected="true"] {
-  background: #dbeafe;
-  color: #1d4ed8 !important;
-}
 
 /* ─── Comparison full-screen overlay ─── */
 .comparisonOverlay {
@@ -1102,5 +967,3 @@ body {
     padding: 6px 10px !important;
   }
 }
-
-/* Light theme overrides already handled by CSS custom properties above */

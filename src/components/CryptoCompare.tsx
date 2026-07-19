@@ -35,7 +35,6 @@ import { useCryptoCompareUrlState } from "@/lib/useCryptoCompareUrlState";
 import { useMobileNavBehavior } from "@/lib/useMobileNavBehavior";
 import { usePersistentFavorites } from "@/lib/usePersistentFavorites";
 import { useKeyboardShortcuts } from "@/lib/useKeyboardShortcuts";
-import { useTheme } from "@/lib/useTheme";
 import { validateAlgorithms } from "@/lib/validation";
 import type { Algorithm, AlgorithmCategory } from "@/types/crypto";
 
@@ -81,7 +80,6 @@ export default function CryptoCompare() {
   const [showShortcuts, setShowShortcuts] = useState(false);
   const { favorites, toggleFavorite } = usePersistentFavorites();
   const [favOnly, setFavOnly] = useState(false);
-  const { theme, toggleTheme } = useTheme();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [advisorHighlight, setAdvisorHighlight] = useState<string | null>(null);
   const mobileNavRef = useRef<HTMLElement>(null);
@@ -300,7 +298,6 @@ export default function CryptoCompare() {
           selectedCategory={cat}
           mobileNavOpen={mobileNavOpen}
           mobileNavRef={mobileNavRef}
-          theme={theme}
           onReset={controller.resetToMainMenu}
           onToggleMobileNav={() => setMobileNavOpen((value) => !value)}
           onCloseMobileNav={() => setMobileNavOpen(false)}
@@ -312,7 +309,6 @@ export default function CryptoCompare() {
           onShowDefaults={controller.showRecommendedDefaults}
           onShowSafeUsage={() => setShowSafeUsage(true)}
           onToggleMethodology={() => setShowMethodology((value) => !value)}
-          onToggleTheme={toggleTheme}
         />
 
         <main id="main-content" className="cryptoCompareMain" aria-label={`${globalSearch ? "All categories" : selectedCategoryLabel} algorithms`}>
