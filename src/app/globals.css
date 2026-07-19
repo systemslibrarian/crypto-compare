@@ -543,16 +543,21 @@ body {
   }
 
   @media (min-width: 901px) {
+    /* Single-row, horizontally-scrollable tab strip instead of a wrapping
+       17-tab wall. Keeps the top of the page to one thin, calm nav row. */
     .categoryNav {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       align-items: stretch;
-      overflow: visible;
+      overflow-x: auto;
+      overflow-y: hidden;
       row-gap: 0;
     }
 
     .categoryNav .categoryTab {
       flex: 0 0 auto;
+      padding: 12px 14px;
+      font-size: 14px;
     }
   }
 
