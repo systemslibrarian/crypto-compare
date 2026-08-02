@@ -25,7 +25,11 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `npx serve out -l ${PORT}`,
+    // Build before serving. `serve out` only publishes whatever is already on
+    // disk, so without this a failed build leaves the previous good bundle in
+    // `out/` and the suite passes green against code that no longer compiles —
+    // which silently invalidates mutation checks.
+    command: `npm run build && npx serve out -l ${PORT}`,
     url: BASE_URL,
     timeout: 120_000,
     reuseExistingServer: !process.env.CI,
