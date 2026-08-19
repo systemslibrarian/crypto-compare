@@ -86,6 +86,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-nonce-collision/",
       note: "Reuses one nonce under one key across AES-CTR, AES-GCM, ChaCha20-Poly1305, and AES-CBC, crib-dragging plaintext from XORed keystreams and running the GHASH forbidden attack to forge tags the real verifier accepts.",
     },
+    {
+      title: "Matsui Line",
+      url: "https://systemslibrarian.github.io/crypto-lab-matsui-line/",
+      note: "Matsui's Algorithm 2 linear cryptanalysis of a toy SPN, counting bias in known-plaintext traffic until one subkey candidate separates and the piling-up lemma's prediction misses.",
+    },
   ],
   chacha20poly: [
     {
@@ -124,6 +129,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Shadow Vault",
       url: "https://systemslibrarian.github.io/crypto-lab-shadow-vault/",
       note: "Applies XChaCha20-Poly1305 in a deniable-encryption workflow.",
+    },
+    {
+      title: "Stream Ward",
+      url: "https://systemslibrarian.github.io/crypto-lab-stream-ward/",
+      note: "Streaming AEAD over large files with XChaCha20-Poly1305 secretstream, showing how per-segment tags still verify after reorder, drop, or truncation until a chained state binds them.",
     },
   ],
   curve25519: [
@@ -211,6 +221,16 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "TLS Handshake",
       url: "https://systemslibrarian.github.io/crypto-lab-tls-handshake/",
       note: "Full TLS 1.3 handshake with X25519 key exchange, Ed25519 authentication, the HKDF key schedule, and AES-GCM records, including a blocked man-in-the-middle.",
+    },
+    {
+      title: "Encrochat",
+      url: "https://systemslibrarian.github.io/crypto-lab-encrochat/",
+      note: "A real Double Ratchet exchange over X25519 whose wire stays opaque while a modelled endpoint implant reads the plaintext anyway.",
+    },
+    {
+      title: "Isogeny Atlas",
+      url: "https://systemslibrarian.github.io/crypto-lab-isogeny-atlas/",
+      note: "Supersingular isogeny graph over GF(431²) computed live from modular polynomials, mapping the open problems of isogeny crypto as paths, cycles, and endomorphisms.",
     },
   ],
   ed25519: [
@@ -307,6 +327,16 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Bitcoin Script",
       url: "https://systemslibrarian.github.io/crypto-lab-bitcoin-script/",
       note: "Steps a real P2PKH spend through the Bitcoin Script stack machine with secp256k1 ECDSA and HASH160, covering wrong-key, forged-signature, and tampered scenarios.",
+    },
+    {
+      title: "Schnorr Forge",
+      url: "https://systemslibrarian.github.io/crypto-lab-schnorr-forge/",
+      note: "BIP-340 Schnorr signing and verification on secp256k1, with the step-by-step signing equation, nonce-reuse key recovery, and the linearity behind multisig.",
+    },
+    {
+      title: "MuSig Gate",
+      url: "https://systemslibrarian.github.io/crypto-lab-musig-gate/",
+      note: "MuSig2 (BIP-327) key and nonce aggregation producing a single secp256k1 Schnorr signature, plus the Wagner and ROS forgeries the scheme defends against.",
     },
   ],
   curve448_ed448: [
@@ -417,6 +447,16 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-kem-trap/",
       note: "Shows FIPS 203 implicit rejection — a bit-flipped ML-KEM-768 ciphertext still returns 32 bytes, and a caller that drops the return code or skips key confirmation turns silent decapsulation failure into a plaintext-checking oracle.",
     },
+    {
+      title: "Lattice Gentle",
+      url: "https://systemslibrarian.github.io/crypto-lab-lattice-gentle/",
+      note: "The lattice picture underneath ML-KEM and ML-DSA: SVP and CVP on draggable bases, Gauss and LLL stepped by hand, then toy Kyber and Dilithium end to end.",
+    },
+    {
+      title: "Ablation Wire",
+      url: "https://systemslibrarian.github.io/crypto-lab-ablation-wire/",
+      note: "A layered protocol built on X-Wing (X25519 + ML-KEM-768) and AES-256-GCM with every layer independently switchable, so turning one off shows which was load-bearing.",
+    },
   ],
   mlkem1024: [
     {
@@ -474,6 +514,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "McEliece Gate",
       url: "https://systemslibrarian.github.io/crypto-lab-mceliece-gate/",
       note: "Code-based encryption and key-size tradeoff visualized for Classic McEliece.",
+    },
+    {
+      title: "Syndrome Hints",
+      url: "https://systemslibrarian.github.io/crypto-lab-syndrome-hints/",
+      note: "Information-set decoding (Prange and Stern) against syndrome decoding over F₂, with leaked side-channel hints sliding the work factor from exponential toward polynomial.",
     },
   ],
   frodokem: [
@@ -562,6 +607,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Hybrid PQC",
       url: "https://systemslibrarian.github.io/crypto-lab-hybrid-pqc/",
       note: "Composite Ed25519 + ML-DSA-65 signatures verified with AND, shown alongside classical and post-quantum signing so a single broken assumption still verifies.",
+    },
+    {
+      title: "MAYO Seal",
+      url: "https://systemslibrarian.github.io/crypto-lab-mayo-seal/",
+      note: "Real MAYO keygen, signing, and verification over GF(16), showing how an oil space too small to invert becomes solvable once k copies of the map are whipped together.",
     },
   ],
   falcon512: [
@@ -755,6 +805,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-mac-race/",
       note: "Compares HMAC, CMAC, Poly1305, and GHASH with common failure modes.",
     },
+    {
+      title: "Simon's Period",
+      url: "https://systemslibrarian.github.io/crypto-lab-simon-period/",
+      note: "Exact statevector Simon's algorithm recovering a hidden XOR period in O(n) queries, then using it to predict an Even-Mansour ciphertext and forge a CBC-MAC tag.",
+    },
   ],
   poly1305: [
     {
@@ -830,6 +885,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "VSS Gate",
       url: "https://systemslibrarian.github.io/crypto-lab-vss-gate/",
       note: "Verifiable sharing workflow with commitments and complaint handling.",
+    },
+    {
+      title: "DKG Gate",
+      url: "https://systemslibrarian.github.io/crypto-lab-dkg-gate/",
+      note: "Pedersen/GJKR dealerless key generation where n parties Feldman-deal to each other, complaints disqualify cheating dealers, and the sharings sum into a t-of-n key nobody held.",
     },
   ],
   pedersen_vss: [
@@ -961,6 +1021,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-protocol-compose/",
       note: "Composability failure modes and safe protocol-combination patterns.",
     },
+    {
+      title: "Card Trick",
+      url: "https://systemslibrarian.github.io/crypto-lab-card-trick/",
+      note: "den Boer's five-card trick: two players compute the AND of their secret bits from a shuffle alone, with information-theoretic security no computing power can buy through.",
+    },
   ],
   ot_base: [
     {
@@ -986,6 +1051,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "ORAM Vault",
       url: "https://systemslibrarian.github.io/crypto-lab-oram-vault/",
       note: "Access-pattern privacy walkthrough showing where PIR and ORAM solve different leakage problems.",
+    },
+    {
+      title: "Search Vault",
+      url: "https://systemslibrarian.github.io/crypto-lab-search-vault/",
+      note: "An encrypted inverted index the server searches without a key, then the count and IKK leakage-abuse attacks turn the observed access pattern back into the queries.",
     },
   ],
   it_pir: [
@@ -1035,6 +1105,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-rsa-educational/",
       note: "Textbook RSA key generation, encryption, and signatures on small numbers, factoring a weak key and contrasting deterministic textbook ciphertext with RSA-OAEP.",
     },
+    {
+      title: "Accumulator",
+      url: "https://systemslibrarian.github.io/crypto-lab-accumulator/",
+      note: "An RSA accumulator committing a growing set to one fixed-size digest, with short membership and non-membership witnesses under strong RSA and a trapdoor forgery.",
+    },
   ],
   rsa_oaep_4096: [
     {
@@ -1074,6 +1149,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Shamir vs FROST",
       url: "https://systemslibrarian.github.io/crypto-lab-shamir-vs-frost/",
       note: "Compares FROST threshold Schnorr signing against Shamir secret sharing, showing the signing key never exists on any single machine.",
+    },
+    {
+      title: "Icy DVRF",
+      url: "https://systemslibrarian.github.io/crypto-lab-icy-dvrf/",
+      note: "A t-of-n distributed VRF whose partial evaluations are proven with Chaum-Pedersen DLEQ under one shared challenge, aggregating to a constant-size 128-byte proof.",
     },
   ],
   gg20: [
@@ -1181,6 +1261,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-threshold-decrypt/",
       note: "Distributed decryption and share-combination mechanics for MPC systems.",
     },
+    {
+      title: "DP Noise",
+      url: "https://systemslibrarian.github.io/crypto-lab-dp-noise/",
+      note: "Laplace and Gaussian differential-privacy mechanisms over a twelve-person payroll, protecting the released statistic the way MPC protects the inputs, until the budget runs out.",
+    },
   ],
   bls12_381_curve: [
     {
@@ -1197,6 +1282,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "IBE Gate",
       url: "https://systemslibrarian.github.io/crypto-lab-ibe-gate/",
       note: "Identity-based encryption walkthrough rooted in pairing-based public-key constructions.",
+    },
+    {
+      title: "Beacon Lock",
+      url: "https://systemslibrarian.github.io/crypto-lab-beacon-lock/",
+      note: "Timelock encryption to a future drand round, where the beacon's BLS12-381 signature becomes the Boneh-Franklin IBE decryption key — a clock in place of an authority.",
     },
   ],
   bls_threshold: [
