@@ -42,12 +42,39 @@ jobs:
             const fs = require('fs');
             const report = JSON.parse(fs.readFileSync('demo-sync-report.json', 'utf8'));
 
+            const label = 'demo-sync';
+
             if (!report.hasIssues) {
+              // Sync restored. Close whatever drift issue a previous red run
+              // opened: this branch used to just return, so the issue stayed
+              // open forever and every later green run left it standing.
+              const { data: staleIssues } = await github.rest.issues.listForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: label,
+                state: 'open',
+              });
+
+              for (const issue of staleIssues) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: `Demo catalog is back in sync as of ${report.generatedAt}: ${report.summary.localSlugCount} local slugs against ${report.summary.liveSlugCount} live. Closing automatically.`,
+                });
+                await github.rest.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  state: 'closed',
+                  state_reason: 'completed',
+                });
+                console.log(`Closed stale drift issue #${issue.number}`);
+              }
+
               console.log('Demo catalog is in sync — no issue needed.');
               return;
             }
-
-            const label = 'demo-sync';
 
             // Ensure label exists
             try {

@@ -30,6 +30,21 @@ Thanks for your interest. This is a solo project, but pull requests and issues a
 4. Run checks: `npm run type-check && npm run test && npm run lint && npm run build`
 5. Open a PR with a clear description of what changed and why
 
+### Commit Messages
+
+Never put `[skip ci]` in a commit message. GitHub acts on that marker before any
+workflow is evaluated, so it suppresses the entire push -- the Pages deploy
+included. In August 2026 five workflow-only commits carrying it left the site
+undeployed, and because the legacy Jekyll builder ignores the marker, GitHub
+quietly republished the README in place of the app.
+
+To skip the test gate on a commit that cannot affect the build, use `[skip
+tests]` instead. Only `ci.yml` honours it, and only on pushes to `main`; the
+deploy still runs and pull requests always run the full gate.
+
+Note that GitHub matches `[skip ci]` anywhere in the message, including inside
+prose -- writing "no `[skip ci]` here" is enough to trigger it.
+
 ## Data Standards
 
 When adding or modifying algorithm data:

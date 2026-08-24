@@ -8,6 +8,17 @@ on:
 
 jobs:
   build:
+    # Repo-level test skip, deliberately NOT GitHub's `[skip ci]`. That marker is
+    # honoured by GitHub before any workflow is evaluated, so it suppresses the
+    # whole push -- including pages.yml. Five workflow-only commits carrying it
+    # left the site undeployed from 2026-08-19 while the legacy Jekyll builder,
+    # which ignores the marker, kept republishing the README over the app.
+    # `[skip tests]` skips only this gate; the deploy always runs.
+    # e2e and lighthouse `needs: build`, so skipping here cascades to them.
+    # Pull requests never skip -- dependabot-auto-merge depends on this gate.
+    if: >-
+      github.event_name != 'push' ||
+      !contains(github.event.head_commit.message, '[skip tests]')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

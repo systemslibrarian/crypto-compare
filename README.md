@@ -268,7 +268,7 @@ The project is grounded in:
 - academic papers and cryptanalysis literature
 - deployment evidence from major protocol and library ecosystems
 
-See [docs/data-sources.md](/workspaces/crypto-compare/docs/data-sources.md) and [src/data/provenance.ts](/workspaces/crypto-compare/src/data/provenance.ts) for the source backbone.
+See [docs/data-sources.md](docs/data-sources.md) and [src/data/provenance.ts](src/data/provenance.ts) for the source backbone.
 
 ### Where Reasonable Experts May Disagree
 
@@ -396,14 +396,14 @@ src/
 
 High-value files:
 
-- [src/components/CryptoCompare.tsx](/workspaces/crypto-compare/src/components/CryptoCompare.tsx)
-- [src/components/DecisionFlowchart.tsx](/workspaces/crypto-compare/src/components/DecisionFlowchart.tsx)
-- [src/components/UseCaseGuide.tsx](/workspaces/crypto-compare/src/components/UseCaseGuide.tsx)
-- [src/components/SafeUsage.tsx](/workspaces/crypto-compare/src/components/SafeUsage.tsx)
-- [src/components/ReferenceArchitectures.tsx](/workspaces/crypto-compare/src/components/ReferenceArchitectures.tsx)
-- [src/components/DesignPhilosophy.tsx](/workspaces/crypto-compare/src/components/DesignPhilosophy.tsx)
-- [src/data/algorithms.ts](/workspaces/crypto-compare/src/data/algorithms.ts)
-- [src/data/provenance.ts](/workspaces/crypto-compare/src/data/provenance.ts)
+- [src/components/CryptoCompare.tsx](src/components/CryptoCompare.tsx)
+- [src/components/DecisionFlowchart.tsx](src/components/DecisionFlowchart.tsx)
+- [src/components/UseCaseGuide.tsx](src/components/UseCaseGuide.tsx)
+- [src/components/SafeUsage.tsx](src/components/SafeUsage.tsx)
+- [src/components/ReferenceArchitectures.tsx](src/components/ReferenceArchitectures.tsx)
+- [src/components/DesignPhilosophy.tsx](src/components/DesignPhilosophy.tsx)
+- [src/data/algorithms.ts](src/data/algorithms.ts)
+- [src/data/provenance.ts](src/data/provenance.ts)
 
 ---
 
@@ -412,7 +412,7 @@ High-value files:
 Each category in the app links to working demo projects that illustrate the cryptographic concepts in practice.
 
 - Full live crypto-lab index: [crypto-lab.systemslibrarian.dev](https://crypto-lab.systemslibrarian.dev/)
-- App mapping source of truth: [src/data/demoResources.ts](/workspaces/crypto-compare/src/data/demoResources.ts)
+- App mapping source of truth: [src/data/demoResources.ts](src/data/demoResources.ts)
 - Current mapped crypto-lab demos: **178** unique slugs (kept in sync with the live crypto-lab catalog)
 
 The list below is representative rather than exhaustive.
@@ -461,7 +461,7 @@ The list below is representative rather than exhaustive.
 
 ## Contributing
 
-See [CONTRIBUTING.md](/workspaces/crypto-compare/CONTRIBUTING.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
