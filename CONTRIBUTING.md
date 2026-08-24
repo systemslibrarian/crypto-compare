@@ -38,12 +38,19 @@ included. In August 2026 five workflow-only commits carrying it left the site
 undeployed, and because the legacy Jekyll builder ignores the marker, GitHub
 quietly republished the README in place of the app.
 
-To skip the test gate on a commit that cannot affect the build, use `[skip
-tests]` instead. Only `ci.yml` honours it, and only on pushes to `main`; the
-deploy still runs and pull requests always run the full gate.
+To skip the test gate on a commit that cannot affect the build, open the subject
+line with `[skip tests]`:
 
-Note that GitHub matches `[skip ci]` anywhere in the message, including inside
-prose -- writing "no `[skip ci]` here" is enough to trigger it.
+    [skip tests] Retitle the deploy workflow
+
+Only `ci.yml` honours it, and only on pushes to `main`; the deploy still runs
+and pull requests always run the full gate.
+
+The marker must start the subject line -- `ci.yml` matches it with `startsWith`
+precisely so that discussing it in a commit body does not trigger it. GitHub's
+own `[skip ci]` has no such guard: it matches anywhere in the message, so even
+writing "no `[skip ci]` here" suppresses the push. Both traps have bitten this
+repo once each.
 
 ## Data Standards
 

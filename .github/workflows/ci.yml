@@ -14,11 +14,14 @@ jobs:
     # left the site undeployed from 2026-08-19 while the legacy Jekyll builder,
     # which ignores the marker, kept republishing the README over the app.
     # `[skip tests]` skips only this gate; the deploy always runs.
+    # startsWith, not contains: the marker must open the subject line. contains
+    # matches anywhere, so merely naming the marker in a commit body fires it --
+    # the exact trap that made e338d8a skip its own gate.
     # e2e and lighthouse `needs: build`, so skipping here cascades to them.
     # Pull requests never skip -- dependabot-auto-merge depends on this gate.
     if: >-
       github.event_name != 'push' ||
-      !contains(github.event.head_commit.message, '[skip tests]')
+      !startsWith(github.event.head_commit.message, '[skip tests]')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
