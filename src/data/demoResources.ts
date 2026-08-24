@@ -91,6 +91,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-matsui-line/",
       note: "Matsui's Algorithm 2 linear cryptanalysis of a toy SPN, counting bias in known-plaintext traffic until one subkey candidate separates and the piling-up lemma's prediction misses.",
     },
+    {
+      title: "Regex Veil — FTE",
+      url: "https://systemslibrarian.github.io/crypto-lab-fte/",
+      note: "Format-transforming encryption: compiles a regex to a minimal DFA, counts its length-n language exactly, and enciphers AES-256-CTR bytes into that slice with FF1 — plus the substitution attack proving nothing is authenticated.",
+    },
   ],
   chacha20poly: [
     {
@@ -284,6 +289,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-time-trust/",
       note: "Drives real Ed25519 certificate and token verification from one movable clock, showing which security decisions silently depend on time — an input a signature cannot authenticate — while the signature itself verifies at every clock position.",
     },
+    {
+      title: "Context Ward",
+      url: "https://systemslibrarian.github.io/crypto-lab-context-ward/",
+      note: "Ed25519 tool-call attestations over a sealed agent context window — every signature verifies while injected content still steers the agent.",
+    },
   ],
   p256: [
     {
@@ -305,6 +315,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Chain of Trust",
       url: "https://systemslibrarian.github.io/crypto-lab-chain-of-trust/",
       note: "Builds and validates X.509 chains by hand on a cross-signed ECDSA P-256 hierarchy, showing that path building and RFC 5280 path validation are different problems and that cryptographically valid signatures can still be correctly rejected.",
+    },
+    {
+      title: "Token Tell",
+      url: "https://systemslibrarian.github.io/crypto-lab-token-tell/",
+      note: "Runs the real SynthID-Text keyed detector over watermarked text, then signs the same words with ECDSA P-256: change only the key and the statistical evidence vanishes; change one byte and verification fails outright.",
     },
   ],
   secp256k1: [
@@ -698,6 +713,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-merkle-proofs/",
       note: "Builds Merkle trees on SHA-256, generates inclusion proofs, and replays the RFC 6962 second-preimage and CVE-2012-2459 attacks with domain-separation defenses.",
     },
+    {
+      title: "Context Ward",
+      url: "https://systemslibrarian.github.io/crypto-lab-context-ward/",
+      note: "Seals an agent context window into a SHA-256 hash chain, then shows injected content passing every integrity check while the agent stays compromised anyway.",
+    },
   ],
   sha512: [
     {
@@ -722,6 +742,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-collision-vault/",
       note: "Demonstrates MD5/SHA-1 collision pairs and shows the SHA-3 sponge construction resisting the same identical- and chosen-prefix attacks.",
     },
+    {
+      title: "KMAC Gate",
+      url: "https://systemslibrarian.github.io/crypto-lab-kmac-gate/",
+      note: "SHA3-256, SHAKE, cSHAKE and KMAC driven by one hand-rolled Keccak-f[1600] permutation — step the sponge block by block, then tamper with a signed message and watch the real verifier reject it.",
+    },
   ],
   blake2b: [
     {
@@ -742,6 +767,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "KDF Chain",
       url: "https://systemslibrarian.github.io/crypto-lab-kdf-chain/",
       note: "Derivation-chain demo for context binding, domain separation, and key expansion.",
+    },
+    {
+      title: "Context Ward",
+      url: "https://systemslibrarian.github.io/crypto-lab-context-ward/",
+      note: "HKDF role separation deriving per-role seal keys for an agent context window sealed into a SHA-256 hash chain.",
     },
   ],
   argon2_kdf: [
@@ -797,6 +827,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Time Trust",
       url: "https://systemslibrarian.github.io/crypto-lab-time-trust/",
       note: "Movable-clock lab where valid HMAC-SHA-256 JWTs and RFC 6238 TOTP codes are accepted or rejected purely by the verifier's clock, demonstrating split-brain expiry, replay windows, and rolled-back-clock credential resurrection.",
+    },
+    {
+      title: "Context Ward",
+      url: "https://systemslibrarian.github.io/crypto-lab-context-ward/",
+      note: "Role-separated HMAC-SHA-256 seals over an agent context window: each role gets its own key, and every seal still verifies on injected content.",
     },
   ],
   cmac_aes: [
