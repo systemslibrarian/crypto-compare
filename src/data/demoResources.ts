@@ -96,6 +96,21 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-fte/",
       note: "Format-transforming encryption: compiles a regex to a minimal DFA, counts its length-n language exactly, and enciphers AES-256-CTR bytes into that slice with FF1 — plus the substitution attack proving nothing is authenticated.",
     },
+    {
+      title: "Feistel Forge",
+      url: "https://systemslibrarian.github.io/crypto-lab-feistel-forge/",
+      note: "Real DES stepped round by round to show a Feistel round function need not be invertible, plus 2DES meet-in-the-middle and a Sweet32 birthday collision.",
+    },
+    {
+      title: "Masked Core",
+      url: "https://systemslibrarian.github.io/crypto-lab-masked-core/",
+      note: "First-order Boolean masking of AES-128 flattens CPA, then a second-order centred product recovers the key byte anyway.",
+    },
+    {
+      title: "Sector Vault",
+      url: "https://systemslibrarian.github.io/crypto-lab-sector-vault/",
+      note: "XTS-AES as full-disk encryption actually uses it, and the three attacks it silently returns plaintext for — then AES-GCM added to show which two that stops.",
+    },
   ],
   chacha20poly: [
     {
@@ -237,6 +252,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-isogeny-atlas/",
       note: "Supersingular isogeny graph over GF(431²) computed live from modular polynomials, mapping the open problems of isogeny crypto as paths, cycles, and endomorphisms.",
     },
+    {
+      title: "Sphinx Mix",
+      url: "https://systemslibrarian.github.io/crypto-lab-sphinx-mix/",
+      note: "Sphinx mix-network packets over ristretto255 — per-hop blinding, a fixed-length header, a LIONESS payload — then traffic analysis that traces a sender anyway.",
+    },
   ],
   ed25519: [
     {
@@ -294,6 +314,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-context-ward/",
       note: "Ed25519 tool-call attestations over a sealed agent context window — every signature verifies while injected content still steers the agent.",
     },
+    {
+      title: "DNSSEC Chain",
+      url: "https://systemslibrarian.github.io/crypto-lab-dnssec-chain/",
+      note: "DNSSEC algorithm 15 (Ed25519) verification, using RFC 8080's Errata 4935 text because the published Section 6 examples do not check out.",
+    },
   ],
   p256: [
     {
@@ -320,6 +345,16 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Token Tell",
       url: "https://systemslibrarian.github.io/crypto-lab-token-tell/",
       note: "Runs the real SynthID-Text keyed detector over watermarked text, then signs the same words with ECDSA P-256: change only the key and the statistical evidence vanishes; change one byte and verification fails outright.",
+    },
+    {
+      title: "DNSSEC Chain",
+      url: "https://systemslibrarian.github.io/crypto-lab-dnssec-chain/",
+      note: "ECDSAP256SHA256 validation across a real captured DNSSEC chain from the IANA root anchor, plus NSEC3 zone walking.",
+    },
+    {
+      title: "Attestation Gate",
+      url: "https://systemslibrarian.github.io/crypto-lab-attestation-gate/",
+      note: "TPM quote signatures as ECDSA P-256, deterministic per RFC 6979, with restricted-key TPM_RC_TICKET enforcement and RATS/EAT appraisal.",
     },
   ],
   secp256k1: [
@@ -718,6 +753,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-context-ward/",
       note: "Seals an agent context window into a SHA-256 hash chain, then shows injected content passing every integrity check while the agent stays compromised anyway.",
     },
+    {
+      title: "Attestation Gate",
+      url: "https://systemslibrarian.github.io/crypto-lab-attestation-gate/",
+      note: "PCR extension as PCR_new = H(PCR_old || measurement) over a hand-rolled SHA-256, showing the exact 64-byte preimage each measurement hashes.",
+    },
   ],
   sha512: [
     {
@@ -974,6 +1014,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-fhe-arena/",
       note: "Compares bootstrapping-heavy and leveled FHE workflows on practical tasks.",
     },
+    {
+      title: "Shelf Oracle",
+      url: "https://systemslibrarian.github.io/crypto-lab-shelf-oracle/",
+      note: "Hand-rolled BFV over Z_q[X]/(X^n+1) driving single-server PIR, with parameters checked against the HomomorphicEncryption.org 128-bit row and a noise budget you can exhaust.",
+    },
   ],
   ckks: [
     {
@@ -1010,6 +1055,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-zk-arena/",
       note: "Side-by-side comparison of zk-SNARK and zk-STARK proof systems, contrasting PLONK's universal setup with transparent STARKs.",
     },
+    {
+      title: "Polynomial Forge",
+      url: "https://systemslibrarian.github.io/crypto-lab-polynomial-forge/",
+      note: "KZG on BLS12-381 with a real multi-party powers-of-tau ceremony, a toxic-waste forgery that passes the transcript audit, and an unenforced degree bound.",
+    },
   ],
   zk_stark: [
     {
@@ -1021,6 +1071,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "ZK Arena",
       url: "https://systemslibrarian.github.io/crypto-lab-zk-arena/",
       note: "Side-by-side comparison of zk-SNARK and zk-STARK proof systems, weighing transparent STARKs against trusted-setup SNARKs.",
+    },
+    {
+      title: "Polynomial Forge",
+      url: "https://systemslibrarian.github.io/crypto-lab-polynomial-forge/",
+      note: "FRI with a DEEP quotient and SHA-256 Merkle commitments, measured against KZG and IPA on the same polynomial.",
     },
   ],
   bulletproofs: [
@@ -1043,6 +1098,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Commit Gate",
       url: "https://systemslibrarian.github.io/crypto-lab-commit-gate/",
       note: "Commitment scheme semantics and binding/hiding tradeoffs in protocol design.",
+    },
+    {
+      title: "Polynomial Forge",
+      url: "https://systemslibrarian.github.io/crypto-lab-polynomial-forge/",
+      note: "IPA in the Bulletproofs/Halo form — log2(n) folding rounds — compared with KZG and FRI for setup type, proof size and verifier cost.",
     },
   ],
   garbled_circuits: [
@@ -1092,6 +1152,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-search-vault/",
       note: "An encrypted inverted index the server searches without a key, then the count and IKK leakage-abuse attacks turn the observed access pattern back into the queries.",
     },
+    {
+      title: "Shelf Oracle",
+      url: "https://systemslibrarian.github.io/crypto-lab-shelf-oracle/",
+      note: "Single-server computational PIR in the SealPIR one-hot form: a BFV-encrypted selection vector, one plaintext-by-ciphertext multiply per record, and a measured noise budget.",
+    },
   ],
   it_pir: [
     {
@@ -1117,6 +1182,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "ElGamal Plain",
       url: "https://systemslibrarian.github.io/crypto-lab-elgamal-plain/",
       note: "Public-key encryption walkthrough for multiplicative homomorphism and ciphertext expansion tradeoffs.",
+    },
+    {
+      title: "Rekey Relay",
+      url: "https://systemslibrarian.github.io/crypto-lab-rekey-relay/",
+      note: "BBS98 proxy re-encryption is ElGamal with the ciphertext components swapped — shown here beside AFGH on the same curve.",
     },
   ],
   rsa_oaep_2048: [
@@ -1322,6 +1392,16 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Beacon Lock",
       url: "https://systemslibrarian.github.io/crypto-lab-beacon-lock/",
       note: "Timelock encryption to a future drand round, where the beacon's BLS12-381 signature becomes the Boneh-Franklin IBE decryption key — a clock in place of an authority.",
+    },
+    {
+      title: "Rekey Relay",
+      url: "https://systemslibrarian.github.io/crypto-lab-rekey-relay/",
+      note: "Proxy re-encryption over BLS12-381: BBS98 against AFGH, where the older scheme lets the relay and delegatee recover the delegator's key in one modular division.",
+    },
+    {
+      title: "Attribute Gate",
+      url: "https://systemslibrarian.github.io/crypto-lab-attribute-gate/",
+      note: "FAME CP-ABE over BLS12-381 pairings, with a collusion attempt that splices two real keys and shows the term that refuses to cancel.",
     },
   ],
   bls_threshold: [
