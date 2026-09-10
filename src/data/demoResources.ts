@@ -507,6 +507,16 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-ablation-wire/",
       note: "A layered protocol built on X-Wing (X25519 + ML-KEM-768) and AES-256-GCM with every layer independently switchable, so turning one off shows which was load-bearing.",
     },
+    {
+      title: "Lattice Builder",
+      url: "https://systemslibrarian.github.io/crypto-lab-lattice-builder/",
+      note: "Two dials straighten a scrambled lattice until its shortest vector is readable by eye, then a real Module-LWE instance with ML-KEM's shape shows that guessing seven of eight secret coefficients leaves an error no smaller than guessing none.",
+    },
+    {
+      title: "GGH Trapdoor",
+      url: "https://systemslibrarian.github.io/crypto-lab-ggh-trapdoor/",
+      note: "A lattice trapdoor is a good basis, and Nguyen's mod-2 sigma reduction breaks GGH because every error entry shares one residue — the structure ML-KEM's centered-binomial errors do not have.",
+    },
   ],
   mlkem1024: [
     {
@@ -674,6 +684,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "HAWK",
       url: "https://systemslibrarian.github.io/crypto-lab-hawk/",
       note: "Alternative post-quantum signature lab for compact-signature tradeoffs and deployment comparisons.",
+    },
+    {
+      title: "GGH Trapdoor",
+      url: "https://systemslibrarian.github.io/crypto-lab-ggh-trapdoor/",
+      note: "The Nguyen-Regev parallelepiped-learning attack recovering a secret basis from deterministic Babai signatures, which is why Falcon samples its signatures instead of rounding them.",
     },
   ],
   slh_dsa: [
@@ -1215,6 +1230,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-accumulator/",
       note: "An RSA accumulator committing a growing set to one fixed-size digest, with short membership and non-membership witnesses under strong RSA and a trapdoor forgery.",
     },
+    {
+      title: "Factor Forge",
+      url: "https://systemslibrarian.github.io/crypto-lab-factor-forge/",
+      note: "Seven classical factoring methods on a real BigInt modulus, each waiting for a different key-generation mistake — a small factor, a narrow |p - q|, a smooth p-1 or p+1 — with every claimed factor multiplied back and primality-tested before it is shown.",
+    },
   ],
   rsa_oaep_4096: [
     {
@@ -1222,12 +1242,22 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-rsa-forge/",
       note: "RSA encryption/signature behavior, padding pitfalls, and parameter intuition.",
     },
+    {
+      title: "Factor Forge",
+      url: "https://systemslibrarian.github.io/crypto-lab-factor-forge/",
+      note: "The quadratic sieve is the method no key-generation rule closes: it exploits nothing about p or q, so the only thing that raises its cost is the size of the modulus.",
+    },
   ],
   lsb_stego: [
     {
       title: "Stego Suite",
       url: "https://systemslibrarian.github.io/crypto-lab-stego-suite/",
       note: "Steganography tradeoffs, payload limits, and detection-risk intuition.",
+    },
+    {
+      title: "Covert Channel Studio",
+      url: "https://systemslibrarian.github.io/crypto-lab-covert-channel-studio/",
+      note: "LSB image embedding with a bit-plane view and the chi-square steganalysis attack, set beside ten other carriers for the same bits — DNS labels, ICMP echoes, timing gaps, packet order, cache lines — each scored by a cited detector.",
     },
   ],
   dct_f5: [
