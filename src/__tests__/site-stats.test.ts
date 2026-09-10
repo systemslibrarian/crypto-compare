@@ -19,6 +19,10 @@
  *   5. README.md                 hero line
  *   6. README.md                 "What you can do" rows and the mapped count
  *
+ * and three more of the same shape found while fixing those: README.md's "Why
+ * Trust This" coverage row, package.json's description, and the "17 categories"
+ * typed beside a derived algorithm count in AboutView.
+ *
  * On public/og.png: the strong form would be regenerating the card to a temp
  * path and diffing it against the committed bytes. That check is not available
  * here — sharp rasterizes the SVG's text through the host font stack, so the
@@ -45,7 +49,7 @@ import { ALGORITHM_DEMOS } from "@/data/demoResources";
 import { extractLocalSlugs } from "@/lib/demoSync";
 import { buildOgSvg, OG_STATS_KEYWORD } from "@/lib/ogCard";
 import { readPngTextChunk, withPngTextChunk } from "@/lib/pngText";
-import { applyStatRules, README_STAT_RULES } from "@/lib/statsSync";
+import { applyStatRules, README_STAT_RULES, STAT_TARGETS } from "@/lib/statsSync";
 import {
   ALGORITHM_COUNT,
   CATEGORY_COUNT,
@@ -127,10 +131,12 @@ describe("headline stats are derived from one constant", () => {
     expect(svg).toContain(`${LINKED_LAB_COUNT} linked labs`);
   });
 
-  // 5 + 6. README.md, whose literals are written by scripts/sync-stats.ts
-  it("keeps every generated README literal in sync", () => {
-    const { drift } = applyStatRules(read("README.md"));
-    expect(drift, `Run: npm run sync:stats\n${drift.join("\n")}`).toEqual([]);
+  // 5 + 6. README.md (and package.json), written by scripts/sync-stats.ts
+  it("keeps every generated literal in sync", () => {
+    for (const target of STAT_TARGETS) {
+      const { drift } = applyStatRules(read(target.path), target.rules);
+      expect(drift, `${target.path} is stale — run: npm run sync:stats\n${drift.join("\n")}`).toEqual([]);
+    }
   });
 
   it("covers the README's hero line, both table rows, and the mapped count", () => {
@@ -140,8 +146,10 @@ describe("headline stats are derived from one constant", () => {
       "README.md hero line",
       'README.md "Browse by category" row',
       'README.md "Explore linked demo projects" row',
+      'README.md "Why Trust This" coverage row',
       "README.md mapped crypto-lab demo count",
     ]);
+    expect(STAT_TARGETS.map((target) => target.path)).toEqual(["README.md", "package.json"]);
 
     const readme = read("README.md");
     expect(readme).toContain(`${ALGORITHM_COUNT} algorithms. ${CATEGORY_COUNT} categories. ${LINKED_LAB_COUNT} unique linked public demos.`);
@@ -156,6 +164,7 @@ describe("no headline count is typed back in", () => {
   // chain fails even when it happens to be today's correct value.
   const sources: [string, RegExp[]][] = [
     ["src/app/labs/page.tsx", [/\d+ hands-on/]],
+    ["src/components/AboutView.tsx", [/\d+ categories/, /\d+ cryptographic algorithms/]],
     ["src/app/layout.tsx", [/\d+ linked labs/, /\d+ algorithms/, /\d+ categories/, /alt: "/]],
     ["src/lib/ogCard.ts", [/\d+ linked labs/, /\d+ algorithms/, /\d+ categories/]],
     ["scripts/generate-og.ts", [/\d+ linked labs/, /\d+ algorithms/]],

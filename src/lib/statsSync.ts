@@ -15,6 +15,8 @@
  * back to being an unchecked one.
  */
 import {
+  ALGORITHM_COUNT,
+  CATEGORY_COUNT,
   README_BROWSE_ROW,
   README_DEMOS_ROW,
   README_HERO_STATS,
@@ -47,10 +49,33 @@ export const README_STAT_RULES: StatRule[] = [
     replacement: README_DEMOS_ROW,
   },
   {
+    name: 'README.md "Why Trust This" coverage row',
+    pattern: /\d+ algorithms across \d+ categories/,
+    replacement: `${ALGORITHM_COUNT} algorithms across ${CATEGORY_COUNT} categories`,
+  },
+  {
     name: "README.md mapped crypto-lab demo count",
     pattern: /Current mapped crypto-lab demos: \*\*\d+\*\*/,
     replacement: README_MAPPED_DEMOS,
   },
+];
+
+/**
+ * package.json's `description` is npm metadata rather than page copy, but it is
+ * the same defect: two counts typed into a file no reader ever re-derives.
+ */
+export const PACKAGE_JSON_STAT_RULES: StatRule[] = [
+  {
+    name: "package.json description",
+    pattern: /\d+ categories, \d+ algorithms/,
+    replacement: `${CATEGORY_COUNT} categories, ${ALGORITHM_COUNT} algorithms`,
+  },
+];
+
+/** Every file whose stat literals are written rather than typed. */
+export const STAT_TARGETS: { path: string; rules: StatRule[] }[] = [
+  { path: "README.md", rules: README_STAT_RULES },
+  { path: "package.json", rules: PACKAGE_JSON_STAT_RULES },
 ];
 
 export type StatSyncResult = {

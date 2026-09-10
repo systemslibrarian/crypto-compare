@@ -6,6 +6,7 @@ import { ALGORITHMS } from "@/data/algorithms";
 import { withProvenance } from "@/lib/dataset";
 import { formatReviewDate } from "@/components/ui";
 import { DATASET_VERSION } from "@/lib/datasetVersion";
+import { ALGORITHM_COUNT, CATEGORY_COUNT } from "@/lib/siteStats";
 
 const snapshot = summarizeReviewWindow(withProvenance(ALGORITHMS));
 
@@ -94,7 +95,7 @@ export default function AboutView() {
           <Section title="What it is">
             <p>
               crypto::compare is a curated, side-by-side reference for{" "}
-              <strong>{ALGORITHMS.length} cryptographic algorithms</strong> across 17 categories — symmetric encryption,
+              <strong>{ALGORITHM_COUNT} cryptographic algorithms</strong> across {CATEGORY_COUNT} categories — symmetric encryption,
               KEMs, signatures, hashes, KDFs, MACs, threshold and multi-party schemes, and more. Every entry carries
               security estimates, recommendation level, known attacks, deployment notes, and primary-source citations.
               It pairs with companion tools: an algorithm <Link href="/advisor" style={linkStyle}>advisor</Link>,{" "}
