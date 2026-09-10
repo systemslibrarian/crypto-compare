@@ -2,7 +2,7 @@
 
 **Cryptographic algorithm decision system for engineers, architects, and technical decision-makers.**
 
-97 algorithms. 17 categories. 123 unique linked public demos. Sourced recommendations. Safe-usage guidance. Reference architectures. Post-quantum migration context.
+97 algorithms. 17 categories. 192 unique linked public demos. Sourced recommendations. Safe-usage guidance. Reference architectures. Post-quantum migration context.
 
 🌐 **[Live Site →](https://crypto-compare.systemslibrarian.dev/)**
 
@@ -304,7 +304,7 @@ That honesty is part of the trust model, not a weakness in spite of it.
 | **Download justification reports** | Markdown output for architecture reviews and design discussion |
 | **Filter and sort** | PQ-safe, standards-track, NIST status, deployment, origin, size, and security dimensions |
 | **Review hybrid patterns** | Classical-plus-PQ constructions for practical migration planning |
-| **Explore linked demo projects** | 123 unique linked public demos across the mapped categories, with per-category project context in the explainer panels |
+| **Explore linked demo projects** | 192 unique linked public demos across the mapped categories, with per-category project context in the explainer panels |
 | **Read safety and architecture guidance** | Use-case content, pitfalls, library direction, and system-level flows |
 
 ### Coverage Snapshot
@@ -372,7 +372,10 @@ Open <http://localhost:3000>.
 | `npm run check:demos` | Compare local demo mappings to the live crypto-lab catalog |
 | `npm run check:demos:json` | Output demo sync report as JSON for automation |
 | `npm run check:demos:report` | Write demo sync JSON report to demo-sync-report.json |
-| `npm run validate:full` | Run dataset validation plus strict live demo sync check |
+| `npm run validate:full` | Run dataset validation, strict live demo sync, and the generated-stats check |
+| `npm run sync:stats` | Rewrite this README's headline counts from `src/lib/siteStats.ts` |
+| `npm run check:stats` | Report drift in those counts and exit non-zero (writes nothing) |
+| `npm run generate:og` | Re-rasterize `public/og.png` from the current counts |
 
 Offline audit option:
 Run `npx tsx scripts/check-demo-sync.ts --live-html-path=/tmp/crypto-lab.html --strict` to compare against a saved catalog snapshot.

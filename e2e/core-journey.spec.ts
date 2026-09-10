@@ -37,6 +37,30 @@ test.describe("crypto::compare core journeys", () => {
     ).toBeVisible();
   });
 
+  // The shipped-HTML half of the frozen-snapshot guard. src/__tests__/site-stats.test.ts
+  // proves the sources all read one constant; this proves the exported page a
+  // crawler sees does not contradict itself. It shipped saying "123 hands-on
+  // crypto-lab demos" in <meta name="description"> and "192 hands-on crypto-lab
+  // demos" in the body of the very same document, 69 apart.
+  test("labs head and body state the same demo count", async ({ page }) => {
+    await page.goto("/labs/");
+
+    const count = (text: string | null, pattern: RegExp) => {
+      const match = text?.match(pattern);
+      expect(match, `expected ${pattern} in: ${text}`).not.toBeNull();
+      return Number.parseInt(match![1], 10);
+    };
+
+    const description = await page.locator('meta[name="description"]').getAttribute("content");
+    const alt = await page.locator('meta[property="og:image:alt"]').getAttribute("content");
+    const body = await page.getByText(/hands-on crypto-lab demos linked/).first().textContent();
+
+    const rendered = count(body, /(\d+) hands-on/);
+    expect(rendered).toBeGreaterThan(0);
+    expect(count(description, /(\d+) hands-on/)).toBe(rendered);
+    expect(count(alt, /(\d+) linked labs/)).toBe(rendered);
+  });
+
   test("serves robots.txt and sitemap.xml", async ({ request }) => {
     const robots = await request.get("/robots.txt");
     expect(robots.ok()).toBeTruthy();

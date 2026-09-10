@@ -20,7 +20,10 @@
     "check:demos:json": "tsx scripts/check-demo-sync.ts --json",
     "check:demos:report": "tsx scripts/check-demo-sync.ts --json --report-path=demo-sync-report.json",
     "validate": "tsx scripts/validate-data.ts",
-    "validate:full": "npm run validate && npm run check:demos:strict",
+    "generate:og": "tsx scripts/generate-og.ts",
+    "sync:stats": "tsx scripts/sync-stats.ts",
+    "check:stats": "tsx scripts/sync-stats.ts --check",
+    "validate:full": "npm run validate && npm run check:demos:strict && npm run check:stats",
     "refresh": "tsx scripts/refresh-data.ts"
   },
   "dependencies": {

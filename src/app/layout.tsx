@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Mono, Fraunces } from "next/font/google";
 import "./globals.css";
+import { OG_ALGORITHM_LABEL, OG_CATEGORY_LABEL, OG_IMAGE_ALT } from "@/lib/siteStats";
 
 // Design language ported from the sibling reference site crypto-lab:
 // DM Mono for body/UI/labels, Fraunces (serif) for display headings.
@@ -21,8 +22,7 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   title: "crypto::compare — Cryptographic Algorithm Reference",
-  description:
-    "Choose cryptography with evidence, tradeoffs, and safe defaults. 97 algorithms · 17 categories · real-world recommendations · implementation maps · architecture checklists.",
+  description: `Choose cryptography with evidence, tradeoffs, and safe defaults. ${OG_ALGORITHM_LABEL} · ${OG_CATEGORY_LABEL} · real-world recommendations · implementation maps · architecture checklists.`,
   keywords: ["cryptography", "post-quantum", "NIST", "ML-KEM", "ML-DSA", "AES", "ChaCha20", "SHA-3", "Argon2", "algorithm comparison", "PQC", "lattice", "hash-based", "KEM", "digital signatures"],
   robots: { index: true, follow: true },
   authors: [{ name: "crypto::compare contributors" }],
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
   openGraph: {
     title: "crypto::compare — Cryptographic Algorithm Reference",
-    description: "Choose cryptography with evidence, tradeoffs, and safe defaults. 97 algorithms · 17 categories · real-world recommendations.",
+    description: `Choose cryptography with evidence, tradeoffs, and safe defaults. ${OG_ALGORITHM_LABEL} · ${OG_CATEGORY_LABEL} · real-world recommendations.`,
     url: "/",
     type: "website",
     siteName: "crypto::compare",
@@ -41,14 +41,14 @@ export const metadata: Metadata = {
         url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "crypto::compare — Cryptographic Algorithm Reference. 97 algorithms, 17 categories, 123 linked labs.",
+        alt: OG_IMAGE_ALT,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title: "crypto::compare",
-    description: "Cryptographic algorithm reference — 97 algorithms, 17 categories, safe defaults, implementation maps, and architecture checklists.",
+    description: `Cryptographic algorithm reference — ${OG_ALGORITHM_LABEL}, ${OG_CATEGORY_LABEL}, safe defaults, implementation maps, and architecture checklists.`,
     images: ["/og.png"],
   },
   icons: {
@@ -77,7 +77,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebApplication",
               name: "crypto::compare",
-              description: "Choose cryptography with evidence, tradeoffs, and safe defaults. 97 algorithms · 17 categories · real-world recommendations · implementation maps.",
+              description: `Choose cryptography with evidence, tradeoffs, and safe defaults. ${OG_ALGORITHM_LABEL} · ${OG_CATEGORY_LABEL} · real-world recommendations · implementation maps.`,
               applicationCategory: "ReferenceApplication",
               operatingSystem: "Any",
               browserRequirements: "Requires JavaScript",
