@@ -13,6 +13,9 @@ permissions:
 jobs:
   demo-sync:
     runs-on: ubuntu-latest
+    # Measured 25-70s. The catalog fetch retries 3x over 2 URLs with a 15s
+    # timeout each, so the check bounds its own network work at ~90s.
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
 

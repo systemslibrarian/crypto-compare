@@ -22,6 +22,12 @@ permissions:
 jobs:
   refresh-check:
     runs-on: ubuntu-latest
+    # Deliberately the loosest cap here. The scheduled shape measures 30-41s, but
+    # a manual dispatch with check_links=true probes ~150 provenance URLs
+    # serially, up to two requests each at a 10s timeout -- tens of minutes in
+    # the worst case. A tight cap would fail a legitimate link sweep, so this is
+    # sized to catch a hang (360 -> 60) rather than to police the runtime.
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v7
 

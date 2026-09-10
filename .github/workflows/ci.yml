@@ -23,6 +23,10 @@ jobs:
       github.event_name != 'push' ||
       !startsWith(github.event.head_commit.message, '[skip tests]')
     runs-on: ubuntu-latest
+    # Measured 75s on 2026-09-09 (run 34331746207). The cap is a hang detector,
+    # not a performance budget: GitHub's default is 360 minutes, so a wedged
+    # npm ci or a build waiting on stdin burns six hours with nothing red.
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
       - name: Setup Node.js
@@ -55,6 +59,9 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     needs: build
+    # Measured 104s including the Chromium download; 20 leaves room for a cold
+    # browser cache without letting a hung Playwright run sit for hours.
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
       - name: Setup Node.js
@@ -81,6 +88,9 @@ jobs:
   lighthouse:
     runs-on: ubuntu-latest
     needs: build
+    # Measured 70s. The `npx serve out &` + `sleep 3` pattern is the one that can
+    # wedge here -- if the server never comes up, lighthouse waits, not fails.
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
       - name: Setup Node.js
@@ -150,6 +160,9 @@ jobs:
     needs: [build, e2e, lighthouse]
     if: github.event_name == 'pull_request' && github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
+    # Measured 10s. The merge loop already sleeps 2x15s between attempts; a cap
+    # of 10 minutes only catches a `gh` call that never returns.
+    timeout-minutes: 10
     permissions:
       contents: write
       pull-requests: write
