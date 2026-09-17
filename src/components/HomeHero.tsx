@@ -24,9 +24,9 @@ export default function HomeHero({ datasetSize, categoryCount, totalCitations, u
   return (
     <section className="homeHero" aria-label="Overview">
       <p className="homeHeroEyebrow">Cryptographic algorithm reference</p>
-      <h2 className="homeHeroTitle">Choose the right cryptography, with confidence.</h2>
+      <h1 className="homeHeroTitle">Choose the right cryptography, with confidence.</h1>
       <p className="homeHeroLede">
-        Vetted recommendations with cited sources and safe defaults. Browse the catalog below, or{" "}
+        Evidence-linked recommendations with explicit tradeoffs and safe defaults. Browse the catalog below, or{" "}
         <Link href="/advisor" className="homeHeroLink">
           answer a few questions in the advisor
         </Link>{" "}
