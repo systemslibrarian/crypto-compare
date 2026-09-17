@@ -19,6 +19,7 @@ export const CATALOG_EVIDENCE: Record<string, CatalogEvidence> = {
   aes256gcm: evidence("final", true, ["NIST"], "ubiquitous"),
   chacha20poly: evidence("final", true, ["IRTF", "RFC Editor"], "widespread"),
   xchacha20poly: evidence("draft", false, ["IRTF"], "widespread"),
+  ascon_aead128: evidence("final", true, ["NIST"], "documented"),
   camellia256: evidence("final", true, ["ISO", "CRYPTREC", "RFC Editor"], "documented"),
   aria256: evidence("final", true, ["KATS"], "documented"),
   sm4: evidence("final", true, ["SAC", "ISO"], "widespread"),

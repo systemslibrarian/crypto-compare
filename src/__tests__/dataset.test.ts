@@ -108,6 +108,14 @@ describe("Provenance", () => {
     }
   });
 
+  it("includes the final NIST lightweight AEAD profile", () => {
+    const ascon = ALGORITHMS.find((algorithm) => algorithm.id === "ascon_aead128");
+    expect(ascon?.statusLabel).toBe("NIST SP 800-232");
+    expect(ascon?.category).toBe("symmetric");
+    expect(ascon?.securityBits).toBe(128);
+    expect(ascon?.pqSecurityBits).toBe(64);
+  });
+
   it("every source has required fields", () => {
     for (const [id, entry] of Object.entries(ALGORITHM_PROVENANCE)) {
       for (const source of entry.sources) {

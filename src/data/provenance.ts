@@ -28,6 +28,12 @@ export const ALGORITHM_PROVENANCE: Record<string, { sources: AlgorithmSource[]; 
       { label: "IETF Draft", url: "https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-xchacha", note: "IRTF draft for XChaCha20-Poly1305.", kind: "standard", supports: ["specification", "standardization"] },
     ],
   },
+  ascon_aead128: {
+    lastReviewed: "2026-09-17",
+    sources: [
+      { label: "NIST SP 800-232", url: "https://csrc.nist.gov/pubs/sp/800/232/final", note: "Final August 2025 standard defining Ascon-AEAD128, its requirements, and its security properties for constrained devices.", kind: "standard", supports: ["specification", "standardization", "security", "implementation"], locator: "Sections 1 and 4; Appendix A" },
+    ],
+  },
   camellia256: {
     lastReviewed: "2026-06-27",
     sources: [
