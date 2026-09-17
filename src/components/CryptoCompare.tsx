@@ -5,12 +5,10 @@ import dynamic from "next/dynamic";
 import AlgoCard from "@/components/AlgoCard";
 import { CounselButton } from "@/components/CounselButton";
 import AppHeaderNav from "@/components/AppHeaderNav";
-import CategoryExplainer from "@/components/CategoryExplainer";
 import CategoryStrip from "@/components/CategoryStrip";
 import FooterShell from "@/components/FooterShell";
 import HeroOverview from "@/components/HeroOverview";
 import HomeHero from "@/components/HomeHero";
-import ReferenceGuidePanel from "@/components/ReferenceGuidePanel";
 import ResultsStatus from "@/components/ResultsStatus";
 import SearchControls from "@/components/SearchControls";
 
@@ -18,11 +16,16 @@ import SearchControls from "@/components/SearchControls";
 // initial JS bundle and off the hydration critical path. None of these are
 // needed for first paint or SEO.
 const ComparisonWorkspace = dynamic(() => import("@/components/ComparisonWorkspace"), { ssr: false });
+const CategoryExplainer = dynamic(() => import("@/components/CategoryExplainer"), {
+  ssr: false,
+  loading: () => <div aria-hidden="true" style={{ minHeight: "128px" }} />,
+});
 const KnowledgeSections = dynamic(() => import("@/components/KnowledgeSections"), {
   ssr: false,
   loading: () => <div className="deferBelowFold" aria-hidden="true" style={{ minHeight: "320px" }} />,
 });
 const MethodologyPanel = dynamic(() => import("@/components/MethodologyPanel"), { ssr: false });
+const ReferenceGuidePanel = dynamic(() => import("@/components/ReferenceGuidePanel"), { ssr: false });
 const ShortcutHelp = dynamic(() => import("@/components/ShortcutHelp"), { ssr: false });
 import { ALGORITHMS } from "@/data/algorithms";
 import { CATEGORIES, CATEGORY_ACCENT } from "@/data/categories";
@@ -74,6 +77,7 @@ export default function CryptoCompare() {
   const [showPhilosophy, setShowPhilosophy] = useState(false);
   const [showLibraries, setShowLibraries] = useState(false);
   const [showResources, setShowResources] = useState(false);
+  const [showReferences, setShowReferences] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [globalSearch, setGlobalSearch] = useState(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
@@ -433,8 +437,23 @@ export default function CryptoCompare() {
             onExportJson={() => exportComparison("json")}
           />
 
-          <div className="deferBelowFold">
-            <ReferenceGuidePanel algorithms={filtered} />
+          <div className="deferBelowFold" style={{ marginBottom: "18px" }}>
+            <button
+              type="button"
+              className="focusRing controlBtn"
+              aria-expanded={showReferences}
+              aria-controls="reference-guide-panel"
+              onClick={() => setShowReferences((value) => !value)}
+              style={{ width: "100%", justifyContent: "space-between" }}
+            >
+              <span>References &amp; terminology</span>
+              <span aria-hidden="true">{showReferences ? "−" : "+"}</span>
+            </button>
+            {showReferences && (
+              <div id="reference-guide-panel" style={{ marginTop: "10px" }}>
+                <ReferenceGuidePanel algorithms={filtered} />
+              </div>
+            )}
           </div>
 
           <KnowledgeSections
