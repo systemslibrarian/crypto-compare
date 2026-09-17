@@ -4,9 +4,11 @@ import { useState } from "react";
 import { RecommendationBadge, ReviewBadge, formatReviewDate } from "@/components/ui";
 import { IMPLEMENTATIONS, ECOSYSTEM_LABELS } from "@/data/implementations";
 import { getAssuranceProfile } from "@/lib/assurance";
+import { DATASET_VERSION } from "@/lib/datasetVersion";
 import {
   ADVISOR_RULESET_VERSION,
   advisorOptionId,
+  resolveAdvisorChoicePath,
   type AdvisorDecisionStep,
   type AdvisorOutcome,
   type AdvisorRuleTree,
@@ -330,12 +332,22 @@ type DecisionFlowchartProps = {
   provenance?: Record<string, { sources: AlgorithmSource[]; lastReviewed: string }>;
 };
 
+const ADVISOR_BASE_URL = "https://crypto-compare.systemslibrarian.dev/";
+
+export function buildAdvisorPermalink(choiceIds: string[]): string {
+  const url = new URL(ADVISOR_BASE_URL);
+  url.searchParams.set("advisor", choiceIds.join(","));
+  return url.toString();
+}
+
 export function buildJustificationReport(
   result: AdvisorOutcome,
   history: AdvisorDecisionStep[],
   algorithms: Algorithm[],
   provenance: Record<string, { sources: AlgorithmSource[]; lastReviewed: string }>,
   tree: AdvisorRuleTree,
+  choiceIds: string[] = [],
+  generatedAt = new Date(),
 ): string {
   const algo = result.id ? algorithms.find((a) => a.id === result.id) : undefined;
   const prov = result.id ? provenance[result.id] : undefined;
@@ -343,9 +355,14 @@ export function buildJustificationReport(
 
   lines.push("# Cryptographic Algorithm Justification Report");
   lines.push("");
-  lines.push(`**Generated**: ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`);
-  lines.push(`**Tool**: crypto::compare (https://crypto-compare.systemslibrarian.dev/)`);
+  lines.push(`**Generated (UTC)**: ${generatedAt.toISOString()}`);
+  lines.push(`**Tool**: crypto::compare (${ADVISOR_BASE_URL})`);
+  lines.push(`**Dataset**: ${DATASET_VERSION}`);
   lines.push(`**Ruleset**: ${ADVISOR_RULESET_VERSION}`);
+  if (choiceIds.length > 0) {
+    lines.push(`**Decision ID**: ${choiceIds.join("/")}`);
+    lines.push(`**Permalink**: ${buildAdvisorPermalink(choiceIds)}`);
+  }
   lines.push("");
 
   // Decision path
@@ -355,16 +372,22 @@ export function buildJustificationReport(
     const node = tree[step.nodeId];
     if (node) {
       lines.push(`- **Q**: ${node.question}`);
-      lines.push(`  - **A**: ${step.optionLabel}`);
+      lines.push(`  - **A** [${step.optionId}]: ${step.optionLabel}`);
     }
   }
   // Final node → answer
   const nodeId = history.at(-1)?.nextNodeId ?? "start";
   const finalNode = tree[nodeId];
   if (finalNode) {
-    const chosen = finalNode.options.find((o) => o.answer?.id === result.id);
+    const finalChoiceId = choiceIds.at(-1);
+    const finalChoiceIndex = finalChoiceId?.startsWith(`${nodeId}.`)
+      ? Number.parseInt(finalChoiceId.slice(nodeId.length + 1), 10) - 1
+      : -1;
+    const chosen = finalChoiceIndex >= 0
+      ? finalNode.options[finalChoiceIndex]
+      : finalNode.options.find((o) => o.answer?.id === result.id);
     lines.push(`- **Q**: ${finalNode.question}`);
-    lines.push(`  - **A**: ${chosen?.label ?? "—"}`);
+    lines.push(`  - **A**${finalChoiceId ? ` [${finalChoiceId}]` : ""}: ${chosen?.label ?? "—"}`);
   }
   lines.push("");
 
@@ -433,9 +456,20 @@ export function buildJustificationReport(
 }
 
 export default function DecisionFlowchart({ onNavigate, algorithms = [], provenance = {} }: DecisionFlowchartProps) {
-  const [currentNode, setCurrentNode] = useState("start");
-  const [history, setHistory] = useState<AdvisorDecisionStep[]>([]);
-  const [result, setResult] = useState<AdvisorOutcome | null>(null);
+  const [initialState] = useState(() => {
+    if (typeof window === "undefined") return resolveAdvisorChoicePath(DECISION_TREE, []);
+    const encodedPath = new URLSearchParams(window.location.search).get("advisor");
+    if (!encodedPath) return resolveAdvisorChoicePath(DECISION_TREE, []);
+    try {
+      return resolveAdvisorChoicePath(DECISION_TREE, encodedPath.split(",").filter(Boolean));
+    } catch {
+      return resolveAdvisorChoicePath(DECISION_TREE, []);
+    }
+  });
+  const [currentNode, setCurrentNode] = useState(initialState.currentNode);
+  const [history, setHistory] = useState<AdvisorDecisionStep[]>(initialState.history);
+  const [choiceIds, setChoiceIds] = useState<string[]>(initialState.choiceIds);
+  const [result, setResult] = useState<AdvisorOutcome | null>(initialState.result);
 
   const node = DECISION_TREE[currentNode];
   const resultAlgo = result?.id ? algorithms.find((algo) => algo.id === result.id) : undefined;
@@ -444,11 +478,13 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
   const goBack = () => {
     if (result) {
       setResult(null);
+      setChoiceIds((ids) => ids.slice(0, -1));
       return;
     }
     if (history.length > 0) {
       const prev = history[history.length - 1].nodeId;
       setHistory((h) => h.slice(0, -1));
+      setChoiceIds((ids) => ids.slice(0, -1));
       setCurrentNode(prev);
     }
   };
@@ -456,20 +492,24 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
   const reset = () => {
     setCurrentNode("start");
     setHistory([]);
+    setChoiceIds([]);
     setResult(null);
   };
 
   const choose = (option: (typeof node)["options"][number]) => {
+    const optionIndex = node.options.indexOf(option);
+    const optionId = advisorOptionId(currentNode, optionIndex);
     if (option.answer) {
+      setChoiceIds((ids) => [...ids, optionId]);
       setResult(option.answer);
     } else if (option.next) {
-      const optionIndex = node.options.indexOf(option);
       setHistory((h) => [...h, {
         nodeId: currentNode,
-        optionId: advisorOptionId(currentNode, optionIndex),
+        optionId,
         optionLabel: option.label,
         nextNodeId: option.next!,
       }]);
+      setChoiceIds((ids) => [...ids, optionId]);
       setCurrentNode(option.next);
     }
   };
@@ -587,6 +627,7 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
           resultAlgo={resultAlgo}
           resultProvenance={resultProvenance}
           history={history}
+          choiceIds={choiceIds}
           algorithms={algorithms}
           provenance={provenance}
           onNavigate={onNavigate}
@@ -601,6 +642,7 @@ function ResultBlock({
   resultAlgo,
   resultProvenance,
   history,
+  choiceIds,
   algorithms,
   provenance,
   onNavigate,
@@ -609,6 +651,7 @@ function ResultBlock({
   resultAlgo?: Algorithm;
   resultProvenance?: { sources: AlgorithmSource[]; lastReviewed: string };
   history: AdvisorDecisionStep[];
+  choiceIds: string[];
   algorithms: Algorithm[];
   provenance: Record<string, { sources: AlgorithmSource[]; lastReviewed: string }>;
   onNavigate: (category: AlgorithmCategory, algoId: string) => void;
@@ -631,7 +674,7 @@ function ResultBlock({
   }
 
   function copyAsMarkdown() {
-    const report = buildJustificationReport(result, history, algorithms, provenance, DECISION_TREE);
+    const report = buildJustificationReport(result, history, algorithms, provenance, DECISION_TREE, choiceIds);
     navigator.clipboard.writeText(report).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
@@ -740,7 +783,7 @@ function ResultBlock({
           </button>
           <button
             onClick={() => {
-              const report = buildJustificationReport(result, history, algorithms, provenance, DECISION_TREE);
+              const report = buildJustificationReport(result, history, algorithms, provenance, DECISION_TREE, choiceIds);
               const blob = new Blob([report], { type: "text/markdown" });
               const url = URL.createObjectURL(blob);
               const a = document.createElement("a");

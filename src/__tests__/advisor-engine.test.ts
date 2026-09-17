@@ -4,6 +4,7 @@ import { ALGORITHMS } from "@/data/algorithms";
 import {
   ADVISOR_RULESET_VERSION,
   enumerateAdvisorLeafPaths,
+  resolveAdvisorChoicePath,
   type AdvisorRuleTree,
   validateAdvisorRules,
 } from "@/lib/advisorEngine";
@@ -79,5 +80,13 @@ describe("advisor rule engine", () => {
 
     expect(validateAdvisorRules(tree, algorithmIds)).toEqual([]);
     expect(enumerateAdvisorLeafPaths(tree)[0].result.id).toBeNull();
+  });
+
+  it("replays stable choice IDs into the same result", () => {
+    const resolved = resolveAdvisorChoicePath(DECISION_TREE, ["start.2", "kem.2", "kem_pq.1"]);
+
+    expect(resolved.result?.id).toBe("mlkem768");
+    expect(resolved.history.map((step) => step.optionId)).toEqual(["start.2", "kem.2"]);
+    expect(() => resolveAdvisorChoicePath(DECISION_TREE, ["start.2", "sig.1"])).toThrow(/does not belong/);
   });
 });

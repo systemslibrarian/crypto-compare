@@ -54,8 +54,56 @@ export type AdvisorLeafPath = {
   result: AdvisorOutcome;
 };
 
+export type AdvisorResolvedPath = {
+  currentNode: string;
+  choiceIds: string[];
+  history: AdvisorDecisionStep[];
+  result: AdvisorOutcome | null;
+};
+
 export function advisorOptionId(nodeId: string, optionIndex: number): string {
   return `${nodeId}.${optionIndex + 1}`;
+}
+
+export function resolveAdvisorChoicePath(
+  tree: AdvisorRuleTree,
+  choiceIds: string[],
+  startNode = ADVISOR_START_NODE,
+): AdvisorResolvedPath {
+  let currentNode = startNode;
+  const history: AdvisorDecisionStep[] = [];
+
+  for (const [pathIndex, choiceId] of choiceIds.entries()) {
+    const expectedPrefix = `${currentNode}.`;
+    if (!choiceId.startsWith(expectedPrefix)) {
+      throw new Error(`Advisor choice ${choiceId} does not belong to ${currentNode}`);
+    }
+
+    const optionIndex = Number.parseInt(choiceId.slice(expectedPrefix.length), 10) - 1;
+    const node = tree[currentNode];
+    const option = node?.options[optionIndex];
+    if (!node || !option || advisorOptionId(currentNode, optionIndex) !== choiceId) {
+      throw new Error(`Unknown advisor choice ${choiceId}`);
+    }
+
+    if (option.answer) {
+      if (pathIndex !== choiceIds.length - 1) {
+        throw new Error(`Advisor choice ${choiceId} ends the path before its final segment`);
+      }
+      return { currentNode, choiceIds: [...choiceIds], history, result: option.answer };
+    }
+
+    if (!option.next) throw new Error(`Advisor choice ${choiceId} has no target`);
+    history.push({
+      nodeId: currentNode,
+      optionId: choiceId,
+      optionLabel: option.label,
+      nextNodeId: option.next,
+    });
+    currentNode = option.next;
+  }
+
+  return { currentNode, choiceIds: [...choiceIds], history, result: null };
 }
 
 export function enumerateAdvisorLeafPaths(

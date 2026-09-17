@@ -30,12 +30,17 @@ describe("Decision flowchart report", () => {
 
     expect(report).toContain("https://crypto-compare.systemslibrarian.dev/");
     expect(report).not.toContain("systemslubrarian");
+    expect(report).toMatch(/\*\*Generated \(UTC\)\*\*: \d{4}-\d{2}-\d{2}T/);
+    expect(report).toContain("**Dataset**: 1.1.0");
+    expect(report).toContain("**Ruleset**: 2026.09.2");
+    expect(report).toContain("**Decision ID**: start.1/symmetric.1/symmetric_fips.1");
+    expect(report).toContain("?advisor=start.1%2Csymmetric.1%2Csymmetric_fips.1");
     expect(report).toContain("**Q**: What do you need to do?");
-    expect(report).toContain("**A**: Encrypt data with a shared key");
+    expect(report).toContain("**A** [start.1]: Encrypt data with a shared key");
     expect(report).toContain("**Q**: What is the deployment context?");
-    expect(report).toContain("**A**: A FIPS/NIST-approved implementation is required");
+    expect(report).toContain("**A** [symmetric.1]: A FIPS/NIST-approved implementation is required");
     expect(report).toContain("**Q**: Can the system guarantee a unique 96-bit nonce");
-    expect(report).toContain("**A**: Yes — uniqueness is enforced and monitored");
+    expect(report).toContain("**A** [symmetric_fips.1]: Yes — uniqueness is enforced and monitored");
     expect(report).not.toContain("**A**: —");
   });
 });
