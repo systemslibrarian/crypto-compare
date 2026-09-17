@@ -3,6 +3,7 @@ import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import { ALGORITHMS } from "@/data/algorithms";
 import { CATEGORIES } from "@/data/categories";
 import { ALGORITHM_PROVENANCE } from "@/data/provenance";
+import { CATALOG_EVIDENCE } from "@/data/catalogEvidence";
 import { buildRows, exportToCSV, exportToMarkdown } from "@/lib/comparison";
 import { validateAlgorithms } from "@/lib/validation";
 import type { Algorithm, AlgorithmCategory } from "@/types/crypto";
@@ -10,7 +11,7 @@ import type { Algorithm, AlgorithmCategory } from "@/types/crypto";
 /** Merge provenance into algorithm (same as CryptoCompare.withProvenance) */
 function withProvenance(algo: Algorithm): Algorithm {
   const traced = ALGORITHM_PROVENANCE[algo.id];
-  return { ...algo, sources: traced?.sources, lastReviewed: traced?.lastReviewed };
+  return { ...algo, sources: traced?.sources, lastReviewed: traced?.lastReviewed, catalogEvidence: CATALOG_EVIDENCE[algo.id] };
 }
 
 // ─── Export Correctness ────────────────────────────────────────
@@ -117,7 +118,7 @@ describe("Exact Export Content", () => {
   const mlkem = withProvenance(ALGORITHMS.find((a) => a.id === "mlkem768")!);
   const sha = withProvenance(ALGORITHMS.find((a) => a.id === "sha256")!);
 
-  describe("AES-256-GCM (symmetric, Badge + SecurityMeter)", () => {
+  describe("AES-256-GCM (symmetric assurance profile)", () => {
     const rows = buildRows("symmetric", true);
 
     it("CSV contains exact status label text, not JSX", () => {
@@ -135,14 +136,14 @@ describe("Exact Export Content", () => {
       expect(csv).toContain("NIST-standardized, ubiquitous hardware acceleration");
     });
 
-    it("CSV contains classical security as plain text", () => {
+    it("CSV labels the classical estimate as key-search cost", () => {
       const csv = exportToCSV(rows, [aes]);
-      expect(csv).toContain('"256 bits"');
+      expect(csv).toContain("Key-search estimate: 256-bit classical");
     });
 
-    it("CSV contains PQ security as plain text", () => {
+    it("CSV labels the quantum estimate as a Grover model", () => {
       const csv = exportToCSV(rows, [aes]);
-      expect(csv).toContain('"128 bits"');
+      expect(csv).toContain("128-bit Grover model");
     });
 
     it("CSV contains source labels, not count", () => {
@@ -171,12 +172,14 @@ describe("Exact Export Content", () => {
       }
     });
 
-    it("Markdown contains exact values in table format", () => {
+    it("Markdown contains category-specific assurance values in table format", () => {
       const md = exportToMarkdown(rows, [aes]);
       expect(md).toContain("| Status | NIST Standard |");
       expect(md).toContain("| Recommendation | Recommended default |");
-      expect(md).toContain("| Classical | 256 bits |");
-      expect(md).toContain("| PQ | 128 bits |");
+      expect(md).toContain("| Assurance Model | AEAD profile");
+      expect(md).toContain("Authentication: 128-bit tag");
+      expect(md).not.toContain("| Classical |");
+      expect(md).not.toContain("| PQ |");
       expect(md).toContain("| Last Reviewed | June 2026 |");
       expect(md).not.toContain("[object Object]");
     });

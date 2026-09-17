@@ -19,7 +19,7 @@ function TestController() {
   const [, setNistOnly] = useState(true);
   const [, setDeployedOnly] = useState(true);
   const [, setCountry] = useState<"all" | "Japan">("Japan");
-  const [, setSortBy] = useState<"name" | "security">("security");
+  const [, setSortBy] = useState<"name" | "publicKey">("publicKey");
   const [, setShowMethodology] = useState(true);
   const [, setShowHybrid] = useState(true);
   const [, setShowGuide] = useState(true);

@@ -31,7 +31,7 @@ export const FILTER_PRESETS: readonly FilterPreset[] = [
     label: "Post-Quantum Ready",
     icon: "🛡️",
     description: "Algorithms safe against quantum computers",
-    filters: { globalSearch: true, pqOnly: true, sortBy: "pq" },
+    filters: { globalSearch: true, pqOnly: true, sortBy: "name" },
   },
   {
     id: "nist-approved",
@@ -45,14 +45,14 @@ export const FILTER_PRESETS: readonly FilterPreset[] = [
     label: "IoT / Constrained",
     icon: "📡",
     description: "Widely deployed, standards-backed algorithms for resource-limited devices",
-    filters: { globalSearch: true, deployedOnly: true, standardOnly: true, sortBy: "security" },
+    filters: { globalSearch: true, deployedOnly: true, standardOnly: true, sortBy: "name" },
   },
   {
-    id: "high-security",
-    label: "Maximum Security",
+    id: "reviewed-defaults",
+    label: "Reviewed Defaults",
     icon: "🔒",
-    description: "256-bit+ classical security level algorithms",
-    filters: { globalSearch: true, sortBy: "security", standardOnly: true },
+    description: "Curated defaults backed by final standards or specifications",
+    filters: { globalSearch: true, sortBy: "name", standardOnly: true, showDefaults: true },
   },
   {
     id: "battle-tested",

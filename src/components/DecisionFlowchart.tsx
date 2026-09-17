@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { RecommendationBadge, ReviewBadge, formatReviewDate } from "@/components/ui";
 import { IMPLEMENTATIONS, ECOSYSTEM_LABELS } from "@/data/implementations";
+import { getAssuranceProfile } from "@/lib/assurance";
 import type { Algorithm, AlgorithmCategory, AlgorithmSource } from "@/types/crypto";
 
 type DecisionNode = {
@@ -297,6 +298,7 @@ export function buildJustificationReport(
   lines.push("");
 
   if (algo) {
+    const assurance = getAssuranceProfile(algo);
     lines.push("## Algorithm Details");
     lines.push("");
     lines.push(`| Field | Value |`);
@@ -305,8 +307,9 @@ export function buildJustificationReport(
     lines.push(`| Rationale | ${algo.recommendationRationale} |`);
     lines.push(`| Changes When | ${algo.recommendationChangesWhen} |`);
     lines.push(`| Why Not This? | ${algo.whyNotThis} |`);
-    lines.push(`| Classical Security | ${algo.securityBits} bits |`);
-    lines.push(`| PQ Security | ${algo.pqSecurityBits} bits |`);
+    lines.push(`| Assurance Model | ${assurance.headline} |`);
+    lines.push(`| Assurance Dimensions | ${assurance.metrics.map((metric) => `${metric.label}: ${metric.value}`).join("; ")} |`);
+    lines.push(`| Assurance Caveat | ${assurance.caveat} |`);
     lines.push(`| Best Known Attack | ${algo.bestAttack} |`);
     lines.push(`| Performance | ${algo.performance} |`);
     lines.push(`| Status | ${algo.statusLabel} |`);

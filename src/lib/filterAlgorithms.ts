@@ -3,7 +3,7 @@ import type { Algorithm, AlgorithmCategory } from "@/types/crypto";
 
 const DEFAULT_RECOMMENDED_IDS = new Set(["xchacha20poly", "aes256gcm", "curve25519", "ed25519", "mlkem768", "mldsa65", "argon2id", "hmac_sha256", "kmac256"]);
 
-export type AlgorithmSortOption = "name" | "security" | "pq" | "publicKey" | "signature";
+export type AlgorithmSortOption = "name" | "publicKey" | "signature";
 
 export type FilterAlgorithmsOptions = {
   category: AlgorithmCategory;
@@ -61,8 +61,6 @@ export function filterAlgorithms(algorithms: Algorithm[], options: FilterAlgorit
   const sorted = [...items];
   sorted.sort((left, right) => {
     if (options.sortBy === "name") return left.name.localeCompare(right.name);
-    if (options.sortBy === "security") return right.securityBits - left.securityBits;
-    if (options.sortBy === "pq") return right.pqSecurityBits - left.pqSecurityBits;
     if (options.sortBy === "publicKey") return getSizeMetric(left, "publicKey") - getSizeMetric(right, "publicKey");
     return getSizeMetric(left, "signature") - getSizeMetric(right, "signature");
   });

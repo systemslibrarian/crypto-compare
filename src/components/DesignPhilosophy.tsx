@@ -63,7 +63,7 @@ export default function DesignPhilosophy() {
           <li><strong>Standards bodies:</strong> NIST (FIPS, SP 800-series), IETF (RFCs), ISO/IEC, national standards (KPQC, CRYPTREC, GB/T, GOST, DSTU).</li>
           <li><strong>Academic literature:</strong> Eurocrypt, CRYPTO, ASIACRYPT proceedings, IACR ePrint archive, and peer-reviewed journals. Security proofs and cryptanalysis results are cited per algorithm.</li>
           <li><strong>Deployment evidence:</strong> Official documentation from major implementations (OpenSSL, BoringSSL, libsodium, Go crypto), browser telemetry, protocol specifications (TLS 1.3, Signal, WireGuard).</li>
-          <li><strong>Security estimates:</strong> Classical security bits follow NIST SP 800-57. Post-quantum estimates follow NIST PQC security levels and published quantum algorithm analyses (Grover, Shor).</li>
+          <li><strong>Assurance profiles:</strong> Each category exposes the dimensions that actually govern it: forgery and nonce limits for AEAD, preimage and collision bounds for hashes, cost parameters for passwords, and categories plus estimator assumptions for PQ schemes.</li>
           <li><strong>Each algorithm entry includes source citations</strong> with kind labels (standard, analysis, deployment, benchmark) and direct links to the source material.</li>
         </ul>
       </div>
@@ -94,7 +94,7 @@ export default function DesignPhilosophy() {
           <li><strong>&quot;Why not this?&quot;</strong> — Every algorithm explains its own weaknesses, limitations, and scenarios where you should choose something else. No algorithm is presented as universally superior.</li>
           <li><strong>&quot;When this changes&quot;</strong> — Explicit trigger conditions for upgrading or downgrading recommendations. Cryptography is not static — these fields ensure recommendations age transparently.</li>
           <li><strong>&quot;Assumptions&quot;</strong> — The exact mathematical and operational assumptions underlying each security claim. If an assumption is later broken, you know exactly what&apos;s affected.</li>
-          <li><strong>&quot;Estimation methodology&quot;</strong> — Whether security bits are exact (from key length), conservative (adjusted for known attacks), estimated (best-effort analysis), or speculative (limited evidence). No false precision.</li>
+          <li><strong>&quot;Estimation methodology&quot;</strong> — Whether each underlying estimate is exact, conservative, estimated, or speculative, while keeping unlike security properties on separate dimensions.</li>
           <li><strong>Open source.</strong> The entire dataset, validation logic, and UI are open source. The data can be audited, corrected, and extended by anyone.</li>
         </ul>
       </div>

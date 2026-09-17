@@ -1,7 +1,7 @@
 import { useCallback, useMemo, type RefObject } from "react";
 import type { AlgorithmCategory } from "@/types/crypto";
 
-type SortOption = "name" | "security" | "pq" | "publicKey" | "signature";
+type SortOption = "name" | "publicKey" | "signature";
 type CountryFilter = "all" | "Korea" | "USA" | "Europe" | "Japan" | "China" | "Russia" | "Ukraine";
 
 type UseCryptoCompareControllerArgs = {

@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { RecommendationBadge, SecurityMeter, formatReviewDate, recommendationText } from "@/components/ui";
+import { RecommendationBadge, formatReviewDate, recommendationText } from "@/components/ui";
 import { CounselButton } from "@/components/CounselButton";
 import { CATEGORY_ACCENT } from "@/data/categories";
 import { ALGORITHM_DEMOS } from "@/data/demoResources";
 import { IMPLEMENTATIONS, ECOSYSTEM_LABELS, type ImplementationEntry } from "@/data/implementations";
+import { formatAssuranceForExport, getAssuranceProfile, type AssuranceProfile } from "@/lib/assurance";
 import type { Algorithm } from "@/types/crypto";
 
 type AlgoCardProps = {
@@ -28,6 +29,7 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
   const impls = IMPLEMENTATIONS.filter((i) => i.algorithmId === algo.id);
   const [detailOpen, setDetailOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const assurance = getAssuranceProfile(algo);
 
   function copyRecommendation(e: React.MouseEvent) {
     e.stopPropagation();
@@ -35,7 +37,7 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
       `## ${algo.name}`,
       `Recommendation: ${recommendationText(algo.recommendation)}`,
       `Rationale: ${algo.recommendationRationale}`,
-      `Classical security: ${algo.securityBits} bits | PQ security: ${algo.pqSecurityBits ?? "N/A"} bits`,
+      `Assurance: ${formatAssuranceForExport(algo)}`,
       `Use cases: ${algo.useCases}`,
       algo.whyNotThis ? `Caution: ${algo.whyNotThis}` : "",
       algo.notes ? `Notes: ${algo.notes}` : "",
@@ -109,8 +111,7 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
       )}
 
       <div className="recordFacts">
-        <SecurityMeter bits={algo.securityBits} label="C" />
-        <SecurityMeter bits={algo.pqSecurityBits} label="PQ" />
+        <AssuranceSummary profile={assurance} />
       </div>
 
       <div className="recordFoot">
@@ -145,6 +146,8 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
             {algo.whyNotThis && <DetailField label="Why not this" value={algo.whyNotThis} />}
           </div>
           <div className="recordDetailGrid">
+            <DetailField label="Assurance model" value={assurance.headline} />
+            <DetailField label="Assurance caveat" value={assurance.caveat} />
             <DetailField label="Classical estimate" value={`${algo.estimationMethodology.classicalBasis}: ${algo.estimationMethodology.classicalNote}`} />
             <DetailField label="Quantum estimate" value={`${algo.estimationMethodology.quantumBasis}: ${algo.estimationMethodology.quantumNote}`} />
             <DetailField label="Origin" value={algo.originDetail} />
@@ -207,6 +210,22 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function AssuranceSummary({ profile }: { profile: AssuranceProfile }) {
+  return (
+    <div className="assuranceSummary">
+      <div className="assuranceHeadline">{profile.headline}</div>
+      <dl className="assuranceMetrics">
+        {profile.metrics.slice(0, 3).map((metric) => (
+          <div key={metric.label} className="assuranceMetric">
+            <dt>{metric.label}</dt>
+            <dd>{metric.value}</dd>
+          </div>
+        ))}
+      </dl>
     </div>
   );
 }

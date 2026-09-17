@@ -12,11 +12,12 @@ export default function MethodologyPanel({ trustSnapshot }: MethodologyPanelProp
 
       <div style={{ marginBottom: "16px" }}>
         <h3 style={{ fontSize: "15px", fontWeight: 700, color: "var(--color-accent-blue-label)", margin: "12px 0 6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
-          Reading Security Values
+          Reading Assurance Profiles
         </h3>
         <ul style={{ margin: 0, paddingLeft: "18px", color: "var(--color-text-secondary)", lineHeight: 1.8 }}>
-          <li><strong>Classical security (C):</strong> Approximate attack cost in bits against known public cryptanalysis. 128-bit = infeasible with classical compute. 256-bit = maximum conventional strength.</li>
-          <li><strong>Post-quantum security (PQ):</strong> Expected security under quantum algorithms (Grover, Shor). 0 = fully broken by Shor&apos;s. Lattice/hash schemes retain estimated PQ security levels.</li>
+          <li><strong>No universal score:</strong> An AEAD tag bound, a hash collision bound, a password attacker cost, and a PQ estimator result are different quantities and are not ranked against one another.</li>
+          <li><strong>Category-specific profiles:</strong> AEAD entries separate confidentiality, forgery, nonce, and usage limits; hashes separate preimage and collision properties; password schemes emphasize entropy and cost parameters; PQ schemes show categories and estimator assumptions.</li>
+          <li><strong>Classical and quantum estimates:</strong> Where meaningful, these remain visible inside the relevant dimension with their estimation basis. They are models, not guarantees.</li>
           <li><strong>Best attack:</strong> Strongest published attack path. These are continuously updated as cryptanalysis evolves, not guarantees but current best knowledge.</li>
           <li><strong>Performance:</strong> Approximate throughput/latency values. Highly implementation- and platform-dependent; treat as relative ordering, not absolute benchmarks.</li>
         </ul>
@@ -54,7 +55,7 @@ export default function MethodologyPanel({ trustSnapshot }: MethodologyPanelProp
         <ul style={{ margin: 0, paddingLeft: "18px", color: "var(--color-text-secondary)", lineHeight: 1.8 }}>
           <li>All entries undergo Zod schema validation at build time, ensuring type correctness, range bounds, and cross-field consistency.</li>
           <li>Provenance coverage is verified: every algorithm must have at least one cited source and a review date.</li>
-          <li>Security estimates are checked for internal consistency, for example PQ-safe algorithms must have non-zero PQ security bits.</li>
+          <li>Assurance profiles are checked for category consistency so hashes, AEADs, password schemes, PQ parameter sets, and protocols do not share a misleading universal scale.</li>
           <li>The dataset undergoes periodic review. Current provenance window: <strong>{trustSnapshot.earliest ? `${formatReviewDate(trustSnapshot.earliest)} to ${formatReviewDate(trustSnapshot.latest)}` : "review dates pending"}</strong>.</li>
         </ul>
       </div>

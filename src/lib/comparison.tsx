@@ -1,4 +1,5 @@
-import { RecommendationBadge, SecurityMeter, StandardizationBadge, formatBytes, recommendationText } from "@/components/ui";
+import { RecommendationBadge, StandardizationBadge, formatBytes, recommendationText } from "@/components/ui";
+import { formatAssuranceForExport, getAssuranceProfile } from "@/lib/assurance";
 import type {
   Algorithm,
   AsymmetricAlgorithm,
@@ -97,12 +98,6 @@ function formatReviewDate(iso: string | undefined): string {
   return `${months[parseInt(m, 10) - 1]} ${y}`;
 }
 
-function formatPqSecurity(bits: number | null | undefined): string {
-  if (bits == null) return "TBD";
-  if (bits === 0) return "Broken (Shor)";
-  return `${bits} bits`;
-}
-
 export function buildRows(category: AlgorithmCategory, _advanced?: boolean): ComparisonRow[] {
   const rows: ComparisonRow[] = [];
   rows.push({ label: "Origin", render: (a) => a.origin, exportText: (a) => a.origin });
@@ -131,8 +126,21 @@ export function buildRows(category: AlgorithmCategory, _advanced?: boolean): Com
   rows.push({ label: "Justification", render: (a) => a.recommendationRationale ?? "—", exportText: (a) => a.recommendationRationale ?? "" });
   rows.push({ label: "Changes When", render: (a) => a.recommendationChangesWhen, exportText: (a) => a.recommendationChangesWhen });
   rows.push({ label: "Why Not This?", render: (a) => a.whyNotThis, exportText: (a) => a.whyNotThis });
-  rows.push({ label: "Classical", render: (a) => <SecurityMeter bits={a.securityBits} />, exportText: (a) => a.securityBits != null ? `${a.securityBits} bits` : "TBD" });
-  rows.push({ label: "PQ", render: (a) => <SecurityMeter bits={a.pqSecurityBits} label="PQ" />, exportText: (a) => formatPqSecurity(a.pqSecurityBits) });
+  rows.push({
+    label: "Assurance Model",
+    render: (a) => getAssuranceProfile(a).headline,
+    exportText: (a) => getAssuranceProfile(a).headline,
+  });
+  rows.push({
+    label: "Assurance Dimensions",
+    render: (a) => getAssuranceProfile(a).metrics.map((metric) => `${metric.label}: ${metric.value}`).join(" · "),
+    exportText: (a) => getAssuranceProfile(a).metrics.map((metric) => `${metric.label}: ${metric.value}`).join("; "),
+  });
+  rows.push({
+    label: "Assurance Caveat",
+    render: (a) => getAssuranceProfile(a).caveat,
+    exportText: (a) => getAssuranceProfile(a).caveat,
+  });
 
   if (category === "symmetric") {
     rows.push({ label: "Key", render: (a) => `${asSymmetric(a).keySize} bits`, exportText: (a) => `${asSymmetric(a).keySize} bits` });

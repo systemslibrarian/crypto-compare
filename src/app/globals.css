@@ -23,7 +23,6 @@
   --color-bg-elevated: #0d1d27;
   --color-bg-inset: #09141b;
   --color-bg-hover: #10222c;
-  --color-bg-meter: #10222c;
   --color-bg-selected: #0e2229;
   --color-bg-advisor: #0c1f24;
   --color-bg-mobile-card: #0a171f;
@@ -858,6 +857,48 @@ h3 {
     margin-bottom: 10px;
   }
 
+  .assuranceSummary {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 10px 12px;
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 8px;
+    background: var(--color-bg-surface);
+  }
+
+  .assuranceHeadline {
+    color: var(--color-text-heading);
+    font-size: 12px;
+    font-weight: 650;
+    line-height: 1.5;
+  }
+
+  .assuranceMetrics {
+    display: grid;
+    gap: 5px;
+    margin: 0;
+  }
+
+  .assuranceMetric {
+    display: grid;
+    grid-template-columns: minmax(92px, 0.35fr) minmax(0, 1fr);
+    gap: 8px;
+    align-items: baseline;
+    font-size: 11.5px;
+    line-height: 1.45;
+  }
+
+  .assuranceMetric dt {
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+  }
+
+  .assuranceMetric dd {
+    margin: 0;
+    color: var(--color-text-body);
+  }
+
   .recordFoot {
     display: flex;
     flex-wrap: wrap;
@@ -1023,45 +1064,6 @@ h3 {
     color: var(--color-text-secondary);
     background: transparent;
     border-color: var(--color-border-muted);
-  }
-
-  /* ─── Security meters ─── */
-
-  .meter {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .meterLabel {
-    font-size: 11px;
-    color: var(--color-text-muted);
-    min-width: 22px;
-    font-weight: 500;
-    font-family: var(--font-mono);
-  }
-
-  .meterTrack {
-    flex: 1;
-    height: 4px;
-    background: var(--color-bg-meter);
-    border-radius: 999px;
-    overflow: hidden;
-    min-width: 50px;
-  }
-
-  .meterFill {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 0.4s;
-  }
-
-  .meterValue {
-    font-size: 12.5px;
-    font-weight: 500;
-    min-width: 34px;
-    text-align: right;
-    font-family: var(--font-mono);
   }
 
   /* ─── Panels (methodology, knowledge sections, etc.) ─── */

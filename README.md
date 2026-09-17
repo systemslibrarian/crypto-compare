@@ -302,7 +302,7 @@ That honesty is part of the trust model, not a weakness in spite of it.
 | **Compare side by side** | Consistent field-by-field comparisons adapted to category-specific metrics |
 | **Use the decision flowchart** | A guided path from problem statement to algorithm recommendation |
 | **Download justification reports** | Markdown output for architecture reviews and design discussion |
-| **Filter and sort** | PQ-safe, standards-track, NIST status, deployment, origin, size, and security dimensions |
+| **Filter and sort** | PQ-safe, publication stage, NIST status, deployment, origin, and category-appropriate size dimensions; unlike security properties are never globally ranked |
 | **Review hybrid patterns** | Classical-plus-PQ constructions for practical migration planning |
 | **Explore linked demo projects** | 192 unique linked public demos across the mapped categories, with per-category project context in the explainer panels |
 | **Read safety and architecture guidance** | Use-case content, pitfalls, library direction, and system-level flows |

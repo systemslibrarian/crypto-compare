@@ -41,8 +41,6 @@ import type { Algorithm, AlgorithmCategory } from "@/types/crypto";
 
 const SORT_OPTIONS = [
   { id: "name", label: "Name" },
-  { id: "security", label: "Classical Security" },
-  { id: "pq", label: "PQ Security" },
   { id: "publicKey", label: "Public Key Size" },
   { id: "signature", label: "Signature Size" },
 ] as const;
@@ -215,6 +213,21 @@ export default function CryptoCompare() {
   const filteredRecommendationCounts = useMemo(() => countRecommendations(filtered), [filtered]);
 
   const selectedCategoryLabel = CATEGORIES.find((c) => c.id === cat)?.label || cat;
+  const visibleSortOptions = globalSearch
+    ? SORT_OPTIONS.filter((option) => option.id === "name")
+    : SORT_OPTIONS.filter((option) => {
+        if (option.id === "publicKey") return cat === "kem" || cat === "signature";
+        if (option.id === "signature") return cat === "signature";
+        return true;
+      });
+
+  useEffect(() => {
+    const publicKeySortAllowed = !globalSearch && (cat === "kem" || cat === "signature");
+    const signatureSortAllowed = !globalSearch && cat === "signature";
+    if ((sortBy === "publicKey" && !publicKeySortAllowed) || (sortBy === "signature" && !signatureSortAllowed)) {
+      setSortBy("name");
+    }
+  }, [cat, globalSearch, sortBy]);
 
   const kbHandlers = useMemo(
     () => ({
@@ -350,7 +363,7 @@ export default function CryptoCompare() {
             selectedCategoryLabel={selectedCategoryLabel}
             globalSearch={globalSearch}
             sortBy={sortBy}
-            sortOptions={SORT_OPTIONS}
+            sortOptions={visibleSortOptions}
             showFilters={showFilters}
             showMethodology={showMethodology}
             pqOnly={pqOnly}

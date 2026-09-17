@@ -29,60 +29,6 @@ export function StandardizationBadge({ stage, label }: { stage: StandardizationS
   return <span className={toneClass(STANDARDIZATION_TONES[stage])}>{label}</span>;
 }
 
-export function SecurityMeter({ bits, max = 256, label }: { bits: number | null | undefined; max?: number; label?: string }) {
-  if (bits == null) {
-    return <span style={{ color: "var(--color-text-dim)", fontSize: "13px" }}>TBD</span>;
-  }
-
-  const fullLabel = label === "C" ? "Classical" : label === "PQ" ? "Post-Quantum" : label || "Security";
-
-  const brokenByShor = label === "PQ" && bits === 0;
-  if (brokenByShor) {
-    return (
-      <div className="meter">
-        {label && <span aria-hidden="true" className="meterLabel">{label}</span>}
-        <div
-          role="meter"
-          aria-label="Post-Quantum security: Broken by Shor's algorithm"
-          aria-valuenow={0}
-          aria-valuemin={0}
-          aria-valuemax={max}
-          className="meterTrack"
-        >
-          <div className="meterFill" style={{ width: "0%" }} />
-        </div>
-        <span aria-hidden="true" className="meterValue" style={{ color: "var(--color-badge-red-text)", minWidth: "100px" }}>
-          Broken (Shor)
-        </span>
-      </div>
-    );
-  }
-
-  const pct = Math.min((bits / max) * 100, 100);
-  // Restrained scale: teal for standard-or-better, amber for moderate, crimson for weak.
-  const c = bits >= 128 ? "var(--color-text-accent-bright)" : bits >= 112 ? "var(--color-badge-yellow-text)" : "var(--color-badge-red-text)";
-  const levelLabel = bits >= 192 ? "high" : bits >= 128 ? "standard" : bits >= 112 ? "moderate" : "low";
-
-  return (
-    <div className="meter">
-      {label && <span aria-hidden="true" className="meterLabel">{label}</span>}
-      <div
-        role="meter"
-        aria-label={`${fullLabel} security: ${bits} bits (${levelLabel})`}
-        aria-valuenow={bits}
-        aria-valuemin={0}
-        aria-valuemax={max}
-        className="meterTrack"
-      >
-        <div className="meterFill" style={{ width: `${pct}%`, background: c }} />
-      </div>
-      <span aria-hidden="true" className="meterValue" style={{ color: c }}>
-        {bits}
-      </span>
-    </div>
-  );
-}
-
 export function formatBytes(b: number | null | undefined): string {
   if (b == null) {
     return "TBD";

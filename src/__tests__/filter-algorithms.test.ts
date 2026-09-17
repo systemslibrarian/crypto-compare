@@ -117,7 +117,7 @@ describe("filterAlgorithms", () => {
       nistOnly: true,
       deployedOnly: true,
       country: "Europe",
-      sortBy: "security",
+      sortBy: "name",
     });
 
     expect(filtered).toHaveLength(1);
