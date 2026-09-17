@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import DecisionFlowchart from "@/components/DecisionFlowchart";
+import { formatReviewDate } from "@/components/ui";
 import { ALGORITHMS } from "@/data/algorithms";
 import { ALGORITHM_PROVENANCE } from "@/data/provenance";
+import { DATASET_TRUST_SNAPSHOT } from "@/lib/datasetMetadata";
 import type { AlgorithmCategory } from "@/types/crypto";
 
 export default function AdvisorView() {
@@ -133,7 +135,7 @@ export default function AdvisorView() {
                 <strong>Primitive selection is necessary but not sufficient.</strong> Implementation quality, side-channel resistance, key management, and protocol design matter more.
               </li>
               <li>
-                <strong>Security estimates reflect current public knowledge</strong> as of March 2026. Cryptanalysis is ongoing; estimates may change as new attacks are discovered.
+                <strong>Security estimates reflect current public knowledge</strong> as of {formatReviewDate(DATASET_TRUST_SNAPSHOT.latest)}. Cryptanalysis is ongoing; estimates may change as new attacks are discovered.
               </li>
               <li>
                 <strong>Performance data is approximate.</strong> Values are from published benchmarks, not your hardware. Production decisions require application-specific measurement.
@@ -170,7 +172,7 @@ export default function AdvisorView() {
         >
           <div style={{ marginBottom: "6px" }}>
             <span style={{ color: "var(--color-accent-blue-label)", fontWeight: 700 }}>Dataset reviewed:</span>{" "}
-            <time dateTime="2026-03-16">March 16, 2026</time>
+            <time dateTime={DATASET_TRUST_SNAPSHOT.latest}>{formatReviewDate(DATASET_TRUST_SNAPSHOT.latest)}</time>
           </div>
           Sources: NIST FIPS, IETF RFCs, KPQC, CRYPTREC, GB/T, GOST, DSTU, ISO, Eurocrypt/CRYPTO proceedings.
         </footer>

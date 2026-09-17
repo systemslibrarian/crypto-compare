@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { formatReviewDate } from "@/components/ui";
+import { DATASET_TRUST_SNAPSHOT } from "@/lib/datasetMetadata";
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -199,7 +201,7 @@ export default function VisualsView() {
         >
           <div style={{ marginBottom: "6px" }}>
             <span style={{ color: "var(--color-accent-blue-label)", fontWeight: 700 }}>Dataset reviewed:</span>{" "}
-            <time dateTime="2026-06-27">June 27, 2026</time>
+            <time dateTime={DATASET_TRUST_SNAPSHOT.latest}>{formatReviewDate(DATASET_TRUST_SNAPSHOT.latest)}</time>
           </div>
           Sources: NIST FIPS, IETF RFCs, KPQC, CRYPTREC, GB/T, GOST, DSTU, ISO, Eurocrypt/CRYPTO proceedings.
         </footer>
