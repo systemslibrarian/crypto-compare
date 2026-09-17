@@ -45,7 +45,7 @@ const SAFE_DEFAULTS: SafeDefault[] = [
     commonMistakes: [
       "Reusing a nonce with the same key — completely destroys GCM's authentication and can leak the authentication key (GHASH key), allowing forgery.",
       "Using AES-GCM without verifying the authentication tag before processing plaintext — enables chosen-ciphertext attacks.",
-      "Encrypting more than ~64 GiB under a single key without re-keying — GCM's counter wraps and security degrades.",
+      "Encrypting a single plaintext longer than 2³⁹ − 256 bits (~64 GiB − 32 bytes) in one GCM invocation — this exceeds the SP 800-38D per-invocation limit. Track per-key invocation and forgery budgets separately.",
     ],
     wrongChoiceConsequence: "Using AES-CBC without authentication allows padding oracle attacks that recover full plaintext. Using ECB mode leaks structural patterns in the data.",
   },
