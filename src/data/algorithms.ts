@@ -30,7 +30,7 @@ export const ALGORITHMS: Algorithm[] = [
     recommendationRationale:"Constant-time by construction with no lookup tables, eliminating cache-timing attacks. IETF-standardized (RFC 8439), proven Poly1305 MAC, and default cipher in WireGuard and TLS 1.3 fallback.",
     recommendationChangesWhen:"Downgrade if a shortcut attack on ChaCha20 is found. Upgrade to recommended-only if AES-NI becomes universal and ChaCha20 loses its software advantage.",
     whyNotThis:"Slightly slower than AES-256-GCM with AES-NI. 96-bit nonce limits safe random generation to ~2^32 messages per key. Use XChaCha20 for high-volume random nonces.",
-    assumptions:"Security relies on assumed hardness of the ChaCha20 stream cipher. Poly1305 MAC is information-theoretically secure given a unique key per message. Nonce reuse breaks confidentiality but not authenticity. PQ security assumes Grover halves the effective key length to 128-bit.",
+    assumptions:"Security relies on assumed hardness of the ChaCha20 stream cipher. Poly1305 MAC is information-theoretically secure given a unique key per message. Nonce reuse repeats both the ChaCha20 keystream and the one-time Poly1305 key, breaking confidentiality and enabling authentication forgeries. PQ security assumes Grover halves the effective key length to 128-bit.",
     estimationMethodology:{classicalBasis:"exact",quantumBasis:"exact",classicalNote:"256-bit key with no known shortcut attacks",quantumNote:"Grover's algorithm halves effective key length"},
     keySize:256, nonceSize:96, tagSize:128, blockSize:null,
     securityBits:256, pqSecurityBits:128,

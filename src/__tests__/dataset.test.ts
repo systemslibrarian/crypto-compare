@@ -164,6 +164,14 @@ describe("Trust Hardening Fields", () => {
       expect(hasMigration, `${algo.id}: legacy/avoid rationale should mention migration`).toBe(true);
     }
   });
+
+  it("warns that ChaCha20-Poly1305 nonce reuse endangers authentication", () => {
+    const chacha20Poly1305 = ALGORITHMS.find((algorithm) => algorithm.id === "chacha20poly");
+
+    expect(chacha20Poly1305).toBeDefined();
+    expect(chacha20Poly1305?.assumptions.toLowerCase()).toContain("authentication forgeries");
+    expect(chacha20Poly1305?.assumptions.toLowerCase()).not.toContain("but not authenticity");
+  });
 });
 
 describe("Hybrid Patterns", () => {
