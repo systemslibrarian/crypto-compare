@@ -530,7 +530,12 @@ function ResultBlock({
 
   const trustBadges: { label: string; color: string }[] = [];
   if (resultAlgo?.maturity) trustBadges.push({ label: resultAlgo.maturity, color: resultAlgo.maturity === "mature" ? "var(--color-badge-green-text, #5ce65c)" : resultAlgo.maturity === "established" ? "var(--color-badge-blue-text, #6cb6ff)" : "var(--color-badge-yellow-text, #e6c85c)" });
-  if (resultAlgo?.standardization && resultAlgo.standardization !== "none") trustBadges.push({ label: resultAlgo.standardization.toUpperCase(), color: "var(--color-text-accent-bright, #a0d0ff)" });
+  if (resultAlgo?.catalogEvidence?.standardization.bodies.length) {
+    trustBadges.push({
+      label: `${resultAlgo.catalogEvidence.standardization.bodies.join("/")} · ${resultAlgo.catalogEvidence.standardization.stage}`,
+      color: "var(--color-text-accent-bright, #a0d0ff)",
+    });
+  }
   if (resultAlgo?.pqRelevance) {
     const pqColors: Record<string, string> = { "pq-safe": "var(--color-badge-green-text, #5ce65c)", "pq-ready": "var(--color-badge-blue-text, #6cb6ff)", "pq-vulnerable": "var(--color-badge-red-text, #ff6b6b)", "pq-neutral": "var(--color-text-secondary, #aaa)" };
     trustBadges.push({ label: resultAlgo.pqRelevance, color: pqColors[resultAlgo.pqRelevance] ?? "var(--color-text-secondary)" });

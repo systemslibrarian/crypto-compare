@@ -7,6 +7,7 @@ import { formatReviewDate } from "@/components/ui";
 import { ALGORITHMS } from "@/data/algorithms";
 import { ALGORITHM_PROVENANCE } from "@/data/provenance";
 import { DATASET_TRUST_SNAPSHOT } from "@/lib/datasetMetadata";
+import { withProvenance } from "@/lib/dataset";
 import type { AlgorithmCategory } from "@/types/crypto";
 
 export default function AdvisorView() {
@@ -106,7 +107,7 @@ export default function AdvisorView() {
         <main style={{ padding: "28px 0 48px" }}>
           <DecisionFlowchart
             onNavigate={handleNavigate}
-            algorithms={ALGORITHMS}
+            algorithms={withProvenance(ALGORITHMS)}
             provenance={ALGORITHM_PROVENANCE}
           />
 

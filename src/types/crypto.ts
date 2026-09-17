@@ -46,6 +46,20 @@ export type SecurityEstimation = {
   quantumNote: string;
 };
 
+export type StandardizationStage = "final" | "draft" | "selected" | "research" | "none";
+export type DeploymentLevel = "ubiquitous" | "widespread" | "documented" | "limited" | "research" | "unknown";
+
+export type CatalogEvidence = {
+  standardization: {
+    stage: StandardizationStage;
+    formalPublication: boolean;
+    bodies: string[];
+  };
+  deployment: {
+    level: DeploymentLevel;
+  };
+};
+
 export type CategoryProject = {
   name: string;
   tech: string;
@@ -95,9 +109,7 @@ export type AlgorithmBase = {
   performance: string;
   notes: string;
   estimationMethodology: SecurityEstimation;
-  standardized?: boolean;
-  nistStandardized?: boolean;
-  widelyDeployed?: boolean;
+  catalogEvidence?: CatalogEvidence;
   countryTag?: string;
   sources?: AlgorithmSource[];
   lastReviewed?: string;

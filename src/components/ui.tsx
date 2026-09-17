@@ -1,4 +1,4 @@
-import type { AlgorithmStatus, RecommendationLevel, SourceKind } from "@/types/crypto";
+import type { AlgorithmStatus, RecommendationLevel, SourceKind, StandardizationStage } from "@/types/crypto";
 
 const REVIEW_MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -15,6 +15,18 @@ const STATUS_TONES: Record<AlgorithmStatus, BadgeTone> = {
 
 export function Badge({ status, label }: { status: AlgorithmStatus; label: string }) {
   return <span className={toneClass(STATUS_TONES[status] ?? "neutral")}>{label}</span>;
+}
+
+const STANDARDIZATION_TONES: Record<StandardizationStage, BadgeTone> = {
+  final: "green",
+  draft: "yellow",
+  selected: "purple",
+  research: "purple",
+  none: "neutral",
+};
+
+export function StandardizationBadge({ stage, label }: { stage: StandardizationStage; label: string }) {
+  return <span className={toneClass(STANDARDIZATION_TONES[stage])}>{label}</span>;
 }
 
 export function SecurityMeter({ bits, max = 256, label }: { bits: number | null | undefined; max?: number; label?: string }) {

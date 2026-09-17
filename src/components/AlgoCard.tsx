@@ -50,7 +50,6 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
 
   const metaBits: string[] = [algo.origin, algo.statusLabel];
   if (algo.maturity) metaBits.push(algo.maturity);
-  if (algo.standardization && algo.standardization !== "none") metaBits.push(algo.standardization.toUpperCase());
   if (algo.pqRelevance) metaBits.push(algo.pqRelevance.replace("pq-", "PQ-"));
 
   return (

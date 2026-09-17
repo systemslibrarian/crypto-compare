@@ -1,4 +1,5 @@
 import { ALGORITHM_PROVENANCE } from "@/data/provenance";
+import { CATALOG_EVIDENCE } from "@/data/catalogEvidence";
 import type { Algorithm } from "@/types/crypto";
 
 function deriveCountryTag(origin: string): string {
@@ -20,9 +21,7 @@ export function withProvenance(algorithms: Algorithm[]): Algorithm[] {
       ...algorithm,
       sources: traced?.sources,
       lastReviewed: traced?.lastReviewed,
-      standardized: algorithm.status === "standard",
-      nistStandardized: algorithm.statusLabel.includes("NIST") || algorithm.statusLabel.includes("FIPS"),
-      widelyDeployed: /deployed|widely|ubiquitous|default/i.test(`${algorithm.statusLabel} ${algorithm.notes}`),
+      catalogEvidence: CATALOG_EVIDENCE[algorithm.id],
       countryTag: deriveCountryTag(algorithm.origin),
     };
   });

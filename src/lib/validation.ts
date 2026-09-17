@@ -14,6 +14,8 @@ const RECOMMENDATION_LEVELS = ["recommended", "acceptable", "legacy", "research"
 const SOURCE_KINDS = ["standard", "analysis", "deployment", "benchmark"] as const;
 
 const ESTIMATION_BASES = ["exact", "conservative", "estimated", "speculative"] as const;
+const STANDARDIZATION_STAGES = ["final", "draft", "selected", "research", "none"] as const;
+const DEPLOYMENT_LEVELS = ["ubiquitous", "widespread", "documented", "limited", "research", "unknown"] as const;
 
 const AlgorithmSourceSchema = z.object({
   label: z.string().min(1),
@@ -27,6 +29,17 @@ const SecurityEstimationSchema = z.object({
   quantumBasis: z.enum(ESTIMATION_BASES),
   classicalNote: z.string().min(1),
   quantumNote: z.string().min(1),
+});
+
+const CatalogEvidenceSchema = z.object({
+  standardization: z.object({
+    stage: z.enum(STANDARDIZATION_STAGES),
+    formalPublication: z.boolean(),
+    bodies: z.array(z.string().min(1)),
+  }),
+  deployment: z.object({
+    level: z.enum(DEPLOYMENT_LEVELS),
+  }),
 });
 
 const AlgorithmBaseSchema = z.object({
@@ -51,9 +64,7 @@ const AlgorithmBaseSchema = z.object({
   performance: z.string().min(1),
   notes: z.string().min(1),
   estimationMethodology: SecurityEstimationSchema,
-  standardized: z.boolean().optional(),
-  nistStandardized: z.boolean().optional(),
-  widelyDeployed: z.boolean().optional(),
+  catalogEvidence: CatalogEvidenceSchema.optional(),
   countryTag: z.string().optional(),
   sources: z.array(AlgorithmSourceSchema).optional(),
   lastReviewed: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Must be YYYY-MM-DD format").optional(),

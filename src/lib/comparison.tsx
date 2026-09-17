@@ -1,4 +1,4 @@
-import { Badge, RecommendationBadge, SecurityMeter, formatBytes, recommendationText } from "@/components/ui";
+import { RecommendationBadge, SecurityMeter, StandardizationBadge, formatBytes, recommendationText } from "@/components/ui";
 import type {
   Algorithm,
   AsymmetricAlgorithm,
@@ -106,7 +106,27 @@ function formatPqSecurity(bits: number | null | undefined): string {
 export function buildRows(category: AlgorithmCategory, _advanced?: boolean): ComparisonRow[] {
   const rows: ComparisonRow[] = [];
   rows.push({ label: "Origin", render: (a) => a.origin, exportText: (a) => a.origin });
-  rows.push({ label: "Status", render: (a) => <Badge status={a.status} label={a.statusLabel} />, exportText: (a) => a.statusLabel });
+  rows.push({
+    label: "Status",
+    render: (a) => (
+      <StandardizationBadge
+        stage={a.catalogEvidence?.standardization.stage ?? (a.status === "standard" ? "final" : "research")}
+        label={a.statusLabel}
+      />
+    ),
+    exportText: (a) => a.statusLabel,
+  });
+  rows.push({
+    label: "Publication Stage",
+    render: (a) => {
+      const evidence = a.catalogEvidence?.standardization;
+      return <span>{evidence ? `${evidence.stage}${evidence.bodies.length ? ` · ${evidence.bodies.join(" / ")}` : ""}` : "Unclassified"}</span>;
+    },
+    exportText: (a) => {
+      const evidence = a.catalogEvidence?.standardization;
+      return evidence ? `${evidence.stage}${evidence.bodies.length ? ` · ${evidence.bodies.join(" / ")}` : ""}` : "Unclassified";
+    },
+  });
   rows.push({ label: "Recommendation", render: (a) => <RecommendationBadge level={a.recommendation} />, exportText: (a) => recommendationText(a.recommendation) });
   rows.push({ label: "Justification", render: (a) => a.recommendationRationale ?? "—", exportText: (a) => a.recommendationRationale ?? "" });
   rows.push({ label: "Changes When", render: (a) => a.recommendationChangesWhen, exportText: (a) => a.recommendationChangesWhen });

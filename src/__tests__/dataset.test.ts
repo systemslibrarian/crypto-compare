@@ -4,8 +4,10 @@ import { join } from "path";
 import { ALGORITHMS } from "@/data/algorithms";
 import { CATEGORIES, CATEGORY_INFO } from "@/data/categories";
 import { ALGORITHM_PROVENANCE } from "@/data/provenance";
+import { CATALOG_EVIDENCE } from "@/data/catalogEvidence";
 import { HYBRID_PATTERNS } from "@/data/hybridPatterns";
 import { validateAlgorithms } from "@/lib/validation";
+import { withProvenance } from "@/lib/dataset";
 import type { AlgorithmCategory } from "@/types/crypto";
 
 describe("Algorithm Dataset", () => {
@@ -115,6 +117,26 @@ describe("Provenance", () => {
         expect(["standard", "analysis", "deployment", "benchmark"]).toContain(source.kind);
       }
     }
+  });
+});
+
+describe("Catalog Evidence", () => {
+  it("covers every algorithm exactly once", () => {
+    const algorithmIds = new Set(ALGORITHMS.map((algorithm) => algorithm.id));
+    const evidenceIds = Object.keys(CATALOG_EVIDENCE);
+
+    expect(evidenceIds.filter((id) => !algorithmIds.has(id))).toEqual([]);
+    expect(ALGORITHMS.filter((algorithm) => !CATALOG_EVIDENCE[algorithm.id]).map((algorithm) => algorithm.id)).toEqual([]);
+    expect(evidenceIds).toHaveLength(algorithmIds.size);
+  });
+
+  it("does not mark pending NIST selections as final publications", () => {
+    expect(CATALOG_EVIDENCE.hqc.standardization.stage).toBe("selected");
+    expect(CATALOG_EVIDENCE.falcon512.standardization.stage).toBe("selected");
+  });
+
+  it("passes schema validation after evidence is attached", () => {
+    expect(validateAlgorithms(withProvenance(ALGORITHMS))).toEqual([]);
   });
 });
 

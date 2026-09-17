@@ -37,9 +37,25 @@ export function filterAlgorithms(algorithms: Algorithm[], options: FilterAlgorit
   }
 
   if (options.pqOnly) items = items.filter((algorithm) => algorithm.pqRelevance === "pq-safe");
-  if (options.standardOnly) items = items.filter((algorithm) => algorithm.standardized);
-  if (options.nistOnly) items = items.filter((algorithm) => algorithm.nistStandardized);
-  if (options.deployedOnly) items = items.filter((algorithm) => algorithm.widelyDeployed);
+  if (options.standardOnly) {
+    items = items.filter((algorithm) =>
+      algorithm.catalogEvidence?.standardization.stage === "final"
+      && algorithm.catalogEvidence.standardization.formalPublication,
+    );
+  }
+  if (options.nistOnly) {
+    items = items.filter((algorithm) =>
+      algorithm.catalogEvidence?.standardization.stage === "final"
+      && algorithm.catalogEvidence.standardization.formalPublication
+      && algorithm.catalogEvidence.standardization.bodies.includes("NIST"),
+    );
+  }
+  if (options.deployedOnly) {
+    items = items.filter((algorithm) =>
+      algorithm.catalogEvidence?.deployment.level === "ubiquitous"
+      || algorithm.catalogEvidence?.deployment.level === "widespread",
+    );
+  }
   if (options.country !== "all") items = items.filter((algorithm) => algorithm.countryTag === options.country);
 
   const sorted = [...items];

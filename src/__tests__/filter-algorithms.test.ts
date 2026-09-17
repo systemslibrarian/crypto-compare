@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { ALGORITHMS } from "@/data/algorithms";
+import { withProvenance } from "@/lib/dataset";
 import { filterAlgorithms } from "@/lib/filterAlgorithms";
 import type { Algorithm } from "@/types/crypto";
 
@@ -34,9 +36,10 @@ const algorithms: Algorithm[] = [
     nonceSize: 96,
     tagSize: 128,
     blockSize: 128,
-    standardized: true,
-    nistStandardized: true,
-    widelyDeployed: true,
+    catalogEvidence: {
+      standardization: { stage: "final", formalPublication: true, bodies: ["NIST"] },
+      deployment: { level: "ubiquitous" },
+    },
     countryTag: "Europe",
     pqRelevance: "pq-ready",
   },
@@ -71,9 +74,10 @@ const algorithms: Algorithm[] = [
     nonceSize: 192,
     tagSize: 128,
     blockSize: null,
-    standardized: false,
-    nistStandardized: false,
-    widelyDeployed: false,
+    catalogEvidence: {
+      standardization: { stage: "draft", formalPublication: false, bodies: ["IRTF"] },
+      deployment: { level: "limited" },
+    },
     countryTag: "USA",
     pqRelevance: "pq-safe",
   },
@@ -138,5 +142,72 @@ describe("filterAlgorithms", () => {
 
     expect(filtered).toHaveLength(1);
     expect(filtered[0].id).toBe("xchacha20poly");
+  });
+
+  it("does not treat NIST selections as final NIST publications", () => {
+    const filtered = filterAlgorithms(withProvenance(ALGORITHMS), {
+      category: "kem",
+      globalSearch: true,
+      showDefaults: false,
+      favoritesOnly: false,
+      favorites: [],
+      search: "",
+      pqOnly: false,
+      standardOnly: false,
+      nistOnly: true,
+      deployedOnly: false,
+      country: "all",
+      sortBy: "name",
+    });
+    const ids = filtered.map((algorithm) => algorithm.id);
+
+    expect(ids).toContain("mlkem768");
+    expect(ids).not.toContain("hqc");
+    expect(ids).not.toContain("falcon512");
+  });
+
+  it("does not treat research protocols as final publications", () => {
+    const filtered = filterAlgorithms(withProvenance(ALGORITHMS), {
+      category: "zkp",
+      globalSearch: true,
+      showDefaults: false,
+      favoritesOnly: false,
+      favorites: [],
+      search: "",
+      pqOnly: false,
+      standardOnly: true,
+      nistOnly: false,
+      deployedOnly: false,
+      country: "all",
+      sortBy: "name",
+    });
+    const ids = filtered.map((algorithm) => algorithm.id);
+
+    expect(ids).not.toContain("groth16");
+    expect(ids).not.toContain("plonk");
+    expect(ids).not.toContain("spdz");
+  });
+
+  it("uses explicit deployment levels rather than prose matches", () => {
+    const filtered = filterAlgorithms(withProvenance(ALGORITHMS), {
+      category: "kdf",
+      globalSearch: true,
+      showDefaults: false,
+      favoritesOnly: false,
+      favorites: [],
+      search: "",
+      pqOnly: false,
+      standardOnly: false,
+      nistOnly: false,
+      deployedOnly: true,
+      country: "all",
+      sortBy: "name",
+    });
+    const ids = filtered.map((algorithm) => algorithm.id);
+
+    expect(ids).toContain("aes256gcm");
+    expect(ids).not.toContain("balloon");
+    expect(ids).not.toContain("bfv");
+    expect(ids).not.toContain("wow_stego");
   });
 });

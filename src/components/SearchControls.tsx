@@ -118,11 +118,11 @@ export default function SearchControls({
           {pqOnly && <span className="filterChipIndicator" aria-hidden="true">✓</span>}
           PQ-safe only
         </button>
-        <button className={`focusRing controlBtn filterChip ${standardOnly ? "controlBtnActive" : ""}`} onClick={onToggleStandardOnly} aria-pressed={standardOnly} aria-label={standardOnly ? "Standards filter active — click to show all" : "Show only standardized algorithms"}>
+        <button className={`focusRing controlBtn filterChip ${standardOnly ? "controlBtnActive" : ""}`} onClick={onToggleStandardOnly} aria-pressed={standardOnly} aria-label={standardOnly ? "Final publications filter active — click to show all" : "Show only final standards and specifications"}>
           {standardOnly && <span className="filterChipIndicator" aria-hidden="true">✓</span>}
-          Standards only
+          Final publications
         </button>
-        <button className={`focusRing controlBtn filterChip ${nistOnly ? "controlBtnActive" : ""}`} onClick={onToggleNistOnly} aria-pressed={nistOnly} aria-label={nistOnly ? "NIST filter active — click to show all" : "Show only NIST-standardized algorithms"}>
+        <button className={`focusRing controlBtn filterChip ${nistOnly ? "controlBtnActive" : ""}`} onClick={onToggleNistOnly} aria-pressed={nistOnly} aria-label={nistOnly ? "NIST filter active — click to show all" : "Show only final NIST publications"}>
           {nistOnly && <span className="filterChipIndicator" aria-hidden="true">✓</span>}
           NIST only
         </button>
