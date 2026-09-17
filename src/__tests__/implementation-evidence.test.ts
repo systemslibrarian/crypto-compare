@@ -1,0 +1,31 @@
+import { describe, expect, it } from "vitest";
+import {
+  IMPLEMENTATIONS,
+  isImplementationCheckStale,
+  validateImplementationEvidence,
+  type ImplementationEntry,
+} from "@/data/implementations";
+
+describe("implementation evidence", () => {
+  it("never labels an implementation audited without linked, scoped evidence", () => {
+    expect(validateImplementationEvidence(IMPLEMENTATIONS)).toEqual([]);
+    expect(IMPLEMENTATIONS.every((entry) => entry.auditStatus !== "evidence-linked" || Boolean(entry.auditEvidence))).toBe(true);
+  });
+
+  it("rejects a bare audit claim", () => {
+    const entry: ImplementationEntry = {
+      ...IMPLEMENTATIONS[0],
+      auditStatus: "evidence-linked",
+      auditEvidence: undefined,
+    };
+    expect(validateImplementationEvidence([entry])).toEqual([
+      `${entry.algorithmId}/${entry.ecosystem}/${entry.library}: audit evidence is missing`,
+    ]);
+  });
+
+  it("marks catalog checks older than 180 days as stale", () => {
+    expect(isImplementationCheckStale("2024-12-01", new Date("2026-09-17T00:00:00Z"))).toBe(true);
+    expect(isImplementationCheckStale("2026-09-01", new Date("2026-09-17T00:00:00Z"))).toBe(false);
+    expect(isImplementationCheckStale("not-a-date", new Date("2026-09-17T00:00:00Z"))).toBe(true);
+  });
+});

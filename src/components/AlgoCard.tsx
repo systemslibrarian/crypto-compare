@@ -246,9 +246,8 @@ function ImplementationList({ impls }: { impls: ImplementationEntry[] }) {
     byEco[impl.ecosystem].push(impl);
   }
   const auditColor: Record<string, string> = {
-    audited: "var(--color-badge-green-text)",
-    unaudited: "var(--color-badge-red-text)",
-    unknown: "var(--color-badge-yellow-text)",
+    "evidence-linked": "var(--color-badge-green-text)",
+    "not-evidenced": "var(--color-badge-yellow-text)",
   };
   return (
     <DetailSection label="Implementations">
@@ -260,7 +259,7 @@ function ImplementationList({ impls }: { impls: ImplementationEntry[] }) {
           {list.map((impl, idx) => (
             <div key={idx} className="recordSubItem">
               <strong style={{ color: "var(--color-text-heading)" }}>{impl.library}</strong>
-              <span style={{ fontSize: "10.5px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.06em", color: auditColor[impl.auditStatus], marginLeft: "8px" }}>{impl.auditStatus}</span>
+              <span style={{ fontSize: "10.5px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.06em", color: auditColor[impl.auditStatus], marginLeft: "8px" }}>{impl.auditStatus === "evidence-linked" ? "audit evidence linked" : "audit not evidenced"}</span>
               <div style={{ color: "var(--color-text-muted)" }}>{impl.notes}</div>
               {impl.warning && <div style={{ color: "var(--color-badge-yellow-text)", fontSize: "11.5px", marginTop: "2px" }}>{impl.warning}</div>}
             </div>

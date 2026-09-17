@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { IMPLEMENTATIONS, ECOSYSTEM_LABELS, type Ecosystem, type ImplementationEntry } from "@/data/implementations";
+import { IMPLEMENTATIONS, ECOSYSTEM_LABELS, isImplementationCheckStale, type Ecosystem, type ImplementationEntry } from "@/data/implementations";
 
 const ALL_ECOSYSTEMS: Ecosystem[] = ["rust", "python", "typescript", "go", "dotnet", "java"];
 
@@ -29,14 +29,13 @@ const UNIQUE_ALGOS = Array.from(new Set(IMPLEMENTATIONS.map((i) => i.algorithmId
 
 function auditBadge(status: ImplementationEntry["auditStatus"]) {
   const colors: Record<string, { bg: string; text: string; border: string }> = {
-    audited: { bg: "var(--color-badge-green-bg, #143d1a)", text: "var(--color-badge-green-text, #5ce65c)", border: "var(--color-badge-green-border, #2a7d2a)" },
-    unaudited: { bg: "var(--color-badge-red-bg, #3d1414)", text: "var(--color-badge-red-text, #ff6b6b)", border: "var(--color-badge-red-border, #7d2a2a)" },
-    unknown: { bg: "var(--color-badge-yellow-bg, #3d3414)", text: "var(--color-badge-yellow-text, #e6c85c)", border: "var(--color-badge-yellow-border, #7d6e2a)" },
+    "evidence-linked": { bg: "var(--color-badge-green-bg, #143d1a)", text: "var(--color-badge-green-text, #5ce65c)", border: "var(--color-badge-green-border, #2a7d2a)" },
+    "not-evidenced": { bg: "var(--color-badge-yellow-bg, #3d3414)", text: "var(--color-badge-yellow-text, #e6c85c)", border: "var(--color-badge-yellow-border, #7d6e2a)" },
   };
   const c = colors[status];
   return (
     <span style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", padding: "2px 8px", borderRadius: "4px", background: c.bg, color: c.text, border: `1px solid ${c.border}` }}>
-      {status}
+      {status === "evidence-linked" ? "audit evidence linked" : "audit not evidenced"}
     </span>
   );
 }
@@ -67,7 +66,7 @@ export default function ImplementationsView() {
         Implementation Map
       </h1>
       <p style={{ fontSize: "17px", color: "var(--color-text-secondary)", lineHeight: 1.7, margin: "0 0 12px" }}>
-        Verified libraries for recommended algorithms across 6 ecosystems. Filter by language or algorithm.
+        Candidate libraries for recommended algorithms across 6 ecosystems, with explicit audit-evidence and catalog-freshness status.
       </p>
 
       {/* Disclaimer */}
@@ -84,9 +83,8 @@ export default function ImplementationsView() {
           ⚠ Disclaimer
         </strong>
         <span style={{ color: "var(--color-text-warning, var(--color-text-body))" }}>
-          Library audit status may change. Always verify the latest status before deploying to production.
-          Entries marked &quot;unknown&quot; have not been independently confirmed by this project.
-          Last bulk verification: 2024-12.
+          A library listing is not a security endorsement. &quot;Audit not evidenced&quot; means this catalog does not link a scoped audit report.
+          Every entry must be re-checked for its current package version, maintenance status, platform support, and published security reviews before production use.
         </span>
       </div>
 
@@ -177,12 +175,20 @@ export default function ImplementationsView() {
                         ⚠ {impl.warning}
                       </div>
                     )}
+                    {impl.auditEvidence && (
+                      <div style={{ marginBottom: "8px", fontSize: "12px" }}>
+                        <a href={impl.auditEvidence.url} target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-text-link)" }}>
+                          {impl.auditEvidence.label} ({impl.auditEvidence.published})
+                        </a>
+                        <div style={{ color: "var(--color-text-muted)" }}>Scope: {impl.auditEvidence.scope}</div>
+                      </div>
+                    )}
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                       <a href={impl.url} target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-text-link)", fontSize: "12px", textDecoration: "none" }}>
                         View library →
                       </a>
                       <span style={{ fontSize: "11px", color: "var(--color-text-ghost)" }}>
-                        Verified {impl.lastVerified}
+                        Checked {impl.lastChecked}{isImplementationCheckStale(impl.lastChecked) ? " · stale" : ""}
                       </span>
                     </div>
                   </div>
