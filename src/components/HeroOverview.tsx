@@ -8,7 +8,8 @@ type HeroOverviewProps = {
   filteredCount: number;
   recommendationCounts: RecommendationCounts;
   trustSnapshot: TrustSnapshot;
-  totalSources: number;
+  totalCitations: number;
+  uniqueSources: number;
 };
 
 /**
@@ -22,14 +23,15 @@ export default function HeroOverview({
   filteredCount,
   recommendationCounts,
   trustSnapshot,
-  totalSources,
+  totalCitations,
+  uniqueSources,
 }: HeroOverviewProps) {
   return (
     <div className="statusRow" aria-label="Catalog status">
       <span className="statusScope">{globalSearch ? "All categories" : selectedCategoryLabel}</span>
       <span className="statusItem"><strong>{filteredCount}</strong> shown / {datasetSize} total</span>
       <span className="statusItem"><strong>{recommendationCounts.recommended ?? 0}</strong> recommended</span>
-      <span className="statusItem"><strong>{totalSources}</strong> sources cited</span>
+      <span className="statusItem"><strong>{totalCitations}</strong> citations · <strong>{uniqueSources}</strong> unique sources</span>
       {trustSnapshot.latest && (
         <span className="statusItem">Reviewed {formatReviewDate(trustSnapshot.latest)}</span>
       )}

@@ -3,7 +3,8 @@ import Link from "next/link";
 type HomeHeroProps = {
   datasetSize: number;
   categoryCount: number;
-  totalSources: number;
+  totalCitations: number;
+  uniqueSources: number;
 };
 
 const USE_CASES: { label: string; href: string }[] = [
@@ -19,7 +20,7 @@ const USE_CASES: { label: string; href: string }[] = [
  * First viewport: what this is, how big it is, and where to go — while keeping
  * the catalog immediately visible below. An app screen, not a marketing page.
  */
-export default function HomeHero({ datasetSize, categoryCount, totalSources }: HomeHeroProps) {
+export default function HomeHero({ datasetSize, categoryCount, totalCitations, uniqueSources }: HomeHeroProps) {
   return (
     <section className="homeHero" aria-label="Overview">
       <p className="homeHeroEyebrow">Cryptographic algorithm reference</p>
@@ -42,8 +43,8 @@ export default function HomeHero({ datasetSize, categoryCount, totalSources }: H
           <span className="heroStatLabel">categories</span>
         </span>
         <span className="heroStat">
-          <span className="heroStatValue">{totalSources}</span>
-          <span className="heroStatLabel">sources cited</span>
+          <span className="heroStatValue">{totalCitations}</span>
+          <span className="heroStatLabel">citations · {uniqueSources} unique sources</span>
         </span>
       </div>
 

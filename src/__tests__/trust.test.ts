@@ -16,12 +16,13 @@ function withProvenance(algo: Algorithm): Algorithm {
 describe("trust helpers", () => {
   const dataset = ALGORITHMS.map(withProvenance);
 
-  it("summarizes provenance review window and source count", () => {
+  it("summarizes provenance review window, citations, and unique sources", () => {
     const summary = summarizeReviewWindow(dataset);
     expect(summary.earliest).toBe("2026-06-27");
     expect(summary.latest).toBe("2026-06-27");
     expect(summary.coverage).toBe(dataset.length);
-    expect(summary.totalSources).toBeGreaterThan(0);
+    expect(summary.totalCitations).toBe(150);
+    expect(summary.uniqueSources).toBe(117);
   });
 
   it("counts recommendation levels in a filtered set", () => {
@@ -34,7 +35,7 @@ describe("trust helpers", () => {
     const summary = summarizeReviewWindow([]);
     const counts = countRecommendations([]);
 
-    expect(summary).toEqual({ earliest: undefined, latest: undefined, coverage: 0, totalSources: 0 });
+    expect(summary).toEqual({ earliest: undefined, latest: undefined, coverage: 0, totalCitations: 0, uniqueSources: 0 });
     expect(counts).toEqual({});
   });
 });

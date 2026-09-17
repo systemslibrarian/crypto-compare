@@ -322,7 +322,8 @@ export default function CryptoCompare() {
           <HomeHero
             datasetSize={dataset.length}
             categoryCount={CATEGORIES.length}
-            totalSources={trustSnapshot.totalSources}
+            totalCitations={trustSnapshot.totalCitations}
+            uniqueSources={trustSnapshot.uniqueSources}
           />
 
           <div className="browseHeading">
@@ -397,7 +398,8 @@ export default function CryptoCompare() {
             filteredCount={filtered.length}
             recommendationCounts={filteredRecommendationCounts}
             trustSnapshot={trustSnapshot}
-            totalSources={trustSnapshot.totalSources}
+            totalCitations={trustSnapshot.totalCitations}
+            uniqueSources={trustSnapshot.uniqueSources}
           />
 
           <CategoryExplainer category={cat} expanded={explainerOpen} onToggle={() => setExplainerOpen(!explainerOpen)} onNavigateCategory={controller.switchCategory} />

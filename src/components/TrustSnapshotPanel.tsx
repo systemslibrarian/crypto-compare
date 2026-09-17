@@ -29,8 +29,8 @@ export default function TrustSnapshotPanel({
         </div>
         <div className="trustCard">
           <div className="trustLabel">Source backbone</div>
-          <div className="trustValue">{snapshot.totalSources} cited sources</div>
-          <div className="trustMeta">standards, analysis, deployment, and benchmark references</div>
+          <div className="trustValue">{snapshot.totalCitations} citations</div>
+          <div className="trustMeta">{snapshot.uniqueSources} unique source URLs across standards, analysis, deployment, and benchmarks</div>
         </div>
         <div className="trustCard">
           <div className="trustLabel">Current view</div>

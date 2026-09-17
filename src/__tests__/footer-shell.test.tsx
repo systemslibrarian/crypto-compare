@@ -10,7 +10,8 @@ describe("FooterShell", () => {
           earliest: "2026-01",
           latest: "2026-03",
           coverage: 85,
-          totalSources: 220,
+          totalCitations: 220,
+          uniqueSources: 180,
         }}
       />,
     );

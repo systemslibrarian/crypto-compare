@@ -138,7 +138,8 @@ export default function AboutView() {
               GB/T, GOST, DSTU, and peer-reviewed Eurocrypt/CRYPTO proceedings. A build-time check rejects entries
               lacking primary-source citations, and a separate job keeps the linked{" "}
               <Link href="/labs" style={linkStyle}>interactive labs</Link> in sync with the live catalog. The dataset and
-              its full provenance are open source.
+              its full provenance are open source. The current catalog contains {snapshot.totalCitations} citation
+              records across {snapshot.uniqueSources} unique source URLs.
             </p>
           </Section>
 
