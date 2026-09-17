@@ -25,11 +25,10 @@ export default function CategoryStrip({
   onSelectAll,
 }: CategoryStripProps) {
   return (
-    <nav className="catStrip" role="tablist" aria-label="Cryptography categories">
+    <nav className="catStrip" aria-label="Cryptography categories">
       <button
         type="button"
-        role="tab"
-        aria-selected={globalSearch}
+        aria-pressed={globalSearch}
         className="focusRing catChip"
         onClick={onSelectAll}
       >
@@ -40,8 +39,7 @@ export default function CategoryStrip({
         <button
           key={category.id}
           type="button"
-          role="tab"
-          aria-selected={!globalSearch && selectedCategory === category.id}
+          aria-pressed={!globalSearch && selectedCategory === category.id}
           className="focusRing catChip"
           onClick={() => onSelectCategory(category.id)}
         >

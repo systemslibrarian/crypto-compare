@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, fireEvent, cleanup } from "@testing-library/react";
+import { render, screen, fireEvent, cleanup, within } from "@testing-library/react";
 import { ALGORITHMS } from "@/data/algorithms";
 import { CATEGORIES } from "@/data/categories";
 import { ALGORITHM_PROVENANCE } from "@/data/provenance";
@@ -509,9 +509,9 @@ describe("URL State Hydration", () => {
     window.history.replaceState({}, "", "?cat=hash");
     const CryptoCompare = (await import("@/components/CryptoCompare")).default;
     const { unmount } = render(<CryptoCompare />);
-    // The hash category tab should be selected
-    const hashTab = screen.getByRole("tab", { name: /Hash/i });
-    expect(hashTab).toHaveAttribute("aria-selected", "true");
+    const categoryNav = screen.getByRole("navigation", { name: "Cryptography categories" });
+    const hashButton = within(categoryNav).getByRole("button", { name: /Hash/i });
+    expect(hashButton).toHaveAttribute("aria-pressed", "true");
     unmount();
   });
 
@@ -520,8 +520,9 @@ describe("URL State Hydration", () => {
     const CryptoCompare = (await import("@/components/CryptoCompare")).default;
     const { unmount } = render(<CryptoCompare />);
     // Falls back to default "symmetric"
-    const symTab = screen.getByRole("tab", { name: /\bSymmetric\b/i });
-    expect(symTab).toHaveAttribute("aria-selected", "true");
+    const categoryNav = screen.getByRole("navigation", { name: "Cryptography categories" });
+    const symmetricButton = within(categoryNav).getByRole("button", { name: /\bSymmetric\b/i });
+    expect(symmetricButton).toHaveAttribute("aria-pressed", "true");
     unmount();
   });
 
@@ -664,8 +665,9 @@ describe("Keyboard Shortcuts", () => {
     // Default is "symmetric" (index 1) — ArrowRight goes to next ("curve", index 2)
     const nextCat = CATEGORIES[2]; // curve
     fireEvent.keyDown(document, { key: "ArrowRight" });
-    const nextTab = screen.getByRole("tab", { name: new RegExp(nextCat.label, "i") });
-    expect(nextTab).toHaveAttribute("aria-selected", "true");
+    const categoryNav = screen.getByRole("navigation", { name: "Cryptography categories" });
+    const nextButton = within(categoryNav).getByRole("button", { name: new RegExp(nextCat.label, "i") });
+    expect(nextButton).toHaveAttribute("aria-pressed", "true");
     unmount();
   });
 
@@ -675,8 +677,9 @@ describe("Keyboard Shortcuts", () => {
     const { unmount } = render(<CryptoCompare />);
     // hash (index 3) — ArrowLeft goes to curve (index 2)
     fireEvent.keyDown(document, { key: "ArrowLeft" });
-    const curveTab = screen.getByRole("tab", { name: /Elliptic Curves/i });
-    expect(curveTab).toHaveAttribute("aria-selected", "true");
+    const categoryNav = screen.getByRole("navigation", { name: "Cryptography categories" });
+    const curveButton = within(categoryNav).getByRole("button", { name: /Elliptic Curves/i });
+    expect(curveButton).toHaveAttribute("aria-pressed", "true");
     unmount();
   });
 

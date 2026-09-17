@@ -590,7 +590,7 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
           <div id="flowchart-question" style={{ fontSize: "17px", color: "var(--color-text)", fontWeight: 600, marginBottom: "14px", lineHeight: 1.6 }}>
             {node.question}
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }} role="list" aria-labelledby="flowchart-question">
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }} aria-labelledby="flowchart-question">
             {node.options.map((option, optionIndex) => (
               <button
                 key={advisorOptionId(currentNode, optionIndex)}
@@ -682,7 +682,7 @@ function ResultBlock({
   }
 
   return (
-    <div role="alert" aria-live="assertive">
+    <div role="status" aria-live="polite">
       <div style={{ fontSize: "13px", color: "var(--color-badge-green-text)", fontWeight: 700, marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
         {result.kind === "review" ? "Security review required" : "Recommended profile"}
       </div>
