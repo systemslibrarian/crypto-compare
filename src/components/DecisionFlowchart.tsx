@@ -8,7 +8,7 @@ import {
   ADVISOR_RULESET_VERSION,
   advisorOptionId,
   type AdvisorDecisionStep,
-  type AdvisorRecommendation,
+  type AdvisorOutcome,
   type AdvisorRuleTree,
 } from "@/lib/advisorEngine";
 import type { Algorithm, AlgorithmCategory, AlgorithmSource } from "@/types/crypto";
@@ -40,6 +40,21 @@ export const DECISION_TREE: AdvisorRuleTree = {
     options: [
       { label: "Yes — hardware AES available", answer: { algo: "AES-256-GCM", id: "aes256gcm", reason: "Hardware-accelerated, NIST standard, ~1 cycle/byte. The universal default when AES-NI is present.", category: "symmetric" } },
       { label: "No — or I prefer a software-first design", next: "symmetric_sw" },
+      {
+        label: "I need full-disk encryption or am designing a new protocol",
+        answer: {
+          kind: "review",
+          algo: "Security review required",
+          id: null,
+          reason: "A general-purpose AEAD recommendation is not sufficient for sector encryption or a new protocol. The construction, state model, and failure behavior must be reviewed together.",
+          category: "symmetric",
+          nextSteps: [
+            "Choose a storage- or protocol-specific construction instead of dropping in a standalone AEAD primitive.",
+            "Document the record or sector format, integrity and replay requirements, nonce or state model, key hierarchy, and recovery behavior.",
+            "Obtain cryptographic design review before implementation or deployment.",
+          ],
+        },
+      },
     ],
   },
   symmetric_sw: {
@@ -250,14 +265,14 @@ type DecisionFlowchartProps = {
 };
 
 export function buildJustificationReport(
-  result: { algo: string; id: string; reason: string; category: AlgorithmCategory },
+  result: AdvisorOutcome,
   history: AdvisorDecisionStep[],
   algorithms: Algorithm[],
   provenance: Record<string, { sources: AlgorithmSource[]; lastReviewed: string }>,
   tree: AdvisorRuleTree,
 ): string {
-  const algo = algorithms.find((a) => a.id === result.id);
-  const prov = provenance[result.id];
+  const algo = result.id ? algorithms.find((a) => a.id === result.id) : undefined;
+  const prov = result.id ? provenance[result.id] : undefined;
   const lines: string[] = [];
 
   lines.push("# Cryptographic Algorithm Justification Report");
@@ -287,12 +302,19 @@ export function buildJustificationReport(
   }
   lines.push("");
 
-  lines.push("## Recommendation");
+  lines.push(result.kind === "review" ? "## Review Required" : "## Recommendation");
   lines.push("");
-  lines.push(`**Algorithm**: ${result.algo}`);
+  lines.push(`**${result.kind === "review" ? "Outcome" : "Algorithm"}**: ${result.algo}`);
   lines.push(`**Category**: ${result.category}`);
   lines.push(`**Wizard Reasoning**: ${result.reason}`);
   lines.push("");
+
+  if (result.kind === "review") {
+    lines.push("## Required Next Steps");
+    lines.push("");
+    for (const step of result.nextSteps) lines.push(`- ${step}`);
+    lines.push("");
+  }
 
   if (algo) {
     const assurance = getAssuranceProfile(algo);
@@ -347,11 +369,11 @@ export function buildJustificationReport(
 export default function DecisionFlowchart({ onNavigate, algorithms = [], provenance = {} }: DecisionFlowchartProps) {
   const [currentNode, setCurrentNode] = useState("start");
   const [history, setHistory] = useState<AdvisorDecisionStep[]>([]);
-  const [result, setResult] = useState<AdvisorRecommendation | null>(null);
+  const [result, setResult] = useState<AdvisorOutcome | null>(null);
 
   const node = DECISION_TREE[currentNode];
-  const resultAlgo = result ? algorithms.find((algo) => algo.id === result.id) : undefined;
-  const resultProvenance = result ? provenance[result.id] : undefined;
+  const resultAlgo = result?.id ? algorithms.find((algo) => algo.id === result.id) : undefined;
+  const resultProvenance = result?.id ? provenance[result.id] : undefined;
 
   const goBack = () => {
     if (result) {
@@ -517,7 +539,7 @@ function ResultBlock({
   provenance,
   onNavigate,
 }: {
-  result: AdvisorRecommendation;
+  result: AdvisorOutcome;
   resultAlgo?: Algorithm;
   resultProvenance?: { sources: AlgorithmSource[]; lastReviewed: string };
   history: AdvisorDecisionStep[];
@@ -526,7 +548,7 @@ function ResultBlock({
   onNavigate: (category: AlgorithmCategory, algoId: string) => void;
 }) {
   const [copied, setCopied] = useState(false);
-  const impls = IMPLEMENTATIONS.filter((i) => i.algorithmId === result.id);
+  const impls = result.id ? IMPLEMENTATIONS.filter((i) => i.algorithmId === result.id) : [];
   const ecosystems = Array.from(new Set(impls.map((i) => i.ecosystem)));
 
   const trustBadges: { label: string; color: string }[] = [];
@@ -553,7 +575,7 @@ function ResultBlock({
   return (
     <div role="alert" aria-live="assertive">
       <div style={{ fontSize: "13px", color: "var(--color-badge-green-text)", fontWeight: 700, marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
-        Recommended Stack
+        {result.kind === "review" ? "Security review required" : "Recommended profile"}
       </div>
       <div style={{ background: "var(--color-bg-card)", border: "1px solid var(--color-badge-green-border)", borderRadius: "10px", padding: "18px 20px" }}>
         <div style={{ fontSize: "22px", fontWeight: 700, color: "var(--color-badge-green-text)", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", marginBottom: "4px" }}>
@@ -572,6 +594,15 @@ function ResultBlock({
           <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--color-text-accent-bright)", textTransform: "uppercase", letterSpacing: "0.4px", marginBottom: "4px" }}>Justification</div>
           <div style={{ fontSize: "15px", color: "var(--color-text-body)", lineHeight: 1.75 }}>{result.reason}</div>
         </div>
+
+        {result.kind === "review" && (
+          <div style={{ marginBottom: "14px" }}>
+            <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--color-badge-yellow-text)", textTransform: "uppercase", letterSpacing: "0.4px", marginBottom: "4px" }}>Required next steps</div>
+            <ul style={{ margin: 0, paddingLeft: "20px", color: "var(--color-text-body)", lineHeight: 1.7 }}>
+              {result.nextSteps.map((step) => <li key={step}>{step}</li>)}
+            </ul>
+          </div>
+        )}
 
         {/* WHY NOT THIS */}
         {resultAlgo?.whyNotThis && (
@@ -630,9 +661,11 @@ function ResultBlock({
 
         {/* Actions */}
         <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-          <button onClick={() => onNavigate(result.category, result.id)} style={{ background: "var(--color-button-primary)", color: "var(--color-button-primary-text)", border: "none", padding: "12px 20px", borderRadius: "6px", fontSize: "14px", fontWeight: 700, cursor: "pointer", minHeight: "44px" }}>
-            View {result.algo} details →
-          </button>
+          {result.id && (
+            <button onClick={() => onNavigate(result.category, result.id!)} style={{ background: "var(--color-button-primary)", color: "var(--color-button-primary-text)", border: "none", padding: "12px 20px", borderRadius: "6px", fontSize: "14px", fontWeight: 700, cursor: "pointer", minHeight: "44px" }}>
+              View {result.algo} details →
+            </button>
+          )}
           <button
             onClick={copyAsMarkdown}
             style={{ background: "var(--color-bg-control)", color: "var(--color-text-body)", border: "1px solid var(--color-border-muted)", padding: "12px 20px", borderRadius: "6px", fontSize: "14px", fontWeight: 700, cursor: "pointer", minHeight: "44px" }}
@@ -646,7 +679,7 @@ function ResultBlock({
               const url = URL.createObjectURL(blob);
               const a = document.createElement("a");
               a.href = url;
-              a.download = `justification-${result.id}.md`;
+              a.download = `justification-${result.id ?? "review-required"}.md`;
               a.click();
               URL.revokeObjectURL(url);
             }}

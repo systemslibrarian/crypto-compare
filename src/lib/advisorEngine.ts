@@ -4,16 +4,34 @@ export const ADVISOR_RULESET_VERSION = "2026.09.1";
 export const ADVISOR_START_NODE = "start";
 
 export type AdvisorRecommendation = {
+  kind?: "recommendation";
   algo: string;
   id: string;
   reason: string;
   category: AlgorithmCategory;
 };
 
+export type AdvisorReviewOutcome = {
+  kind: "review";
+  algo: "Security review required";
+  id: null;
+  reason: string;
+  category: AlgorithmCategory;
+  nextSteps: string[];
+};
+
+export type AdvisorOutcome = AdvisorRecommendation | AdvisorReviewOutcome;
+
+export function isAdvisorRecommendation(
+  outcome: AdvisorOutcome,
+): outcome is AdvisorRecommendation {
+  return outcome.kind !== "review";
+}
+
 export type AdvisorOption = {
   label: string;
   next?: string;
-  answer?: AdvisorRecommendation;
+  answer?: AdvisorOutcome;
 };
 
 export type AdvisorNode = {
@@ -33,7 +51,7 @@ export type AdvisorDecisionStep = {
 export type AdvisorLeafPath = {
   choiceIds: string[];
   steps: AdvisorDecisionStep[];
-  result: AdvisorRecommendation;
+  result: AdvisorOutcome;
 };
 
 export function advisorOptionId(nodeId: string, optionIndex: number): string {
@@ -86,7 +104,12 @@ export function validateAdvisorRules(tree: AdvisorRuleTree, algorithmIds: Set<st
       const targetCount = Number(Boolean(option.next)) + Number(Boolean(option.answer));
       if (targetCount !== 1) errors.push(`${optionId}: must have exactly one next node or answer`);
       if (option.next && !tree[option.next]) errors.push(`${optionId}: missing next node ${option.next}`);
-      if (option.answer && !algorithmIds.has(option.answer.id)) errors.push(`${optionId}: unknown algorithm ${option.answer.id}`);
+      if (option.answer && isAdvisorRecommendation(option.answer) && !algorithmIds.has(option.answer.id)) {
+        errors.push(`${optionId}: unknown algorithm ${option.answer.id}`);
+      }
+      if (option.answer?.kind === "review" && option.answer.nextSteps.length === 0) {
+        errors.push(`${optionId}: review outcome must provide next steps`);
+      }
     });
   }
 
