@@ -12,13 +12,16 @@ const SHORTCUTS = [
 ] as const;
 
 export default function ShortcutHelp({ open, onClose }: ShortcutHelpProps) {
+  const dialogRef = useModalDialog<HTMLDivElement>(open, onClose);
   if (!open) return null;
 
-  return (
+  const dialog = (
     <div
+      ref={dialogRef}
       role="dialog"
-      aria-label="Keyboard shortcuts"
       aria-modal="true"
+      aria-labelledby="shortcut-dialog-title"
+      tabIndex={-1}
       style={{
         position: "fixed",
         inset: 0,
@@ -44,11 +47,12 @@ export default function ShortcutHelp({ open, onClose }: ShortcutHelpProps) {
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-          <h2 style={{ margin: 0, fontSize: "18px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", color: "var(--color-text-heading)" }}>
+          <h2 id="shortcut-dialog-title" style={{ margin: 0, fontSize: "18px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", color: "var(--color-text-heading)" }}>
             Keyboard Shortcuts
           </h2>
           <button
             onClick={onClose}
+            data-modal-initial-focus="true"
             className="focusRing"
             aria-label="Close shortcuts panel"
             style={{
@@ -92,4 +96,10 @@ export default function ShortcutHelp({ open, onClose }: ShortcutHelpProps) {
       </div>
     </div>
   );
+
+  return createPortal(dialog, document.body);
 }
+"use client";
+
+import { createPortal } from "react-dom";
+import { useModalDialog } from "@/lib/useModalDialog";

@@ -1,5 +1,7 @@
-import { useEffect, type ChangeEvent, type Ref } from "react";
+import { useEffect, useState, type ChangeEvent, type Ref } from "react";
+import { createPortal } from "react-dom";
 import { FILTER_PRESETS, type FilterPreset } from "@/data/filterPresets";
+import { useModalDialog } from "@/lib/useModalDialog";
 
 type SortOption = {
   id: string;
@@ -77,6 +79,7 @@ export default function SearchControls({
   onApplyPreset,
   onClearAllFilters,
 }: SearchControlsProps) {
+  const [isMobile, setIsMobile] = useState(false);
   const hasActiveFilters = pqOnly || standardOnly || nistOnly || deployedOnly || showDefaults || country !== "all" || favOnly;
   const activeFilterCount = [pqOnly, standardOnly, nistOnly, deployedOnly, showDefaults, country !== "all", favOnly].filter(Boolean).length;
   const activePresetId = FILTER_PRESETS.find((preset) => {
@@ -94,15 +97,16 @@ export default function SearchControls({
       && search === (filters.search ?? "");
   })?.id;
 
-  // Lock body scroll when filter sheet is open on mobile
   useEffect(() => {
-    if (!showFilters) return;
     if (typeof window.matchMedia !== "function") return;
     const mql = window.matchMedia("(max-width: 900px)");
-    if (!mql.matches) return;
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
-  }, [showFilters]);
+    const update = () => setIsMobile(mql.matches);
+    update();
+    mql.addEventListener?.("change", update);
+    return () => mql.removeEventListener?.("change", update);
+  }, []);
+
+  const filterDialogRef = useModalDialog<HTMLDivElement>(showFilters && isMobile, onToggleFilters);
 
   const filterContent = (
     <>
@@ -172,6 +176,50 @@ export default function SearchControls({
     </>
   );
 
+  const mobileFilterSheet = showFilters && isMobile && typeof document !== "undefined"
+    ? createPortal(
+      <>
+        <div className="filterSheetBackdrop" onClick={onToggleFilters} aria-hidden="true" />
+        <div ref={filterDialogRef} className="filterSheet" role="dialog" aria-modal="true" aria-labelledby="filter-dialog-title" tabIndex={-1}>
+          <div className="filterSheetHeader">
+            <h3 id="filter-dialog-title" style={{ margin: 0, fontSize: "18px" }}>
+              Filters {activeFilterCount > 0 && <span style={{ color: "var(--color-text-accent-bright)", fontFamily: "var(--font-mono)", fontSize: "13px" }}>({activeFilterCount} active)</span>}
+            </h3>
+            <button
+              onClick={onToggleFilters}
+              data-modal-initial-focus="true"
+              className="focusRing controlBtn"
+              aria-label="Close filters"
+              style={{ fontWeight: 700, fontSize: "16px", lineHeight: 1, padding: "8px 12px" }}
+            >
+              ✕
+            </button>
+          </div>
+          <div className="filterSheetBody">{filterContent}</div>
+          <div className="filterSheetFooter">
+            {hasActiveFilters && onClearAllFilters && (
+              <button onClick={() => { onClearAllFilters(); onToggleFilters(); }} className="focusRing" style={{
+                background: "transparent", color: "var(--color-badge-red-text)", border: "1px solid var(--color-badge-red-border)", padding: "14px 16px",
+                borderRadius: "8px", fontSize: "15px", fontWeight: 500, cursor: "pointer", flex: "0 0 auto",
+                fontFamily: "var(--font-mono)",
+              }} aria-label="Clear all filters and close">
+                Clear all
+              </button>
+            )}
+            <button onClick={onToggleFilters} className="focusRing" style={{
+              background: "var(--color-button-primary)", color: "var(--color-button-primary-text)", border: "none", padding: "14px 28px",
+              borderRadius: "8px", fontSize: "15px", fontWeight: 700, cursor: "pointer", flex: "1 1 auto",
+              fontFamily: "var(--font-mono)",
+            }}>
+              Done
+            </button>
+          </div>
+        </div>
+      </>,
+      document.body,
+    )
+    : null;
+
   return (
     <>
       <div role="search" aria-label="Filter and search algorithms" className="toolbar">
@@ -207,56 +255,13 @@ export default function SearchControls({
       </div>
 
       {/* Desktop: inline filters */}
-      {showFilters && (
+      {showFilters && !isMobile && (
         <div className="filterInlineDesktop">
           {filterContent}
         </div>
       )}
 
-      {/* Mobile: bottom sheet overlay */}
-      {showFilters && (
-        <>
-          <div className="filterSheetBackdrop" onClick={onToggleFilters} />
-          <div className="filterSheet" role="dialog" aria-modal="true" aria-label="Filter options">
-            <div className="filterSheetHeader">
-              <h3 style={{ margin: 0, fontSize: "18px" }}>
-                Filters {activeFilterCount > 0 && <span style={{ color: "var(--color-text-accent-bright)", fontFamily: "var(--font-mono)", fontSize: "13px" }}>({activeFilterCount} active)</span>}
-              </h3>
-              <button
-                onClick={onToggleFilters}
-                className="focusRing controlBtn"
-                aria-label="Close filters"
-                style={{ fontWeight: 700, fontSize: "16px", lineHeight: 1, padding: "8px 12px" }}
-              >
-                ✕
-              </button>
-            </div>
-            <div className="filterSheetBody">
-              {filterContent}
-            </div>
-            <div className="filterSheetFooter">
-              {hasActiveFilters && onClearAllFilters && (
-                <button onClick={() => { onClearAllFilters(); onToggleFilters(); }} className="focusRing" style={{
-                  background: "transparent", color: "var(--color-badge-red-text)", border: "1px solid var(--color-badge-red-border)", padding: "14px 16px",
-                  borderRadius: "8px", fontSize: "15px", fontWeight: 500, cursor: "pointer", flex: "0 0 auto",
-                  fontFamily: "var(--font-mono)",
-                }}
-                aria-label="Clear all filters and close"
-                >
-                  Clear all
-                </button>
-              )}
-              <button onClick={onToggleFilters} className="focusRing" style={{
-                background: "var(--color-button-primary)", color: "var(--color-button-primary-text)", border: "none", padding: "14px 28px",
-                borderRadius: "8px", fontSize: "15px", fontWeight: 700, cursor: "pointer", flex: "1 1 auto",
-                fontFamily: "var(--font-mono)",
-              }}>
-                Done
-              </button>
-            </div>
-          </div>
-        </>
-      )}
+      {mobileFilterSheet}
 
     </>
   );
