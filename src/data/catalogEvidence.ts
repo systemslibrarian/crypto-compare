@@ -49,6 +49,7 @@ export const CATALOG_EVIDENCE: Record<string, CatalogEvidence> = {
 
   mldsa44: evidence("final", true, ["NIST"], "documented"),
   mldsa65: evidence("final", true, ["NIST"], "documented"),
+  mldsa87: evidence("final", true, ["NIST"], "limited"),
   haetae: evidence("selected", false, ["KpqC"], "limited"),
   falcon512: evidence("selected", false, ["NIST"], "documented"),
   slh_dsa: evidence("final", true, ["NIST"], "documented"),

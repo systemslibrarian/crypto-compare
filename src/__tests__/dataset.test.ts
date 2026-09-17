@@ -123,6 +123,13 @@ describe("Provenance", () => {
     expect(ids.has("mlkem1024")).toBe(true);
   });
 
+  it("includes all three FIPS 204 ML-DSA parameter sets", () => {
+    const ids = new Set(ALGORITHMS.filter((algorithm) => algorithm.category === "signature").map((algorithm) => algorithm.id));
+    expect(ids.has("mldsa44")).toBe(true);
+    expect(ids.has("mldsa65")).toBe(true);
+    expect(ids.has("mldsa87")).toBe(true);
+  });
+
   it("every source has required fields", () => {
     for (const [id, entry] of Object.entries(ALGORITHM_PROVENANCE)) {
       for (const source of entry.sources) {

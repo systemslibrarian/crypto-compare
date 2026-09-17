@@ -35,6 +35,12 @@ describe("category-specific assurance profiles", () => {
     expect(getAssuranceProfile(algorithm("mlkem1024")).headline).toContain("NIST category 5");
   });
 
+  it("covers every FIPS 204 ML-DSA parameter set by NIST category", () => {
+    expect(getAssuranceProfile(algorithm("mldsa44")).headline).toContain("NIST category 2");
+    expect(getAssuranceProfile(algorithm("mldsa65")).headline).toContain("NIST category 3");
+    expect(getAssuranceProfile(algorithm("mldsa87")).headline).toContain("NIST category 5");
+  });
+
   it("describes password hashing through entropy and cost parameters", () => {
     const profile = getAssuranceProfile(algorithm("argon2id"));
 

@@ -216,6 +216,12 @@ export const ALGORITHM_PROVENANCE: Record<string, { sources: AlgorithmSource[]; 
       { label: "NIST FIPS 204", url: "https://csrc.nist.gov/pubs/fips/204/final", note: "Defines ML-DSA parameter sets, security categories, and signature sizes.", kind: "standard", supports: ["specification", "standardization", "security"], locator: "Sections 5–7" },
     ],
   },
+  mldsa87: {
+    lastReviewed: "2026-09-17",
+    sources: [
+      { label: "NIST FIPS 204", url: "https://csrc.nist.gov/pubs/fips/204/final", note: "Defines ML-DSA-87 at NIST security category 5 with a 2,592-byte public key and 4,627-byte signature.", kind: "standard", supports: ["specification", "standardization", "security"], locator: "Sections 5–7" },
+    ],
+  },
   haetae: {
     lastReviewed: "2026-06-27",
     sources: [

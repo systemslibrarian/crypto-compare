@@ -37,6 +37,7 @@ const NIST_PQ_CATEGORIES: Partial<Record<string, number>> = {
   mlkem1024: 5,
   mldsa44: 2,
   mldsa65: 3,
+  mldsa87: 5,
   falcon512: 1,
   frodokem: 3,
 };
