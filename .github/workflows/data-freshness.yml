@@ -71,18 +71,46 @@ jobs:
           name: demo-sync-report
           path: demo-sync-report.json
 
-      - name: Create or update issue if stale
-        if: env.HAS_ISSUES == 'true'
+      - name: Reconcile freshness issue
+        if: always()
         uses: actions/github-script@v9
         with:
           script: |
             const fs = require('fs');
             const report = JSON.parse(fs.readFileSync('refresh-report.json', 'utf8'));
+            const label = 'data-freshness';
+
+            const { data: existingIssues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: label,
+              state: 'open',
+            });
+
+            if (process.env.HAS_ISSUES !== 'true') {
+              for (const issue of existingIssues) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: `Freshness checks passed on ${report.generated}. Closing automatically.`,
+                });
+                await github.rest.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  state: 'closed',
+                  state_reason: 'completed',
+                });
+              }
+              return;
+            }
 
             let body = `## 🔄 Automated Data Freshness Report\n\n`;
             body += `**Generated:** ${report.generated}\n`;
             body += `**Threshold:** entries older than ${report.staleDays} days\n`;
-            body += `**Total algorithms:** ${report.totalAlgorithms}\n\n`;
+            body += `**Total algorithms:** ${report.totalAlgorithms}\n`;
+            body += `**Total implementation records:** ${report.totalImplementations}\n\n`;
 
             if (report.staleEntries.length > 0) {
               body += `### ⚠️ Stale Entries (${report.staleEntries.length})\n\n`;
@@ -90,6 +118,16 @@ jobs:
               body += `|-----------|----|--------------|---------|\n`;
               for (const e of report.staleEntries) {
                 body += `| ${e.name} | \`${e.id}\` | ${e.lastReviewed} | ${e.daysAgo} |\n`;
+              }
+              body += `\n`;
+            }
+
+            if (report.staleImplementations.length > 0) {
+              body += `### ⚠️ Stale Implementation Checks (${report.staleImplementations.length})\n\n`;
+              body += `| Algorithm | Ecosystem | Library | Last Checked | Days Ago |\n`;
+              body += `|-----------|-----------|---------|--------------|----------|\n`;
+              for (const e of report.staleImplementations) {
+                body += `| \`${e.algorithmId}\` | ${e.ecosystem} | ${e.library} | ${e.lastChecked} | ${e.daysAgo} |\n`;
               }
               body += `\n`;
             }
@@ -122,17 +160,8 @@ jobs:
             }
 
             body += `---\n`;
-            body += `*To resolve, review and update the flagged entries in \`src/data/algorithms.ts\` and \`src/data/provenance.ts\`, then update the \`lastReviewed\` date.*\n`;
+            body += `*To resolve, re-check the flagged records in \`src/data/provenance.ts\` and \`src/data/implementations.ts\`, then update only the dates backed by that review.*\n`;
             body += `*Run locally: \`npx tsx scripts/refresh-data.ts --check-links\`*`;
-
-            // Find existing open issue with our label
-            const label = 'data-freshness';
-            const { data: existingIssues } = await github.rest.issues.listForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: label,
-              state: 'open',
-            });
 
             // Ensure the label exists
             try {

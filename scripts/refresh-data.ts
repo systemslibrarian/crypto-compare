@@ -3,15 +3,17 @@
  * Automated data-freshness checker.
  *
  * 1. Flags algorithms whose provenance `lastReviewed` is older than STALE_DAYS.
- * 2. Probes authoritative source URLs to detect dead links (HTTP ≥ 400).
- * 3. Checks NIST CSRC, IETF Datatracker, and PQC pages for new publications
+ * 2. Flags implementation-catalog checks older than the same review window.
+ * 3. Probes authoritative source URLs to detect dead links (HTTP ≥ 400).
+ * 4. Checks NIST CSRC, IETF Datatracker, and PQC pages for new publications
  *    that may affect existing entries.
  * 4. Outputs a structured JSON report for CI / GitHub Actions to consume.
  *
- * Run: npx tsx scripts/refresh-data.ts [--stale-days=180] [--check-links]
+ * Run: npx tsx scripts/refresh-data.ts [--stale-days=180] [--check-links] [--skip-upstream]
  */
 
 import { ALGORITHMS } from "../src/data/algorithms";
+import { IMPLEMENTATIONS } from "../src/data/implementations";
 import { ALGORITHM_PROVENANCE } from "../src/data/provenance";
 
 // ── Configuration ──────────────────────────────────────────────
@@ -19,10 +21,12 @@ const STALE_DAYS = Number(
   process.argv.find((a) => a.startsWith("--stale-days="))?.split("=")[1] ?? 180,
 );
 const CHECK_LINKS = process.argv.includes("--check-links");
+const CHECK_UPSTREAM = !process.argv.includes("--skip-upstream");
 const TODAY = new Date();
 
 // ── Types ──────────────────────────────────────────────────────
 type StaleEntry = { id: string; name: string; lastReviewed: string; daysAgo: number };
+type StaleImplementation = { algorithmId: string; ecosystem: string; library: string; lastChecked: string; daysAgo: number };
 type DeadLink = { algorithmId: string; url: string; label: string; status: number | string };
 type UpstreamNotice = { source: string; title: string; url: string; relevant: string[] };
 
@@ -31,6 +35,8 @@ type Report = {
   staleDays: number;
   totalAlgorithms: number;
   staleEntries: StaleEntry[];
+  totalImplementations: number;
+  staleImplementations: StaleImplementation[];
   missingProvenance: string[];
   deadLinks: DeadLink[];
   upstreamNotices: UpstreamNotice[];
@@ -53,6 +59,23 @@ function findStaleEntries(): StaleEntry[] {
 
 function findMissingProvenance(): string[] {
   return ALGORITHMS.filter((a) => !ALGORITHM_PROVENANCE[a.id]).map((a) => a.id);
+}
+
+function findStaleImplementations(): StaleImplementation[] {
+  return IMPLEMENTATIONS.flatMap((entry) => {
+    const checked = new Date(`${entry.lastChecked}T00:00:00Z`);
+    const daysAgo = Math.floor((TODAY.getTime() - checked.getTime()) / 86_400_000);
+    if (!Number.isFinite(daysAgo) || daysAgo > STALE_DAYS) {
+      return [{
+        algorithmId: entry.algorithmId,
+        ecosystem: entry.ecosystem,
+        library: entry.library,
+        lastChecked: entry.lastChecked,
+        daysAgo,
+      }];
+    }
+    return [];
+  }).sort((a, b) => b.daysAgo - a.daysAgo);
 }
 
 // ── Link checker ───────────────────────────────────────────────
@@ -235,6 +258,8 @@ async function main() {
     staleDays: STALE_DAYS,
     totalAlgorithms: ALGORITHMS.length,
     staleEntries: findStaleEntries(),
+    totalImplementations: IMPLEMENTATIONS.length,
+    staleImplementations: findStaleImplementations(),
     missingProvenance: findMissingProvenance(),
     deadLinks: [],
     upstreamNotices: [],
@@ -248,6 +273,15 @@ async function main() {
     }
   } else {
     console.log(`✅ No stale entries (all reviewed within ${STALE_DAYS} days)`);
+  }
+
+  if (report.staleImplementations.length > 0) {
+    console.log(`\n⚠️  ${report.staleImplementations.length} stale implementation checks (>${STALE_DAYS} days):`);
+    for (const entry of report.staleImplementations) {
+      console.log(`   • ${entry.library} (${entry.algorithmId}/${entry.ecosystem}) — last checked ${entry.lastChecked} (${entry.daysAgo}d ago)`);
+    }
+  } else {
+    console.log(`\n✅ No stale implementation checks (all checked within ${STALE_DAYS} days)`);
   }
 
   // Missing provenance
@@ -273,16 +307,18 @@ async function main() {
   }
 
   // Upstream notices
-  console.log(`\n📡 Checking upstream publications…`);
-  report.upstreamNotices = await checkUpstreamPublications();
-  if (report.upstreamNotices.length > 0) {
-    console.log(`📋 ${report.upstreamNotices.length} upstream notices:`);
-    for (const n of report.upstreamNotices) {
-      console.log(`   • [${n.source}] ${n.title}`);
-      console.log(`     Affects: ${n.relevant.join(", ")}`);
+  if (CHECK_UPSTREAM) {
+    console.log(`\n📡 Checking upstream publications…`);
+    report.upstreamNotices = await checkUpstreamPublications();
+    if (report.upstreamNotices.length > 0) {
+      console.log(`📋 ${report.upstreamNotices.length} upstream notices:`);
+      for (const n of report.upstreamNotices) {
+        console.log(`   • [${n.source}] ${n.title}`);
+        console.log(`     Affects: ${n.relevant.join(", ")}`);
+      }
+    } else {
+      console.log(`✅ No new upstream activity detected`);
     }
-  } else {
-    console.log(`✅ No new upstream activity detected`);
   }
 
   // Write JSON report for CI consumption
@@ -294,6 +330,7 @@ async function main() {
   // Exit with failure if there are stale entries or missing provenance
   const hasIssues =
     report.staleEntries.length > 0 ||
+    report.staleImplementations.length > 0 ||
     report.missingProvenance.length > 0 ||
     report.deadLinks.length > 0;
 
