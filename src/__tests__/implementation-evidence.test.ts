@@ -23,7 +23,7 @@ describe("implementation evidence", () => {
     ]);
   });
 
-  it("marks catalog checks older than 180 days as stale", () => {
+  it("marks catalog checks older than 120 days as stale", () => {
     expect(isImplementationCheckStale("2024-12-01", new Date("2026-09-17T00:00:00Z"))).toBe(true);
     expect(isImplementationCheckStale("2026-09-01", new Date("2026-09-17T00:00:00Z"))).toBe(false);
     expect(isImplementationCheckStale("not-a-date", new Date("2026-09-17T00:00:00Z"))).toBe(true);

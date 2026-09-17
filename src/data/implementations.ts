@@ -37,7 +37,7 @@ export function validateImplementationEvidence(entries: ImplementationEntry[]): 
 export function isImplementationCheckStale(
   isoDate: string,
   asOf = new Date(),
-  maxAgeDays = 180,
+  maxAgeDays = 120,
 ): boolean {
   const checked = new Date(`${isoDate}T00:00:00Z`);
   if (Number.isNaN(checked.getTime())) return true;

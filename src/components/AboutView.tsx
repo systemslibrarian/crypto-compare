@@ -155,7 +155,7 @@ export default function AboutView() {
             <p style={{ marginTop: "10px" }}>
               <strong>What that review is and is not:</strong> it is automated primary-source re-verification and a
               cryptanalysis scan — not an expert cryptographer&apos;s sign-off. Automated freshness checks flag entries
-              older than 180 days so reviews don&apos;t silently lapse. Treat research-grade entries as a prompt to
+              older than 120 days so reviews don&apos;t silently lapse. Treat research-grade entries as a prompt to
               verify more aggressively against your own threat model.
             </p>
           </Section>

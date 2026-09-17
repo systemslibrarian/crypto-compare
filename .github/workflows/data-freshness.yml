@@ -9,7 +9,7 @@ on:
     inputs:
       stale_days:
         description: "Flag entries older than N days"
-        default: "180"
+        default: "120"
       check_links:
         description: "Also check source URLs for dead links"
         type: boolean
@@ -51,7 +51,7 @@ jobs:
         env:
           REPORT_PATH: refresh-report.json
         run: |
-          ARGS="--stale-days=${{ inputs.stale_days || '180' }}"
+          ARGS="--stale-days=${{ inputs.stale_days || '120' }}"
           if [ "${{ inputs.check_links }}" = "true" ]; then
             ARGS="$ARGS --check-links"
           fi

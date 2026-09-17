@@ -9,7 +9,7 @@
  *    that may affect existing entries.
  * 4. Outputs a structured JSON report for CI / GitHub Actions to consume.
  *
- * Run: npx tsx scripts/refresh-data.ts [--stale-days=180] [--check-links] [--skip-upstream]
+ * Run: npx tsx scripts/refresh-data.ts [--stale-days=120] [--check-links] [--skip-upstream]
  */
 
 import { ALGORITHMS } from "../src/data/algorithms";
@@ -18,7 +18,7 @@ import { ALGORITHM_PROVENANCE } from "../src/data/provenance";
 
 // ── Configuration ──────────────────────────────────────────────
 const STALE_DAYS = Number(
-  process.argv.find((a) => a.startsWith("--stale-days="))?.split("=")[1] ?? 180,
+  process.argv.find((a) => a.startsWith("--stale-days="))?.split("=")[1] ?? 120,
 );
 const CHECK_LINKS = process.argv.includes("--check-links");
 const CHECK_UPSTREAM = !process.argv.includes("--skip-upstream");
@@ -140,15 +140,15 @@ const IETF_CFRG_URL = "https://datatracker.ietf.org/wg/cfrg/documents/";
 
 // Map keywords to algorithm IDs they're most relevant to
 const KEYWORD_MAP: Record<string, string[]> = {
-  "FIPS 203": ["mlkem768", "mlkem1024"],
-  "FIPS 204": ["mldsa44", "mldsa65"],
+  "FIPS 203": ["mlkem512", "mlkem768", "mlkem1024"],
+  "FIPS 204": ["mldsa44", "mldsa65", "mldsa87"],
   "FIPS 205": ["slh_dsa"],
-  "ML-KEM": ["mlkem768", "mlkem1024"],
-  "ML-DSA": ["mldsa44", "mldsa65"],
+  "ML-KEM": ["mlkem512", "mlkem768", "mlkem1024"],
+  "ML-DSA": ["mldsa44", "mldsa65", "mldsa87"],
   "SLH-DSA": ["slh_dsa"],
   "SPHINCS": ["slh_dsa"],
-  "Kyber": ["mlkem768", "mlkem1024"],
-  "Dilithium": ["mldsa44", "mldsa65"],
+  "Kyber": ["mlkem512", "mlkem768", "mlkem1024"],
+  "Dilithium": ["mldsa44", "mldsa65", "mldsa87"],
   "FALCON": ["falcon512"],
   "HQC": ["hqc"],
   "McEliece": ["classic_mceliece"],
@@ -216,7 +216,7 @@ async function checkUpstreamPublications(): Promise<UpstreamNotice[]> {
           source: "NIST PQC Project",
           title: `PQC project page mentions "${kw}"`,
           url: NIST_PQC_URL,
-          relevant: onlyKnownAlgorithmIds(["mlkem768", "mlkem1024", "mldsa44", "mldsa65", "slh_dsa", "falcon512", "hqc", "classic_mceliece", "bike"]),
+          relevant: onlyKnownAlgorithmIds(["mlkem512", "mlkem768", "mlkem1024", "mldsa44", "mldsa65", "mldsa87", "slh_dsa", "falcon512", "hqc", "classic_mceliece", "bike"]),
         });
         break; // one notice is enough for this source
       }
