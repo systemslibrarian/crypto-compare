@@ -184,7 +184,7 @@ export const ALGORITHMS: Algorithm[] = [
   // ═══════════════════════════════════════
   // ELLIPTIC CURVES
   // ═══════════════════════════════════════
-  { id:"curve25519", name:"Curve25519 / X25519", category:"curve", family:"Montgomery", origin:"🇺🇸 United States",
+  { id:"curve25519", name:"Curve25519 / X25519", category:"curve", operationProfiles:[{category:"kem",label:"Key exchange",publicKeySize:32,ciphertextSize:null,sharedSecretSize:256}], family:"Montgomery", origin:"🇺🇸 United States",
     originDetail:"Daniel J. Bernstein, 2006. Standardized for key agreement as X25519 in RFC 7748.",
     useCases:"Modern elliptic-curve Diffie-Hellman, Signal/WireGuard-style key agreement, the base curve behind the 25519 ecosystem.",
     status:"standard", statusLabel:"RFC 7748 / deployed",
@@ -203,7 +203,7 @@ export const ALGORITHMS: Algorithm[] = [
     notes:"Use the KEM and Signatures categories for protocol choices built on top of this curve family. Classical default only — not PQ-safe.",
     maturity:"mature", standardization:"ietf", pqRelevance:"pq-vulnerable"
   },
-  { id:"ed25519", name:"Ed25519", category:"curve", family:"Twisted Edwards", origin:"🇺🇸 United States",
+  { id:"ed25519", name:"Ed25519", category:"curve", operationProfiles:[{category:"signature",label:"Signature",publicKeySize:32,signatureSize:64}], family:"Twisted Edwards", origin:"🇺🇸 United States",
     originDetail:"Bernstein, Duif, Lange, Schwabe & Yang, 2011. Standardized in RFC 8032 as EdDSA over Edwards25519.",
     useCases:"Modern deterministic signatures, SSH keys, software signing, threshold-signature systems such as FROST.",
     status:"standard", statusLabel:"RFC 8032",

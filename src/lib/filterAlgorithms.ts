@@ -20,8 +20,25 @@ export type FilterAlgorithmsOptions = {
   sortBy: AlgorithmSortOption;
 };
 
+export function belongsToCategory(algorithm: Algorithm, category: AlgorithmCategory): boolean {
+  return algorithm.category === category
+    || algorithm.operationProfiles?.some((profile) => profile.category === category) === true;
+}
+
+export function countAlgorithmsByCategory(algorithms: Algorithm[]): Record<string, number> {
+  const counts: Record<string, number> = {};
+  for (const algorithm of algorithms) {
+    const categories = new Set<AlgorithmCategory>([
+      algorithm.category,
+      ...(algorithm.operationProfiles?.map((profile) => profile.category) ?? []),
+    ]);
+    for (const category of categories) counts[category] = (counts[category] ?? 0) + 1;
+  }
+  return counts;
+}
+
 export function filterAlgorithms(algorithms: Algorithm[], options: FilterAlgorithmsOptions): Algorithm[] {
-  let items = options.globalSearch ? [...algorithms] : algorithms.filter((algorithm) => algorithm.category === options.category);
+  let items = options.globalSearch ? [...algorithms] : algorithms.filter((algorithm) => belongsToCategory(algorithm, options.category));
 
   if (options.showDefaults) {
     items = items.filter((algorithm) => DEFAULT_RECOMMENDED_IDS.has(algorithm.id));
@@ -33,7 +50,7 @@ export function filterAlgorithms(algorithms: Algorithm[], options: FilterAlgorit
 
   if (options.search.trim()) {
     const query = options.search.trim().toLowerCase();
-    items = items.filter((algorithm) => `${algorithm.name} ${algorithm.family} ${algorithm.useCases} ${algorithm.origin} ${algorithm.statusLabel} ${algorithm.category}`.toLowerCase().includes(query));
+    items = items.filter((algorithm) => `${algorithm.name} ${algorithm.family} ${algorithm.useCases} ${algorithm.origin} ${algorithm.statusLabel} ${algorithm.category} ${algorithm.operationProfiles?.map((profile) => `${profile.category} ${profile.label}`).join(" ") ?? ""}`.toLowerCase().includes(query));
   }
 
   if (options.pqOnly) items = items.filter((algorithm) => algorithm.pqRelevance === "pq-safe");

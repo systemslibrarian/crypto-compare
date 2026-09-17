@@ -22,6 +22,14 @@ describe("Algorithm Dataset", () => {
     expect(ids.length).toBe(unique.size);
   });
 
+  it("uses unique operation profiles outside each record's primary category", () => {
+    for (const algorithm of ALGORITHMS) {
+      const profileCategories = algorithm.operationProfiles?.map((profile) => profile.category) ?? [];
+      expect(profileCategories).not.toContain(algorithm.category);
+      expect(new Set(profileCategories).size).toBe(profileCategories.length);
+    }
+  });
+
   it("has at least 55 algorithms", () => {
     expect(ALGORITHMS.length).toBeGreaterThanOrEqual(55);
   });

@@ -5,10 +5,11 @@ import { CATEGORY_ACCENT } from "@/data/categories";
 import { ALGORITHM_DEMOS } from "@/data/demoResources";
 import { IMPLEMENTATIONS, ECOSYSTEM_LABELS, type ImplementationEntry } from "@/data/implementations";
 import { formatAssuranceForExport, getAssuranceProfile, type AssuranceProfile } from "@/lib/assurance";
-import type { Algorithm } from "@/types/crypto";
+import type { Algorithm, AlgorithmCategory } from "@/types/crypto";
 
 type AlgoCardProps = {
   algo: Algorithm;
+  browsingCategory?: AlgorithmCategory;
   selected: boolean;
   onToggle: () => void;
   favorited?: boolean;
@@ -23,13 +24,14 @@ type AlgoCardProps = {
  * implementations, wrong-choice consequences, demos, rationale) lives behind
  * the Details disclosure.
  */
-export default function AlgoCard({ algo, selected, onToggle, favorited, onToggleFavorite, advisorPick }: AlgoCardProps) {
+export default function AlgoCard({ algo, browsingCategory, selected, onToggle, favorited, onToggleFavorite, advisorPick }: AlgoCardProps) {
   const accent = CATEGORY_ACCENT[algo.category];
   const demos = ALGORITHM_DEMOS[algo.id] ?? [];
   const impls = IMPLEMENTATIONS.filter((i) => i.algorithmId === algo.id);
   const [detailOpen, setDetailOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const assurance = getAssuranceProfile(algo);
+  const operationContext = algo.operationProfiles?.find((profile) => profile.category === browsingCategory);
 
   function copyRecommendation() {
     const text = [
@@ -66,6 +68,7 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
           <h3 id={`algo-${algo.id}-name`} className="recordName">{algo.name}</h3>
           <RecommendationBadge level={algo.recommendation} compact />
           {advisorPick && <span className="badge badge--green">Advisor pick</span>}
+          {operationContext && <span className="badge badge--blue">{operationContext.label}</span>}
         </div>
         <div className="recordActions">
           <button

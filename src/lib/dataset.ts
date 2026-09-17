@@ -34,5 +34,12 @@ export function getSizeMetric(algorithm: Algorithm, key: "publicKey" | "signatur
   if (key === "signature" && "signatureSize" in algorithm && typeof algorithm.signatureSize === "number") {
     return algorithm.signatureSize;
   }
+  const profile = algorithm.operationProfiles?.find((candidate) =>
+    key === "signature" ? candidate.category === "signature" : "publicKeySize" in candidate,
+  );
+  if (profile) {
+    if (key === "publicKey") return profile.publicKeySize;
+    if (profile.category === "signature") return profile.signatureSize;
+  }
   return Number.MAX_SAFE_INTEGER;
 }

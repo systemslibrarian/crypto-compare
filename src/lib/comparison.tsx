@@ -39,6 +39,27 @@ function asSignature(algo: Algorithm): SignatureAlgorithm {
   return algo as SignatureAlgorithm;
 }
 
+function kemMetrics(algo: Algorithm) {
+  const profile = algo.operationProfiles?.find((candidate) => candidate.category === "kem");
+  if (profile) return profile;
+  const kem = asKEM(algo);
+  return {
+    publicKeySize: kem.publicKeySize,
+    ciphertextSize: kem.ciphertextSize,
+    sharedSecretSize: kem.sharedSecretSize,
+  };
+}
+
+function signatureMetrics(algo: Algorithm) {
+  const profile = algo.operationProfiles?.find((candidate) => candidate.category === "signature");
+  if (profile) return profile;
+  const signature = asSignature(algo);
+  return {
+    publicKeySize: signature.publicKeySize,
+    signatureSize: signature.signatureSize,
+  };
+}
+
 function asHash(algo: Algorithm): HashAlgorithm {
   return algo as HashAlgorithm;
 }
@@ -151,12 +172,12 @@ export function buildRows(category: AlgorithmCategory, _advanced?: boolean): Com
     rows.push({ label: "Form", render: (a) => asCurve(a).curveForm, exportText: (a) => asCurve(a).curveForm });
     rows.push({ label: "SafeCurves", render: (a) => asCurve(a).safeCurves, exportText: (a) => asCurve(a).safeCurves });
   } else if (category === "kem") {
-    rows.push({ label: "Public Key", render: (a) => formatBytes(asKEM(a).publicKeySize), exportText: (a) => formatBytes(asKEM(a).publicKeySize) });
-    rows.push({ label: "Ciphertext", render: (a) => formatBytes(asKEM(a).ciphertextSize), exportText: (a) => formatBytes(asKEM(a).ciphertextSize) });
-    rows.push({ label: "Secret", render: (a) => `${asKEM(a).sharedSecretSize} bits`, exportText: (a) => `${asKEM(a).sharedSecretSize} bits` });
+    rows.push({ label: "Public Key", render: (a) => formatBytes(kemMetrics(a).publicKeySize), exportText: (a) => formatBytes(kemMetrics(a).publicKeySize) });
+    rows.push({ label: "Ciphertext", render: (a) => formatBytes(kemMetrics(a).ciphertextSize), exportText: (a) => formatBytes(kemMetrics(a).ciphertextSize) });
+    rows.push({ label: "Secret", render: (a) => `${kemMetrics(a).sharedSecretSize} bits`, exportText: (a) => `${kemMetrics(a).sharedSecretSize} bits` });
   } else if (category === "signature") {
-    rows.push({ label: "Public Key", render: (a) => formatBytes(asSignature(a).publicKeySize), exportText: (a) => formatBytes(asSignature(a).publicKeySize) });
-    rows.push({ label: "Signature", render: (a) => formatBytes(asSignature(a).signatureSize), exportText: (a) => formatBytes(asSignature(a).signatureSize) });
+    rows.push({ label: "Public Key", render: (a) => formatBytes(signatureMetrics(a).publicKeySize), exportText: (a) => formatBytes(signatureMetrics(a).publicKeySize) });
+    rows.push({ label: "Signature", render: (a) => formatBytes(signatureMetrics(a).signatureSize), exportText: (a) => formatBytes(signatureMetrics(a).signatureSize) });
   } else if (category === "hash") {
     rows.push({ label: "Output", render: (a) => `${asHash(a).outputSize} bits`, exportText: (a) => `${asHash(a).outputSize} bits` });
     rows.push({ label: "Block", render: (a) => `${asHash(a).blockSize} bits`, exportText: (a) => `${asHash(a).blockSize} bits` });

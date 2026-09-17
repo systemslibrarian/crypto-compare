@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { ALGORITHMS } from "@/data/algorithms";
 import { withProvenance } from "@/lib/dataset";
-import { filterAlgorithms } from "@/lib/filterAlgorithms";
+import { countAlgorithmsByCategory, filterAlgorithms } from "@/lib/filterAlgorithms";
 import type { Algorithm } from "@/types/crypto";
 
 const algorithms: Algorithm[] = [
@@ -84,6 +84,36 @@ const algorithms: Algorithm[] = [
 ];
 
 describe("filterAlgorithms", () => {
+  it("surfaces curve-backed operations in their applied categories without duplicating records", () => {
+    const dataset = withProvenance(ALGORITHMS);
+    const baseOptions = {
+      globalSearch: false,
+      showDefaults: false,
+      favoritesOnly: false,
+      favorites: [],
+      search: "",
+      pqOnly: false,
+      standardOnly: false,
+      nistOnly: false,
+      deployedOnly: false,
+      country: "all",
+      sortBy: "name" as const,
+    };
+    const keyExchange = filterAlgorithms(dataset, { ...baseOptions, category: "kem" });
+    const signatures = filterAlgorithms(dataset, { ...baseOptions, category: "signature" });
+
+    expect(keyExchange.map((algorithm) => algorithm.id)).toContain("curve25519");
+    expect(signatures.map((algorithm) => algorithm.id)).toContain("ed25519");
+    expect(new Set(keyExchange.map((algorithm) => algorithm.id)).size).toBe(keyExchange.length);
+    expect(new Set(signatures.map((algorithm) => algorithm.id)).size).toBe(signatures.length);
+  });
+
+  it("includes operation profiles in category counts", () => {
+    const counts = countAlgorithmsByCategory(ALGORITHMS);
+    expect(counts.kem).toBe(ALGORITHMS.filter((algorithm) => algorithm.category === "kem").length + 1);
+    expect(counts.signature).toBe(ALGORITHMS.filter((algorithm) => algorithm.category === "signature").length + 1);
+  });
+
   it("filters by favorites, search, and sort order", () => {
     const filtered = filterAlgorithms(algorithms, {
       category: "symmetric",

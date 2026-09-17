@@ -96,10 +96,26 @@ export type CategoryDefinition = {
   icon: string;
 };
 
+export type OperationProfile =
+  | {
+      category: "kem";
+      label: "Key exchange" | "Key encapsulation";
+      publicKeySize: number;
+      ciphertextSize: number | null;
+      sharedSecretSize: number;
+    }
+  | {
+      category: "signature";
+      label: "Signature";
+      publicKeySize: number;
+      signatureSize: number;
+    };
+
 export type AlgorithmBase = {
   id: string;
   name: string;
   category: AlgorithmCategory;
+  operationProfiles?: OperationProfile[];
   family: string;
   origin: string;
   originDetail: string;

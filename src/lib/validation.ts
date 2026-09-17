@@ -45,10 +45,27 @@ const CatalogEvidenceSchema = z.object({
   }),
 });
 
+const OperationProfileSchema = z.discriminatedUnion("category", [
+  z.object({
+    category: z.literal("kem"),
+    label: z.enum(["Key exchange", "Key encapsulation"]),
+    publicKeySize: z.number().int().min(0),
+    ciphertextSize: z.number().int().min(0).nullable(),
+    sharedSecretSize: z.number().int().min(0),
+  }),
+  z.object({
+    category: z.literal("signature"),
+    label: z.literal("Signature"),
+    publicKeySize: z.number().int().min(0),
+    signatureSize: z.number().int().min(0),
+  }),
+]);
+
 const AlgorithmBaseSchema = z.object({
   id: z.string().min(1).regex(/^[a-z0-9_]+$/, "ID must be lowercase alphanumeric with underscores"),
   name: z.string().min(1),
   category: z.enum(ALGORITHM_CATEGORIES),
+  operationProfiles: z.array(OperationProfileSchema).optional(),
   family: z.string().min(1),
   origin: z.string().min(1),
   originDetail: z.string().min(1),

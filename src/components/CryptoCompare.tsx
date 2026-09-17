@@ -29,7 +29,7 @@ import { CATEGORIES, CATEGORY_ACCENT } from "@/data/categories";
 import type { FilterPreset } from "@/data/filterPresets";
 import { buildRows, exportToCSV, exportToJSON, exportToMarkdown } from "@/lib/comparison";
 import { withProvenance } from "@/lib/dataset";
-import { filterAlgorithms } from "@/lib/filterAlgorithms";
+import { countAlgorithmsByCategory, filterAlgorithms } from "@/lib/filterAlgorithms";
 import { useCryptoCompareController } from "@/lib/useCryptoCompareController";
 import { countRecommendations, summarizeReviewWindow } from "@/lib/trust";
 import { useCryptoCompareUrlState } from "@/lib/useCryptoCompareUrlState";
@@ -202,13 +202,7 @@ export default function CryptoCompare() {
 
   const selAlgos = useMemo(() => filtered.filter((a) => sel.includes(a.id)), [filtered, sel]);
   const rows = useMemo(() => buildRows(cat), [cat]);
-  const categoryCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    for (const algorithm of dataset) {
-      counts[algorithm.category] = (counts[algorithm.category] ?? 0) + 1;
-    }
-    return counts;
-  }, [dataset]);
+  const categoryCounts = useMemo(() => countAlgorithmsByCategory(dataset), [dataset]);
   const trustSnapshot = useMemo(() => summarizeReviewWindow(dataset), [dataset]);
   const filteredRecommendationCounts = useMemo(() => countRecommendations(filtered), [filtered]);
 
@@ -421,7 +415,7 @@ export default function CryptoCompare() {
 
           <section aria-label={`${globalSearch ? "All categories" : selectedCategoryLabel} algorithms`} className="algoGrid" style={{ marginBottom: "18px" }}>
             {filtered.map((a) => (
-              <AlgoCard key={a.id} algo={a} selected={sel.includes(a.id)} onToggle={() => controller.toggleSelection(a.id)} favorited={favorites.includes(a.id)} onToggleFavorite={() => toggleFavorite(a.id)} advisorPick={advisorHighlight === a.id} />
+              <AlgoCard key={a.id} algo={a} browsingCategory={globalSearch ? undefined : cat} selected={sel.includes(a.id)} onToggle={() => controller.toggleSelection(a.id)} favorited={favorites.includes(a.id)} onToggleFavorite={() => toggleFavorite(a.id)} advisorPick={advisorHighlight === a.id} />
             ))}
           </section>
 
