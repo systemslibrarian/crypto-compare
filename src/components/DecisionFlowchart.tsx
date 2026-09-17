@@ -10,6 +10,12 @@ type DecisionNode = {
   options: { label: string; next?: string; answer?: { algo: string; id: string; reason: string; category: AlgorithmCategory } }[];
 };
 
+type DecisionStep = {
+  nodeId: string;
+  optionLabel: string;
+  nextNodeId: string;
+};
+
 const DECISION_TREE: Record<string, DecisionNode> = {
   start: {
     question: "What do you need to do?",
@@ -246,9 +252,9 @@ type DecisionFlowchartProps = {
   provenance?: Record<string, { sources: AlgorithmSource[]; lastReviewed: string }>;
 };
 
-function buildJustificationReport(
+export function buildJustificationReport(
   result: { algo: string; id: string; reason: string; category: AlgorithmCategory },
-  history: string[],
+  history: DecisionStep[],
   algorithms: Algorithm[],
   provenance: Record<string, { sources: AlgorithmSource[]; lastReviewed: string }>,
   tree: Record<string, DecisionNode>,
@@ -260,23 +266,21 @@ function buildJustificationReport(
   lines.push("# Cryptographic Algorithm Justification Report");
   lines.push("");
   lines.push(`**Generated**: ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`);
-  lines.push(`**Tool**: crypto::compare (https://crypto-compare.systemslubrarian.dev/)`);
+  lines.push(`**Tool**: crypto::compare (https://crypto-compare.systemslibrarian.dev/)`);
   lines.push("");
 
   // Decision path
   lines.push("## Decision Path");
   lines.push("");
-  let nodeId = "start";
-  for (const nextId of history) {
-    const node = tree[nodeId];
+  for (const step of history) {
+    const node = tree[step.nodeId];
     if (node) {
-      const chosen = node.options.find((o) => o.next === nextId);
       lines.push(`- **Q**: ${node.question}`);
-      lines.push(`  - **A**: ${chosen?.label ?? "—"}`);
+      lines.push(`  - **A**: ${step.optionLabel}`);
     }
-    nodeId = nextId;
   }
   // Final node → answer
+  const nodeId = history.at(-1)?.nextNodeId ?? "start";
   const finalNode = tree[nodeId];
   if (finalNode) {
     const chosen = finalNode.options.find((o) => o.answer?.id === result.id);
@@ -342,7 +346,7 @@ function buildJustificationReport(
 
 export default function DecisionFlowchart({ onNavigate, algorithms = [], provenance = {} }: DecisionFlowchartProps) {
   const [currentNode, setCurrentNode] = useState("start");
-  const [history, setHistory] = useState<string[]>([]);
+  const [history, setHistory] = useState<DecisionStep[]>([]);
   const [result, setResult] = useState<{
     algo: string;
     id: string;
@@ -360,7 +364,7 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
       return;
     }
     if (history.length > 0) {
-      const prev = history[history.length - 1];
+      const prev = history[history.length - 1].nodeId;
       setHistory((h) => h.slice(0, -1));
       setCurrentNode(prev);
     }
@@ -376,7 +380,7 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
     if (option.answer) {
       setResult(option.answer);
     } else if (option.next) {
-      setHistory((h) => [...h, currentNode]);
+      setHistory((h) => [...h, { nodeId: currentNode, optionLabel: option.label, nextNodeId: option.next! }]);
       setCurrentNode(option.next);
     }
   };
@@ -515,7 +519,7 @@ function ResultBlock({
   result: { algo: string; id: string; reason: string; category: AlgorithmCategory };
   resultAlgo?: Algorithm;
   resultProvenance?: { sources: AlgorithmSource[]; lastReviewed: string };
-  history: string[];
+  history: DecisionStep[];
   algorithms: Algorithm[];
   provenance: Record<string, { sources: AlgorithmSource[]; lastReviewed: string }>;
   onNavigate: (category: AlgorithmCategory, algoId: string) => void;
