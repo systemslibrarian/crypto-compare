@@ -116,6 +116,13 @@ describe("Provenance", () => {
     expect(ascon?.pqSecurityBits).toBe(64);
   });
 
+  it("includes all three FIPS 203 ML-KEM parameter sets", () => {
+    const ids = new Set(ALGORITHMS.filter((algorithm) => algorithm.category === "kem").map((algorithm) => algorithm.id));
+    expect(ids.has("mlkem512")).toBe(true);
+    expect(ids.has("mlkem768")).toBe(true);
+    expect(ids.has("mlkem1024")).toBe(true);
+  });
+
   it("every source has required fields", () => {
     for (const [id, entry] of Object.entries(ALGORITHM_PROVENANCE)) {
       for (const source of entry.sources) {

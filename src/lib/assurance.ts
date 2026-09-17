@@ -32,6 +32,7 @@ export type AssuranceProfile = {
 };
 
 const NIST_PQ_CATEGORIES: Partial<Record<string, number>> = {
+  mlkem512: 1,
   mlkem768: 3,
   mlkem1024: 5,
   mldsa44: 2,

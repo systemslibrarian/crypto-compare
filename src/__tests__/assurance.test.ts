@@ -29,6 +29,12 @@ describe("category-specific assurance profiles", () => {
     expect(profile.caveat).toContain("not exact security-bit measurements");
   });
 
+  it("covers every FIPS 203 ML-KEM parameter set by NIST category", () => {
+    expect(getAssuranceProfile(algorithm("mlkem512")).headline).toContain("NIST category 1");
+    expect(getAssuranceProfile(algorithm("mlkem768")).headline).toContain("NIST category 3");
+    expect(getAssuranceProfile(algorithm("mlkem1024")).headline).toContain("NIST category 5");
+  });
+
   it("describes password hashing through entropy and cost parameters", () => {
     const profile = getAssuranceProfile(algorithm("argon2id"));
 

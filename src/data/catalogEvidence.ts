@@ -38,6 +38,7 @@ export const CATALOG_EVIDENCE: Record<string, CatalogEvidence> = {
   bn254: evidence("research", false, [], "widespread"),
   brainpool_p256r1: evidence("final", true, ["BSI", "RFC Editor"], "limited"),
 
+  mlkem512: evidence("final", true, ["NIST"], "limited"),
   mlkem768: evidence("final", true, ["NIST"], "widespread"),
   mlkem1024: evidence("final", true, ["NIST"], "documented"),
   smaug_t: evidence("selected", false, ["KpqC"], "limited"),

@@ -150,6 +150,12 @@ export const ALGORITHM_PROVENANCE: Record<string, { sources: AlgorithmSource[]; 
     ],
   },
   // ─── KEM ─────────────────────────────────────────────────────────
+  mlkem512: {
+    lastReviewed: "2026-09-17",
+    sources: [
+      { label: "NIST FIPS 203", url: "https://csrc.nist.gov/pubs/fips/203/final", note: "Defines ML-KEM-512 at NIST security category 1 with an 800-byte encapsulation key and 768-byte ciphertext.", kind: "standard", supports: ["specification", "standardization", "security"], locator: "Sections 7 and 8" },
+    ],
+  },
   mlkem768: {
     lastReviewed: "2026-06-27",
     sources: [

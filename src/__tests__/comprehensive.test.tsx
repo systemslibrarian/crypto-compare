@@ -206,7 +206,7 @@ describe("Exact Export Content", () => {
 
     it("CSV contains justification for ML-KEM-768", () => {
       const csv = exportToCSV(rows, [mlkem]);
-      expect(csv).toContain("NIST primary PQ KEM standard");
+      expect(csv).toContain("FIPS 203 standardizes ML-KEM-768 at NIST security category 3");
     });
 
     it("CSV contains source labels", () => {
