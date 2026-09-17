@@ -3,6 +3,24 @@ import { DM_Mono, Fraunces } from "next/font/google";
 import "./globals.css";
 import { OG_ALGORITHM_LABEL, OG_CATEGORY_LABEL, OG_IMAGE_ALT } from "@/lib/siteStats";
 
+export const CONTENT_SECURITY_POLICY = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "frame-src 'none'",
+  "form-action 'self'",
+  "img-src 'self' data:",
+  "font-src 'self'",
+  "style-src 'self' 'unsafe-inline'",
+  // Next's static export uses inline bootstrap scripts. Keep this explicit
+  // until the app can attach per-build hashes or nonces at an HTTP edge.
+  process.env.NODE_ENV === "development"
+    ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+    : "script-src 'self' 'unsafe-inline'",
+  "connect-src 'self'",
+  "upgrade-insecure-requests",
+].join("; ");
+
 // Design language ported from the sibling reference site crypto-lab:
 // DM Mono for body/UI/labels, Fraunces (serif) for display headings.
 // The mono keeps the old CSS variable name so existing inline
@@ -27,6 +45,12 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   authors: [{ name: "crypto::compare contributors" }],
   creator: "crypto::compare",
+  referrer: "strict-origin-when-cross-origin",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   metadataBase: new URL("https://crypto-compare.systemslibrarian.dev"),
   alternates: { canonical: "/" },
   openGraph: {
@@ -67,6 +91,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* GitHub Pages cannot set response headers. This meta policy still
+            constrains document-loaded resources; frame-ancestors and other
+            header-only directives must be configured if hosting moves. */}
+        <meta httpEquiv="Content-Security-Policy" content={CONTENT_SECURITY_POLICY} />
+      </head>
       <body
         className={`${dmMono.className} ${dmMono.variable} ${fraunces.variable} min-h-screen antialiased`}
       >
