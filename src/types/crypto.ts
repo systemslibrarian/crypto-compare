@@ -29,12 +29,21 @@ export type RecommendationLevel =
   | "avoid";
 
 export type SourceKind = "standard" | "analysis" | "deployment" | "benchmark";
+export type SupportedClaim =
+  | "specification"
+  | "standardization"
+  | "security"
+  | "deployment"
+  | "implementation"
+  | "performance";
 
 export type AlgorithmSource = {
   label: string;
   url: string;
   note: string;
   kind: SourceKind;
+  supports: SupportedClaim[];
+  locator?: string;
 };
 
 export type EstimationBasis = "exact" | "conservative" | "estimated" | "speculative";

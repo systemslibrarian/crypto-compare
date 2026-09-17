@@ -115,6 +115,7 @@ describe("Provenance", () => {
         expect(source.url.length, `${id}: source url`).toBeGreaterThan(0);
         expect(source.note.length, `${id}: source note`).toBeGreaterThan(0);
         expect(["standard", "analysis", "deployment", "benchmark"]).toContain(source.kind);
+        expect(source.supports.length, `${id}: supported claims`).toBeGreaterThan(0);
       }
     }
   });

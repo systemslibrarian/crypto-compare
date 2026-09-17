@@ -40,7 +40,7 @@ const algo: Algorithm = {
       label: "Example source",
       url: "https://example.com/source",
       note: "Reference note",
-      kind: "analysis",
+      kind: "analysis", supports: ["security"],
     },
   ],
 };

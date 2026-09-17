@@ -12,6 +12,7 @@ const ALGORITHM_STATUSES = ["standard", "candidate"] as const;
 const RECOMMENDATION_LEVELS = ["recommended", "acceptable", "legacy", "research", "avoid"] as const;
 
 const SOURCE_KINDS = ["standard", "analysis", "deployment", "benchmark"] as const;
+const SUPPORTED_CLAIMS = ["specification", "standardization", "security", "deployment", "implementation", "performance"] as const;
 
 const ESTIMATION_BASES = ["exact", "conservative", "estimated", "speculative"] as const;
 const STANDARDIZATION_STAGES = ["final", "draft", "selected", "research", "none"] as const;
@@ -22,6 +23,8 @@ const AlgorithmSourceSchema = z.object({
   url: z.string().url(),
   note: z.string().min(1),
   kind: z.enum(SOURCE_KINDS),
+  supports: z.array(z.enum(SUPPORTED_CLAIMS)).min(1),
+  locator: z.string().min(1).optional(),
 });
 
 const SecurityEstimationSchema = z.object({

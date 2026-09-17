@@ -415,6 +415,16 @@ describe("Provenance Coverage", () => {
       }
     }
   });
+
+  it("maps every source to the claims it supports", () => {
+    const validClaims = ["specification", "standardization", "security", "deployment", "implementation", "performance"];
+    for (const [id, prov] of Object.entries(ALGORITHM_PROVENANCE)) {
+      for (const source of prov.sources) {
+        expect(source.supports.length, `${id}: ${source.label}`).toBeGreaterThan(0);
+        expect(source.supports.every((claim) => validClaims.includes(claim))).toBe(true);
+      }
+    }
+  });
 });
 
 // ─── Build Rows Coverage ────────────────────────────────────

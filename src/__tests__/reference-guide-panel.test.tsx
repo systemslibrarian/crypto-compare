@@ -39,7 +39,7 @@ const algorithms: Algorithm[] = [
         label: "NIST FIPS 203",
         url: "https://example.com/fips-203",
         note: "Standard text",
-        kind: "standard",
+        kind: "standard", supports: ["specification", "standardization"],
       },
     ],
   },

@@ -27,12 +27,18 @@ export default function SourceCitationsPanel({ algorithms }: SourceCitationsPane
           {algo.sources && algo.sources.length > 0 ? (
             <ul style={{ margin: "8px 0 0", paddingLeft: "18px", color: "var(--color-text-secondary)", listStyle: "none" }}>
               {algo.sources.map((source) => (
-                <li key={`${algo.id}-${source.label}`} style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px", flexWrap: "wrap" }}>
-                  <SourceKindBadge kind={source.kind} />
-                  <a href={source.url} target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-text-accent-bright)" }}>
-                    {source.label}
-                  </a>
-                  <span style={{ color: "var(--color-text-muted)" }}>— {source.note}</span>
+                <li key={`${algo.id}-${source.label}`} style={{ marginBottom: "10px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                    <SourceKindBadge kind={source.kind} />
+                    <a href={source.url} target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-text-accent-bright)" }}>
+                      {source.label}
+                    </a>
+                    {source.locator && <span style={{ color: "var(--color-text-secondary)", fontSize: "12px" }}>{source.locator}</span>}
+                  </div>
+                  <div style={{ color: "var(--color-text-muted)", marginTop: "3px" }}>{source.note}</div>
+                  <div style={{ color: "var(--color-text-secondary)", fontSize: "12px", marginTop: "3px" }}>
+                    Supports: {source.supports.join(" · ")}
+                  </div>
                 </li>
               ))}
             </ul>
