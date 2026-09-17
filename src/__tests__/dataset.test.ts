@@ -180,6 +180,14 @@ describe("Trust Hardening Fields", () => {
     expect(serializedAlgorithms).not.toContain("immune to cache-timing");
     expect(serializedAlgorithms).not.toContain("requires aes-ni for timing-safe");
   });
+
+  it("does not present AES-GCM as a full-disk-encryption mode", () => {
+    const aesGcm = ALGORITHMS.find((algorithm) => algorithm.id === "aes256gcm");
+
+    expect(aesGcm).toBeDefined();
+    expect(aesGcm?.useCases).toContain("XTS-AES");
+    expect(aesGcm?.useCases).not.toMatch(/TLS 1\.3, disk encryption/i);
+  });
 });
 
 describe("Hybrid Patterns", () => {

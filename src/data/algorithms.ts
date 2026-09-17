@@ -6,7 +6,7 @@ export const ALGORITHMS: Algorithm[] = [
   // ═══════════════════════════════════════
   { id:"aes256gcm", name:"AES-256-GCM", category:"symmetric", family:"AES", origin:"🇧🇪 Belgium",
     originDetail:"Joan Daemen & Vincent Rijmen (Belgium). NIST standardized.",
-    useCases:"General-purpose authenticated encryption. TLS 1.3, disk encryption, government classified data.",
+    useCases:"General-purpose authenticated record, message, and object encryption. TLS 1.3 and government-approved systems. Full-disk encryption normally uses a storage-specific mode such as XTS-AES instead.",
     status:"standard", statusLabel:"NIST Standard",
     recommendation:"recommended",
     recommendationRationale:"NIST-standardized, ubiquitous hardware acceleration via AES-NI, proven secure under PRP assumption, and deployed as default in TLS 1.3.",
