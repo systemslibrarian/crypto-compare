@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { CATALOG_EVIDENCE } from "@/data/catalogEvidence";
 import { getSizeMetric, withProvenance } from "@/lib/dataset";
 import type { Algorithm } from "@/types/crypto";
 
@@ -37,9 +38,13 @@ describe("dataset helpers", () => {
   it("adds provenance-derived trust fields", () => {
     const [algorithm] = withProvenance([signatureAlgorithm]);
 
-    expect(algorithm.standardized).toBe(true);
-    expect(algorithm.nistStandardized).toBe(true);
-    expect(algorithm.widelyDeployed).toBe(true);
+    expect(algorithm.catalogEvidence).toEqual(CATALOG_EVIDENCE.mldsa65);
+    expect(algorithm.catalogEvidence?.standardization).toEqual({
+      stage: "final",
+      formalPublication: true,
+      bodies: ["NIST"],
+    });
+    expect(algorithm.catalogEvidence?.deployment.level).toBe("documented");
     expect(algorithm.countryTag).toBe("USA");
   });
 

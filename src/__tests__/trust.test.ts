@@ -18,11 +18,13 @@ describe("trust helpers", () => {
 
   it("summarizes provenance review window, citations, and unique sources", () => {
     const summary = summarizeReviewWindow(dataset);
-    expect(summary.earliest).toBe("2026-06-27");
-    expect(summary.latest).toBe("2026-06-27");
+    const reviewDates = Object.values(ALGORITHM_PROVENANCE).map((entry) => entry.lastReviewed).sort();
+    const sourceUrls = Object.values(ALGORITHM_PROVENANCE).flatMap((entry) => entry.sources.map((source) => source.url));
+    expect(summary.earliest).toBe(reviewDates[0]);
+    expect(summary.latest).toBe(reviewDates.at(-1));
     expect(summary.coverage).toBe(dataset.length);
-    expect(summary.totalCitations).toBe(150);
-    expect(summary.uniqueSources).toBe(117);
+    expect(summary.totalCitations).toBe(sourceUrls.length);
+    expect(summary.uniqueSources).toBe(new Set(sourceUrls).size);
   });
 
   it("counts recommendation levels in a filtered set", () => {
