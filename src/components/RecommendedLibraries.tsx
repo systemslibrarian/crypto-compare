@@ -19,12 +19,12 @@ const CATEGORIES: CategorySection[] = [
     title: "Symmetric Encryption",
     color: "var(--color-accent-blue-label)",
     libs: [
-      { name: "libsodium / NaCl", note: "Misuse-resistant AEAD (XChaCha20-Poly1305) by default. Bindings for every major language. Used in Minisign, age, and many modern tools." },
+      { name: "libsodium / NaCl", note: "XChaCha20-Poly1305 offers a large nonce space and high-level APIs. It still requires a unique nonce for each message under a key." },
       { name: "BoringSSL", note: "Google's hardened OpenSSL fork. Powers Chrome, Android, Cloudflare, and AWS-LC. Includes AES-GCM with hardware acceleration." },
       { name: "Go crypto/cipher", note: "Standard library AES-GCM and ChaCha20-Poly1305. Constant-time, well-reviewed, used by the entire Go ecosystem." },
       { name: "ring (Rust)", note: "Minimal, correctness-focused. Backs rustls (the Rust TLS library). AES-GCM and ChaCha20-Poly1305." },
       { name: "Web Crypto API", note: "Built into all modern browsers. Provides AES-GCM and AES-CBC. No external dependency needed for client-side web apps." },
-      { name: "OpenSSL 3.x", note: "Widely deployed, FIPS 140-2/3 validated. Supports AES-GCM, AES-CCM, ChaCha20-Poly1305. Use the EVP interface, never low-level calls." },
+      { name: "OpenSSL 3.x", note: "Widely deployed and supports AES-GCM, AES-CCM, and ChaCha20-Poly1305. FIPS claims apply only when using an applicable validated module and configuration." },
     ],
     notes: [
       "Prefer AEAD modes (AES-GCM, ChaCha20-Poly1305, XChaCha20-Poly1305). Never use unauthenticated modes (ECB, CBC alone, CTR alone) without a separate MAC.",
@@ -72,7 +72,7 @@ const CATEGORIES: CategorySection[] = [
     title: "Hashing",
     color: "var(--color-badge-yellow-text)",
     libs: [
-      { name: "libsodium", note: "BLAKE2b by default — faster than SHA-256 on all platforms, with a 256-bit security level." },
+      { name: "libsodium", note: "Its generic-hash API uses BLAKE2b. Performance and security strength depend on the platform and selected output length." },
       { name: "OpenSSL / BoringSSL", note: "SHA-256, SHA-384, SHA-512, SHA-3. Hardware-accelerated on modern CPUs (SHA-NI extension)." },
       { name: "Go crypto/sha256, crypto/sha3", note: "Standard library SHA-2 and SHA-3 families. Constant-time, hardware-accelerated where available." },
       { name: "ring (Rust)", note: "SHA-256, SHA-384, SHA-512. Correctness-focused, suitable for TLS and certificate verification." },
@@ -80,7 +80,7 @@ const CATEGORIES: CategorySection[] = [
     ],
     notes: [
       "SHA-256 is the safe default for general-purpose hashing (integrity checks, commitments, Merkle trees).",
-      "BLAKE2b and BLAKE3 are faster alternatives with equivalent or better security margins. Prefer them when standards compliance is not required.",
+      "BLAKE2b and BLAKE3 can be faster alternatives on some targets. Benchmark the actual implementation and select an output length appropriate to the application.",
       "SHA-3 (Keccak) is a backup standard with a completely different internal design from SHA-2. Use it when algorithm diversity is required.",
       "Never use MD5 or SHA-1 for security purposes. They are broken for collision resistance.",
     ],
@@ -97,10 +97,10 @@ const CATEGORIES: CategorySection[] = [
       { name: "Bouncy Castle", note: "Argon2, bcrypt, and scrypt for Java and C# environments." },
     ],
     notes: [
-      "Argon2id is the recommended default (OWASP 2023). Minimum parameters: 64 MiB memory, 3 iterations, 1 degree of parallelism.",
-      "bcrypt remains acceptable with a work factor of 12+. It has a 72-byte input limit — truncate or pre-hash long passwords with SHA-256.",
+      "OWASP recommends Argon2id when available and currently gives 19 MiB, 2 iterations, and parallelism 1 as its minimum baseline. Tune upward on the deployment hardware while controlling denial-of-service risk.",
+      "OWASP limits bcrypt to legacy use when Argon2id and scrypt are unavailable. Most bcrypt implementations have a 72-byte input limit; do not silently truncate or invent a pre-hash scheme.",
       "scrypt is acceptable but harder to tune correctly than Argon2id. Prefer Argon2id for new systems.",
-      "Never use PBKDF2 with fewer than 600,000 iterations (OWASP 2023). It lacks memory-hardness and is vulnerable to GPU attacks.",
+      "For FIPS-constrained deployments, OWASP's current PBKDF2-HMAC-SHA-256 baseline is 600,000 iterations. Benchmark and version the work factor; PBKDF2 is not memory-hard.",
     ],
   },
   {
@@ -170,10 +170,10 @@ export default function RecommendedLibraries() {
   return (
     <div>
       <p style={{ margin: "0 0 16px", color: S.mutedColor, fontSize: S.text, lineHeight: S.lineHeight }}>
-        Algorithms are public standards — their security comes from mathematical proofs and decades of analysis, not from keeping the design secret.
+        Cryptographic designs should withstand public scrutiny; secrecy of the design is not a substitute for analysis, standardization, or deployment evidence.
         But a perfect algorithm becomes a vulnerability the moment it is implemented incorrectly: a leaked timing signal, a reused nonce, a mishandled buffer.{" "}
         <strong style={{ color: "var(--color-badge-red-text)" }}>Never write your own cryptographic primitives.</strong>{" "}
-        Use the audited, battle-tested libraries listed below — they exist so you don&apos;t have to solve problems that took world-class cryptographers years to get right.
+        Prefer maintained, well-reviewed libraries and verify the exact version, configuration, support policy, and validation evidence required by your threat model.
       </p>
 
       {CATEGORIES.map((cat, i) => (

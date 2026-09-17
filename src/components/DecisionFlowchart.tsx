@@ -165,9 +165,9 @@ export const DECISION_TREE: AdvisorRuleTree = {
   hash: {
     question: "What's the primary use case?",
     options: [
-      { label: "General purpose / interoperability", answer: { algo: "SHA-256", id: "sha256", reason: "NIST FIPS 180-4. Ubiquitous hardware acceleration. The universal default.", category: "hash" } },
+      { label: "General purpose / interoperability", answer: { algo: "SHA-256", id: "sha256", reason: "NIST FIPS 180-4. Broad interoperability and hardware acceleration on many modern processors. A conservative default when SHA-2 compatibility is required.", category: "hash" } },
       { label: "Diversity from SHA-2 (different design family)", answer: { algo: "SHA-3-256 (Keccak)", id: "sha3_256", reason: "NIST FIPS 202. Sponge construction. If SHA-2 breaks, SHA-3 is unaffected. Same team as AES.", category: "hash" } },
-      { label: "Maximum software speed", answer: { algo: "BLAKE3", id: "blake3", reason: "Massively parallel SIMD. ~0.3 cycles/byte. Built-in KDF and MAC. Not NIST standardized.", category: "hash" } },
+      { label: "Maximum software speed", answer: { algo: "BLAKE3", id: "blake3", reason: "A parallel tree design with SIMD-friendly implementations and XOF/keyed modes. Benchmark on the target hardware; it is not NIST standardized.", category: "hash" } },
       { label: "High-speed + built into Argon2/libsodium", answer: { algo: "BLAKE2b", id: "blake2b", reason: "IETF RFC 7693. Faster than SHA-256 in software. Foundation of Argon2.", category: "hash" } },
     ],
   },
@@ -189,7 +189,7 @@ export const DECISION_TREE: AdvisorRuleTree = {
   password: {
     question: "Can you use a modern library (not legacy constraints)?",
     options: [
-      { label: "Yes (recommended)", answer: { algo: "Argon2id", id: "argon2id", reason: "RFC 9106. OWASP #1 recommendation. Memory-hard + GPU-resistant + side-channel resistant. Gold standard.", category: "password" } },
+      { label: "Yes (recommended)", answer: { algo: "Argon2id", id: "argon2id", reason: "RFC 9106. OWASP's preferred modern password-hashing choice when available. Its hybrid access pattern balances resistance to GPU cracking and side-channel leakage; parameters still require deployment-specific tuning.", category: "password" } },
       { label: "Limited to older algorithms only", answer: { algo: "bcrypt", id: "bcrypt", reason: "OpenBSD. OWASP acceptable. 72-byte password limit. Not memory-hard but decent GPU resistance.", category: "password" } },
     ],
   },
@@ -291,7 +291,7 @@ export const DECISION_TREE: AdvisorRuleTree = {
   threshold_sig: {
     question: "Which signature type do you need?",
     options: [
-      { label: "Schnorr / EdDSA (IETF standard, most flexible)", answer: { algo: "FROST", id: "frost", reason: "RFC 9591. IETF standard. 2-round threshold Schnorr. Identifiable abort. First threshold sig scheme with an IETF RFC.", category: "threshold_sig" } },
+      { label: "Schnorr / EdDSA (CFRG specification)", answer: { algo: "FROST", id: "frost", reason: "RFC 9591 specifies two-round threshold Schnorr signatures. It is a CFRG/IRTF Informational RFC, not an Internet Standards Track standard; deployment still needs protocol and implementation review.", category: "threshold_sig" } },
       { label: "ECDSA (compatible with Ethereum / Bitcoin chains)", next: "threshold_ecdsa" },
       { label: "BLS (needs non-interactive aggregation for large sets)", answer: { algo: "BLS Threshold", id: "bls_threshold", reason: "Boneh et al. 2004. Non-interactive aggregation. O(1) verification for large validator sets. Ethereum 2.0 PoS uses this.", category: "threshold_sig" } },
     ],
@@ -313,7 +313,7 @@ export const DECISION_TREE: AdvisorRuleTree = {
   csprng_fips: {
     question: "Is AES-NI hardware available?",
     options: [
-      { label: "Yes — hardware AES available (fast throughput)", answer: { algo: "CTR-DRBG (AES-256)", id: "ctr_drbg", reason: "NIST SP 800-90A Rev 1. AES-NI accelerated. ~1-2 GB/s. Fastest NIST-approved DRBG. Used in Windows CNG and hardware HSMs.", category: "csprng" } },
+      { label: "Yes — hardware AES available (fast throughput)", answer: { algo: "CTR-DRBG (AES-256)", id: "ctr_drbg", reason: "NIST SP 800-90A Rev. 1 specifies CTR_DRBG. AES hardware can make it efficient, but throughput and validation status depend on the implementation and module.", category: "csprng" } },
       { label: "No — or prefer hash-based construction", answer: { algo: "HMAC-DRBG", id: "hmac_drbg", reason: "NIST SP 800-90A Rev 1. HMAC-SHA-256 backed. Proven under PRF assumption. No known weaknesses. The unbackdoored alternative to Dual_EC_DRBG in the same spec.", category: "csprng" } },
     ],
   },
@@ -321,7 +321,7 @@ export const DECISION_TREE: AdvisorRuleTree = {
     question: "OS-level CSPRNG design or general software randomness?",
     options: [
       { label: "OS entropy pool with catastrophic reseed recovery (macOS/BSD pattern)", answer: { algo: "Fortuna", id: "fortuna", reason: "Ferguson & Schneier 2003. 32 entropy pools guarantee recovery from full state compromise. FreeBSD and macOS use this design.", category: "csprng" } },
-      { label: "Application-level or Linux kernel (constant-time, no AES-NI)", answer: { algo: "ChaCha20-DRBG", id: "chacha20_drbg", reason: "Linux ≥ 5.17 primary DRBG. Constant-time — no lookup tables, immune to timing attacks. Not FIPS-approved.", category: "csprng" } },
+      { label: "Application-level or ChaCha-based OS design", answer: { algo: "ChaCha20-DRBG", id: "chacha20_drbg", reason: "ChaCha-based generators avoid secret-dependent table lookups and are used in modern operating-system RNG designs. That reduces common timing risks but does not make an implementation side-channel-immune; this profile is not a FIPS-approved DRBG.", category: "csprng" } },
     ],
   },
 };
