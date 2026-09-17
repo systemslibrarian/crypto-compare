@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import ComparisonTable from "@/components/ComparisonTable";
 import type { Algorithm, ComparisonRow } from "@/types/crypto";
 
@@ -29,22 +30,60 @@ export default function ComparisonWorkspace({
   onExportMarkdown,
   onExportJson,
 }: ComparisonWorkspaceProps) {
-  // Lock body scroll when comparison overlay is open
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const wasComparing = useRef(false);
+
   useEffect(() => {
-    if (!comparing) return;
+    if (!comparing) {
+      if (wasComparing.current) {
+        requestAnimationFrame(() => {
+          document.querySelector<HTMLButtonElement>("[data-comparison-trigger='true']")?.focus();
+        });
+      }
+      wasComparing.current = false;
+      return;
+    }
+
+    wasComparing.current = true;
+    const appRoot = document.querySelector<HTMLElement>(".cryptoCompareRoot");
+    const previousAriaHidden = appRoot?.getAttribute("aria-hidden");
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
+    appRoot?.setAttribute("inert", "");
+    appRoot?.setAttribute("aria-hidden", "true");
+    const frame = requestAnimationFrame(() => closeButtonRef.current?.focus());
+
+    return () => {
+      cancelAnimationFrame(frame);
+      document.body.style.overflow = "";
+      appRoot?.removeAttribute("inert");
+      if (previousAriaHidden == null) appRoot?.removeAttribute("aria-hidden");
+      else appRoot?.setAttribute("aria-hidden", previousAriaHidden);
+    };
   }, [comparing]);
 
-  // Close on Escape key
-  useEffect(() => {
-    if (!comparing) return;
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [comparing, onClose]);
+  function handleDialogKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      onClose();
+      return;
+    }
+    if (event.key !== "Tab" || !dialogRef.current) return;
+
+    const focusable = Array.from(dialogRef.current.querySelectorAll<HTMLElement>(
+      "button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex='-1'])",
+    ));
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
 
   if (algorithms.length === 1) {
     return <p style={{ textAlign: "center", color: "var(--color-text-body)", fontSize: "15px" }}>Select one more algorithm to compare.</p>;
@@ -77,6 +116,7 @@ export default function ComparisonWorkspace({
       >
         <button
           onClick={onStartCompare}
+          data-comparison-trigger="true"
           className="focusRing"
           aria-label={`Compare ${algorithms.length} selected algorithms`}
           style={{
@@ -100,10 +140,17 @@ export default function ComparisonWorkspace({
     );
   }
 
-  return (
-    <div className="comparisonOverlay" role="dialog" aria-modal="true" aria-label="Algorithm comparison">
+  const dialog = (
+    <div
+      ref={dialogRef}
+      className="comparisonOverlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="comparison-dialog-title"
+      onKeyDown={handleDialogKeyDown}
+    >
       <div className="comparisonOverlayHeader">
-        <h2 style={{ margin: 0, fontSize: "20px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", display: "flex", alignItems: "center", gap: "8px" }}>
+        <h2 id="comparison-dialog-title" style={{ margin: 0, fontSize: "20px", fontWeight: 700, fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace", display: "flex", alignItems: "center", gap: "8px" }}>
           <span style={{ color: categoryAccent }}>▍</span>Comparison
           <span style={{ fontSize: "14px", fontWeight: 400, color: "var(--color-text-muted)" }}>({algorithms.length} algorithms)</span>
         </h2>
@@ -124,6 +171,7 @@ export default function ComparisonWorkspace({
             Clear
           </button>
           <button
+            ref={closeButtonRef}
             onClick={onClose}
             className="focusRing controlBtn"
             aria-label="Close comparison"
@@ -138,4 +186,6 @@ export default function ComparisonWorkspace({
       </div>
     </div>
   );
+
+  return createPortal(dialog, document.body);
 }

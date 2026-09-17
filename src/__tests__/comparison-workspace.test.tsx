@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import ComparisonWorkspace from "@/components/ComparisonWorkspace";
 import type { Algorithm, ComparisonRow } from "@/types/crypto";
 
@@ -79,6 +79,8 @@ const rows: ComparisonRow[] = [
 ];
 
 describe("ComparisonWorkspace", () => {
+  afterEach(cleanup);
+
   it("shows the pre-compare actions and forwards callbacks", () => {
     const onStartCompare = vi.fn();
     const onCopyLink = vi.fn();
@@ -103,5 +105,62 @@ describe("ComparisonWorkspace", () => {
 
     expect(onStartCompare).toHaveBeenCalledTimes(1);
     expect(onCopyLink).toHaveBeenCalledTimes(1);
+  });
+
+  it("manages focus, traps Tab, and closes on Escape", async () => {
+    const onClose = vi.fn();
+    render(
+      <ComparisonWorkspace
+        algorithms={algorithms}
+        comparing
+        categoryAccent="#3b82f6"
+        rows={rows}
+        onStartCompare={vi.fn()}
+        onClose={onClose}
+        onCopyLink={vi.fn()}
+        onClearSelection={vi.fn()}
+        onExportCsv={vi.fn()}
+        onExportMarkdown={vi.fn()}
+        onExportJson={vi.fn()}
+      />,
+    );
+
+    const dialog = screen.getByRole("dialog", { name: /comparison/i });
+    const close = screen.getByRole("button", { name: /close comparison/i });
+    await waitFor(() => expect(close).toHaveFocus());
+
+    fireEvent.keyDown(dialog, { key: "Tab" });
+    expect(screen.getByRole("button", { name: "Copy link" })).toHaveFocus();
+
+    fireEvent.keyDown(dialog, { key: "Escape" });
+    expect(onClose).toHaveBeenCalledOnce();
+  });
+
+  it("makes the application background inert while open", () => {
+    const background = document.createElement("div");
+    background.className = "cryptoCompareRoot";
+    document.body.appendChild(background);
+
+    const { unmount } = render(
+      <ComparisonWorkspace
+        algorithms={algorithms}
+        comparing
+        categoryAccent="#3b82f6"
+        rows={rows}
+        onStartCompare={vi.fn()}
+        onClose={vi.fn()}
+        onCopyLink={vi.fn()}
+        onClearSelection={vi.fn()}
+        onExportCsv={vi.fn()}
+        onExportMarkdown={vi.fn()}
+        onExportJson={vi.fn()}
+      />,
+    );
+
+    expect(background).toHaveAttribute("inert");
+    expect(background).toHaveAttribute("aria-hidden", "true");
+    unmount();
+    expect(background).not.toHaveAttribute("inert");
+    background.remove();
   });
 });
