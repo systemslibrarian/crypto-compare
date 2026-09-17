@@ -33,17 +33,17 @@ const DECISION_TREE: Record<string, DecisionNode> = {
     ],
   },
   symmetric: {
-    question: "Does your target hardware have AES-NI (most modern x86/ARM)?",
+    question: "Does your target have hardware AES acceleration (AES-NI on x86 or Arm cryptography extensions)?",
     options: [
       { label: "Yes — hardware AES available", answer: { algo: "AES-256-GCM", id: "aes256gcm", reason: "Hardware-accelerated, NIST standard, ~1 cycle/byte. The universal default when AES-NI is present.", category: "symmetric" } },
-      { label: "No — or I want software-only / side-channel safety", next: "symmetric_sw" },
+      { label: "No — or I prefer a software-first design", next: "symmetric_sw" },
     ],
   },
   symmetric_sw: {
     question: "Do you need random nonces (e.g. at-rest / file encryption)?",
     options: [
-      { label: "Yes — I want safe random nonces", answer: { algo: "XChaCha20-Poly1305", id: "xchacha20poly", reason: "192-bit nonce makes random generation safe. libsodium default. Constant-time by construction.", category: "symmetric" } },
-      { label: "No — sequential / protocol nonces are fine", answer: { algo: "ChaCha20-Poly1305", id: "chacha20poly", reason: "IETF standard (RFC 8439). Used in TLS 1.3, WireGuard. No lookup tables = immune to cache-timing.", category: "symmetric" } },
+      { label: "Yes — I want safe random nonces", answer: { algo: "XChaCha20-Poly1305", id: "xchacha20poly", reason: "192-bit nonce makes random generation practical at high volume. Use a vetted constant-time implementation such as libsodium.", category: "symmetric" } },
+      { label: "No — sequential / protocol nonces are fine", answer: { algo: "ChaCha20-Poly1305", id: "chacha20poly", reason: "IETF standard (RFC 8439), used in TLS 1.3 and WireGuard. Its ARX design makes constant-time software practical; the implementation still matters.", category: "symmetric" } },
     ],
   },
   kem: {

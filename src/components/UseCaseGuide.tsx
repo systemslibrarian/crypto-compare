@@ -238,7 +238,7 @@ const SCENARIOS: Scenario[] = [
       "MAC → Poly1305 or SipHash (fast, constant-time)",
     ],
     why: [
-      "ChaCha20-Poly1305 outperforms AES on devices without AES-NI hardware — constant-time by construction with no lookup tables, immune to cache-timing side-channels.",
+      "ChaCha20-Poly1305 often outperforms AES on devices without hardware AES acceleration. Its ARX design avoids key-dependent lookup tables and makes constant-time software practical, but the complete implementation still requires side-channel review.",
       "ML-KEM-768 ciphertexts are only ~1088 bytes — much smaller than Classic McEliece, practical for bandwidth-constrained IoT.",
       "BLAKE3 is extremely fast in software on ARM processors — 2–4× faster than SHA-256 without hardware acceleration.",
       "All recommended primitives here are constant-time, avoiding timing side-channels that are especially dangerous on shared-hardware IoT platforms.",

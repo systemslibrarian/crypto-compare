@@ -172,6 +172,14 @@ describe("Trust Hardening Fields", () => {
     expect(chacha20Poly1305?.assumptions.toLowerCase()).toContain("authentication forgeries");
     expect(chacha20Poly1305?.assumptions.toLowerCase()).not.toContain("but not authenticity");
   });
+
+  it("does not make absolute side-channel claims", () => {
+    const serializedAlgorithms = JSON.stringify(ALGORITHMS).toLowerCase();
+
+    expect(serializedAlgorithms).not.toContain("constant-time by construction");
+    expect(serializedAlgorithms).not.toContain("immune to cache-timing");
+    expect(serializedAlgorithms).not.toContain("requires aes-ni for timing-safe");
+  });
 });
 
 describe("Hybrid Patterns", () => {
