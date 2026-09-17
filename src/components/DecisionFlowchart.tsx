@@ -4,20 +4,16 @@ import { useState } from "react";
 import { RecommendationBadge, ReviewBadge, formatReviewDate } from "@/components/ui";
 import { IMPLEMENTATIONS, ECOSYSTEM_LABELS } from "@/data/implementations";
 import { getAssuranceProfile } from "@/lib/assurance";
+import {
+  ADVISOR_RULESET_VERSION,
+  advisorOptionId,
+  type AdvisorDecisionStep,
+  type AdvisorRecommendation,
+  type AdvisorRuleTree,
+} from "@/lib/advisorEngine";
 import type { Algorithm, AlgorithmCategory, AlgorithmSource } from "@/types/crypto";
 
-type DecisionNode = {
-  question: string;
-  options: { label: string; next?: string; answer?: { algo: string; id: string; reason: string; category: AlgorithmCategory } }[];
-};
-
-type DecisionStep = {
-  nodeId: string;
-  optionLabel: string;
-  nextNodeId: string;
-};
-
-const DECISION_TREE: Record<string, DecisionNode> = {
+export const DECISION_TREE: AdvisorRuleTree = {
   start: {
     question: "What do you need to do?",
     options: [
@@ -255,10 +251,10 @@ type DecisionFlowchartProps = {
 
 export function buildJustificationReport(
   result: { algo: string; id: string; reason: string; category: AlgorithmCategory },
-  history: DecisionStep[],
+  history: AdvisorDecisionStep[],
   algorithms: Algorithm[],
   provenance: Record<string, { sources: AlgorithmSource[]; lastReviewed: string }>,
-  tree: Record<string, DecisionNode>,
+  tree: AdvisorRuleTree,
 ): string {
   const algo = algorithms.find((a) => a.id === result.id);
   const prov = provenance[result.id];
@@ -268,6 +264,7 @@ export function buildJustificationReport(
   lines.push("");
   lines.push(`**Generated**: ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`);
   lines.push(`**Tool**: crypto::compare (https://crypto-compare.systemslibrarian.dev/)`);
+  lines.push(`**Ruleset**: ${ADVISOR_RULESET_VERSION}`);
   lines.push("");
 
   // Decision path
@@ -349,13 +346,8 @@ export function buildJustificationReport(
 
 export default function DecisionFlowchart({ onNavigate, algorithms = [], provenance = {} }: DecisionFlowchartProps) {
   const [currentNode, setCurrentNode] = useState("start");
-  const [history, setHistory] = useState<DecisionStep[]>([]);
-  const [result, setResult] = useState<{
-    algo: string;
-    id: string;
-    reason: string;
-    category: AlgorithmCategory;
-  } | null>(null);
+  const [history, setHistory] = useState<AdvisorDecisionStep[]>([]);
+  const [result, setResult] = useState<AdvisorRecommendation | null>(null);
 
   const node = DECISION_TREE[currentNode];
   const resultAlgo = result ? algorithms.find((algo) => algo.id === result.id) : undefined;
@@ -383,7 +375,13 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
     if (option.answer) {
       setResult(option.answer);
     } else if (option.next) {
-      setHistory((h) => [...h, { nodeId: currentNode, optionLabel: option.label, nextNodeId: option.next! }]);
+      const optionIndex = node.options.indexOf(option);
+      setHistory((h) => [...h, {
+        nodeId: currentNode,
+        optionId: advisorOptionId(currentNode, optionIndex),
+        optionLabel: option.label,
+        nextNodeId: option.next!,
+      }]);
       setCurrentNode(option.next);
     }
   };
@@ -465,9 +463,9 @@ export default function DecisionFlowchart({ onNavigate, algorithms = [], provena
             {node.question}
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }} role="list" aria-labelledby="flowchart-question">
-            {node.options.map((option) => (
+            {node.options.map((option, optionIndex) => (
               <button
-                key={option.label}
+                key={advisorOptionId(currentNode, optionIndex)}
                 onClick={() => choose(option)}
                 style={{
                   background: "var(--color-bg-card)",
@@ -519,10 +517,10 @@ function ResultBlock({
   provenance,
   onNavigate,
 }: {
-  result: { algo: string; id: string; reason: string; category: AlgorithmCategory };
+  result: AdvisorRecommendation;
   resultAlgo?: Algorithm;
   resultProvenance?: { sources: AlgorithmSource[]; lastReviewed: string };
-  history: DecisionStep[];
+  history: AdvisorDecisionStep[];
   algorithms: Algorithm[];
   provenance: Record<string, { sources: AlgorithmSource[]; lastReviewed: string }>;
   onNavigate: (category: AlgorithmCategory, algoId: string) => void;
