@@ -1,3 +1,8 @@
+"use client";
+
+import { createPortal } from "react-dom";
+import { useModalDialog } from "@/lib/useModalDialog";
+
 type ShortcutHelpProps = {
   open: boolean;
   onClose: () => void;
@@ -99,7 +104,3 @@ export default function ShortcutHelp({ open, onClose }: ShortcutHelpProps) {
 
   return createPortal(dialog, document.body);
 }
-"use client";
-
-import { createPortal } from "react-dom";
-import { useModalDialog } from "@/lib/useModalDialog";
