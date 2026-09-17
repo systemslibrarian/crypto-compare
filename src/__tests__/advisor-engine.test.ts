@@ -35,6 +35,19 @@ describe("advisor rule engine", () => {
     }
   });
 
+  it("offers explicit classical, post-quantum, and review paths", () => {
+    const leaves = enumerateAdvisorLeafPaths(DECISION_TREE);
+
+    expect(leaves).toEqual(expect.arrayContaining([
+      expect.objectContaining({ choiceIds: ["start.2", "kem.1"], result: expect.objectContaining({ id: "curve25519" }) }),
+      expect.objectContaining({ choiceIds: ["start.2", "kem.2", "kem_pq.1"], result: expect.objectContaining({ id: "mlkem768" }) }),
+      expect.objectContaining({ choiceIds: ["start.2", "kem.3"], result: expect.objectContaining({ kind: "review", id: null }) }),
+      expect.objectContaining({ choiceIds: ["start.3", "sig.1"], result: expect.objectContaining({ id: "ed25519" }) }),
+      expect.objectContaining({ choiceIds: ["start.3", "sig.2", "sig_pq.1"], result: expect.objectContaining({ id: "mldsa65" }) }),
+      expect.objectContaining({ choiceIds: ["start.3", "sig.4"], result: expect.objectContaining({ kind: "review", id: null }) }),
+    ]));
+  });
+
   it("supports a review-required outcome without inventing an algorithm", () => {
     const tree: AdvisorRuleTree = {
       start: {

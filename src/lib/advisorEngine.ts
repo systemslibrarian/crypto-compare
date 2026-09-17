@@ -1,6 +1,6 @@
 import type { AlgorithmCategory } from "@/types/crypto";
 
-export const ADVISOR_RULESET_VERSION = "2026.09.1";
+export const ADVISOR_RULESET_VERSION = "2026.09.2";
 export const ADVISOR_START_NODE = "start";
 
 export type AdvisorRecommendation = {

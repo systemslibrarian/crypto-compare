@@ -21,7 +21,8 @@ describe("Decision flowchart report", () => {
     );
 
     fireEvent.click(screen.getByRole("button", { name: /encrypt data with a shared key/i }));
-    fireEvent.click(screen.getByRole("button", { name: /yes.*hardware aes available/i }));
+    fireEvent.click(screen.getByRole("button", { name: /fips.*approved implementation/i }));
+    fireEvent.click(screen.getByRole("button", { name: /yes.*uniqueness is enforced/i }));
     fireEvent.click(screen.getByRole("button", { name: /copy as markdown/i }));
 
     await waitFor(() => expect(writeText).toHaveBeenCalledOnce());
@@ -31,8 +32,10 @@ describe("Decision flowchart report", () => {
     expect(report).not.toContain("systemslubrarian");
     expect(report).toContain("**Q**: What do you need to do?");
     expect(report).toContain("**A**: Encrypt data with a shared key");
-    expect(report).toContain("**Q**: Does your target have hardware AES acceleration");
-    expect(report).toContain("**A**: Yes — hardware AES available");
+    expect(report).toContain("**Q**: What is the deployment context?");
+    expect(report).toContain("**A**: A FIPS/NIST-approved implementation is required");
+    expect(report).toContain("**Q**: Can the system guarantee a unique 96-bit nonce");
+    expect(report).toContain("**A**: Yes — uniqueness is enforced and monitored");
     expect(report).not.toContain("**A**: —");
   });
 });

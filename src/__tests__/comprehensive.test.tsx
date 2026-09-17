@@ -697,7 +697,9 @@ describe("Decision Flowchart Paths", () => {
     const DecisionFlowchart = (await import("@/components/DecisionFlowchart")).default;
     const { unmount } = render(<DecisionFlowchart onNavigate={() => {}} />);
     fireEvent.click(screen.getByText(/Encrypt data with a shared key/));
-    fireEvent.click(screen.getByText(/Yes.*hardware AES available/));
+    fireEvent.click(screen.getByText(/General application, record, or file encryption/));
+    fireEvent.click(screen.getByText(/Yes.*protocol or state/));
+    fireEvent.click(screen.getByText(/Yes.*hardware AES is available/));
     expect(screen.getAllByText(/AES-256-GCM/).length).toBeGreaterThan(0);
     unmount();
   });
@@ -706,8 +708,8 @@ describe("Decision Flowchart Paths", () => {
     const DecisionFlowchart = (await import("@/components/DecisionFlowchart")).default;
     const { unmount } = render(<DecisionFlowchart onNavigate={() => {}} />);
     fireEvent.click(screen.getByText(/Establish a shared secret/));
-    fireEvent.click(screen.getByText(/Yes.*protect against future/));
-    fireEvent.click(screen.getByText(/Balance of speed and security/));
+    fireEvent.click(screen.getByText(/Protect long-lived data against future/));
+    fireEvent.click(screen.getByText(/Standardized general-purpose profile/));
     expect(screen.getAllByText(/ML-KEM-768/).length).toBeGreaterThan(0);
     unmount();
   });
@@ -736,8 +738,9 @@ describe("Decision Flowchart Paths", () => {
     const DecisionFlowchart = (await import("@/components/DecisionFlowchart")).default;
     const { unmount } = render(<DecisionFlowchart onNavigate={() => {}} />);
     fireEvent.click(screen.getByText(/Encrypt data with a shared key/));
-    fireEvent.click(screen.getByText(/No.*software/));
-    fireEvent.click(screen.getByText(/Yes.*safe random nonces/));
+    fireEvent.click(screen.getByText(/General application, record, or file encryption/));
+    fireEvent.click(screen.getByText(/No.*random nonces/));
+    fireEvent.click(screen.getByText(/large random nonce/));
     // Result shown — click Start over
     fireEvent.click(screen.getByText(/Start over/));
     expect(screen.getByText("What do you need to do?")).toBeInTheDocument();

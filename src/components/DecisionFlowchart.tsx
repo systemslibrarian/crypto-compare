@@ -36,10 +36,10 @@ export const DECISION_TREE: AdvisorRuleTree = {
     ],
   },
   symmetric: {
-    question: "Does your target have hardware AES acceleration (AES-NI on x86 or Arm cryptography extensions)?",
+    question: "What is the deployment context?",
     options: [
-      { label: "Yes — hardware AES available", answer: { algo: "AES-256-GCM", id: "aes256gcm", reason: "Hardware-accelerated, NIST standard, ~1 cycle/byte. The universal default when AES-NI is present.", category: "symmetric" } },
-      { label: "No — or I prefer a software-first design", next: "symmetric_sw" },
+      { label: "A FIPS/NIST-approved implementation is required", next: "symmetric_fips" },
+      { label: "General application, record, or file encryption", next: "symmetric_nonce" },
       {
         label: "I need full-disk encryption or am designing a new protocol",
         answer: {
@@ -57,40 +57,106 @@ export const DECISION_TREE: AdvisorRuleTree = {
       },
     ],
   },
-  symmetric_sw: {
-    question: "Do you need random nonces (e.g. at-rest / file encryption)?",
+  symmetric_fips: {
+    question: "Can the system guarantee a unique 96-bit nonce for every message under a key?",
     options: [
-      { label: "Yes — I want safe random nonces", answer: { algo: "XChaCha20-Poly1305", id: "xchacha20poly", reason: "192-bit nonce makes random generation practical at high volume. Use a vetted constant-time implementation such as libsodium.", category: "symmetric" } },
-      { label: "No — sequential / protocol nonces are fine", answer: { algo: "ChaCha20-Poly1305", id: "chacha20poly", reason: "IETF standard (RFC 8439), used in TLS 1.3 and WireGuard. Its ARX design makes constant-time software practical; the implementation still matters.", category: "symmetric" } },
+      { label: "Yes — uniqueness is enforced and monitored", answer: { algo: "AES-256-GCM", id: "aes256gcm", reason: "GCM is a NIST-approved authenticated-encryption mode with broad validated implementation support. This recommendation depends on enforcing nonce uniqueness and the applicable per-invocation and per-key limits.", category: "symmetric" } },
+      {
+        label: "No — nonce reuse cannot be ruled out",
+        answer: {
+          kind: "review",
+          algo: "Security review required",
+          id: null,
+          reason: "AES-GCM can fail catastrophically when a nonce repeats under the same key, while the catalog's misuse-resistant alternatives may not satisfy the required validation profile.",
+          category: "symmetric",
+          nextSteps: [
+            "Fix the nonce allocation and persistence design before choosing GCM.",
+            "Confirm the exact FIPS module, approved mode, and protocol profile required by the deployment.",
+            "Have the resulting key and nonce lifecycle reviewed before release.",
+          ],
+        },
+      },
+    ],
+  },
+  symmetric_nonce: {
+    question: "Can the system guarantee a unique nonce for every message under a key?",
+    options: [
+      { label: "Yes — uniqueness is enforced by the protocol or state", next: "symmetric_hardware" },
+      { label: "No — use random nonces or tolerate accidental repeats", next: "symmetric_misuse" },
+    ],
+  },
+  symmetric_hardware: {
+    question: "Does the target have well-supported hardware AES acceleration?",
+    options: [
+      { label: "Yes — hardware AES is available", answer: { algo: "AES-256-GCM", id: "aes256gcm", reason: "With enforced nonce uniqueness, AES-GCM offers mature interoperability and strong performance on platforms with hardware AES support. Use a vetted implementation and enforce usage limits.", category: "symmetric" } },
+      { label: "No — prefer a software-oriented construction", answer: { algo: "ChaCha20-Poly1305", id: "chacha20poly", reason: "RFC 8439 specifies this AEAD and it is widely deployed in modern protocols. Its ARX design supports efficient constant-time implementations, but nonce uniqueness and implementation quality still matter.", category: "symmetric" } },
+    ],
+  },
+  symmetric_misuse: {
+    question: "Which nonce constraint best matches the system?",
+    options: [
+      { label: "A large random nonce can be generated and stored", answer: { algo: "XChaCha20-Poly1305", id: "xchacha20poly", reason: "Its 192-bit nonce makes collision-resistant random nonce generation practical at high volume. Use a vetted implementation such as libsodium and still treat nonce generation as part of the security design.", category: "symmetric" } },
+      { label: "Application-supplied nonces might accidentally repeat", answer: { algo: "AES-256-GCM-SIV", id: "aes256gcmsiv", reason: "RFC 8452 provides nonce-misuse resistance that limits the damage of accidental nonce repetition. Repetition still leaks information, and this is not a substitute for a sound nonce design or a required FIPS profile.", category: "symmetric" } },
     ],
   },
   kem: {
-    question: "Do you need post-quantum resistance?",
+    question: "What confidentiality horizon and compatibility constraint applies?",
     options: [
-      { label: "Yes — protect against future quantum computers", next: "kem_pq" },
-      { label: "I need maximum conservatism (oldest assumptions)", answer: { algo: "Classic McEliece", id: "classic_mceliece", reason: "45+ years of cryptanalysis. Code-based. Enormous keys (~261 KB) but maximum confidence.", category: "kem" } },
+      { label: "Classical-only compatibility with existing peers", answer: { algo: "Curve25519 / X25519", id: "curve25519", reason: "RFC 7748 X25519 is a mature classical key-agreement choice with compact keys and broad deployment. It is not post-quantum secure and should not be used alone for long-lived confidentiality at quantum risk.", category: "curve" } },
+      { label: "Protect long-lived data against future quantum attacks", next: "kem_pq" },
+      {
+        label: "The horizon is uncertain or I am designing a new handshake",
+        answer: {
+          kind: "review",
+          algo: "Security review required",
+          id: null,
+          reason: "A KEM cannot be selected safely without a protocol profile, peer capabilities, downgrade behavior, authentication design, and a defined confidentiality horizon.",
+          category: "kem",
+          nextSteps: [
+            "Define the data lifetime, peer compatibility, and compliance requirements.",
+            "Use a published protocol-specific hybrid profile when both classical and post-quantum protection are required.",
+            "Review the combiner, transcript binding, downgrade resistance, and key schedule before deployment.",
+          ],
+        },
+      },
     ],
   },
   kem_pq: {
     question: "What matters most?",
     options: [
-      { label: "Balance of speed and security (recommended)", answer: { algo: "ML-KEM-768 (Kyber)", id: "mlkem768", reason: "NIST FIPS 203.Primary PQ KEM standard. Already deployed in Chrome/Firefox hybrid TLS. 192-bit PQ security, fast.", category: "kem" } },
-      { label: "Maximum security margin", answer: { algo: "ML-KEM-1024 (Kyber)", id: "mlkem1024", reason: "256-bit PQ security. Conservative choice for government / long-term secrets.", category: "kem" } },
-      { label: "Diversify away from lattice assumptions", answer: { algo: "HQC", id: "hqc", reason: "Code-based alternative. If lattice problems (ML-KEM) break, HQC is unaffected. NIST selected.", category: "kem" } },
+      { label: "Standardized general-purpose profile", answer: { algo: "ML-KEM-768 (Kyber)", id: "mlkem768", reason: "FIPS 203 standardizes ML-KEM-768 at NIST security category 3. Deploy it only through a reviewed protocol profile; transition deployments may require a specified classical/PQ hybrid.", category: "kem" } },
+      { label: "NIST security category 5 is required", answer: { algo: "ML-KEM-1024 (Kyber)", id: "mlkem1024", reason: "FIPS 203 standardizes ML-KEM-1024 at NIST security category 5. Its larger keys and ciphertexts are justified only when the higher category is an explicit requirement.", category: "kem" } },
+      { label: "Diversify away from module-lattice assumptions", answer: { algo: "HQC", id: "hqc", reason: "NIST selected the code-based HQC for standardization as a backup to ML-KEM, but the final standard is not yet published. Treat current deployments as experimental and track the final specification.", category: "kem" } },
     ],
   },
   sig: {
-    question: "Do you need post-quantum resistance?",
+    question: "What verification horizon and compatibility constraint applies?",
     options: [
-      { label: "Yes — PQ signatures", next: "sig_pq" },
-      { label: "I need ultra-conservative (hash-only assumptions)", answer: { algo: "SLH-DSA (SPHINCS+)", id: "slh_dsa", reason: "Only needs hash security — most conservative PQ assumption possible. NIST FIPS 205. Large sigs, slow signing.", category: "signature" } },
+      { label: "Classical-only compatibility with broad library support", answer: { algo: "Ed25519", id: "ed25519", reason: "RFC 8032 Ed25519 is a mature classical signature scheme with compact keys and signatures. It is not post-quantum secure, so do not use it alone when signatures must remain trustworthy after a quantum transition.", category: "curve" } },
+      { label: "Post-quantum verification is required", next: "sig_pq" },
+      { label: "Prefer hash-based assumptions despite larger signatures", answer: { algo: "SLH-DSA (SPHINCS+)", id: "slh_dsa", reason: "FIPS 205 standardizes stateless hash-based signatures. The conservative assumption comes with much larger signatures and slower operations, so select a parameter set and implementation for the actual system constraints.", category: "signature" } },
+      {
+        label: "The horizon is uncertain or I need a hybrid signature format",
+        answer: {
+          kind: "review",
+          algo: "Security review required",
+          id: null,
+          reason: "Hybrid signatures need an explicit format, verification policy, downgrade behavior, and lifecycle plan; concatenating signatures without a profile can create interoperability and policy failures.",
+          category: "signature",
+          nextSteps: [
+            "Define how long signatures must remain verifiable and which verifiers must interoperate.",
+            "Select a published application or protocol profile for composite or dual signatures.",
+            "Review algorithm identifiers, verification policy, key rotation, and downgrade handling.",
+          ],
+        },
+      },
     ],
   },
   sig_pq: {
     question: "What matters most?",
     options: [
-      { label: "Balance of size and speed (recommended)", answer: { algo: "ML-DSA-65 (Dilithium)", id: "mldsa65", reason: "NIST FIPS 204. 192-bit PQ security. Good balance of signature size and performance.", category: "signature" } },
-      { label: "Smallest possible signatures", answer: { algo: "FALCON-512", id: "falcon512", reason: "Smallest PQ signatures (~666 bytes). But: constant-time signing is very hard to implement safely.", category: "signature" } },
+      { label: "Standardized general-purpose profile", answer: { algo: "ML-DSA-65 (Dilithium)", id: "mldsa65", reason: "FIPS 204 standardizes ML-DSA-65 at NIST security category 3. It is a balanced default only when its key and signature sizes fit the protocol and a vetted implementation is available.", category: "signature" } },
+      { label: "Compact signatures justify a not-yet-final standard", answer: { algo: "FALCON-512", id: "falcon512", reason: "FN-DSA/FALCON was selected by NIST for standardization and offers compact signatures, but the final NIST standard is not yet published and signing is difficult to implement safely. Treat it as an expert-reviewed, transition-sensitive choice.", category: "signature" } },
       { label: "Stateful (firmware/code signing)", answer: { algo: "XMSS", id: "xmss", reason: "IETF RFC 8391 / NIST SP 800-208. Hash-only assumptions. Stateful — reusing an index breaks security.", category: "signature" } },
     ],
   },
