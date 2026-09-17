@@ -725,7 +725,6 @@ h3 {
     background: var(--color-bg-card);
     border: 1px solid var(--color-border);
     border-radius: 10px;
-    cursor: pointer;
     transition: border-color 0.15s, background 0.15s;
   }
 
@@ -733,7 +732,7 @@ h3 {
     border-color: var(--color-border-muted);
   }
 
-  .algoCard[aria-pressed="true"] {
+  .algoCard[data-selected="true"] {
     background: var(--color-bg-selected);
     border-color: var(--color-border-accent);
   }
@@ -741,10 +740,6 @@ h3 {
   .algoCard.algoCardAdvisor {
     background: var(--color-bg-advisor);
     border-color: var(--color-badge-green-border);
-  }
-
-  .algoCard:focus-visible {
-    border-color: var(--color-text-accent-bright);
   }
 
   .recordTop {
@@ -764,6 +759,7 @@ h3 {
   }
 
   .recordName {
+    margin: 0;
     font-family: var(--font-serif);
     font-size: 19px;
     font-weight: 500;
@@ -803,6 +799,25 @@ h3 {
 
   .recordIconBtn.isActive {
     color: var(--color-dot-private);
+  }
+
+  .recordCompareBtn {
+    min-height: 36px;
+    padding: 6px 9px;
+    border: 1px solid var(--color-border-muted);
+    border-radius: 8px;
+    background: var(--color-bg-control);
+    color: var(--color-text-secondary);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .recordCompareBtn.isActive {
+    border-color: var(--color-border-accent);
+    color: var(--color-text-accent-bright);
+    background: var(--color-bg-selected);
   }
 
   .recordCheck {

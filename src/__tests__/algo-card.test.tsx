@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import AlgoCard from "@/components/AlgoCard";
 import type { Algorithm } from "@/types/crypto";
 
@@ -46,6 +46,8 @@ const algo: Algorithm = {
 };
 
 describe("AlgoCard", () => {
+  afterEach(cleanup);
+
   it("shows a labeled details control and reveals demo links", () => {
     render(
       <AlgoCard
@@ -62,5 +64,17 @@ describe("AlgoCard", () => {
 
     expect(screen.getByText("Demos")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /chacha20 stream/i })).toBeInTheDocument();
+  });
+
+  it("uses an article with a separate comparison control", () => {
+    const onToggle = vi.fn();
+    render(<AlgoCard algo={algo} selected={false} onToggle={onToggle} />);
+
+    const card = screen.getByRole("article", { name: algo.name });
+    expect(card).not.toHaveAttribute("tabindex");
+    expect(card).not.toHaveAttribute("aria-pressed");
+
+    fireEvent.click(screen.getByRole("button", { name: /add xchacha20-poly1305 to comparison/i }));
+    expect(onToggle).toHaveBeenCalledOnce();
   });
 });

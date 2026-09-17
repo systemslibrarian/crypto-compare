@@ -31,8 +31,7 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
   const [copied, setCopied] = useState(false);
   const assurance = getAssuranceProfile(algo);
 
-  function copyRecommendation(e: React.MouseEvent) {
-    e.stopPropagation();
+  function copyRecommendation() {
     const text = [
       `## ${algo.name}`,
       `Recommendation: ${recommendationText(algo.recommendation)}`,
@@ -55,34 +54,33 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
   if (algo.pqRelevance) metaBits.push(algo.pqRelevance.replace("pq-", "PQ-"));
 
   return (
-    <div
+    <article
       id={`algo-${algo.id}`}
-      onClick={onToggle}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          onToggle();
-        }
-      }}
-      role="button"
-      tabIndex={0}
-      aria-pressed={selected}
-      aria-label={`${selected ? "Deselect" : "Select"} ${algo.name} for comparison`}
-      className={`focusRing algoCard${advisorPick ? " algoCardAdvisor" : ""}`}
+      aria-labelledby={`algo-${algo.id}-name`}
+      data-selected={selected}
+      className={`algoCard${advisorPick ? " algoCardAdvisor" : ""}`}
       style={{ borderLeft: `3px solid ${advisorPick ? "var(--color-badge-green-text)" : selected ? accent : `${accent}55`}` }}
     >
       <div className="recordTop">
         <div className="recordTitleWrap">
-          <span className="recordName">{algo.name}</span>
+          <h3 id={`algo-${algo.id}-name`} className="recordName">{algo.name}</h3>
           <RecommendationBadge level={algo.recommendation} compact />
           {advisorPick && <span className="badge badge--green">Advisor pick</span>}
         </div>
         <div className="recordActions">
-          {selected && <span className="recordCheck" aria-hidden="true">✓</span>}
+          <button
+            type="button"
+            onClick={onToggle}
+            aria-pressed={selected}
+            aria-label={`${selected ? "Remove" : "Add"} ${algo.name} ${selected ? "from" : "to"} comparison`}
+            className={`focusRing recordCompareBtn${selected ? " isActive" : ""}`}
+          >
+            {selected ? "✓ Comparing" : "Compare"}
+          </button>
           {onToggleFavorite && (
             <button
               type="button"
-              onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}
+              onClick={onToggleFavorite}
               aria-label={favorited ? `Remove ${algo.name} from favorites` : `Add ${algo.name} to favorites`}
               className={`focusRing recordIconBtn${favorited ? " isActive" : ""}`}
             >
@@ -123,7 +121,7 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
         <span style={{ flex: "1 1 auto" }} />
         <button
           type="button"
-          onClick={(e) => { e.stopPropagation(); setDetailOpen((v) => !v); }}
+          onClick={() => setDetailOpen((v) => !v)}
           aria-label={detailOpen ? `Hide ${algo.name} details` : `Show ${algo.name} details`}
           aria-expanded={detailOpen}
           className="focusRing recordFootBtn"
@@ -133,7 +131,7 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
       </div>
 
       {detailOpen && (
-        <div onClick={(e) => e.stopPropagation()} className="recordDetails">
+        <div className="recordDetails">
           <div className="recordDetailGrid">
             <DetailField label="Best known attack" value={algo.bestAttack} />
             <DetailField label="Performance" value={algo.performance} />
@@ -175,7 +173,7 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
           {algo.sources && algo.sources.length > 0 && (
             <DetailSection label="Sources">
               {algo.sources.map((s) => (
-                <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="recordLink" style={{ display: "block" }}>
+                <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer" className="recordLink" style={{ display: "block" }}>
                   {s.label} <span className="note">— {s.note}</span>
                 </a>
               ))}
@@ -185,7 +183,7 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
           {demos.length > 0 && (
             <DetailSection label="Demos">
               {demos.map((demo) => (
-                <a key={demo.url} href={demo.url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="recordLink" style={{ display: "block" }}>
+                <a key={demo.url} href={demo.url} target="_blank" rel="noopener noreferrer" className="recordLink" style={{ display: "block" }}>
                   {demo.title} <span className="note">— {demo.note}</span>
                 </a>
               ))}
@@ -210,7 +208,7 @@ export default function AlgoCard({ algo, selected, onToggle, favorited, onToggle
           </div>
         </div>
       )}
-    </div>
+    </article>
   );
 }
 
