@@ -1,6 +1,21 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("crypto::compare core journeys", () => {
+  test("does not preload guide routes before the visitor chooses one", async ({ page }) => {
+    const speculativeRoutes: string[] = [];
+    page.on("request", (request) => {
+      const url = new URL(request.url());
+      if (url.searchParams.has("_rsc")) {
+        speculativeRoutes.push(url.pathname);
+      }
+    });
+
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    expect(speculativeRoutes).toEqual([]);
+  });
+
   test("loads without Content Security Policy browser issues", async ({ page, context }) => {
     const devtools = await context.newCDPSession(page);
     const issues: unknown[] = [];

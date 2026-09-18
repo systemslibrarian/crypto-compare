@@ -27,7 +27,7 @@ export default function HomeHero({ datasetSize, categoryCount, totalCitations, u
       <h1 className="homeHeroTitle">Choose the right cryptography, with confidence.</h1>
       <p className="homeHeroLede">
         Evidence-linked recommendations with explicit tradeoffs and safe defaults. Browse the catalog below, or{" "}
-        <Link href="/advisor" className="homeHeroLink">
+        <Link href="/advisor" prefetch={false} className="homeHeroLink">
           answer a few questions in the advisor
         </Link>{" "}
         for a tailored pick.
@@ -51,7 +51,7 @@ export default function HomeHero({ datasetSize, categoryCount, totalCitations, u
       <nav className="homeHeroTasks" aria-label="Jump to a use case">
         <span className="homeHeroTasksLabel">Safe defaults for</span>
         {USE_CASES.map((task) => (
-          <Link key={task.label} href={task.href} className="homeHeroTask">
+          <Link key={task.label} href={task.href} prefetch={false} className="homeHeroTask">
             {task.label}
           </Link>
         ))}

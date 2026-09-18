@@ -115,7 +115,7 @@ export default function AppHeaderNav({
           <span className="navMenuLabel">Guides</span>
           <div className="navLinkList">
             {NAV_LINKS.map((link) => (
-              <Link key={link.href} href={link.href} className="focusRing navLink" onClick={onCloseMobileNav}>
+              <Link key={link.href} href={link.href} prefetch={false} className="focusRing navLink" onClick={onCloseMobileNav}>
                 {link.label}
               </Link>
             ))}
