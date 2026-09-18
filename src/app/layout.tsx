@@ -27,14 +27,14 @@ export const CONTENT_SECURITY_POLICY = [
 // `var(--font-jetbrains-mono)` references resolve to DM Mono without edits.
 const dmMono = DM_Mono({
   subsets: ["latin"],
-  weight: ["300", "400", "500"],
+  weight: ["400", "500"],
   variable: "--font-jetbrains-mono",
 });
 
 const fraunces = Fraunces({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
+  style: "normal",
   variable: "--font-fraunces",
 });
 
