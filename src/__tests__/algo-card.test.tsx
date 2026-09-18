@@ -48,7 +48,7 @@ const algo: Algorithm = {
 describe("AlgoCard", () => {
   afterEach(cleanup);
 
-  it("shows a labeled details control and reveals demo links", () => {
+  it("shows a labeled details control and reveals demo links", async () => {
     render(
       <AlgoCard
         algo={algo}
@@ -62,8 +62,8 @@ describe("AlgoCard", () => {
 
     fireEvent.click(detailsButton);
 
-    expect(screen.getByText("Demos")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /chacha20 stream/i })).toBeInTheDocument();
+    expect(await screen.findByText("Demos")).toBeInTheDocument();
+    expect(await screen.findByRole("link", { name: /chacha20 stream/i })).toBeInTheDocument();
   });
 
   it("uses an article with a separate comparison control", () => {
