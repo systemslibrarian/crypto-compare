@@ -90,8 +90,8 @@ jobs:
   lighthouse:
     runs-on: ubuntu-latest
     needs: build
-    # Measured 70s. The `npx serve out &` + `sleep 3` pattern is the one that can
-    # wedge here -- if the server never comes up, lighthouse waits, not fails.
+    # Measured 70s. The server implementation and dependencies are committed
+    # and lockfile-pinned; the cap still catches a failed startup or audit hang.
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
@@ -106,7 +106,7 @@ jobs:
         run: npm run build
       - name: Serve and audit
         run: |
-          npx serve out -l 3000 &
+          npm run serve:static -- -l 3000 &
           sleep 3
           npx lighthouse http://localhost:3000 \
             --chrome-flags="--headless --no-sandbox" \
