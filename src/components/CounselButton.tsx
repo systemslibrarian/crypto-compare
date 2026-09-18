@@ -34,8 +34,8 @@ export function CounselButton({
         rel="noopener noreferrer"
         aria-label={label}
         className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full
-                   bg-emerald-600 px-4 py-3 text-sm font-medium text-white shadow-lg
-                   transition-all hover:bg-emerald-500 hover:shadow-emerald-500/30
+                   bg-emerald-700 px-4 py-3 text-sm font-medium text-white shadow-lg
+                   transition-all hover:bg-emerald-800 hover:shadow-emerald-500/30
                    focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
                    focus-visible:outline-emerald-400
                    md:px-5 md:py-3"
