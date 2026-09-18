@@ -27,6 +27,18 @@ test.describe("crypto::compare core journeys", () => {
     await expect(hybridPatterns).toBeVisible();
   });
 
+  test("loads the comparison workspace only after an algorithm is selected", async ({ page }) => {
+    await page.goto("/");
+
+    await expect(page.getByText("Select one more algorithm to compare.")).toHaveCount(0);
+
+    await page.getByRole("button", { name: "Compare — add AES-256-GCM to comparison" }).click();
+    await expect(page.getByText("Select one more algorithm to compare.")).toBeVisible();
+
+    await page.getByRole("button", { name: "Compare — add ChaCha20-Poly1305 to comparison" }).click();
+    await expect(page.getByRole("button", { name: "Compare 2 selected algorithms" })).toBeVisible();
+  });
+
   test("loads without Content Security Policy browser issues", async ({ page, context }) => {
     const devtools = await context.newCDPSession(page);
     const issues: unknown[] = [];
