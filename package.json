@@ -7,6 +7,7 @@
     "dev": "next dev",
     "prebuild": "node --import tsx scripts/export-dataset.ts",
     "build": "next build",
+    "postbuild": "node --import tsx scripts/finalize-static-html.ts",
     "export:dataset": "node --import tsx scripts/export-dataset.ts",
     "start": "next start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings=0 --ignore-pattern .next --ignore-pattern out",

@@ -1,4 +1,9 @@
 import { z } from "zod";
+
+// This module is bundled for client-side dataset validation. Zod's optional
+// JIT probe uses the Function constructor, which a strict CSP correctly blocks.
+// Keep the regular parser so validation works without 'unsafe-eval'.
+z.config({ jitless: true });
 import type { Algorithm, AlgorithmCategory } from "@/types/crypto";
 
 const ALGORITHM_CATEGORIES = [

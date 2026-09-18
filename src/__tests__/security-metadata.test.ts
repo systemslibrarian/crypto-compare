@@ -26,4 +26,11 @@ describe("document security metadata", () => {
       telephone: false,
     });
   });
+
+  it("keeps client-side schema validation compatible with the production CSP", async () => {
+    const { z } = await import("zod");
+    await import("@/lib/validation");
+
+    expect(z.config()).toMatchObject({ jitless: true });
+  });
 });

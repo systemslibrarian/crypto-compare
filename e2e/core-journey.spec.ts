@@ -1,6 +1,23 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("crypto::compare core journeys", () => {
+  test("loads without Content Security Policy browser issues", async ({ page, context }) => {
+    const devtools = await context.newCDPSession(page);
+    const issues: unknown[] = [];
+
+    devtools.on("Audits.issueAdded", ({ issue }) => {
+      if (issue.code === "ContentSecurityPolicyIssue") {
+        issues.push(issue.details.contentSecurityPolicyIssueDetails);
+      }
+    });
+    await devtools.send("Audits.enable");
+
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    expect(issues).toEqual([]);
+  });
+
   test("home loads, search filters the algorithm grid", async ({ page }) => {
     await page.goto("/");
 
