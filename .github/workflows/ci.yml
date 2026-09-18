@@ -113,38 +113,7 @@ jobs:
             --only-categories=accessibility,best-practices,performance \
             --output=json --output-path=./lighthouse-report.json \
             --quiet
-          node -e '
-            const r = require("./lighthouse-report.json");
-            const cat = r.categories;
-            const score = (key) => Math.round((cat[key]?.score ?? 0) * 100);
-            const a = score("accessibility");
-            const p = score("performance");
-            const bp = score("best-practices");
-            const audits = r.audits;
-            const cls = audits["cumulative-layout-shift"]?.numericValue ?? 1;
-            const cwv = (key) => audits[key]?.displayValue ?? "n/a";
-            console.log(`Accessibility ${a} | Performance ${p} | Best-practices ${bp}`);
-            console.log(`LCP ${cwv("largest-contentful-paint")} | CLS ${cwv("cumulative-layout-shift")} | TBT ${cwv("total-blocking-time")}`);
-            // Hard gates: things that should always hold. Accessibility and
-            // best-practices are mature; CLS is a stable Core Web Vital here.
-            const hard = {
-              "accessibility >= 90": a >= 90,
-              "best-practices >= 90": bp >= 90,
-              "CLS < 0.1": cls < 0.1,
-              // Regression floor for performance; raise toward 90 as the home
-              // bundle / TBT is optimized. Today the page scores ~67.
-              "performance >= 55": p >= 55,
-            };
-            const failed = Object.entries(hard).filter(([, ok]) => !ok).map(([k]) => k);
-            if (failed.length) {
-              console.error(`::error::Lighthouse gate failed: ${failed.join(", ")}`);
-              process.exit(1);
-            }
-            if (p < 90) {
-              console.log(`::warning::Performance ${p} is below the 90 target (TBT/bundle weight on the home page).`);
-            }
-            console.log("Lighthouse gates passed.");
-          '
+          npm run check:lighthouse -- lighthouse-report.json
       - name: Upload Lighthouse report
         if: always()
         uses: actions/upload-artifact@v7
