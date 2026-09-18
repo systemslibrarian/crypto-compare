@@ -77,6 +77,7 @@ export default function CryptoCompare() {
   const [showLibraries, setShowLibraries] = useState(false);
   const [showResources, setShowResources] = useState(false);
   const [showReferences, setShowReferences] = useState(false);
+  const [knowledgeNearViewport, setKnowledgeNearViewport] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [globalSearch, setGlobalSearch] = useState(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
@@ -85,6 +86,7 @@ export default function CryptoCompare() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [advisorHighlight, setAdvisorHighlight] = useState<string | null>(null);
   const mobileNavRef = useRef<HTMLElement>(null);
+  const knowledgeRef = useRef<HTMLDivElement>(null);
   const controller = useCryptoCompareController({
     searchRef,
     setCat,
@@ -133,6 +135,30 @@ export default function CryptoCompare() {
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (knowledgeNearViewport) return;
+    const target = knowledgeRef.current;
+    if (!target) return;
+
+    if (!("IntersectionObserver" in window)) {
+      setKnowledgeNearViewport(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setKnowledgeNearViewport(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "600px 0px" },
+    );
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [knowledgeNearViewport]);
 
   useMobileNavBehavior({
     isOpen: mobileNavOpen,
@@ -193,6 +219,15 @@ export default function CryptoCompare() {
       }),
     [dataset, cat, globalSearch, showDefaults, favOnly, favorites, search, pqOnly, standardOnly, nistOnly, deployedOnly, country, sortBy],
   );
+
+  const knowledgeRequested =
+    showHybrid ||
+    showGuide ||
+    showSafeUsage ||
+    showArchitectures ||
+    showLibraries ||
+    showPhilosophy ||
+    showResources;
 
   const selAlgos = useMemo(() => filtered.filter((a) => sel.includes(a.id)), [filtered, sel]);
   const rows = useMemo(() => buildRows(cat), [cat]);
@@ -446,22 +481,26 @@ export default function CryptoCompare() {
             )}
           </div>
 
-          <KnowledgeSections
-            showHybrid={showHybrid}
-            showGuide={showGuide}
-            showSafeUsage={showSafeUsage}
-            showArchitectures={showArchitectures}
-            showLibraries={showLibraries}
-            showPhilosophy={showPhilosophy}
-            showResources={showResources}
-            onToggleHybrid={() => setShowHybrid((value) => !value)}
-            onToggleGuide={() => setShowGuide((value) => !value)}
-            onToggleSafeUsage={() => setShowSafeUsage((value) => !value)}
-            onToggleArchitectures={() => setShowArchitectures((value) => !value)}
-            onToggleLibraries={() => setShowLibraries((value) => !value)}
-            onTogglePhilosophy={() => setShowPhilosophy((value) => !value)}
-            onToggleResources={() => setShowResources((value) => !value)}
-          />
+          <div ref={knowledgeRef} className="deferBelowFold" style={{ minHeight: "320px" }}>
+            {(knowledgeNearViewport || knowledgeRequested) && (
+              <KnowledgeSections
+                showHybrid={showHybrid}
+                showGuide={showGuide}
+                showSafeUsage={showSafeUsage}
+                showArchitectures={showArchitectures}
+                showLibraries={showLibraries}
+                showPhilosophy={showPhilosophy}
+                showResources={showResources}
+                onToggleHybrid={() => setShowHybrid((value) => !value)}
+                onToggleGuide={() => setShowGuide((value) => !value)}
+                onToggleSafeUsage={() => setShowSafeUsage((value) => !value)}
+                onToggleArchitectures={() => setShowArchitectures((value) => !value)}
+                onToggleLibraries={() => setShowLibraries((value) => !value)}
+                onTogglePhilosophy={() => setShowPhilosophy((value) => !value)}
+                onToggleResources={() => setShowResources((value) => !value)}
+              />
+            )}
+          </div>
         </main>
 
         <FooterShell trustSnapshot={trustSnapshot} />
