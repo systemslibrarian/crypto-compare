@@ -448,19 +448,21 @@ export default function CryptoCompare() {
             ))}
           </section>
 
-          <ComparisonWorkspace
-            algorithms={selAlgos}
-            comparing={cmp}
-            categoryAccent={CATEGORY_ACCENT[cat]}
-            rows={rows}
-            onStartCompare={() => setCmp(true)}
-            onClose={() => setCmp(false)}
-            onCopyLink={controller.copyComparisonLink}
-            onClearSelection={controller.clearComparison}
-            onExportCsv={() => exportComparison("csv")}
-            onExportMarkdown={() => exportComparison("markdown")}
-            onExportJson={() => exportComparison("json")}
-          />
+          {selAlgos.length > 0 && (
+            <ComparisonWorkspace
+              algorithms={selAlgos}
+              comparing={cmp}
+              categoryAccent={CATEGORY_ACCENT[cat]}
+              rows={rows}
+              onStartCompare={() => setCmp(true)}
+              onClose={() => setCmp(false)}
+              onCopyLink={controller.copyComparisonLink}
+              onClearSelection={controller.clearComparison}
+              onExportCsv={() => exportComparison("csv")}
+              onExportMarkdown={() => exportComparison("markdown")}
+              onExportJson={() => exportComparison("json")}
+            />
+          )}
 
           <div className="deferBelowFold" style={{ marginBottom: "18px" }}>
             <button
