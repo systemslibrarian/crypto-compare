@@ -28,7 +28,7 @@ export default function CategoryStrip({
     <nav className="catStrip" aria-label="Cryptography categories">
       <button
         type="button"
-        aria-label={`All, ${datasetSize} algorithms`}
+        aria-label={`All ${datasetSize} algorithms`}
         aria-pressed={globalSearch}
         className="focusRing catChip"
         onClick={onSelectAll}
@@ -40,7 +40,7 @@ export default function CategoryStrip({
         <button
           key={category.id}
           type="button"
-          aria-label={`${category.label}, ${counts[category.id] ?? 0} algorithms`}
+          aria-label={`${category.label} ${counts[category.id] ?? 0} algorithms`}
           aria-pressed={!globalSearch && selectedCategory === category.id}
           className="focusRing catChip"
           onClick={() => onSelectCategory(category.id)}

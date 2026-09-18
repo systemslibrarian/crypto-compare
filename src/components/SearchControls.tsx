@@ -246,10 +246,10 @@ export default function SearchControls({
             </option>
           ))}
         </select>
-        <button className={`focusRing controlBtn ${hasActiveFilters ? "controlBtnActive" : ""}`} onClick={onToggleFilters} aria-expanded={showFilters} aria-label={`${showFilters ? "Hide" : "Show"} filter options${hasActiveFilters ? " (active)" : ""}`}>
+        <button className={`focusRing controlBtn ${hasActiveFilters ? "controlBtnActive" : ""}`} onClick={onToggleFilters} aria-expanded={showFilters} aria-label={`Filters${activeFilterCount > 0 ? ` (${activeFilterCount})` : ""} — ${showFilters ? "hide" : "show"} options`}>
           Filters{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
         </button>
-        <button className="focusRing controlBtn" onClick={onToggleMethodology} aria-expanded={showMethodology} aria-label={`${showMethodology ? "Hide" : "Show"} methodology and trust model`}>
+        <button className="focusRing controlBtn" onClick={onToggleMethodology} aria-expanded={showMethodology} aria-label={`How to read this site — ${showMethodology ? "hide" : "show"} methodology and trust model`}>
           How to read this site
         </button>
       </div>

@@ -48,7 +48,7 @@ export default function AppHeaderNav({
   return (
     <>
       <header className="siteHeader">
-        <button type="button" className="focusRing siteBrand" onClick={onReset} aria-label="Back to main menu">
+        <button type="button" className="focusRing siteBrand" onClick={onReset} aria-label="crypto::compare — back to main menu">
           <span className="brandMark" aria-hidden="true">◈</span>
           <span className="siteBrandText"><span className="siteBrandAccent">crypto</span>::compare</span>
         </button>

@@ -45,7 +45,7 @@ describe("SearchControls", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /show filter options \(active\)/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Filters \(1\).*show options/i }));
 
     expect(onToggleFilters).toHaveBeenCalledTimes(1);
   });
