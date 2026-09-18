@@ -45,7 +45,7 @@ test.describe("crypto::compare core journeys", () => {
     const shortcuts = page.getByRole("dialog", { name: "Keyboard Shortcuts" });
     await expect(shortcuts).toHaveCount(0);
 
-    await page.keyboard.press("Shift+/");
+    await page.keyboard.press("Shift+?");
     await expect(shortcuts).toBeVisible();
 
     await page.keyboard.press("Escape");
