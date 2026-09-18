@@ -2,13 +2,13 @@ import { describe, expect, it } from "vitest";
 import {
   IMPLEMENTATIONS,
   isImplementationCheckStale,
-  validateImplementationEvidence,
+  validateImplementationCatalog,
   type ImplementationEntry,
 } from "@/data/implementations";
 
 describe("implementation evidence", () => {
   it("never labels an implementation audited without linked, scoped evidence", () => {
-    expect(validateImplementationEvidence(IMPLEMENTATIONS)).toEqual([]);
+    expect(validateImplementationCatalog(IMPLEMENTATIONS)).toEqual([]);
     expect(IMPLEMENTATIONS.every((entry) => entry.auditStatus !== "evidence-linked" || Boolean(entry.auditEvidence))).toBe(true);
   });
 
@@ -18,9 +18,16 @@ describe("implementation evidence", () => {
       auditStatus: "evidence-linked",
       auditEvidence: undefined,
     };
-    expect(validateImplementationEvidence([entry])).toEqual([
+    expect(validateImplementationCatalog([entry])).toEqual([
       `${entry.algorithmId}/${entry.ecosystem}/${entry.library}: audit evidence is missing`,
     ]);
+  });
+
+  it("gives every entry sourced, dated version context without calling it an audit", () => {
+    expect(IMPLEMENTATIONS).toHaveLength(58);
+    expect(validateImplementationCatalog(IMPLEMENTATIONS)).toEqual([]);
+    expect(IMPLEMENTATIONS.every((entry) => entry.versionContext.checked === "2026-09-18")).toBe(true);
+    expect(IMPLEMENTATIONS.every((entry) => entry.versionContext.url.startsWith("https://"))).toBe(true);
   });
 
   it("marks catalog checks older than 120 days as stale", () => {

@@ -261,6 +261,12 @@ function ImplementationList({ impls }: { impls: ImplementationEntry[] }) {
             <div key={idx} className="recordSubItem">
               <strong style={{ color: "var(--color-text-heading)" }}>{impl.library}</strong>
               <span style={{ fontSize: "10.5px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.06em", color: auditColor[impl.auditStatus], marginLeft: "8px" }}>{impl.auditStatus === "evidence-linked" ? "audit evidence linked" : "audit not evidenced"}</span>
+              <div style={{ fontSize: "11.5px", marginTop: "2px" }}>
+                <a href={impl.versionContext.url} target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-text-link)", textDecoration: "none" }}>
+                  {impl.versionContext.label} ↗
+                </a>
+                <span style={{ color: "var(--color-text-ghost)" }}> · version context</span>
+              </div>
               <div style={{ color: "var(--color-text-muted)" }}>{impl.notes}</div>
               {impl.warning && <div style={{ color: "var(--color-badge-yellow-text)", fontSize: "11.5px", marginTop: "2px" }}>{impl.warning}</div>}
             </div>

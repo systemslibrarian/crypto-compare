@@ -1,8 +1,17 @@
 // `lastChecked` records the last catalog review, not an audit or security
-// endorsement. An implementation is `evidence-linked` only when this dataset
-// links the report and identifies its scope.
+// endorsement. `versionContext` records the release or platform used to make
+// this catalog entry reproducible; it does not assert that version was audited.
+// An implementation is `evidence-linked` only when this dataset links the
+// report and identifies its scope.
 
 export type Ecosystem = "rust" | "python" | "typescript" | "go" | "dotnet" | "java";
+
+export type VersionContext = {
+  kind: "package-release" | "platform-baseline" | "living-platform";
+  label: string;
+  url: string;
+  checked: string;
+};
 
 export type ImplementationEntry = {
   algorithmId: string;
@@ -18,17 +27,24 @@ export type ImplementationEntry = {
     published: string;
     scope: string;
   };
+  versionContext: VersionContext;
   lastChecked: string;
   warning?: string;
 };
 
-export function validateImplementationEvidence(entries: ImplementationEntry[]): string[] {
+export function validateImplementationCatalog(entries: ImplementationEntry[]): string[] {
   return entries.flatMap((entry) => {
     if (entry.auditStatus === "evidence-linked" && !entry.auditEvidence) {
       return [`${entry.algorithmId}/${entry.ecosystem}/${entry.library}: audit evidence is missing`];
     }
     if (entry.auditStatus === "not-evidenced" && entry.auditEvidence) {
       return [`${entry.algorithmId}/${entry.ecosystem}/${entry.library}: evidence is linked but status is not-evidenced`];
+    }
+    if (!entry.versionContext.label || !entry.versionContext.url || !entry.versionContext.checked) {
+      return [`${entry.algorithmId}/${entry.ecosystem}/${entry.library}: version context is incomplete`];
+    }
+    if (!/^https:\/\//.test(entry.versionContext.url)) {
+      return [`${entry.algorithmId}/${entry.ecosystem}/${entry.library}: version context must link an HTTPS source`];
     }
     return [];
   });
@@ -53,7 +69,45 @@ export const ECOSYSTEM_LABELS: Record<Ecosystem, { label: string; icon: string }
   java: { label: "Java", icon: "☕" },
 };
 
-export const IMPLEMENTATIONS: ImplementationEntry[] = [
+const VERSION_CHECKED = "2026-09-18";
+
+const VERSION_CONTEXTS = {
+  "rust:ring": { kind: "package-release", label: "crate 0.17.14", url: "https://docs.rs/crate/ring/0.17.14", checked: VERSION_CHECKED },
+  "rust:aes-gcm": { kind: "package-release", label: "crate 0.11.1", url: "https://docs.rs/crate/aes-gcm/0.11.1", checked: VERSION_CHECKED },
+  "rust:chacha20poly1305": { kind: "package-release", label: "crate 0.11.0", url: "https://docs.rs/crate/chacha20poly1305/0.11.0", checked: VERSION_CHECKED },
+  "rust:argon2": { kind: "package-release", label: "crate 0.6.0", url: "https://docs.rs/crate/argon2/0.6.0", checked: VERSION_CHECKED },
+  "rust:ed25519-dalek": { kind: "package-release", label: "crate 3.0.0", url: "https://docs.rs/crate/ed25519-dalek/3.0.0", checked: VERSION_CHECKED },
+  "rust:x25519-dalek": { kind: "package-release", label: "crate 3.0.0", url: "https://docs.rs/crate/x25519-dalek/3.0.0", checked: VERSION_CHECKED },
+  "rust:hkdf": { kind: "package-release", label: "crate 0.13.0", url: "https://docs.rs/crate/hkdf/0.13.0", checked: VERSION_CHECKED },
+  "rust:ml-kem": { kind: "package-release", label: "crate 0.3.2", url: "https://docs.rs/crate/ml-kem/0.3.2", checked: VERSION_CHECKED },
+  "rust:ml-dsa": { kind: "package-release", label: "crate 0.1.1", url: "https://docs.rs/crate/ml-dsa/0.1.1", checked: VERSION_CHECKED },
+  "python:cryptography": { kind: "package-release", label: "PyPI 50.0.1", url: "https://pypi.org/project/cryptography/50.0.1/", checked: VERSION_CHECKED },
+  "python:PyNaCl": { kind: "package-release", label: "PyPI 1.6.2", url: "https://pypi.org/project/PyNaCl/1.6.2/", checked: VERSION_CHECKED },
+  "python:argon2-cffi": { kind: "package-release", label: "PyPI 25.1.0", url: "https://pypi.org/project/argon2-cffi/25.1.0/", checked: VERSION_CHECKED },
+  "python:kyber-py": { kind: "package-release", label: "PyPI 1.2.0", url: "https://pypi.org/project/kyber-py/1.2.0/", checked: VERSION_CHECKED },
+  "python:dilithium-py": { kind: "package-release", label: "PyPI 1.4.0", url: "https://pypi.org/project/dilithium-py/1.4.0/", checked: VERSION_CHECKED },
+  "python:built-in": { kind: "platform-baseline", label: "Python 3.14.7 stdlib", url: "https://docs.python.org/release/3.14.7/library/hmac.html", checked: VERSION_CHECKED },
+  "typescript:@noble/ciphers": { kind: "package-release", label: "npm 2.4.0", url: "https://www.npmjs.com/package/%40noble%2Fciphers/v/2.4.0", checked: VERSION_CHECKED },
+  "typescript:libsodium-wrappers": { kind: "package-release", label: "npm 0.8.4", url: "https://www.npmjs.com/package/libsodium-wrappers/v/0.8.4", checked: VERSION_CHECKED },
+  "typescript:argon2": { kind: "package-release", label: "npm 0.45.1", url: "https://www.npmjs.com/package/argon2/v/0.45.1", checked: VERSION_CHECKED },
+  "typescript:@noble/curves": { kind: "package-release", label: "npm 2.4.0", url: "https://www.npmjs.com/package/%40noble%2Fcurves/v/2.4.0", checked: VERSION_CHECKED },
+  "typescript:@noble/hashes": { kind: "package-release", label: "npm 2.4.0", url: "https://www.npmjs.com/package/%40noble%2Fhashes/v/2.4.0", checked: VERSION_CHECKED },
+  "typescript:@noble/post-quantum": { kind: "package-release", label: "npm 0.7.1", url: "https://www.npmjs.com/package/%40noble%2Fpost-quantum/v/0.7.1", checked: VERSION_CHECKED },
+  "typescript:built-in": { kind: "living-platform", label: "Web Crypto API", url: "https://www.w3.org/TR/WebCryptoAPI/", checked: VERSION_CHECKED },
+  "go:stdlib": { kind: "platform-baseline", label: "Go 1.27.1 stdlib", url: "https://go.dev/doc/devel/release#go1.27.1", checked: VERSION_CHECKED },
+  "go:golang.org/x/crypto": { kind: "package-release", label: "module v0.57.0", url: "https://pkg.go.dev/golang.org/x/crypto@v0.57.0", checked: VERSION_CHECKED },
+  "go:github.com/cloudflare/circl/sign/mldsa": { kind: "package-release", label: "CIRCL v1.6.5", url: "https://pkg.go.dev/github.com/cloudflare/circl@v1.6.5/sign/mldsa", checked: VERSION_CHECKED },
+  "dotnet:Sodium.Core": { kind: "package-release", label: "NuGet 1.4.1", url: "https://www.nuget.org/packages/Sodium.Core/1.4.1", checked: VERSION_CHECKED },
+  "dotnet:Konscious.Security.Cryptography.Argon2": { kind: "package-release", label: "NuGet 1.3.1", url: "https://www.nuget.org/packages/Konscious.Security.Cryptography.Argon2/1.3.1", checked: VERSION_CHECKED },
+  "dotnet:NSec.Cryptography": { kind: "package-release", label: "NuGet 26.4.0", url: "https://www.nuget.org/packages/NSec.Cryptography/26.4.0", checked: VERSION_CHECKED },
+  "dotnet:built-in": { kind: "platform-baseline", label: ".NET 10", url: "https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-10/overview", checked: VERSION_CHECKED },
+  "java:built-in": { kind: "platform-baseline", label: "JDK 25", url: "https://docs.oracle.com/en/java/javase/25/security/java-cryptography-architecture-jca-reference-guide.html", checked: VERSION_CHECKED },
+  "java:org.bouncycastle:bcprov-jdk18on": { kind: "package-release", label: "Bouncy Castle 1.86", url: "https://central.sonatype.com/artifact/org.bouncycastle/bcprov-jdk18on/1.86", checked: VERSION_CHECKED },
+} as const satisfies Record<string, VersionContext>;
+
+type ImplementationDraft = Omit<ImplementationEntry, "versionContext">;
+
+const IMPLEMENTATION_CATALOG: ImplementationDraft[] = [
   // ─── AES-256-GCM ────────────────────────────────────────────────
   { algorithmId: "aes256gcm", ecosystem: "rust", library: "ring", packageName: "ring", url: "https://github.com/briansmith/ring", notes: "aead::AES_256_GCM. Hardware-accelerated. Minimal unsafe surface.", auditStatus: "not-evidenced", lastChecked: "2026-09-17" },
   { algorithmId: "aes256gcm", ecosystem: "rust", library: "RustCrypto aes-gcm", packageName: "aes-gcm", url: "https://github.com/RustCrypto/AEADs", notes: "Pure Rust with optional AES-NI. Part of the RustCrypto ecosystem.", auditStatus: "not-evidenced", lastChecked: "2026-09-17" },
@@ -130,3 +184,12 @@ export const IMPLEMENTATIONS: ImplementationEntry[] = [
   { algorithmId: "mldsa65", ecosystem: "dotnet", library: "System.Security.Cryptography", packageName: "built-in", url: "https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.mldsa?view=net-10.0", notes: "MLDsa class for FIPS 204, including the ML-DSA-65 parameter set.", auditStatus: "not-evidenced", lastChecked: "2026-09-17", warning: "Support is platform-dependent; check MLDsa.IsSupported before use." },
   { algorithmId: "mldsa65", ecosystem: "java", library: "Bouncy Castle", packageName: "org.bouncycastle:bcprov-jdk18on", url: "https://www.bouncycastle.org/java.html", notes: "MLDSAKeyPairGenerator and MLDSASigner implement final FIPS 204 ML-DSA.", auditStatus: "not-evidenced", lastChecked: "2026-09-17" },
 ];
+
+export const IMPLEMENTATIONS: ImplementationEntry[] = IMPLEMENTATION_CATALOG.map((entry) => {
+  const key = `${entry.ecosystem}:${entry.packageName}` as keyof typeof VERSION_CONTEXTS;
+  const versionContext = VERSION_CONTEXTS[key];
+  if (!versionContext) {
+    throw new Error(`Missing version context for ${key}`);
+  }
+  return { ...entry, versionContext };
+});

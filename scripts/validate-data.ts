@@ -6,9 +6,11 @@
 import { ALGORITHMS } from "../src/data/algorithms";
 import { ALGORITHM_PROVENANCE } from "../src/data/provenance";
 import { HYBRID_PATTERNS } from "../src/data/hybridPatterns";
+import { IMPLEMENTATIONS, validateImplementationCatalog } from "../src/data/implementations";
 import { validateAlgorithms } from "../src/lib/validation";
 
 const errors = validateAlgorithms(ALGORITHMS);
+errors.push(...validateImplementationCatalog(IMPLEMENTATIONS));
 
 // Check provenance coverage
 const algoIds = new Set(ALGORITHMS.map((a) => a.id));
@@ -71,5 +73,5 @@ if (errors.length > 0) {
   }
   process.exit(1);
 } else {
-  console.log(`✅ Dataset validated: ${ALGORITHMS.length} algorithms, ${provenanceIds.size} provenance entries, ${HYBRID_PATTERNS.length} hybrid patterns, 0 errors.`);
+  console.log(`✅ Dataset validated: ${ALGORITHMS.length} algorithms, ${provenanceIds.size} provenance entries, ${HYBRID_PATTERNS.length} hybrid patterns, ${IMPLEMENTATIONS.length} implementations, 0 errors.`);
 }

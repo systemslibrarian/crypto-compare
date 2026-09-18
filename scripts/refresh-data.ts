@@ -4,7 +4,7 @@
  *
  * 1. Flags algorithms whose provenance `lastReviewed` is older than STALE_DAYS.
  * 2. Flags implementation-catalog checks older than the same review window.
- * 3. Probes authoritative source URLs to detect dead links (HTTP ≥ 400).
+ * 3. Probes authoritative algorithm, implementation, and version-context URLs.
  * 4. Checks NIST CSRC, IETF Datatracker, and PQC pages for new publications
  *    that may affect existing entries.
  * 4. Outputs a structured JSON report for CI / GitHub Actions to consume.
@@ -124,6 +124,28 @@ async function checkLinks(): Promise<DeadLink[]> {
         }
       } catch {
         // Network/transient errors are reported through CI logs but not treated as confirmed dead links.
+      }
+    }
+  }
+
+  for (const entry of IMPLEMENTATIONS) {
+    const links = [
+      { url: entry.url, label: `${entry.library} project` },
+      { url: entry.versionContext.url, label: `${entry.library} ${entry.versionContext.label}` },
+    ];
+    for (const link of links) {
+      if (seen.has(link.url)) continue;
+      seen.add(link.url);
+      try {
+        let status = await probe(link.url, "HEAD");
+        if (status === 404 || status === 405 || status === 429) {
+          status = await probe(link.url, "GET");
+        }
+        if (isClearlyDead(link.url, status)) {
+          dead.push({ algorithmId: entry.algorithmId, url: link.url, label: link.label, status });
+        }
+      } catch {
+        // Network/transient errors are not treated as confirmed dead links.
       }
     }
   }

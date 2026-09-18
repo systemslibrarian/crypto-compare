@@ -66,7 +66,7 @@ export default function ImplementationsView() {
         Implementation Map
       </h1>
       <p style={{ fontSize: "17px", color: "var(--color-text-secondary)", lineHeight: 1.7, margin: "0 0 12px" }}>
-        Candidate libraries for recommended algorithms across 6 ecosystems, with explicit audit-evidence and catalog-freshness status.
+        Candidate libraries for recommended algorithms across 6 ecosystems, with explicit version context, audit-evidence, and catalog-freshness status.
       </p>
 
       {/* Disclaimer */}
@@ -84,7 +84,8 @@ export default function ImplementationsView() {
         </strong>
         <span style={{ color: "var(--color-text-warning, var(--color-text-body))" }}>
           A library listing is not a security endorsement. &quot;Audit not evidenced&quot; means this catalog does not link a scoped audit report.
-          Every entry must be re-checked for its current package version, maintenance status, platform support, and published security reviews before production use.
+          Version context is the package release or platform baseline verified when the entry was reviewed—not proof that version was audited.
+          Re-check maintenance, platform support, and published security reviews before production use.
         </span>
       </div>
 
@@ -168,6 +169,13 @@ export default function ImplementationsView() {
                     </div>
                     <div style={{ fontSize: "12px", color: "var(--color-text-muted)", marginBottom: "6px", fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace" }}>
                       {impl.packageName === "built-in" || impl.packageName === "stdlib" ? impl.packageName : <code>{impl.packageName}</code>}
+                    </div>
+                    <div style={{ fontSize: "12px", marginBottom: "8px" }}>
+                      <span style={{ color: "var(--color-text-muted)" }}>Version context: </span>
+                      <a href={impl.versionContext.url} target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-text-link)", textDecoration: "none" }}>
+                        {impl.versionContext.label} ↗
+                      </a>
+                      <span style={{ color: "var(--color-text-ghost)" }}> · checked {impl.versionContext.checked}</span>
                     </div>
                     <p style={{ margin: "0 0 8px", color: "var(--color-text-body)" }}>{impl.notes}</p>
                     {impl.warning && (
