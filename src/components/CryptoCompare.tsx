@@ -39,7 +39,6 @@ import { useCryptoCompareUrlState } from "@/lib/useCryptoCompareUrlState";
 import { useMobileNavBehavior } from "@/lib/useMobileNavBehavior";
 import { usePersistentFavorites } from "@/lib/usePersistentFavorites";
 import { useKeyboardShortcuts } from "@/lib/useKeyboardShortcuts";
-import { validateAlgorithms } from "@/lib/validation";
 import type { Algorithm, AlgorithmCategory } from "@/types/crypto";
 
 const SORT_OPTIONS = [
@@ -113,15 +112,6 @@ export default function CryptoCompare() {
     setFavOnly,
     setMobileNavOpen,
   });
-
-  useEffect(() => {
-    if (process.env.NODE_ENV !== "production") {
-      const validationErrors = validateAlgorithms(dataset);
-      if (validationErrors.length > 0) {
-        console.warn("Algorithm validation issues", validationErrors);
-      }
-    }
-  }, [dataset]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
