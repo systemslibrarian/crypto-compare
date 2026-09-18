@@ -39,6 +39,19 @@ test.describe("crypto::compare core journeys", () => {
     await expect(page.getByRole("button", { name: "Compare 2 selected algorithms" })).toBeVisible();
   });
 
+  test("loads keyboard help only when the visitor requests it", async ({ page }) => {
+    await page.goto("/");
+
+    const shortcuts = page.getByRole("dialog", { name: "Keyboard Shortcuts" });
+    await expect(shortcuts).toHaveCount(0);
+
+    await page.keyboard.press("Shift+?");
+    await expect(shortcuts).toBeVisible();
+
+    await page.keyboard.press("Escape");
+    await expect(shortcuts).toHaveCount(0);
+  });
+
   test("loads without Content Security Policy browser issues", async ({ page, context }) => {
     const devtools = await context.newCDPSession(page);
     const issues: unknown[] = [];

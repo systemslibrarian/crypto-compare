@@ -333,7 +333,7 @@ export default function CryptoCompare() {
       <a href="#main-content" className="skipLink">
         Skip to main content
       </a>
-      <ShortcutHelp open={showShortcuts} onClose={() => setShowShortcuts(false)} />
+      {showShortcuts && <ShortcutHelp open onClose={() => setShowShortcuts(false)} />}
       <div className="pageShell">
         <AppHeaderNav
           categories={CATEGORIES}
