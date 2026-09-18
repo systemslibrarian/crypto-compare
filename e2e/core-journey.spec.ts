@@ -52,6 +52,18 @@ test.describe("crypto::compare core journeys", () => {
     await expect(shortcuts).toHaveCount(0);
   });
 
+  test("loads implementation records only when algorithm details are opened", async ({ page }) => {
+    await page.goto("/");
+
+    const aesCard = page.getByRole("article", { name: "AES-256-GCM" });
+    await expect(aesCard.getByText("8 implementations")).toBeVisible();
+    await expect(aesCard.getByText("ring", { exact: true })).toHaveCount(0);
+
+    await aesCard.getByRole("button", { name: "Show AES-256-GCM details" }).click();
+    await expect(aesCard.getByText("Implementations", { exact: true })).toBeVisible();
+    await expect(aesCard.getByText("ring", { exact: true })).toBeVisible();
+  });
+
   test("loads without Content Security Policy browser issues", async ({ page, context }) => {
     const devtools = await context.newCDPSession(page);
     const issues: unknown[] = [];

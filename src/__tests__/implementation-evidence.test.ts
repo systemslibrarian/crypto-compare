@@ -5,6 +5,7 @@ import {
   validateImplementationCatalog,
   type ImplementationEntry,
 } from "@/data/implementations";
+import { IMPLEMENTATION_COUNTS } from "@/data/implementationCounts";
 
 describe("implementation evidence", () => {
   it("never labels an implementation audited without linked, scoped evidence", () => {
@@ -28,6 +29,15 @@ describe("implementation evidence", () => {
     expect(validateImplementationCatalog(IMPLEMENTATIONS)).toEqual([]);
     expect(IMPLEMENTATIONS.every((entry) => entry.versionContext.checked === "2026-09-18")).toBe(true);
     expect(IMPLEMENTATIONS.every((entry) => entry.versionContext.url.startsWith("https://"))).toBe(true);
+  });
+
+  it("keeps the lightweight card counts synchronized with the full catalog", () => {
+    const actualCounts = IMPLEMENTATIONS.reduce<Record<string, number>>((counts, entry) => {
+      counts[entry.algorithmId] = (counts[entry.algorithmId] ?? 0) + 1;
+      return counts;
+    }, {});
+
+    expect(IMPLEMENTATION_COUNTS).toEqual(actualCounts);
   });
 
   it("marks catalog checks older than 120 days as stale", () => {

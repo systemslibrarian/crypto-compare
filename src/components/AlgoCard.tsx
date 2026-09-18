@@ -1,11 +1,14 @@
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { RecommendationBadge, formatReviewDate, recommendationText } from "@/components/ui";
 import { CounselButton } from "@/components/CounselButton";
 import { CATEGORY_ACCENT } from "@/data/categories";
 import { ALGORITHM_DEMOS } from "@/data/demoResources";
-import { IMPLEMENTATIONS, ECOSYSTEM_LABELS, type ImplementationEntry } from "@/data/implementations";
+import { IMPLEMENTATION_COUNTS } from "@/data/implementationCounts";
 import { formatAssuranceForExport, getAssuranceProfile, type AssuranceProfile } from "@/lib/assurance";
 import type { Algorithm, AlgorithmCategory } from "@/types/crypto";
+
+const ImplementationList = dynamic(() => import("@/components/ImplementationList"), { ssr: false });
 
 type AlgoCardProps = {
   algo: Algorithm;
@@ -27,7 +30,7 @@ type AlgoCardProps = {
 export default function AlgoCard({ algo, browsingCategory, selected, onToggle, favorited, onToggleFavorite, advisorPick }: AlgoCardProps) {
   const accent = CATEGORY_ACCENT[algo.category];
   const demos = ALGORITHM_DEMOS[algo.id] ?? [];
-  const impls = IMPLEMENTATIONS.filter((i) => i.algorithmId === algo.id);
+  const implementationCount = IMPLEMENTATION_COUNTS[algo.id] ?? 0;
   const [detailOpen, setDetailOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const assurance = getAssuranceProfile(algo);
@@ -119,7 +122,7 @@ export default function AlgoCard({ algo, browsingCategory, selected, onToggle, f
         {algo.sources && algo.sources.length > 0 && (
           <span>{algo.sources.length} source{algo.sources.length !== 1 ? "s" : ""}</span>
         )}
-        {impls.length > 0 && <span>{impls.length} implementation{impls.length !== 1 ? "s" : ""}</span>}
+        {implementationCount > 0 && <span>{implementationCount} implementation{implementationCount !== 1 ? "s" : ""}</span>}
         <span>{formatReviewDate(algo.lastReviewed)}</span>
         <span style={{ flex: "1 1 auto" }} />
         <button
@@ -171,7 +174,7 @@ export default function AlgoCard({ algo, browsingCategory, selected, onToggle, f
             </DetailSection>
           )}
 
-          {impls.length > 0 && <ImplementationList impls={impls} />}
+          {implementationCount > 0 && <ImplementationList algorithmId={algo.id} />}
 
           {algo.sources && algo.sources.length > 0 && (
             <DetailSection label="Sources">
@@ -237,43 +240,6 @@ function DetailSection({ label, children }: { label: string; children: React.Rea
       <div className="recordDetailLabel">{label}</div>
       <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>{children}</div>
     </div>
-  );
-}
-
-function ImplementationList({ impls }: { impls: ImplementationEntry[] }) {
-  const byEco: Record<string, ImplementationEntry[]> = {};
-  for (const impl of impls) {
-    if (!byEco[impl.ecosystem]) byEco[impl.ecosystem] = [];
-    byEco[impl.ecosystem].push(impl);
-  }
-  const auditColor: Record<string, string> = {
-    "evidence-linked": "var(--color-badge-green-text)",
-    "not-evidenced": "var(--color-badge-yellow-text)",
-  };
-  return (
-    <DetailSection label="Implementations">
-      {Object.entries(byEco).map(([eco, list]) => (
-        <div key={eco}>
-          <div style={{ fontSize: "11px", fontWeight: 500, letterSpacing: "0.06em", color: "var(--color-text-secondary)", marginBottom: "4px" }}>
-            {ECOSYSTEM_LABELS[eco as keyof typeof ECOSYSTEM_LABELS]?.label ?? eco}
-          </div>
-          {list.map((impl, idx) => (
-            <div key={idx} className="recordSubItem">
-              <strong style={{ color: "var(--color-text-heading)" }}>{impl.library}</strong>
-              <span style={{ fontSize: "10.5px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.06em", color: auditColor[impl.auditStatus], marginLeft: "8px" }}>{impl.auditStatus === "evidence-linked" ? "audit evidence linked" : "audit not evidenced"}</span>
-              <div style={{ fontSize: "11.5px", marginTop: "2px" }}>
-                <a href={impl.versionContext.url} target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-text-link)", textDecoration: "none" }}>
-                  {impl.versionContext.label} ↗
-                </a>
-                <span style={{ color: "var(--color-text-ghost)" }}> · version context</span>
-              </div>
-              <div style={{ color: "var(--color-text-muted)" }}>{impl.notes}</div>
-              {impl.warning && <div style={{ color: "var(--color-badge-yellow-text)", fontSize: "11.5px", marginTop: "2px" }}>{impl.warning}</div>}
-            </div>
-          ))}
-        </div>
-      ))}
-    </DetailSection>
   );
 }
 
