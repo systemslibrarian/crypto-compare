@@ -75,10 +75,10 @@ export default function AlgoCard({ algo, browsingCategory, selected, onToggle, f
             type="button"
             onClick={onToggle}
             aria-pressed={selected}
-            aria-label={`${selected ? "Remove" : "Add"} ${algo.name} ${selected ? "from" : "to"} comparison`}
+            aria-label={selected ? `Comparing — remove ${algo.name} from comparison` : `Compare — add ${algo.name} to comparison`}
             className={`focusRing recordCompareBtn${selected ? " isActive" : ""}`}
           >
-            {selected ? "✓ Comparing" : "Compare"}
+            {selected ? <><span aria-hidden="true">✓ </span>Comparing</> : "Compare"}
           </button>
           {onToggleFavorite && (
             <button

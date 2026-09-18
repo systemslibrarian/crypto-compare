@@ -4,7 +4,7 @@ test.describe("crypto::compare core journeys", () => {
   test("home loads, search filters the algorithm grid", async ({ page }) => {
     await page.goto("/");
 
-    await expect(page.getByRole("button", { name: "Back to main menu" })).toBeVisible();
+    await expect(page.getByRole("button", { name: /crypto::compare.*back to main menu/i })).toBeVisible();
 
     // Grid loads with the default category; the first card should be present.
     await expect(page.getByText("AES-256-GCM").first()).toBeVisible();

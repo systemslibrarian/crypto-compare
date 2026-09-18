@@ -159,22 +159,8 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
         padding: expanded ? "24px 28px" : "18px 22px",
         marginBottom: "16px",
         transition: "all 0.2s",
-        cursor: expanded ? "default" : "pointer",
+        cursor: "default",
       }}
-      onClick={() => {
-        if (!expanded) {
-          onToggle();
-        }
-      }}
-      onKeyDown={(e) => {
-        if (!expanded && (e.key === "Enter" || e.key === " ")) {
-          e.preventDefault();
-          onToggle();
-        }
-      }}
-      role={expanded ? undefined : "button"}
-      tabIndex={expanded ? undefined : 0}
-      aria-label={expanded ? undefined : `Expand ${info.title} details`}
     >
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", flexWrap: "wrap" }}>
         <div style={{ flex: "1 1 320px", minWidth: 0 }}>
@@ -195,7 +181,7 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
           }}
           className="focusRing"
           aria-expanded={expanded}
-          aria-label={expanded ? `Collapse ${info.title} details` : `Expand ${info.title} details`}
+          aria-label={expanded ? `Less — collapse ${info.title} details` : `Learn more — expand ${info.title} details`}
           style={{
             background: expanded ? "var(--color-border-header)" : "var(--color-bg-surface)",
             color: expanded ? "var(--color-text-accent-bright)" : "var(--color-text-muted)",
@@ -213,7 +199,7 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
             minHeight: "44px",
           }}
         >
-          {expanded ? "v Less" : "> Learn more"}
+          {expanded ? <><span aria-hidden="true">v </span>Less</> : <><span aria-hidden="true">&gt; </span>Learn more</>}
         </button>
       </div>
 

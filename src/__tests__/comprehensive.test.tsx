@@ -619,7 +619,7 @@ describe("Compare Mode State Transitions", () => {
   it("clicking an algorithm compare control toggles selection", async () => {
     const CryptoCompare = (await import("@/components/CryptoCompare")).default;
     const { unmount } = render(<CryptoCompare />);
-    const compareControls = screen.getAllByRole("button", { name: /Add .+ to comparison/i });
+    const compareControls = screen.getAllByRole("button", { name: /Compare — add .+ to comparison/i });
     expect(compareControls.length).toBeGreaterThan(0);
     fireEvent.click(compareControls[0]);
     // URL should now contain sel param
@@ -632,9 +632,8 @@ describe("Compare Mode State Transitions", () => {
     const CryptoCompare = (await import("@/components/CryptoCompare")).default;
     const { unmount } = render(<CryptoCompare />);
     // Select first two algorithms
-    const compareControls = screen.getAllByRole("button", { name: /Add .+ to comparison/i });
-    fireEvent.click(compareControls[0]);
-    fireEvent.click(compareControls[1]);
+    fireEvent.click(screen.getAllByRole("button", { name: /Compare — add .+ to comparison/i })[0]);
+    fireEvent.click(screen.getAllByRole("button", { name: /Compare — add .+ to comparison/i })[0]);
     // ComparisonWorkspace is lazy-loaded (next/dynamic), so await its chunk.
     const compareBtn = await screen.findByRole("button", { name: /^Compare \d/i });
     expect(compareBtn).toBeInTheDocument();

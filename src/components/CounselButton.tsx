@@ -22,7 +22,9 @@ export function CounselButton({
     ? `${COUNSEL_BASE}?q=${encodeURIComponent(question)}`
     : COUNSEL_BASE;
 
-  const label = ariaLabel ?? (question ? `Ask Counsel about ${question}` : 'Open Crypto Counsel');
+  const visibleLabel = variant === 'inline' ? 'Ask' : 'Ask the Counsel';
+  const contextLabel = ariaLabel ?? (question ? `about ${question}` : 'open Crypto Counsel');
+  const label = `${visibleLabel} — ${contextLabel}`;
 
   if (variant === 'floating') {
     return (
