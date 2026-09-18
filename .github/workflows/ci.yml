@@ -36,6 +36,8 @@ jobs:
           cache: "npm"
       - name: Install
         run: npm ci
+      - name: Audit dependencies
+        run: npm run audit:dependencies
       - name: Type check
         run: npm run type-check
       - name: Validate data and demo sync

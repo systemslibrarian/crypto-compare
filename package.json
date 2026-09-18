@@ -5,9 +5,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "tsx scripts/export-dataset.ts",
+    "prebuild": "node --import tsx scripts/export-dataset.ts",
     "build": "next build",
-    "export:dataset": "tsx scripts/export-dataset.ts",
+    "export:dataset": "node --import tsx scripts/export-dataset.ts",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
@@ -15,41 +15,46 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:demos": "vitest run src/__tests__/demo-resources.test.ts src/__tests__/demo-sync-lib.test.ts src/__tests__/check-demo-sync-script.test.ts",
-    "check:demos": "tsx scripts/check-demo-sync.ts",
-    "check:demos:strict": "tsx scripts/check-demo-sync.ts --strict",
-    "check:demos:json": "tsx scripts/check-demo-sync.ts --json",
-    "check:demos:report": "tsx scripts/check-demo-sync.ts --json --report-path=demo-sync-report.json",
-    "validate": "tsx scripts/validate-data.ts",
-    "generate:og": "tsx scripts/generate-og.ts",
-    "sync:stats": "tsx scripts/sync-stats.ts",
-    "check:stats": "tsx scripts/sync-stats.ts --check",
+    "check:demos": "node --import tsx scripts/check-demo-sync.ts",
+    "check:demos:strict": "node --import tsx scripts/check-demo-sync.ts --strict",
+    "check:demos:json": "node --import tsx scripts/check-demo-sync.ts --json",
+    "check:demos:report": "node --import tsx scripts/check-demo-sync.ts --json --report-path=demo-sync-report.json",
+    "validate": "node --import tsx scripts/validate-data.ts",
+    "generate:og": "node --import tsx scripts/generate-og.ts",
+    "sync:stats": "node --import tsx scripts/sync-stats.ts",
+    "check:stats": "node --import tsx scripts/sync-stats.ts --check",
     "validate:full": "npm run validate && npm run check:demos:strict && npm run check:stats",
-    "refresh": "tsx scripts/refresh-data.ts"
+    "refresh": "node --import tsx scripts/refresh-data.ts",
+    "audit:dependencies": "npm audit --audit-level=low"
   },
   "dependencies": {
-    "next": "^15.1.0",
+    "next": "^15.5.25",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "sharp": "^0.35.4",
-    "zod": "^4.6.4"
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
-    "@testing-library/jest-dom": "^6.6.0",
+    "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
-    "@types/node": "^20.14.0",
+    "@types/node": "^22.20.3",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react": "^4.3.0",
-    "autoprefixer": "^10.6.0",
-    "axe-core": "^4.11.3",
+    "@vitejs/plugin-react": "^5.2.0",
+    "autoprefixer": "^10.6.1",
+    "axe-core": "^4.13.0",
     "eslint": "^8.57.0",
-    "eslint-config-next": "^15.1.0",
-    "jsdom": "^25.0.0",
+    "eslint-config-next": "^15.5.25",
+    "jsdom": "^30.1.0",
     "postcss": "^8.5.28",
     "tailwindcss": "^3.4.4",
     "tsx": "^4.23.13",
     "typescript": "^5.4.0",
-    "vitest": "^2.1.0"
+    "vite": "^7.3.6",
+    "vitest": "^5.0.1"
+  },
+  "overrides": {
+    "postcss": "$postcss"
   }
 }
