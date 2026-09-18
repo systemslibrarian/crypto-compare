@@ -16,6 +16,17 @@ test.describe("crypto::compare core journeys", () => {
     expect(speculativeRoutes).toEqual([]);
   });
 
+  test("loads deep knowledge sections only when the visitor approaches them", async ({ page }) => {
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    const hybridPatterns = page.getByRole("button", { name: /show hybrid cryptography patterns/i });
+    await expect(hybridPatterns).toHaveCount(0);
+
+    await page.locator("footer").scrollIntoViewIfNeeded();
+    await expect(hybridPatterns).toBeVisible();
+  });
+
   test("loads without Content Security Policy browser issues", async ({ page, context }) => {
     const devtools = await context.newCDPSession(page);
     const issues: unknown[] = [];
