@@ -9,7 +9,7 @@
     "build": "next build",
     "export:dataset": "node --import tsx scripts/export-dataset.ts",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings=0 --ignore-pattern .next --ignore-pattern out",
     "type-check": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
