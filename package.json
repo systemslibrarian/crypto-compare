@@ -24,6 +24,7 @@
     "generate:og": "node --import tsx scripts/generate-og.ts",
     "sync:stats": "node --import tsx scripts/sync-stats.ts",
     "check:stats": "node --import tsx scripts/sync-stats.ts --check",
+    "check:lighthouse": "node --import tsx scripts/check-lighthouse.ts",
     "validate:full": "npm run validate && npm run check:demos:strict && npm run check:stats",
     "refresh": "node --import tsx scripts/refresh-data.ts",
     "audit:dependencies": "npm audit --audit-level=low"
