@@ -105,7 +105,10 @@ jobs:
               body += `### Missing from local (${report.missingFromLocal.length})\n\n`;
               body += `New crypto-lab demos that need an entry in \`src/data/demoResources.ts\`:\n\n`;
               for (const slug of report.missingFromLocal) {
-                body += `- \`${slug}\` — https://crypto-lab.systemslibrarian.dev/${slug}/\n`;
+                // Each lab is served from its own Pages site. The catalog domain
+                // serves only the catalog page, so per-demo subpaths under it 404 —
+                // this list is what a maintainer clicks to review a new lab.
+                body += `- \`${slug}\` — https://systemslibrarian.github.io/${slug}/\n`;
               }
               body += `\n`;
             }
