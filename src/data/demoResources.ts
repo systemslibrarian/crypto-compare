@@ -111,6 +111,21 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-sector-vault/",
       note: "XTS-AES as full-disk encryption actually uses it, and the three attacks it silently returns plaintext for — then AES-GCM added to show which two that stops.",
     },
+    {
+      title: "Export Grade",
+      url: "https://systemslibrarian.github.io/crypto-lab-export-grade/",
+      note: "Runs real TETRA TEA1, traces its 80-bit key into a 32-bit working register, then extrapolates the rate your browser measured out to 2^80 and 2^128 beside the published attacks on full-round AES.",
+    },
+    {
+      title: "Glass Box",
+      url: "https://systemslibrarian.github.io/crypto-lab-glass-box/",
+      note: "Chow-style white-box AES-128 built from your key as 2,032 encoded lookup tables, then attacked twice: differential computation analysis recovers the key from execution traces, and BGE step A1 strips the table encodings.",
+    },
+    {
+      title: "Return Path",
+      url: "https://systemslibrarian.github.io/crypto-lab-return-path/",
+      note: "Impossible differentials and the boomerang attack on a toy SPN, with DDT and BCT tables computed live and an adaptive chosen-ciphertext oracle.",
+    },
   ],
   chacha20poly: [
     {
@@ -154,6 +169,37 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Stream Ward",
       url: "https://systemslibrarian.github.io/crypto-lab-stream-ward/",
       note: "Streaming AEAD over large files with XChaCha20-Poly1305 secretstream, showing how per-segment tags still verify after reorder, drop, or truncation until a chained state binds them.",
+    },
+  ],
+  kuznyechik: [
+    {
+      title: "MGM Mode",
+      url: "https://systemslibrarian.github.io/crypto-lab-mgm-mode/",
+      note: "MGM, the GOST AEAD mode of RFC 9058, over Magma and Kuznyechik: a distinct authentication coefficient per block against GCM's single H, every RFC test value checked, nonce reuse, and why 64-bit blocks re-key sooner.",
+    },
+    {
+      title: "Sleeve Check",
+      url: "https://systemslibrarian.github.io/crypto-lab-sleeve-check/",
+      note: "GOST published Kuznyechik's 256-byte S-box as a bare table. It falls out of four small constants and field arithmetic — evidence about how it was designed, which is not by itself an attack.",
+    },
+  ],
+  snow_v: [
+    {
+      title: "Air Stream",
+      url: "https://systemslibrarian.github.io/crypto-lab-air-stream/",
+      note: "Generates 128-EEA1, 128-EEA2 and 128-EEA3 keystream from one key, COUNT, bearer and direction, checking SNOW 3G, AES-CTR and ZUC against the test vectors in each specification.",
+    },
+    {
+      title: "Misty Lens",
+      url: "https://systemslibrarian.github.io/crypto-lab-misty-lens/",
+      note: "MISTY1 beside KASUMI, the 3GPP variant derived from it, with the design changes mapped and the seven-round related-key sandwich distinguisher executed in the page.",
+    },
+  ],
+  aes256gcmsiv: [
+    {
+      title: "Order Leak",
+      url: "https://systemslibrarian.github.io/crypto-lab-order-leak/",
+      note: "A column you can still sort or match on has published the shape of its answers: BCLO OPE and CLWW ORE beside AES-SIV, where equality, order and a public distribution hand back plaintext cell by cell without the key being touched.",
     },
   ],
   curve25519: [
@@ -357,6 +403,13 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       note: "TPM quote signatures as ECDSA P-256, deterministic per RFC 6979, with restricted-key TPM_RC_TICKET enforcement and RATS/EAT appraisal.",
     },
   ],
+  p384: [
+    {
+      title: "Privacy Pass",
+      url: "https://systemslibrarian.github.io/crypto-lab-privacy-pass/",
+      note: "A VOPRF over P-384 with a DLEQ proof (RFC 9578): the token proves the issuer authorised someone without the issuer, the origin, or the two colluding learning who. Remove the client's blind and nothing on the wire changes.",
+    },
+  ],
   secp256k1: [
     {
       title: "ECDSA Forge",
@@ -388,12 +441,29 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-musig-gate/",
       note: "MuSig2 (BIP-327) key and nonce aggregation producing a single secp256k1 Schnorr signature, plus the Wagner and ROS forgeries the scheme defends against.",
     },
+    {
+      title: "Adaptor Gate",
+      url: "https://systemslibrarian.github.io/crypto-lab-adaptor-gate/",
+      note: "BIP-340 adaptor signatures: one click turns a pre-signature the real verifier rejects into a valid signature, and subtracting the two reads the secret back out — the fact atomic swaps and PTLC routing are built on.",
+    },
+    {
+      title: "Point Ledger",
+      url: "https://systemslibrarian.github.io/crypto-lab-point-ledger/",
+      note: "Quantum resource estimates for secp256k1 beside a classical multiplication dialog, and where fuzz-test evidence stops supporting a Fiat-Shamir soundness claim.",
+    },
   ],
   curve448_ed448: [
     {
       title: "Curve448",
       url: "https://systemslibrarian.github.io/crypto-lab-curve448/",
       note: "High-security curve walkthrough for X448 and Ed448 style key agreement and signatures.",
+    },
+  ],
+  mlkem512: [
+    {
+      title: "PQ Chooser",
+      url: "https://systemslibrarian.github.io/crypto-lab-pq-chooser/",
+      note: "Set what constrains you and get a shortlist of two or three post-quantum schemes, built from sizes it derives by running ML-KEM, ML-DSA, Falcon and SLH-DSA in your browser rather than quoting a table.",
     },
   ],
   mlkem768: [
@@ -534,6 +604,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-ciphertext-mirror/",
       note: "ML-KEM side-channel walkthrough across the Fujisaki-Okamoto transform, decoder behavior, and NTT blinding countermeasures.",
     },
+    {
+      title: "PQXDH Wire",
+      url: "https://systemslibrarian.github.io/crypto-lab-pqxdh-wire/",
+      note: "One ML-KEM-1024 secret added to the X3DH transcript is what survives a future curve break. The prekey signature and the ratchet after it are untouched, so Bob can still be impersonated with every check green.",
+    },
   ],
   smaug_t: [
     {
@@ -545,6 +620,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "NTRU Classic",
       url: "https://systemslibrarian.github.io/crypto-lab-ntru-classic/",
       note: "Lattice-encryption intuition builder for NTRU-style designs and their deployment tradeoffs.",
+    },
+    {
+      title: "KpqC Pair",
+      url: "https://systemslibrarian.github.io/crypto-lab-kpqc-pair/",
+      note: "NTRU+ from the older NTRU line beside historical AIM2-based AIMer signing, both KpqC candidates. Honest round trips do not establish signature security.",
     },
   ],
   hqc: [
@@ -674,6 +754,20 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       note: "Real MAYO keygen, signing, and verification over GF(16), showing how an oil space too small to invert becomes solvable once k copies of the map are whipped together.",
     },
   ],
+  mldsa87: [
+    {
+      title: "PQ Chooser",
+      url: "https://systemslibrarian.github.io/crypto-lab-pq-chooser/",
+      note: "Derives ML-DSA, Falcon and SLH-DSA key and signature sizes by running the real algorithms in your browser, then shortlists schemes against your constraints with their TLS wire cost.",
+    },
+  ],
+  haetae: [
+    {
+      title: "KpqC Pair",
+      url: "https://systemslibrarian.github.io/crypto-lab-kpqc-pair/",
+      note: "Historical AIM2-based AIMer signing, with a reported public-key-only forgery vulnerability (ePrint 2026/2235, September 28, 2026), beside NTRU+ from the older NTRU line.",
+    },
+  ],
   falcon512: [
     {
       title: "Falcon Seal",
@@ -706,6 +800,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Jevil",
       url: "https://systemslibrarian.github.io/crypto-lab-jevil/",
       note: "Hash-based few-time signature scheme over the Goldilocks field using Lagrange interpolation for bounded-use signing with reusable verification keys.",
+    },
+    {
+      title: "TC26 Pair",
+      url: "https://systemslibrarian.github.io/crypto-lab-tc26-pair/",
+      note: "Hypericum, a stateless hash-based TC26 proposal built over Streebog, beside code-based Shipovnik.",
     },
   ],
   xmss: [
@@ -773,6 +872,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-attestation-gate/",
       note: "PCR extension as PCR_new = H(PCR_old || measurement) over a hand-rolled SHA-256, showing the exact 64-byte preimage each measurement hashes.",
     },
+    {
+      title: "Ghost Commit",
+      url: "https://systemslibrarian.github.io/crypto-lab-ghost-commit/",
+      note: "Git adds objects and never edits them, so a committed API key keeps its name and contents two commits after deletion — then a Shannon-entropy scanner finds it in seconds.",
+    },
   ],
   sha512: [
     {
@@ -817,6 +921,25 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       note: "Cross-standard hash overview and algorithm family context.",
     },
   ],
+  sm3: [
+    {
+      title: "SM2 Forge",
+      url: "https://systemslibrarian.github.io/crypto-lab-sm2-forge/",
+      note: "Reads the SM3 identity digest that precedes every SM2 signature, signs and encrypts under GB/T 32918, compares both deployed ciphertext orders, then recovers a key from a reused nonce.",
+    },
+  ],
+  streebog: [
+    {
+      title: "TC26 Pair",
+      url: "https://systemslibrarian.github.io/crypto-lab-tc26-pair/",
+      note: "Two TC26 post-quantum signature proposals built over Streebog, side by side: code-based Shipovnik and stateless hash-based Hypericum.",
+    },
+    {
+      title: "Sleeve Check",
+      url: "https://systemslibrarian.github.io/crypto-lab-sleeve-check/",
+      note: "Reconstructs the 256-byte GOST S-box that Kuznyechik and Streebog share from four small constants and field arithmetic — evidence about how it was designed, not an attack on it.",
+    },
+  ],
   hkdf: [
     {
       title: "KDF Chain",
@@ -827,6 +950,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Context Ward",
       url: "https://systemslibrarian.github.io/crypto-lab-context-ward/",
       note: "HKDF role separation deriving per-role seal keys for an agent context window sealed into a SHA-256 hash chain.",
+    },
+    {
+      title: "Drift Key",
+      url: "https://systemslibrarian.github.io/crypto-lab-drift-key/",
+      note: "A code-offset secure sketch over hand-built BCH codes feeds HKDF-SHA-256, turning a noisy reading that never repeats into the same key every time, and prices the entropy the public helper data costs.",
     },
   ],
   argon2_kdf: [
@@ -989,6 +1117,13 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       note: "Verifiable sharing workflow with commitments and complaint handling.",
     },
   ],
+  additive_sharing: [
+    {
+      title: "Proof Tally",
+      url: "https://systemslibrarian.github.io/crypto-lab-proof-tally/",
+      note: "Prio3: additive shares hide a measurement and will happily add a lie to the total, until a fully linear proof carried in the same shares lets two aggregators reject a malformed report neither of them can read.",
+    },
+  ],
   tfhe: [
     {
       title: "Blind Oracle",
@@ -1057,6 +1192,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "ZK Arena",
       url: "https://systemslibrarian.github.io/crypto-lab-zk-arena/",
       note: "Side-by-side comparison of zk-SNARK and zk-STARK proof systems across setup phases, proving overhead, and verification cost.",
+    },
+    {
+      title: "Fold Gate",
+      url: "https://systemslibrarian.github.io/crypto-lab-fold-gate/",
+      note: "Nova's non-interactive folding scheme: combining two satisfying R1CS instances leaves a computable cross term, and relaxing the system with a slack scalar and an error vector lets one folded instance stand in for all of them.",
     },
   ],
   plonk: [
@@ -1184,6 +1324,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-oram-vault/",
       note: "Access-pattern privacy walkthrough for stronger hiding guarantees in repeated query settings.",
     },
+    {
+      title: "Split Point",
+      url: "https://systemslibrarian.github.io/crypto-lab-split-point/",
+      note: "Secret-share a function rather than a value: two DPF keys each evaluate to shares of one-at-alpha and zero everywhere else, so two non-colluding servers fold 65,536 records and neither learns which one you read.",
+    },
   ],
   aby: [
     {
@@ -1202,6 +1347,18 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Rekey Relay",
       url: "https://systemslibrarian.github.io/crypto-lab-rekey-relay/",
       note: "BBS98 proxy re-encryption is ElGamal with the ciphertext components swapped — shown here beside AFGH on the same curve.",
+    },
+    {
+      title: "Function Key",
+      url: "https://systemslibrarian.github.io/crypto-lab-function-key/",
+      note: "ABDP15 inner-product functional encryption over ristretto255: a key answers one weighted-sum question about an encrypted vector and nothing else, until enough colluding keys hand over the master secret.",
+    },
+  ],
+  sm2_enc: [
+    {
+      title: "SM2 Forge",
+      url: "https://systemslibrarian.github.io/crypto-lab-sm2-forge/",
+      note: "Sign and encrypt under GB/T 32918 SM2 (RFC 8998), compare both deployed ciphertext orders, and recover a key from a reused nonce.",
     },
   ],
   rsa_oaep_2048: [
@@ -1234,6 +1391,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Factor Forge",
       url: "https://systemslibrarian.github.io/crypto-lab-factor-forge/",
       note: "Seven classical factoring methods on a real BigInt modulus, each waiting for a different key-generation mistake — a small factor, a narrow |p - q|, a smooth p-1 or p+1 — with every claimed factor multiplied back and primality-tested before it is shown.",
+    },
+    {
+      title: "Hidden Bit",
+      url: "https://systemslibrarian.github.io/crypto-lab-hidden-bit/",
+      note: "Runs the IND-CPA and CCA games against textbook RSA, RSA-OAEP, RSA-PSS and AES modes: a rising advantage proves a scheme broken, a flat one proves only that these adversaries failed, which is why security needs a reduction.",
     },
   ],
   rsa_oaep_4096: [
@@ -1360,6 +1522,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-drbg-arena/",
       note: "State evolution, reseeding, and backtracking-resistance comparison across DRBGs.",
     },
+    {
+      title: "Noise to Numbers",
+      url: "https://systemslibrarian.github.io/crypto-lab-noise-to-numbers/",
+      note: "NIST SP 800-90B min-entropy from pinned runs of the real assessment tool: a modelled Infinite Noise TRNG scores 0.37 bits per bit, a SHA-256 counter scores 0.92. Entropy belongs to the source, not the bytes.",
+    },
   ],
   chacha20_drbg: [
     {
@@ -1434,11 +1601,23 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       note: "FAME CP-ABE over BLS12-381 pairings, with a collusion attempt that splices two real keys and shows the term that refuses to cancel.",
     },
   ],
+  bn254: [
+    {
+      title: "SM9 Forge",
+      url: "https://systemslibrarian.github.io/crypto-lab-sm9-forge/",
+      note: "SM9 identity-based signatures, key exchange and encryption over a BN256 pairing curve, run against the standard's own worked examples — with key escrow by construction and a nonce-reuse recovery.",
+    },
+  ],
   bls_threshold: [
     {
       title: "Pairing Gate",
       url: "https://systemslibrarian.github.io/crypto-lab-pairing-gate/",
       note: "Pairing-based threshold signature mechanics and aggregation concepts.",
+    },
+    {
+      title: "Pulse Chain",
+      url: "https://systemslibrarian.github.io/crypto-lab-pulse-chain/",
+      note: "Verifies drand rounds with a BLS12-381 pairing and recomputes real NIST Beacon 2.0 pulses byte by byte, then shows what no check proves: whether the operator knew first.",
     },
   ],
 };
