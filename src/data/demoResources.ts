@@ -306,6 +306,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
   ],
   ed25519: [
     {
+      title: "Vector Gate",
+      url: "https://systemslibrarian.github.io/crypto-lab-vector-gate/",
+      note: "Five RFC 8032 vectors pass while a pinned Wycheproof S + L signature is still accepted, until the canonical scalar range check is restored — what a green known-answer test does and does not establish.",
+    },
+    {
       title: "SPAKE Gate",
       url: "https://systemslibrarian.github.io/crypto-lab-spake-gate/",
       note: "SPAKE2 balanced PAKE that establishes a shared key from a low-entropy password without leaking it.",

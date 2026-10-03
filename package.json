@@ -28,7 +28,8 @@
     "check:lighthouse": "node --import tsx scripts/check-lighthouse.ts",
     "validate:full": "npm run validate && npm run check:demos:strict && npm run check:stats",
     "refresh": "node --import tsx scripts/refresh-data.ts",
-    "audit:dependencies": "npm audit --audit-level=low"
+    "audit:dependencies": "npm audit --omit=dev --audit-level=low",
+    "audit:dev": "npm audit --audit-level=low"
   },
   "dependencies": {
     "next": "^15.5.25",
