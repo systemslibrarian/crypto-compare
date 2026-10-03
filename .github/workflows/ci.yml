@@ -36,7 +36,10 @@ jobs:
           cache: "npm"
       - name: Install
         run: npm ci
-      - name: Audit dependencies
+      # Production dependencies only. Dev-only advisories are reported weekly by
+      # .github/workflows/dev-audit.yml instead of blocking every pull request --
+      # see that file for why the scoping exists.
+      - name: Audit production dependencies
         run: npm run audit:dependencies
       - name: Type check
         run: npm run type-check
