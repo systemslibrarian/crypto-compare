@@ -6,6 +6,14 @@ This project follows [Keep a Changelog](https://keepachangelog.com/) conventions
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-09
+
+### Added
+- Eight source-reviewed demo links: WEP Crack, LFSR Forge, Good Randomness, Locks and Keys, Agreeing in Public, HTTPS Padlock, What Is PQC and SAT Break. Context notes distinguish historical/toy contrasts from implementations of the mapped algorithms.
+
+### Changed
+- Generated linked-demo statistics and OpenGraph image now describe all 227 hub cards. Algorithm entries and categories remain at 100 and 17; the demo-resource export gains the new links.
+
 ## [1.1.0] - 2026-06-27
 
 ### Added

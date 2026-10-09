@@ -7,6 +7,11 @@ export type DemoResource = {
 export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
   aes256gcm: [
     {
+      title: "SAT Break",
+      url: "https://systemslibrarian.github.io/crypto-lab-sat-break/",
+      note: "Structural cryptanalysis contrast: a real CaDiCaL WASM solver enumerates keys fitting public pairs for an 8-bit toy SPN, with direct withheld checks and exhaustive-set comparison. Implements neither AES nor an attack on AES; caps and cancellations remain incomplete.",
+    },
+    {
       title: "Salamander",
       url: "https://systemslibrarian.github.io/crypto-lab-salamander/",
       note: "Invisible-salamanders key-commitment attack: one AES-GCM ciphertext that opens to two valid plaintexts under two keys.",
@@ -129,6 +134,21 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
   ],
   chacha20poly: [
     {
+      title: "Good Randomness",
+      url: "https://systemslibrarian.github.io/crypto-lab-good-randomness/",
+      note: "A beginner compares WebCrypto keys with a real ChaCha20 stream seeded by a four-digit PIN, then exhausts the 10,000 seeds. Passing four output checks does not establish an unpredictable seed.",
+    },
+    {
+      title: "WEP Crack",
+      url: "https://systemslibrarian.github.io/crypto-lab-wep-crack/",
+      note: "Historical stream-encryption contrast: generated WEP protected bodies show RC4 nonce reuse, CRC-32 forgery and bounded PTW key recovery. Implements WEP, not ChaCha20-Poly1305; no real-network capture intake.",
+    },
+    {
+      title: "LFSR Forge",
+      url: "https://systemslibrarian.github.io/crypto-lab-lfsr-forge/",
+      note: "Stream-generator contrast: binary LFSRs, Berlekamp–Massey recovery and a tiny Geffe combiner broken from known keystream. Implements neither ChaCha20 nor an attack on it; recovered states are checked against separately held ground truth.",
+    },
+    {
       title: "ChaCha20 Stream",
       url: "https://systemslibrarian.github.io/crypto-lab-chacha20-stream/",
       note: "Quarter-round stepper, keystream visualizer, nonce-reuse demo, and encrypt/decrypt playground.",
@@ -203,6 +223,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
     },
   ],
   curve25519: [
+    {
+      title: "Agreeing in Public",
+      url: "https://systemslibrarian.github.io/crypto-lab-agreeing-in-public/",
+      note: "Real X25519 and RFC 7748 checks introduce key agreement, then a substituted peer produces matching secrets without authenticating who answered. The paint analogy is explicitly reversible.",
+    },
     {
       title: "Protocol Checker",
       url: "https://systemslibrarian.github.io/crypto-lab-protocol-checker/",
@@ -373,6 +398,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
   ],
   p256: [
     {
+      title: "HTTPS Padlock",
+      url: "https://systemslibrarian.github.io/crypto-lab-https-padlock/",
+      note: "Captured X.509 chains verified with WebCrypto ECDSA introduce trust, names and expiry under a stated RFC 5280 teaching subset. Encodes ClientHello bytes only; no live TLS handshake or encryption observation.",
+    },
+    {
       title: "ECDSA Forge",
       url: "https://systemslibrarian.github.io/crypto-lab-ecdsa-forge/",
       note: "ECDSA signing and verification flow with nonce-discipline and verification-failure intuition.",
@@ -472,6 +502,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
     },
   ],
   mlkem768: [
+    {
+      title: "What Is PQC",
+      url: "https://systemslibrarian.github.io/crypto-lab-what-is-pqc/",
+      note: "A beginner runs real ML-KEM-768 beside X25519, derives wire sizes and sees that post-quantum key agreement still does not authenticate its peer. No current X25519 break or stronger-lock claim.",
+    },
     {
       title: "Downgrade Wire",
       url: "https://systemslibrarian.github.io/crypto-lab-downgrade-wire/",
@@ -1367,6 +1402,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
     },
   ],
   rsa_oaep_2048: [
+    {
+      title: "Locks and Keys",
+      url: "https://systemslibrarian.github.io/crypto-lab-locks-and-keys/",
+      note: "A beginner uses one real 2048-bit RSA pair with WebCrypto RSA-OAEP and RSA-PSS, distinguishing a message that opens from an authenticated sender and a matching signature from a known identity.",
+    },
     {
       title: "RSA Forge",
       url: "https://systemslibrarian.github.io/crypto-lab-rsa-forge/",
