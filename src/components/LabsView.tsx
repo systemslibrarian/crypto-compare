@@ -106,7 +106,7 @@ export default function LabsView() {
             <p style={{ margin: 0, fontSize: "15px", color: "var(--color-text-muted)", lineHeight: 1.6 }}>
               {LABS.length} hands-on crypto-lab demos linked from the algorithm reference — run them in the browser to
               see encryption, signatures, attacks, and post-quantum schemes in action.{" "}
-              <a href={CATALOG_URL} target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-text-accent-bright)" }}>
+              <a href={CATALOG_URL} target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-text-accent-bright)", textDecoration: "underline", textUnderlineOffset: "3px" }}>
                 Full catalog ↗
               </a>
             </p>
@@ -196,7 +196,7 @@ export default function LabsView() {
                         style={{
                           fontSize: "11px",
                           fontWeight: 600,
-                          color: CATEGORY_ACCENT[category],
+                          color: "var(--color-text-caption)",
                           border: `1px solid ${CATEGORY_ACCENT[category]}55`,
                           borderRadius: "999px",
                           padding: "2px 8px",
@@ -244,7 +244,7 @@ function CategoryChip({
       className="focusRing"
       style={{
         background: active ? `${accent}22` : "var(--color-bg-control)",
-        color: active ? accent : "var(--color-text-secondary)",
+        color: active ? "var(--color-text-heading)" : "var(--color-text-secondary)",
         border: `1px solid ${active ? accent : "var(--color-border-muted)"}`,
         borderRadius: "999px",
         padding: "7px 14px",
