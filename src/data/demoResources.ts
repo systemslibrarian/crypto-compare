@@ -1403,6 +1403,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
   ],
   rsa_oaep_2048: [
     {
+      title: "RSA Small Roots",
+      url: "https://systemslibrarian.github.io/crypto-lab-rsa-small-roots/",
+      note: "Textbook-RSA contrast: exact integer lattices recover a known-prefix exponent-3 message suffix or larger-prime high bits, with finite bounds, norm certificates and public verification. Does not implement or attack RSA-OAEP; incomplete searches remain inconclusive.",
+    },
+    {
       title: "Locks and Keys",
       url: "https://systemslibrarian.github.io/crypto-lab-locks-and-keys/",
       note: "A beginner uses one real 2048-bit RSA pair with WebCrypto RSA-OAEP and RSA-PSS, distinguishing a message that opens from an authenticated sender and a matching signature from a known identity.",
