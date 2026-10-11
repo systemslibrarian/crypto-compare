@@ -4,7 +4,7 @@ These are the unmodified DM Mono 400/500 and Fraunces normal 400/500/600 WOFF2 s
 
 `fonts.css` preserves all 13 original real font faces (Latin, Latin Extended and Fraunces Vietnamese), both original fallback faces and their exact metric overrides. The layout preloads the same three Latin files; relative CSS URLs and the layout's base path keep both custom-domain and repository-path exports usable. No Google request is required at build or browser runtime.
 
-Both fonts use the SIL Open Font License 1.1; the accompanying unmodified licenses were read at the immutable Google Fonts repository revision `bd8f81ddb5c74d5c8897b36ad88b440266245103`:
+Both fonts use the SIL Open Font License 1.1; Git normalizes the DM Mono license line endings without changing its wording; the accompanying license wording was read at the immutable Google Fonts repository revision `bd8f81ddb5c74d5c8897b36ad88b440266245103`:
 
 - [DM Mono license](https://github.com/google/fonts/blob/bd8f81ddb5c74d5c8897b36ad88b440266245103/ofl/dmmono/OFL.txt)
 - [Fraunces license](https://github.com/google/fonts/blob/bd8f81ddb5c74d5c8897b36ad88b440266245103/ofl/fraunces/OFL.txt)
