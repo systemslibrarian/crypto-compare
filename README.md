@@ -475,3 +475,11 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 ## License
 
 MIT
+
+### Dependency security and browser support
+
+The supported development-tool migration and exact upstream lint-package patch
+are documented in [dependency-security-migration.md](docs/dependency-security-migration.md).
+Tailwind4 requires Safari16.4+, Chrome111+ or Firefox128+. Every existing
+application lint rule remains enabled; `npm test` also verifies the vendored
+upstream rule hashes and root-directory/navigation compatibility fixtures.

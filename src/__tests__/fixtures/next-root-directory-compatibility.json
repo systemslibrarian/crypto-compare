@@ -1,0 +1,271 @@
+{
+  "upstreamPackage": "@next/eslint-plugin-next@15.5.27",
+  "upstreamTarballSha256": "dffc7da03d3bd534dff89874efeaca6a217c3a3c4483f873dde202107792575a",
+  "generatedFrom": "Actual upstream consumer and actual ESLint8.57.1 on recorded hermetic directory fixture; baseline captured 2026-10-11T06:29:36UTC",
+  "cases": [
+    {
+      "rootDir": null,
+      "expectedDirectories": [
+        "<ROOT>"
+      ],
+      "expectedMessages": []
+    },
+    {
+      "rootDir": "apps/site",
+      "expectedDirectories": [
+        "apps/site"
+      ],
+      "expectedMessages": [
+        {
+          "ruleId": "next-page",
+          "severity": 2,
+          "message": "Do not use an `<a>` element to navigate to `/about/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages",
+          "line": 1,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "rootDir": "apps/site/",
+      "expectedDirectories": [
+        "apps/site/"
+      ],
+      "expectedMessages": [
+        {
+          "ruleId": "next-page",
+          "severity": 2,
+          "message": "Do not use an `<a>` element to navigate to `/about/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages",
+          "line": 1,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "rootDir": "apps/*",
+      "expectedDirectories": [
+        "apps/admin",
+        "apps/nested",
+        "apps/site",
+        "apps/symlink"
+      ],
+      "expectedMessages": [
+        {
+          "ruleId": "next-page",
+          "severity": 2,
+          "message": "Do not use an `<a>` element to navigate to `/about/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages",
+          "line": 1,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "rootDir": "apps/**",
+      "expectedDirectories": [
+        "apps/admin",
+        "apps/admin/src",
+        "apps/admin/src/app",
+        "apps/nested",
+        "apps/nested/site",
+        "apps/nested/site/pages",
+        "apps/site",
+        "apps/site/pages",
+        "apps/symlink",
+        "apps/symlink/pages"
+      ],
+      "expectedMessages": [
+        {
+          "ruleId": "next-page",
+          "severity": 2,
+          "message": "Do not use an `<a>` element to navigate to `/about/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages",
+          "line": 1,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "rootDir": "apps/{site,admin}",
+      "expectedDirectories": [
+        "apps/admin",
+        "apps/site"
+      ],
+      "expectedMessages": [
+        {
+          "ruleId": "next-page",
+          "severity": 2,
+          "message": "Do not use an `<a>` element to navigate to `/about/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages",
+          "line": 1,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "rootDir": "apps/@(site|admin)",
+      "expectedDirectories": [
+        "apps/admin",
+        "apps/site"
+      ],
+      "expectedMessages": [
+        {
+          "ruleId": "next-page",
+          "severity": 2,
+          "message": "Do not use an `<a>` element to navigate to `/about/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages",
+          "line": 1,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "rootDir": "apps/!(admin)",
+      "expectedDirectories": [
+        "apps/.hidden",
+        "apps/nested",
+        "apps/site",
+        "apps/symlink"
+      ],
+      "expectedMessages": [
+        {
+          "ruleId": "next-page",
+          "severity": 2,
+          "message": "Do not use an `<a>` element to navigate to `/about/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages",
+          "line": 1,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "rootDir": "./apps/*",
+      "expectedDirectories": [
+        "./apps/admin",
+        "./apps/nested",
+        "./apps/site",
+        "./apps/symlink"
+      ],
+      "expectedMessages": [
+        {
+          "ruleId": "next-page",
+          "severity": 2,
+          "message": "Do not use an `<a>` element to navigate to `/about/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages",
+          "line": 1,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "rootDir": "missing/*",
+      "expectedDirectories": [],
+      "expectedMessages": []
+    },
+    {
+      "rootDir": ".",
+      "expectedDirectories": [
+        "."
+      ],
+      "expectedMessages": []
+    },
+    {
+      "rootDir": "apps\\*",
+      "expectedDirectories": [
+        "apps/admin",
+        "apps/nested",
+        "apps/site",
+        "apps/symlink"
+      ],
+      "expectedMessages": [
+        {
+          "ruleId": "next-page",
+          "severity": 2,
+          "message": "Do not use an `<a>` element to navigate to `/about/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages",
+          "line": 1,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "rootDir": [
+        "apps/site",
+        "apps/admin"
+      ],
+      "expectedDirectories": [
+        "apps/admin",
+        "apps/site"
+      ],
+      "expectedMessages": [
+        {
+          "ruleId": "next-page",
+          "severity": 2,
+          "message": "Do not use an `<a>` element to navigate to `/about/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages",
+          "line": 1,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "rootDir": [
+        "apps/site",
+        null,
+        42,
+        "missing/*"
+      ],
+      "expectedDirectories": [
+        "apps/site"
+      ],
+      "expectedMessages": [
+        {
+          "ruleId": "next-page",
+          "severity": 2,
+          "message": "Do not use an `<a>` element to navigate to `/about/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages",
+          "line": 1,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "rootDir": "apps/.hidden",
+      "expectedDirectories": [
+        "apps/.hidden"
+      ],
+      "expectedMessages": [
+        {
+          "ruleId": "next-page",
+          "severity": 2,
+          "message": "Do not use an `<a>` element to navigate to `/about/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages",
+          "line": 1,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "rootDir": "apps/symlink",
+      "expectedDirectories": [
+        "apps/symlink"
+      ],
+      "expectedMessages": [
+        {
+          "ruleId": "next-page",
+          "severity": 2,
+          "message": "Do not use an `<a>` element to navigate to `/about/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages",
+          "line": 1,
+          "column": 3
+        }
+      ]
+    },
+    {
+      "rootDir": "<ROOT>/apps/*",
+      "expectedDirectories": [
+        "<ROOT>/apps/admin",
+        "<ROOT>/apps/nested",
+        "<ROOT>/apps/site",
+        "<ROOT>/apps/symlink"
+      ],
+      "expectedMessages": [
+        {
+          "ruleId": "next-page",
+          "severity": 2,
+          "message": "Do not use an `<a>` element to navigate to `/about/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages",
+          "line": 1,
+          "column": 3
+        }
+      ]
+    }
+  ]
+}
