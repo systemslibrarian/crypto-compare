@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { DM_Mono, Fraunces } from "next/font/google";
 import "./globals.css";
 import { OG_ALGORITHM_LABEL, OG_CATEGORY_LABEL, OG_IMAGE_ALT } from "@/lib/siteStats";
 
@@ -25,18 +24,10 @@ export const CONTENT_SECURITY_POLICY = [
 // DM Mono for body/UI/labels, Fraunces (serif) for display headings.
 // The mono keeps the old CSS variable name so existing inline
 // `var(--font-jetbrains-mono)` references resolve to DM Mono without edits.
-const dmMono = DM_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-jetbrains-mono",
-});
-
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: "normal",
-  variable: "--font-fraunces",
-});
+// Keep the exact existing font bytes, subsets and fallback metrics in the
+// repository. Google can return extensionless URLs that Next's loader rejects.
+// See public/fonts/README.md for the immutable capture and both OFL licenses.
+const fontBasePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export const metadata: Metadata = {
   title: "crypto::compare — Cryptographic Algorithm Reference",
@@ -96,9 +87,13 @@ export default function RootLayout({
             constrains document-loaded resources; frame-ancestors and other
             header-only directives must be configured if hosting moves. */}
         <meta httpEquiv="Content-Security-Policy" content={CONTENT_SECURITY_POLICY} />
+        <link rel="stylesheet" href={`${fontBasePath}/fonts/fonts.css`} />
+        {["dm-mono-400-latin.woff2", "dm-mono-500-latin.woff2", "fraunces-400-600-latin.woff2"].map((file) => (
+          <link key={file} rel="preload" href={`${fontBasePath}/fonts/${file}`} as="font" type="font/woff2" crossOrigin="anonymous" />
+        ))}
       </head>
       <body
-        className={`${dmMono.className} ${dmMono.variable} ${fraunces.variable} min-h-screen antialiased`}
+        className="site-fonts min-h-screen antialiased"
       >
         <script
           type="application/ld+json"

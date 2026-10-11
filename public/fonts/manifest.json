@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-11T02:41:45.454474+00:00",
+  "baselineSha": "7b9177b2fd495ebe190b467bdd1e7451edb1f904",
+  "licenseRepositorySha": "bd8f81ddb5c74d5c8897b36ad88b440266245103",
+  "cssRequests": [
+    "https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap",
+    "https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&display=swap"
+  ],
+  "files": [
+    {
+      "file": "dm-mono-400-latin-ext.woff2",
+      "family": "DM Mono",
+      "weight": "400",
+      "style": "normal",
+      "subset": "latin-ext",
+      "sha256": "7f8712cbbd64135f9e74a527475a97cd8c5a49d8e0a1de7a65f8e2c30c5214d9",
+      "size": 5700,
+      "sourceUrl": "https://fonts.gstatic.com/s/dmmono/v16/aFTU7PB1QTsUX8KYthSQBK6PYK3EXw.woff2",
+      "baselineEmittedFile": "64418ffc17e50301-s.woff2"
+    },
+    {
+      "file": "dm-mono-400-latin.woff2",
+      "family": "DM Mono",
+      "weight": "400",
+      "style": "normal",
+      "subset": "latin",
+      "sha256": "fd7521f3531a5ccfc655b25c4f22e9871df3ec141ad79bb27fde20d0df347b6d",
+      "size": 8688,
+      "sourceUrl": "https://fonts.gstatic.com/s/dmmono/v16/aFTU7PB1QTsUX8KYthqQBK6PYK0.woff2",
+      "baselineEmittedFile": "0e96d314a90a6138-s.p.woff2"
+    },
+    {
+      "file": "dm-mono-500-latin-ext.woff2",
+      "family": "DM Mono",
+      "weight": "500",
+      "style": "normal",
+      "subset": "latin-ext",
+      "sha256": "e284f2a17fc9cca89cc30f496945bd9a2903010944a9469fb357924da21b6f6c",
+      "size": 5700,
+      "sourceUrl": "https://fonts.gstatic.com/s/dmmono/v16/aFTR7PB1QTsUX8KYvumzEY2tbYf-Vlh3uA.woff2",
+      "baselineEmittedFile": "ba43ea3467e29870-s.woff2"
+    },
+    {
+      "file": "dm-mono-500-latin.woff2",
+      "family": "DM Mono",
+      "weight": "500",
+      "style": "normal",
+      "subset": "latin",
+      "sha256": "0e263db52797086e763679c54f84ded8cc1249879bc27dca2bd5dd446f6d9f36",
+      "size": 8724,
+      "sourceUrl": "https://fonts.gstatic.com/s/dmmono/v16/aFTR7PB1QTsUX8KYvumzEYOtbYf-Vlg.woff2",
+      "baselineEmittedFile": "b7ea2ab4a8ad1f81-s.p.woff2"
+    },
+    {
+      "file": "fraunces-400-600-vietnamese.woff2",
+      "family": "Fraunces",
+      "weight": "400,500,600",
+      "style": "normal",
+      "subset": "vietnamese",
+      "sha256": "250cc2966c658fb6d336731de9d82a8129025e9839c20c253bbc477852f6cf4f",
+      "size": 11536,
+      "sourceUrl": "https://fonts.gstatic.com/s/fraunces/v38/6NUu8FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0K7iN7hzFUPJH58nib14c0qv8oRcTnaIM.woff2",
+      "baselineEmittedFile": "fb526027db1fc1ae-s.woff2"
+    },
+    {
+      "file": "fraunces-400-600-latin-ext.woff2",
+      "family": "Fraunces",
+      "weight": "400,500,600",
+      "style": "normal",
+      "subset": "latin-ext",
+      "sha256": "f1451edd6434085c4f9f3a8b4a674182dd7d6acccf53bfced19fd167f0705a06",
+      "size": 33640,
+      "sourceUrl": "https://fonts.gstatic.com/s/fraunces/v38/6NUu8FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0K7iN7hzFUPJH58nib14c1qv8oRcTnaIM.woff2",
+      "baselineEmittedFile": "4da3161b738b07dd-s.woff2"
+    },
+    {
+      "file": "fraunces-400-600-latin.woff2",
+      "family": "Fraunces",
+      "weight": "400,500,600",
+      "style": "normal",
+      "subset": "latin",
+      "sha256": "88e17be075f1be50ab67b057b99e3701b828f44ed28f9452df6c02645bb0cba9",
+      "size": 36560,
+      "sourceUrl": "https://fonts.gstatic.com/s/fraunces/v38/6NUu8FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0K7iN7hzFUPJH58nib14c7qv8oRcTn.woff2",
+      "baselineEmittedFile": "af4bf8399d1aacdf-s.p.woff2"
+    }
+  ]
+}
