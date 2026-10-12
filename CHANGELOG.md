@@ -6,6 +6,15 @@ This project follows [Keep a Changelog](https://keepachangelog.com/) conventions
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-09
+
+### Added
+- Nine source-reviewed demo links: WEP Crack, LFSR Forge, Good Randomness, Locks and Keys, Agreeing in Public, HTTPS Padlock, What Is PQC, SAT Break and RSA Small Roots. Context notes distinguish historical/toy contrasts from implementations of the mapped algorithms.
+
+### Changed
+- Patch Next.js and its ESLint configuration to 15.5.27 and source-map-js to 1.2.2; the production dependency audit reports zero vulnerabilities.
+- Generated linked-demo statistics and OpenGraph image now describe all 228 hub cards. Algorithm entries and categories remain at 100 and 17; the demo-resource export gains the new links.
+
 ## [1.1.0] - 2026-06-27
 
 ### Added

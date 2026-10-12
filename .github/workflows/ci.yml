@@ -5,6 +5,9 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  # Token-made Dependabot merges do not raise a push event. Keep the complete
+  # application gate runnable on the actual integrated default-branch revision.
+  workflow_dispatch:
 
 jobs:
   build:
@@ -167,6 +170,10 @@ jobs:
             echo "::warning::leaving this PR open - Dependabot will rebase and retry."
             exit 0
           fi
+          # A merge made with GITHUB_TOKEN raises no push event -- GitHub suppresses
+          # them so workflows cannot retrigger themselves. Run the complete gate
+          # on integrated main as well as the deployment, not just the PR source.
+          gh workflow run ci.yml --repo "$GITHUB_REPOSITORY" --ref main
           # A merge made with GITHUB_TOKEN raises no push event -- GitHub suppresses
           # them so workflows cannot retrigger themselves -- so deploy would never run
           # and the site would keep serving the previous build. Ask for it explicitly;

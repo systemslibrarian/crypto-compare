@@ -31,7 +31,7 @@ describe("Decision flowchart report", () => {
     expect(report).toContain("https://crypto-compare.systemslibrarian.dev/");
     expect(report).not.toContain("systemslubrarian");
     expect(report).toMatch(/\*\*Generated \(UTC\)\*\*: \d{4}-\d{2}-\d{2}T/);
-    expect(report).toContain("**Dataset**: 1.1.0");
+    expect(report).toContain("**Dataset**: 1.2.0");
     expect(report).toContain("**Ruleset**: 2026.09.2");
     expect(report).toContain("**Decision ID**: start.1/symmetric.1/symmetric_fips.1");
     expect(report).toContain("?advisor=start.1%2Csymmetric.1%2Csymmetric_fips.1");

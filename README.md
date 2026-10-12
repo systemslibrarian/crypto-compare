@@ -2,7 +2,7 @@
 
 **Cryptographic algorithm decision system for engineers, architects, and technical decision-makers.**
 
-100 algorithms. 17 categories. 219 unique linked public demos. Sourced recommendations. Safe-usage guidance. Reference architectures. Post-quantum migration context.
+100 algorithms. 17 categories. 228 unique linked public demos. Sourced recommendations. Safe-usage guidance. Reference architectures. Post-quantum migration context.
 
 🌐 **[Live Site →](https://crypto-compare.systemslibrarian.dev/)**
 
@@ -304,7 +304,7 @@ That honesty is part of the trust model, not a weakness in spite of it.
 | **Download justification reports** | Markdown output for architecture reviews and design discussion |
 | **Filter and sort** | PQ-safe, publication stage, NIST status, deployment, origin, and category-appropriate size dimensions; unlike security properties are never globally ranked |
 | **Review hybrid patterns** | Classical-plus-PQ constructions for practical migration planning |
-| **Explore linked demo projects** | 219 unique linked public demos across the mapped categories, with per-category project context in the explainer panels |
+| **Explore linked demo projects** | 228 unique linked public demos across the mapped categories, with per-category project context in the explainer panels |
 | **Read safety and architecture guidance** | Use-case content, pitfalls, library direction, and system-level flows |
 
 ### Coverage Snapshot
@@ -416,7 +416,7 @@ Each category in the app links to working demo projects that illustrate the cryp
 
 - Full live crypto-lab index: [crypto-lab.systemslibrarian.dev](https://crypto-lab.systemslibrarian.dev/)
 - App mapping source of truth: [src/data/demoResources.ts](src/data/demoResources.ts)
-- Current mapped crypto-lab demos: **219** unique slugs (kept in sync with the live crypto-lab catalog)
+- Current mapped crypto-lab demos: **228** unique slugs (kept in sync with the live crypto-lab catalog)
 
 The list below is representative rather than exhaustive.
 
@@ -475,3 +475,11 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 ## License
 
 MIT
+
+### Dependency security and browser support
+
+The supported development-tool migration and exact upstream lint-package patch
+are documented in [dependency-security-migration.md](docs/dependency-security-migration.md).
+Tailwind4 requires Safari16.4+, Chrome111+ or Firefox128+. Every existing
+application lint rule remains enabled; `npm test` also verifies the vendored
+upstream rule hashes and root-directory/navigation compatibility fixtures.

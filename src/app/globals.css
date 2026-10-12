@@ -1,6 +1,25 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
+/* Preserve existing v3 utility palette instead of switching these UI colors to OKLCH. */
+@theme {
+  --color-emerald-300: #6ee7b7;
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-emerald-700: #047857;
+  --color-emerald-800: #065f46;
+  --color-emerald-950: #022c22;
+}
+
+
+@utility rounded-full { border-radius: 9999px; }
+
+/* Preserve v3 default border and focus-outline rendering during migration. */
+@layer base {
+  *, ::before, ::after, ::backdrop, ::file-selector-button {
+    border-color: #e5e7eb;
+  }
+}
+
 
 /* ═══════════════════════════════════════════════════════════════════
    crypto::compare design system
@@ -10,6 +29,7 @@
    near-invisible borders, disciplined spacing.
    ═══════════════════════════════════════════════════════════════════ */
 
+@layer base {
 :root {
   /* Fonts */
   --font-serif: var(--font-fraunces), "Fraunces", Georgia, serif;
@@ -151,6 +171,8 @@ h3 {
   font-weight: 500;
   letter-spacing: -0.02em;
   color: var(--color-text-heading);
+}
+
 }
 
 @layer components {
