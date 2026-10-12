@@ -1,6 +1,32 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("crypto::compare core journeys", () => {
+  for (const width of [1366, 390]) {
+    test(`category details keep keyboard focus and reset disclosures at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto("/");
+      const toggle = page.getByRole("button", { name: /Learn more — expand/ });
+      await expect(toggle).toBeVisible();
+      const original = await toggle.elementHandle();
+      expect(original).not.toBeNull();
+      await toggle.focus();
+      await toggle.press("Enter");
+      const expanded = page.getByRole("button", { name: /Less — collapse/ });
+      await expect(expanded).toBeFocused();
+      expect(await original!.evaluate((button) => button.isConnected && document.activeElement === button)).toBe(true);
+
+      await page.getByRole("button", { name: "Expand What it does" }).click();
+      await expect(page.getByRole("button", { name: "Collapse What it does" })).toHaveAttribute("aria-expanded", "true");
+      await expanded.focus();
+      await expanded.press("Enter");
+      await expect(toggle).toBeFocused();
+      expect(await original!.evaluate((button) => button.isConnected && document.activeElement === button)).toBe(true);
+      await toggle.press("Enter");
+      await expect(expanded).toBeFocused();
+      await expect(page.getByRole("button", { name: "Expand What it does" })).toHaveAttribute("aria-expanded", "false");
+    });
+  }
+
   test("does not preload guide routes before the visitor chooses one", async ({ page }) => {
     const speculativeRoutes: string[] = [];
     page.on("request", (request) => {
