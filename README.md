@@ -382,7 +382,7 @@ consumers such as ESLint use Microsoft's side-by-side TypeScript 6 wrapper until
 their declared peer ranges include TypeScript 7; `npm run check:typescript`
 guards both identities and the compiler executable selected by npm.
 The declaration beside `src/app/globals.css` covers only that stylesheet.
-Type checking rejects unknown stylesheet imports, and its tooling guard checks
+Type checking rejects unknown plain CSS imports, and its tooling guard checks
 that the paired CSS source exists; a declaration alone cannot prove that.
 
 Offline audit option:
