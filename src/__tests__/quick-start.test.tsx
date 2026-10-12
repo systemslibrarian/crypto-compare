@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import QuickStartPanel from "@/components/QuickStartPanel";
 
 describe("QuickStartPanel", () => {
-  it("wires quick-start actions to the provided callbacks", () => {
+  it("wires quick-start actions to the provided callbacks", async () => {
     const onToggleMethodology = vi.fn();
     const onShowDefaults = vi.fn();
     const onSearchAll = vi.fn();
@@ -20,7 +20,7 @@ describe("QuickStartPanel", () => {
     );
 
     // Collapsed bar buttons
-    fireEvent.click(screen.getByRole("button", { name: /^trust model$/i }));
+    fireEvent.click(await screen.findByRole("button", { name: /^trust model$/i }));
     fireEvent.click(screen.getByRole("button", { name: /^safe defaults$/i }));
 
     // Expand to access card buttons

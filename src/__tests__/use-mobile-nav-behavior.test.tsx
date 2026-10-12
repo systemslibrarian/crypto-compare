@@ -9,7 +9,7 @@ function TestMobileNav() {
 
   useMobileNavBehavior({
     isOpen: open,
-    navElement: navRef.current,
+    navRef,
     onClose: () => setOpen(false),
   });
 

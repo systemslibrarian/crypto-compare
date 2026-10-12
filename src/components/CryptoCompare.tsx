@@ -52,6 +52,16 @@ type SortOption = (typeof SORT_OPTIONS)[number]["id"];
 const COUNTRY_OPTIONS = ["all", "Korea", "USA", "Europe", "Japan", "China", "Russia", "Ukraine"] as const;
 type CountryFilter = (typeof COUNTRY_OPTIONS)[number];
 
+function downloadText(content: string, filename: string, mime: string) {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function CryptoCompare() {
   const dataset = useMemo(() => withProvenance(ALGORITHMS), []);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -122,9 +132,8 @@ export default function CryptoCompare() {
       const selParam = params.get("sel");
       if (selParam) {
         const algoId = selParam.split(",")[0];
-        setAdvisorHighlight(algoId);
-        // Scroll to the highlighted card after render
-        requestAnimationFrame(() => {
+        const frame = requestAnimationFrame(() => {
+          setAdvisorHighlight(algoId);
           const el = document.getElementById(`algo-${algoId}`);
           if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
         });
@@ -132,6 +141,7 @@ export default function CryptoCompare() {
         params.delete("from");
         const newUrl = `${window.location.pathname}?${params.toString()}`;
         window.history.replaceState({}, "", newUrl);
+        return () => cancelAnimationFrame(frame);
       }
     }
   }, []);
@@ -142,8 +152,8 @@ export default function CryptoCompare() {
     if (!target) return;
 
     if (!("IntersectionObserver" in window)) {
-      setKnowledgeNearViewport(true);
-      return;
+      const frame = requestAnimationFrame(() => setKnowledgeNearViewport(true));
+      return () => cancelAnimationFrame(frame);
     }
 
     const observer = new IntersectionObserver(
@@ -162,7 +172,7 @@ export default function CryptoCompare() {
 
   useMobileNavBehavior({
     isOpen: mobileNavOpen,
-    navElement: mobileNavRef.current,
+    navRef: mobileNavRef,
     onClose: () => setMobileNavOpen(false),
   });
 
@@ -248,7 +258,8 @@ export default function CryptoCompare() {
     const publicKeySortAllowed = !globalSearch && (cat === "kem" || cat === "signature");
     const signatureSortAllowed = !globalSearch && cat === "signature";
     if ((sortBy === "publicKey" && !publicKeySortAllowed) || (sortBy === "signature" && !signatureSortAllowed)) {
-      setSortBy("name");
+      const frame = requestAnimationFrame(() => setSortBy("name"));
+      return () => cancelAnimationFrame(frame);
     }
   }, [cat, globalSearch, sortBy]);
 
@@ -317,16 +328,6 @@ export default function CryptoCompare() {
     },
     [],
   );
-
-  function downloadText(content: string, filename: string, mime: string) {
-    const blob = new Blob([content], { type: mime });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    a.click();
-    URL.revokeObjectURL(url);
-  }
 
   return (
     <div className="cryptoCompareRoot">
@@ -438,7 +439,7 @@ export default function CryptoCompare() {
             uniqueSources={trustSnapshot.uniqueSources}
           />
 
-          <CategoryExplainer category={cat} expanded={explainerOpen} onToggle={() => setExplainerOpen(!explainerOpen)} onNavigateCategory={controller.switchCategory} />
+          <CategoryExplainer key={`${cat}:${explainerOpen}`} category={cat} expanded={explainerOpen} onToggle={() => setExplainerOpen(!explainerOpen)} onNavigateCategory={controller.switchCategory} />
 
           <ResultsStatus filteredCount={filtered.length} />
 

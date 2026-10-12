@@ -11,24 +11,29 @@ Browser minimums: Safari16.4+, Chrome111+, Firefox128+, per the official upgrade
 [guide](https://tailwindcss.com/docs/upgrade-guide). These browsers are the
 supported minimums for this migration; older-browser compatibility is not claimed.
 
-`vendor/eslint-plugin-next` contains the exact npm15.5.27 distribution, recorded
-with SHA512 tar integrity and per-file SHA256 in `UPSTREAM.json`. All21 upstream rule implementations
-(42 JavaScript/declaration files) remain unchanged. Only the root-directory glob consumer and
-package runtime dependencies are patched. `.gitattributes` exempts only that
-external compiled distribution from whitespace checking so authentic bytes
-remain unchanged; application and handwritten files retain normal checks. glob13.0.6 replaces the vulnerable
-fast-glob path for that consumer, with directory/symlink/path-format semantics
-checked against frozen outputs from the actual original package. This is not a
-general fast-glob compatibility shim. The upstream development-only ESLint8.56
-is omitted; the application retains its current ESLint8.57.1/config/rules.
+`vendor/eslint-plugin-next` now contains the exact npm16.4.0 distribution,
+recorded with SHA512 tar integrity, tarball SHA256 and per-file SHA256 in
+`UPSTREAM.json`. The upstream package still depends on fast-glob3.3.1, which
+resolves the Braces version affected by GHSA-vfj7-8cjw-p6xm. The same narrow
+security replacement therefore remains necessary: all22 upstream rule
+implementations (44 JavaScript/declaration files) remain unchanged, while only
+the root-directory glob consumer and package runtime dependencies are patched.
+glob13.0.6 replaces the vulnerable fast-glob path for that consumer, with
+directory/symlink/path-format semantics checked against frozen outputs from the
+actual upstream consumer. This is not a general fast-glob compatibility shim.
+`.gitattributes` exempts only that external compiled distribution from
+whitespace checking; application and handwritten files retain normal checks.
 
-Application lint coverage is unchanged: the external vendored package was
-previously under ignored node_modules and is now excluded as external source by
-`.eslintignore`. Dedicated regression tests check every upstream file and all
-42 unchanged rule-file hashes, plus actual navigation-rule positive/negative controls.
-They also reject a future config/plugin version mismatch: a newer Next lint
-release requires reviewing/removing this patch rather than silently keeping an
-older rule set. No Next runtime downgrade or lint-rule suppression is used.
+The lint runner is ESLint9.39.5 with the supported flat configuration exported
+by eslint-config-next16.4.0. The external vendored package remains globally
+ignored in `eslint.config.mjs`. Dedicated regression tests check every upstream
+file and all44 unchanged rule-file hashes, plus actual navigation-rule
+positive/negative controls. They also prove that all52 prior resolved rules are
+retained after severity normalization and that the only additions are the
+reviewed Next relative-location rule and14 React Hooks compiler rules. The
+application changes satisfy those rules; none is disabled or downgraded. Tests
+reject a future config/plugin version mismatch so a later release cannot
+silently retain an older rule set. No Next runtime downgrade is used.
 The existing selector-parser security regression now has an explicit7.1.6
 dev dependency instead of relying on Tailwind3 to bring its test prerequisite.
 
@@ -46,6 +51,8 @@ the existing declared semantic palette instead of inheriting unstyled text.
 This known rendering difference is recorded explicitly; full pixel equality in
 all scrolled states is not claimed.
 
-Maintenance record: b1ef1d65-0201-48db-8261-a4603583443c. A candidate audit passing
-does not establish integration or production delivery; those are recorded only
-after exact PR-head checks, normal merge and current-head deployment verification.
+Initial maintenance record: b1ef1d65-0201-48db-8261-a4603583443c. The Next16
+follow-up preserves that history and refreshes the recorded upstream package.
+A candidate audit passing does not establish integration or production delivery;
+those are recorded only after exact PR-head checks, normal merge and current-head
+deployment verification.

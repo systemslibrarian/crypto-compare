@@ -17,7 +17,10 @@ export function useModalDialog<T extends HTMLElement>(
 ): RefObject<T | null> {
   const dialogRef = useRef<T>(null);
   const onCloseRef = useRef(onClose);
-  onCloseRef.current = onClose;
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   useEffect(() => {
     if (!open) return;
