@@ -381,6 +381,9 @@ Open <http://localhost:3000>.
 consumers such as ESLint use Microsoft's side-by-side TypeScript 6 wrapper until
 their declared peer ranges include TypeScript 7; `npm run check:typescript`
 guards both identities and the compiler executable selected by npm.
+The declaration beside `src/app/globals.css` covers only that stylesheet.
+Type checking rejects unknown plain CSS imports, and its tooling guard checks
+that the paired CSS source exists; a declaration alone cannot prove that.
 
 Offline audit option:
 Run `npx tsx scripts/check-demo-sync.ts --live-html-path=/tmp/crypto-lab.html --strict` to compare against a saved catalog snapshot.
