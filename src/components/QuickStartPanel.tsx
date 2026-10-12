@@ -22,7 +22,10 @@ export default function QuickStartPanel({
   const [dismissed, setDismissed] = useState(true);
 
   useEffect(() => {
-    setDismissed(localStorage.getItem(DISMISSED_KEY) === "1");
+    const frame = requestAnimationFrame(() => {
+      setDismissed(localStorage.getItem(DISMISSED_KEY) === "1");
+    });
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   function handleDismiss() {

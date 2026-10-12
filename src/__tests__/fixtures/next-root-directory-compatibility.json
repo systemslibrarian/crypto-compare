@@ -1,7 +1,7 @@
 {
-  "upstreamPackage": "@next/eslint-plugin-next@15.5.27",
-  "upstreamTarballSha256": "dffc7da03d3bd534dff89874efeaca6a217c3a3c4483f873dde202107792575a",
-  "generatedFrom": "Actual upstream consumer and actual ESLint8.57.1 on recorded hermetic directory fixture; baseline captured 2026-10-11T06:29:36UTC",
+  "upstreamPackage": "@next/eslint-plugin-next@16.4.0",
+  "upstreamTarballSha256": "10b4e05335a0b21aff551b033af3b3bca40c629f76179c1cf792b410d77bb10b",
+  "generatedFrom": "Reviewed Next16.4.0 consumer with the existing glob13 security replacement and ESLint9.39.5; original hermetic directory/navigation expectations retained after exact parity rerun on 2026-10-12",
   "cases": [
     {
       "rootDir": null,

@@ -13,16 +13,40 @@ const vendor = path.join(root, "vendor/eslint-plugin-next");
 const upstream = JSON.parse(fs.readFileSync(path.join(vendor, "UPSTREAM.json"), "utf8"));
 const sha = (data: Buffer) => createHash("sha256").update(data).digest("hex");
 const { getRootDirs } = require(path.join(vendor, "dist/utils/get-root-dirs.js"));
-const rule = require(path.join(vendor, "dist/rules/no-html-link-for-pages.js"));
+const rule = require(path.join(vendor, "dist/rules/no-html-link-for-pages.js")).default;
 const { Linter } = require("eslint");
 
-// Frozen results come from the actual unmodified 15.5.27 consumer, not this
-// replacement. Both valid and forbidden links are exercised by the rule itself.
+const EXPECTED_ADDITIONAL_RULES: Record<string, unknown[]> = {
+  "@next/next/no-location-assign-relative-destination": [1],
+  "react-hooks/config": [2],
+  "react-hooks/error-boundaries": [2],
+  "react-hooks/gating": [2],
+  "react-hooks/globals": [2],
+  "react-hooks/immutability": [2],
+  "react-hooks/incompatible-library": [1],
+  "react-hooks/preserve-manual-memoization": [2],
+  "react-hooks/purity": [2],
+  "react-hooks/refs": [2],
+  "react-hooks/set-state-in-effect": [2],
+  "react-hooks/set-state-in-render": [2],
+  "react-hooks/static-components": [2],
+  "react-hooks/unsupported-syntax": [1],
+  "react-hooks/use-memo": [2],
+};
+
+function normalizeRule(ruleConfig: unknown[]) {
+  const severity = { off: 0, warn: 1, error: 2 }[String(ruleConfig[0])];
+  return [severity ?? ruleConfig[0], ...ruleConfig.slice(1)];
+}
+
+// Frozen results were rechecked against the actual unmodified16.4.0 consumer,
+// not inferred from this replacement. Both valid and forbidden links are
+// exercised by the rule itself.
 describe("integrity-pinned Next lint package", () => {
   it("retains every upstream rule and accounts for every modified package file", () => {
     const changed = Object.keys(upstream.changes);
     expect(changed.sort()).toEqual(["dist/utils/get-root-dirs.js", "package.json"]);
-    expect(upstream.files.filter((row: {path: string}) => row.path.startsWith("dist/rules/"))).toHaveLength(42);
+    expect(upstream.files.filter((row: {path: string}) => row.path.startsWith("dist/rules/"))).toHaveLength(44);
     for (const file of upstream.files) {
       expect(sha(fs.readFileSync(path.join(vendor, file.path))), file.path).toBe(
         changed.includes(file.path) ? upstream.patchedHashes[file.path] : file.sha256,
@@ -30,19 +54,35 @@ describe("integrity-pinned Next lint package", () => {
     }
     const plugin = require("@next/eslint-plugin-next");
     const originalIndex = require(path.join(vendor, "dist/index.js"));
-    expect(Object.keys(plugin.rules)).toHaveLength(21);
+    const eslintConfigNextPackage = JSON.parse(
+      fs.readFileSync(path.join(path.dirname(require.resolve("eslint-config-next")), "../package.json"), "utf8"),
+    );
+    const pluginPackage = JSON.parse(fs.readFileSync(path.join(vendor, "package.json"), "utf8"));
+    expect(Object.keys(plugin.rules)).toHaveLength(22);
     expect(plugin.rules).toEqual(originalIndex.rules);
-    expect(require("eslint-config-next/package.json").version).toBe(upstream.version);
-    expect(require("@next/eslint-plugin-next/package.json").version).toBe(upstream.version);
-    expect(require("@next/eslint-plugin-next/package.json").dependencies).toEqual({glob:"13.0.6"});
+    expect(eslintConfigNextPackage.version).toBe(upstream.version);
+    expect(pluginPackage.version).toBe(upstream.version);
+    expect(pluginPackage.dependencies).toEqual({
+      "@eslint-community/eslint-utils": "4.9.1",
+      glob: "13.0.6",
+    });
   });
 
-  it("keeps every resolved application and script lint rule configuration unchanged", async () => {
+  it("retains every prior lint rule and enables only the reviewed Next 16 additions", async () => {
     const { ESLint } = require("eslint");
     const eslint = new ESLint({cwd:root});
     for (const entry of lintBaseline.records) {
       const configuration = await eslint.calculateConfigForFile(path.join(root,entry.file));
-      expect(configuration.rules,entry.file).toEqual(entry.allRules);
+      for (const [ruleName, ruleConfig] of Object.entries(entry.allRules)) {
+        expect(configuration.rules[ruleName], `${entry.file}: ${ruleName}`).toEqual(
+          normalizeRule(ruleConfig as unknown[]),
+        );
+      }
+      const previousRules = new Set(Object.keys(entry.allRules));
+      const addedRules = Object.fromEntries(
+        Object.entries(configuration.rules).filter(([ruleName]) => !previousRules.has(ruleName)),
+      );
+      expect(addedRules, entry.file).toEqual(EXPECTED_ADDITIONAL_RULES);
     }
   });
 
@@ -62,7 +102,7 @@ describe("integrity-pinned Next lint package", () => {
         const dir = entry.rootDir === null ? null : JSON.parse(JSON.stringify(entry.rootDir).replaceAll("<ROOT>",scratch));
         const settings = dir === null ? {} : {next:{rootDir:dir}};
         expect(getRootDirs({cwd:scratch,settings}).map((p: string)=>p.replaceAll(scratch,"<ROOT>")).sort()).toEqual(entry.expectedDirectories);
-        const linter = new Linter();
+        const linter = new Linter({ configType: "eslintrc" });
         expect(typeof rule.create).toBe("function");
         linter.defineRule("next-page",rule);
         const text = '<><a href="/about">about</a><a href="https://outside.test/about">out</a><a href="/about" target="_blank">new</a><a href="/about" download>download</a></>';

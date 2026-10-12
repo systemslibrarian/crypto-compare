@@ -1,12 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, type RefObject } from "react";
 
 type UseMobileNavBehaviorArgs = {
   isOpen: boolean;
-  navElement: HTMLElement | null;
+  navRef: RefObject<HTMLElement | null>;
   onClose: () => void;
 };
 
-export function useMobileNavBehavior({ isOpen, navElement, onClose }: UseMobileNavBehaviorArgs) {
+export function useMobileNavBehavior({ isOpen, navRef, onClose }: UseMobileNavBehaviorArgs) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -22,6 +22,7 @@ export function useMobileNavBehavior({ isOpen, navElement, onClose }: UseMobileN
   useEffect(() => {
     if (!isOpen) return;
 
+    const navElement = navRef.current;
     const getFocusable = () => navElement?.querySelectorAll<HTMLElement>('button, a, [tabindex]:not([tabindex="-1"])') ?? [];
     const focusable = getFocusable();
     if (focusable.length > 0) focusable[0].focus();
@@ -48,5 +49,5 @@ export function useMobileNavBehavior({ isOpen, navElement, onClose }: UseMobileN
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, navElement, onClose]);
+  }, [isOpen, navRef, onClose]);
 }

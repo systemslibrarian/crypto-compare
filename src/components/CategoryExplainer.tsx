@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { CATEGORY_ACCENT, CATEGORY_INFO } from "@/data/categories";
 import { CounselButton } from "@/components/CounselButton";
 import type { AlgorithmCategory } from "@/types/crypto";
@@ -97,13 +97,6 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
   const [realWorldOpen, setRealWorldOpen] = useState(false);
   const [whyItMattersOpen, setWhyItMattersOpen] = useState(false);
   const [projectsOpen, setProjectsOpen] = useState(false);
-
-  useEffect(() => {
-    setWhatItDoesOpen(false);
-    setRealWorldOpen(false);
-    setWhyItMattersOpen(false);
-    setProjectsOpen(false);
-  }, [category, expanded]);
 
   if (!info) {
     return null;
