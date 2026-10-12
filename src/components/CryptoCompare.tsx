@@ -439,7 +439,7 @@ export default function CryptoCompare() {
             uniqueSources={trustSnapshot.uniqueSources}
           />
 
-          <CategoryExplainer key={`${cat}:${explainerOpen}`} category={cat} expanded={explainerOpen} onToggle={() => setExplainerOpen(!explainerOpen)} onNavigateCategory={controller.switchCategory} />
+          <CategoryExplainer category={cat} expanded={explainerOpen} onToggle={() => setExplainerOpen(!explainerOpen)} onNavigateCategory={controller.switchCategory} />
 
           <ResultsStatus filteredCount={filtered.length} />
 

@@ -97,6 +97,18 @@ export default function CategoryExplainer({ category, expanded, onToggle, onNavi
   const [realWorldOpen, setRealWorldOpen] = useState(false);
   const [whyItMattersOpen, setWhyItMattersOpen] = useState(false);
   const [projectsOpen, setProjectsOpen] = useState(false);
+  const [previousScope, setPreviousScope] = useState({ category, expanded });
+
+  // Reset only disclosure state when its scope changes. Remounting the entire
+  // explainer would also remove its focused expand/collapse button from the DOM.
+  // React processes this guarded adjustment before committing the child tree.
+  if (previousScope.category !== category || previousScope.expanded !== expanded) {
+    setPreviousScope({ category, expanded });
+    setWhatItDoesOpen(false);
+    setRealWorldOpen(false);
+    setWhyItMattersOpen(false);
+    setProjectsOpen(false);
+  }
 
   if (!info) {
     return null;
