@@ -377,6 +377,11 @@ Open <http://localhost:3000>.
 | `npm run check:stats` | Report drift in those counts and exit non-zero (writes nothing) |
 | `npm run generate:og` | Re-rasterize `public/og.png` from the current counts |
 
+`npm run type-check` uses the native TypeScript 7 compiler. JavaScript-API
+consumers such as ESLint use Microsoft's side-by-side TypeScript 6 wrapper until
+their declared peer ranges include TypeScript 7; `npm run check:typescript`
+guards both identities and the compiler executable selected by npm.
+
 Offline audit option:
 Run `npx tsx scripts/check-demo-sync.ts --live-html-path=/tmp/crypto-lab.html --strict` to compare against a saved catalog snapshot.
 Advanced options:
