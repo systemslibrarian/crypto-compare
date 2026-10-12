@@ -3,6 +3,7 @@ import {
   copyFileSync,
   mkdirSync,
   mkdtempSync,
+  readFileSync,
   rmSync,
   symlinkSync,
   unlinkSync,
@@ -28,14 +29,13 @@ function fixture() {
   symlinkSync(path.join(root, "node_modules"), path.join(scratch, "node_modules"), "dir");
   writeFileSync(path.join(scratch, "package.json"), "{}\n");
   writeFileSync(path.join(scratch, "index.ts"), 'import "./src/app/globals.css";\n');
+  const configuration = JSON.parse(readFileSync(path.join(root, "tsconfig.json"), "utf8"));
   writeFileSync(path.join(scratch, "tsconfig.json"), JSON.stringify({
     compilerOptions: {
-      noEmit: true,
-      skipLibCheck: true,
-      module: "esnext",
-      moduleResolution: "bundler",
-      allowArbitraryExtensions: true,
-      noUncheckedSideEffectImports: true,
+      // Inherit the real import-resolution policy so weakening the project
+      // config cannot leave a stricter, passing fixture behind.
+      ...configuration.compilerOptions,
+      incremental: false,
       types: [],
     },
     files: ["index.ts"],
