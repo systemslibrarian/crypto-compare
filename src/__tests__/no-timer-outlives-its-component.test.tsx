@@ -78,6 +78,25 @@ describe("nothing a component schedules outlives the component", () => {
     expect(vi.getTimerCount()).toBe(0);
   });
 
+  it("Testing Library unmounts what a test rendered, so nothing is left mounted at file end", () => {
+    /* The second half of #59, and the one no app timer explains. Testing Library
+       auto-cleans only when a global `afterEach` exists -- its index.js gates on
+       `typeof afterEach === "function"` -- and this project runs Vitest without
+       globals, so it never ran. 52 renders across 43 files stayed mounted until
+       their jsdom was destroyed, and React's scheduler then ran queued work for
+       them in the next file's context.
+
+       Asserted as two tests in sequence rather than by inspecting setup.ts,
+       because what matters is the observable state at the start of a test. */
+    render(<div data-testid="left-mounted">still here</div>);
+    expect(screen.getByTestId("left-mounted")).toBeInTheDocument();
+  });
+
+  it("…and the previous test's render is gone by the time this one starts", () => {
+    expect(document.body.textContent).toBe("");
+    expect(document.body.querySelectorAll("div").length).toBe(0);
+  });
+
   it("no source file starts a timer it does not keep a handle to", () => {
     /* The rule, not the four instances. Six sites leaked before this fix, in four
        components and two hooks, and the shape was identical every time: a bare
