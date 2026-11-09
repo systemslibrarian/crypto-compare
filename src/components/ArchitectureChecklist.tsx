@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useCopiedFlag } from "@/lib/useCopiedFlag";
 import Link from "next/link";
 
 type CheckItem = {
@@ -87,7 +88,7 @@ const SECTIONS: CheckSection[] = [
 export default function ArchitectureChecklist() {
   const [checked, setChecked] = useState<Record<string, boolean>>({});
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
-  const [copied, setCopied] = useState(false);
+  const [copied, markCopied] = useCopiedFlag();
 
   const totalItems = SECTIONS.reduce((sum, s) => sum + s.items.length, 0);
   const checkedCount = Object.values(checked).filter(Boolean).length;
@@ -121,8 +122,7 @@ export default function ArchitectureChecklist() {
 
   function copyToClipboard() {
     navigator.clipboard.writeText(exportMarkdown()).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
+      markCopied();
     }, () => {});
   }
 

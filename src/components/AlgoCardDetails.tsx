@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCopiedFlag } from "@/lib/useCopiedFlag";
 import dynamic from "next/dynamic";
 import { CounselButton } from "@/components/CounselButton";
 import { recommendationText } from "@/components/ui";
@@ -17,7 +17,7 @@ type AlgoCardDetailsProps = {
 };
 
 export default function AlgoCardDetails({ algo, assurance, implementationCount }: AlgoCardDetailsProps) {
-  const [copied, setCopied] = useState(false);
+  const [copied, markCopied] = useCopiedFlag();
   const demos = ALGORITHM_DEMOS[algo.id] ?? [];
 
   function copyRecommendation() {
@@ -31,8 +31,7 @@ export default function AlgoCardDetails({ algo, assurance, implementationCount }
       algo.notes ? `Notes: ${algo.notes}` : "",
     ].filter(Boolean).join("\n");
     navigator.clipboard.writeText(text).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
+      markCopied();
     }, () => {
       // Clipboard API unavailable (e.g. HTTP context or denied permission)
     });

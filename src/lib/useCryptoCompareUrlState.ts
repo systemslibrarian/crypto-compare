@@ -125,6 +125,7 @@ export function useCryptoCompareUrlState<Country extends string, Sort extends st
   } = state;
 
   useEffect(() => {
+    let scrollTimer: ReturnType<typeof setTimeout> | null = null;
     const parsed = parseCryptoCompareQueryState(window.location.search, {
       categoryOptions,
       countryOptions,
@@ -150,12 +151,20 @@ export function useCryptoCompareUrlState<Country extends string, Sort extends st
       if (algorithm) {
         setters.setCat(algorithm.category);
         setters.setSel([algorithm.id]);
-        setTimeout(() => {
+        /* Owned by the effect that starts it. The element does not exist until
+           the hydrated state has rendered, so the scroll waits -- but an unowned
+           wait reaches past the component, and under test past the test file's
+           jsdom, where `document` is gone. */
+        scrollTimer = setTimeout(() => {
+          scrollTimer = null;
           const element = document.getElementById(`algo-${algorithm.id}`);
           element?.scrollIntoView({ behavior: "smooth", block: "center" });
         }, 300);
       }
     }
+    return () => {
+      if (scrollTimer !== null) clearTimeout(scrollTimer);
+    };
     // Initial URL hydration should run once on mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
