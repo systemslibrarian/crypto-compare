@@ -131,6 +131,26 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-return-path/",
       note: "Impossible differentials and the boomerang attack on a toy SPN, with DDT and BCT tables computed live and an adaptive chosen-ciphertext oracle.",
     },
+    {
+      title: "AES Anatomy",
+      url: "https://systemslibrarian.github.io/crypto-lab-aes-anatomy/",
+      note: "Builds AES from field arithmetic through encryption and decryption, breaks weakened variants, then recovers a key from structured round-9 differential fault analysis.",
+    },
+    {
+      title: "Compression Leak",
+      url: "https://systemslibrarian.github.io/crypto-lab-compression-leak/",
+      note: "Compresses a secret beside an attacker-controlled guess before AES-GCM encryption, measuring real ciphertext lengths: the leak is in the compression, not the cipher.",
+    },
+    {
+      title: "Key Lifecycle",
+      url: "https://systemslibrarian.github.io/crypto-lab-key-lifecycle/",
+      note: "Ten key-management decisions, then real AES-GCM key rotation showing why a copied old key still decrypts an archived ciphertext.",
+    },
+    {
+      title: "IPsec / IKE",
+      url: "https://systemslibrarian.github.io/crypto-lab-ipsec-ike/",
+      note: "Applies an ordered SPD, runs a four-message PSK IKEv2 exchange, derives two simplex Child SAs, then protects real IPv4 bytes with ESP AES-GCM.",
+    },
   ],
   chacha20poly: [
     {
@@ -172,6 +192,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Nonce Collision",
       url: "https://systemslibrarian.github.io/crypto-lab-nonce-collision/",
       note: "Reuses a single nonce across four AEAD and stream constructions, recovering the Poly1305 one-time key from repeated ChaCha20-Poly1305 tags to forge a valid tag — without ever recovering the ChaCha20 encryption key.",
+    },
+    {
+      title: "DVD Scramble",
+      url: "https://systemslibrarian.github.io/crypto-lab-dvd-scramble/",
+      note: "Breaks the two-LFSR Content Scrambling System by guessing the smaller register and enumerating 65,536 seeds. A contrast with modern stream ciphers: implements neither ChaCha20 nor an attack on it.",
     },
   ],
   xchacha20poly: [
@@ -220,6 +245,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Order Leak",
       url: "https://systemslibrarian.github.io/crypto-lab-order-leak/",
       note: "A column you can still sort or match on has published the shape of its answers: BCLO OPE and CLWW ORE beside AES-SIV, where equality, order and a public distribution hand back plaintext cell by cell without the key being touched.",
+    },
+    {
+      title: "Dedup Vault",
+      url: "https://systemslibrarian.github.io/crypto-lab-dedup-vault/",
+      note: "Compares fresh-key, local message-locked and server-aided encryption of equal files, measuring deduplication and dictionary pressure. Implements AES-SIV and an OPRF, not AES-GCM-SIV.",
     },
   ],
   curve25519: [
@@ -327,6 +357,16 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Sphinx Mix",
       url: "https://systemslibrarian.github.io/crypto-lab-sphinx-mix/",
       note: "Sphinx mix-network packets over ristretto255 — per-hop blinding, a fixed-length header, a LIONESS payload — then traffic analysis that traces a sender anyway.",
+    },
+    {
+      title: "AKE Ladder",
+      url: "https://systemslibrarian.github.io/crypto-lab-ake-ladder/",
+      note: "Walks Boneh-Shoup authenticated key exchange over X25519 and ristretto255, removing one protection at a time while a scripted attack lands on real transcripts.",
+    },
+    {
+      title: "Twist Trap",
+      url: "https://systemslibrarian.github.io/crypto-lab-twist-trap/",
+      note: "Sends points that are not on the curve: five twist queries and CRT recover a scalar once X25519 twist validation is off, and an order-four point leaks a bit.",
     },
   ],
   ed25519: [
@@ -436,6 +476,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Attestation Gate",
       url: "https://systemslibrarian.github.io/crypto-lab-attestation-gate/",
       note: "TPM quote signatures as ECDSA P-256, deterministic per RFC 6979, with restricted-key TPM_RC_TICKET enforcement and RATS/EAT appraisal.",
+    },
+    {
+      title: "Subliminal Channels",
+      url: "https://systemslibrarian.github.io/crypto-lab-subliminal-channels/",
+      note: "Encodes one extra bit by selecting a valid P-256 ECDSA signature, independently verified with WebCrypto, then compares deterministic signatures and message tampering.",
     },
   ],
   p384: [
@@ -700,12 +745,22 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-syndrome-hints/",
       note: "Information-set decoding (Prange and Stern) against syndrome decoding over F₂, with leaked side-channel hints sliding the work factor from exponential toward polynomial.",
     },
+    {
+      title: "Rank Metric",
+      url: "https://systemslibrarian.github.io/crypto-lab-rank-metric/",
+      note: "Expands GF(16) vectors into binary matrices, compares Hamming and rank weight, exhausts a [4,2,3] Gabidulin code, then runs radius-one correction and miscorrection. A rank-metric code, not binary Goppa.",
+    },
   ],
   frodokem: [
     {
       title: "Frodo Vault",
       url: "https://systemslibrarian.github.io/crypto-lab-frodo-vault/",
       note: "Learning-focused module for FrodoKEM design and deployment tradeoffs.",
+    },
+    {
+      title: "Lattice IBE",
+      url: "https://systemslibrarian.github.io/crypto-lab-lattice-ibe/",
+      note: "Maps identity bytes to a lattice syndrome, samples a trapdoor preimage and runs GPV dual-LWE bit encryption, then breaks a deliberately tiny profile. Plain-LWE identity-based encryption, not a KEM.",
     },
   ],
   bike: [
@@ -917,6 +972,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-ghost-commit/",
       note: "Git adds objects and never edits them, so a committed API key keeps its name and contents two commits after deletion — then a Shannon-entropy scanner finds it in seconds.",
     },
+    {
+      title: "Hash Hunt",
+      url: "https://systemslibrarian.github.io/crypto-lab-hash-hunt/",
+      note: "Finds shortened-hash collisions, tests an insecure hash-then-MAC composition, and measures Hellman chain, rainbow chain and salt tradeoffs against SHA-256.",
+    },
   ],
   sha512: [
     {
@@ -1056,6 +1116,16 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-context-ward/",
       note: "Role-separated HMAC-SHA-256 seals over an agent context window: each role gets its own key, and every seal still verifies on injected content.",
     },
+    {
+      title: "Distance Bounding",
+      url: "https://systemslibrarian.github.io/crypto-lab-distance-bounding/",
+      note: "Runs the verifier-nonce Hancke-Kuhn rapid-bit protocol with exact timing and probability arithmetic, then contrasts relays, mafia pre-asking and distance fraud.",
+    },
+    {
+      title: "TESLA Broadcast",
+      url: "https://systemslibrarian.github.io/crypto-lab-tesla-broadcast/",
+      note: "Authenticates a broadcast with a one-way HMAC key chain and delayed disclosure: forges a shared-key MAC, then verifies a later key after dropped packets.",
+    },
   ],
   cmac_aes: [
     {
@@ -1137,6 +1207,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-shamir-vs-frost/",
       note: "Contrasts Shamir secret-sharing reconstruction, which forms the key in memory, against FROST threshold signing, which never reconstructs it.",
     },
+    {
+      title: "Hostile Paths",
+      url: "https://systemslibrarian.github.io/crypto-lab-hostile-paths/",
+      note: "Sends one field symbol over independently modeled hostile paths, comparing naive Shamir interpolation with Welch-Berlekamp Reed-Solomon correction.",
+    },
   ],
   feldman_vss: [
     {
@@ -1162,6 +1237,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Proof Tally",
       url: "https://systemslibrarian.github.io/crypto-lab-proof-tally/",
       note: "Prio3: additive shares hide a measurement and will happily add a lie to the total, until a fully linear proof carried in the same shares lets two aggregators reject a malformed report neither of them can read.",
+    },
+    {
+      title: "DC-net",
+      url: "https://systemslibrarian.github.io/crypto-lab-dc-net/",
+      note: "Cancels five participants' pairwise XOR masks to reveal one anonymous message, then executes collisions, jamming and dropout. Additive sharing over GF(2), not a modular scheme.",
     },
   ],
   tfhe: [
@@ -1393,6 +1473,16 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-function-key/",
       note: "ABDP15 inner-product functional encryption over ristretto255: a key answers one weighted-sum question about an encrypted vector and nothing else, until enough colluding keys hand over the master secret.",
     },
+    {
+      title: "Anamorphic Channel",
+      url: "https://systemslibrarian.github.io/crypto-lab-anamorphic/",
+      note: "Runs one two-point Ristretto ElGamal ciphertext through a surrendered ordinary key and a separate PRF double key, then exposes counter reuse and wrong-key recovery.",
+    },
+    {
+      title: "Log Forge",
+      url: "https://systemslibrarian.github.io/crypto-lab-log-forge/",
+      note: "Attacks the discrete-log assumption ElGamal rests on: generic, smooth-order, index-calculus and Cheon q-1 methods across finite fields and a toy curve. Implements the attacks, not ElGamal.",
+    },
   ],
   sm2_enc: [
     {
@@ -1446,6 +1536,26 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Hidden Bit",
       url: "https://systemslibrarian.github.io/crypto-lab-hidden-bit/",
       note: "Runs the IND-CPA and CCA games against textbook RSA, RSA-OAEP, RSA-PSS and AES modes: a rising advantage proves a scheme broken, a flat one proves only that these adversaries failed, which is why security needs a reduction.",
+    },
+    {
+      title: "Clock Arithmetic",
+      url: "https://systemslibrarian.github.io/crypto-lab-clock-arithmetic/",
+      note: "Exact BigInt arithmetic under RSA and finite-field Diffie-Hellman: inverses, Euler phi, orders, generators, subgroups and generalized CRT. Arithmetic foundations, not OAEP.",
+    },
+    {
+      title: "Prime Witness",
+      url: "https://systemslibrarian.github.io/crypto-lab-prime-witness/",
+      note: "Counts Miller-Rabin lying bases, tests fixed-base lists and measures probable-prime generation, then builds a checked recursive primality proof. The keygen step beneath RSA, not OAEP itself.",
+    },
+    {
+      title: "Residue Gate",
+      url: "https://systemslibrarian.github.io/crypto-lab-residue-gate/",
+      note: "Compares public Jacobi symbols with private residue classes, factors through a Rabin root oracle, and runs BBS bits plus Blum-Goldwasser encryption. Factoring-based schemes alongside RSA, not OAEP.",
+    },
+    {
+      title: "SAML Binding",
+      url: "https://systemslibrarian.github.io/crypto-lab-saml-binding/",
+      note: "Signs a synthetic SAML response, then watches a genuine XML Signature verify while a vulnerable consumer authorizes from the wrong assertion. Exercises RSA signature verification, not OAEP encryption.",
     },
   ],
   rsa_oaep_4096: [
@@ -1584,6 +1694,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-drbg-arena/",
       note: "State evolution, reseeding, and backtracking-resistance comparison across DRBGs.",
     },
+    {
+      title: "Next Number",
+      url: "https://systemslibrarian.github.io/crypto-lab-next-number/",
+      note: "Predicts a generator's next output: reads a toy LCG off its own recurrence, recovers Java's 48-bit state from two ints, then lifts a 512-bit truncated LCG with lattices.",
+    },
   ],
   fortuna: [
     {
@@ -1649,6 +1764,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Attribute Gate",
       url: "https://systemslibrarian.github.io/crypto-lab-attribute-gate/",
       note: "FAME CP-ABE over BLS12-381 pairings, with a collusion attempt that splices two real keys and shows the term that refuses to cancel.",
+    },
+    {
+      title: "Signature Gate",
+      url: "https://systemslibrarian.github.io/crypto-lab-confirmer-signatures/",
+      note: "Challenges real BLS12-381 confirmation proofs, then compares a one-message designated-verifier proof that either the branch witness or its verifier can make.",
     },
   ],
   bn254: [
