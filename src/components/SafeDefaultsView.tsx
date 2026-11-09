@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useCopiedFlag } from "@/lib/useCopiedFlag";
 
 type SafeDefault = {
   id: string;
@@ -145,13 +146,12 @@ const SAFE_DEFAULTS: SafeDefault[] = [
 ];
 
 function CopyButton({ text }: { text: string }) {
-  const [copied, setCopied] = useState(false);
+  const [copied, markCopied] = useCopiedFlag();
 
   function handleCopy() {
     navigator.clipboard.writeText(text).then(
       () => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 1500);
+        markCopied();
       },
       () => {},
     );
