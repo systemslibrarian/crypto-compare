@@ -1,4 +1,4 @@
-import { useCallback, useMemo, type RefObject } from "react";
+import { useCallback, useEffect, useMemo, useRef, type RefObject } from "react";
 import type { AlgorithmCategory } from "@/types/crypto";
 
 type SortOption = "name" | "publicKey" | "signature";
@@ -77,9 +77,22 @@ export function useCryptoCompareController({
     [setCat, setSel, setCmp, setExplainerOpen],
   );
 
+  /* The focus has to wait for the search input to exist, and the wait has to be
+     owned: an unowned 50ms timer outlives a component that unmounts inside it,
+     and under test it outlives the test FILE and its jsdom. Same defect as the
+     four copy flags, same remedy -- see src/lib/useCopiedFlag.ts. */
+  const focusTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => {
+    if (focusTimer.current !== null) clearTimeout(focusTimer.current);
+  }, []);
+
   const activateGlobalSearch = useCallback(() => {
     setGlobalSearch(true);
-    setTimeout(() => searchRef.current?.focus(), 50);
+    if (focusTimer.current !== null) clearTimeout(focusTimer.current);
+    focusTimer.current = setTimeout(() => {
+      focusTimer.current = null;
+      searchRef.current?.focus();
+    }, 50);
   }, [searchRef, setGlobalSearch]);
 
   const showRecommendedDefaults = useCallback(() => {

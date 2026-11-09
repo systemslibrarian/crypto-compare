@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useCopiedFlag } from "@/lib/useCopiedFlag";
 import { RecommendationBadge, ReviewBadge, formatReviewDate } from "@/components/ui";
 import { IMPLEMENTATIONS, ECOSYSTEM_LABELS } from "@/data/implementations";
 import { getAssuranceProfile } from "@/lib/assurance";
@@ -656,7 +657,7 @@ function ResultBlock({
   provenance: Record<string, { sources: AlgorithmSource[]; lastReviewed: string }>;
   onNavigate: (category: AlgorithmCategory, algoId: string) => void;
 }) {
-  const [copied, setCopied] = useState(false);
+  const [copied, markCopied] = useCopiedFlag();
   const impls = result.id ? IMPLEMENTATIONS.filter((i) => i.algorithmId === result.id) : [];
   const ecosystems = Array.from(new Set(impls.map((i) => i.ecosystem)));
 
@@ -676,8 +677,7 @@ function ResultBlock({
   function copyAsMarkdown() {
     const report = buildJustificationReport(result, history, algorithms, provenance, DECISION_TREE, choiceIds);
     navigator.clipboard.writeText(report).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
+      markCopied();
     }, () => {});
   }
 
