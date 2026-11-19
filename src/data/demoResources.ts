@@ -151,6 +151,16 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-ipsec-ike/",
       note: "Applies an ordered SPD, runs a four-message PSK IKEv2 exchange, derives two simplex Child SAs, then protects real IPv4 bytes with ESP AES-GCM.",
     },
+    {
+      title: "Cold Boot",
+      url: "https://systemslibrarian.github.io/crypto-lab-cold-boot/",
+      note: "Recovers AES-128 key schedules from decayed DRAM, running the real key-expansion recurrence with its round constants backwards from a bit-rotted image under a one-way decay model. It implements no GCM and performs no AES encryption -- the key schedule and its reconstruction are the whole subject.",
+    },
+    {
+      title: "Subverted Cipher",
+      url: "https://systemslibrarian.github.io/crypto-lab-subverted-cipher/",
+      note: "An algorithm-substitution attack: a subverted implementation leaks key bits through its IV choice while every ciphertext still decrypts correctly under the honest key. The AEAD shown is AES-128-GCM with AES-CTR beside it; the lab states it does not claim AES-GCM as deployed is subverted.",
+    },
   ],
   chacha20poly: [
     {
@@ -197,6 +207,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "DVD Scramble",
       url: "https://systemslibrarian.github.io/crypto-lab-dvd-scramble/",
       note: "Breaks the two-LFSR Content Scrambling System by guessing the smaller register and enumerating 65,536 seeds. A contrast with modern stream ciphers: implements neither ChaCha20 nor an attack on it.",
+    },
+    {
+      title: "QUIC Packet",
+      url: "https://systemslibrarian.github.io/crypto-lab-quic-packet/",
+      note: "RFC 9001 initial keys: HKDF-Expand-Label, then AES-128-GCM or ChaCha20-Poly1305 packet protection with header protection, run against the real open path. Shows both AEADs side by side on the same packet; it carries no QUIC transport state machine.",
     },
   ],
   xchacha20poly: [
@@ -481,6 +496,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "Subliminal Channels",
       url: "https://systemslibrarian.github.io/crypto-lab-subliminal-channels/",
       note: "Encodes one extra bit by selecting a valid P-256 ECDSA signature, independently verified with WebCrypto, then compares deterministic signatures and message tampering.",
+    },
+    {
+      title: "Weak Curves",
+      url: "https://systemslibrarian.github.io/crypto-lab-weak-curves/",
+      note: "Embedding-degree and anomalous-curve checks at full size over NIST SP 800-186 parameters. The lab gives no verdict on any named curve by its own statement: P-256 and secp256k1 appear only as the subjects of two arithmetic checks, while the MOV reduction and Smart's attack are demonstrated on deliberately weak curves.",
     },
   ],
   p384: [
@@ -1013,6 +1033,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-world-hashes/",
       note: "Cross-standard hash overview and algorithm family context.",
     },
+    {
+      title: "LtHash",
+      url: "https://systemslibrarian.github.io/crypto-lab-lthash/",
+      note: "BLAKE2b with BLAKE2Xb expansion behind an LtHash homomorphic set hash: add or remove a member without rehashing the set. Shows the shape of the ternary-SIS argument the construction rests on; it is not a general hash-function comparison.",
+    },
   ],
   blake3: [
     {
@@ -1056,6 +1081,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       url: "https://systemslibrarian.github.io/crypto-lab-drift-key/",
       note: "A code-offset secure sketch over hand-built BCH codes feeds HKDF-SHA-256, turning a noisy reading that never repeats into the same key every time, and prices the entropy the public helper data costs.",
     },
+    {
+      title: "Exposure Notification",
+      url: "https://systemslibrarian.github.io/crypto-lab-exposure-notification/",
+      note: "Two HKDF-SHA-256 calls a day turn one 16-byte temporary exposure key into 144 rolling proximity identifiers, matched on device. Shows the Apple/Google schedule against the DP-3T contrast; it models no Bluetooth radio layer and computes no exposure risk score.",
+    },
   ],
   argon2_kdf: [
     {
@@ -1076,6 +1106,11 @@ export const ALGORITHM_DEMOS: Record<string, DemoResource[]> = {
       title: "KDF Arena",
       url: "https://systemslibrarian.github.io/crypto-lab-kdf-arena/",
       note: "Iteration-cost and migration tradeoff explorer for password-derived keys.",
+    },
+    {
+      title: "Honey Encryption",
+      url: "https://systemslibrarian.github.io/crypto-lab-honey-encryption/",
+      note: "PBKDF2-HMAC-SHA-256 over a distribution-transforming encoder, so a wrong password decrypts to a plausible decoy card number instead of failing. Shows why offline guessing stops being self-checking; the encoder covers Luhn-valid card numbers only, not arbitrary plaintext.",
     },
   ],
   balloon: [

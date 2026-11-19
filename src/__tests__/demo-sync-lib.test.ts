@@ -59,6 +59,58 @@ describe("demoSync helpers", () => {
     expect(result).toEqual({
       missingFromLocal: ["crypto-lab-kyber-vault"],
       onlyInLocal: ["crypto-lab-shadow-vault"],
+      excluded: [],
+      staleExclusions: [],
+      contradictoryExclusions: [],
     });
+  });
+
+  // The exclusion list exists so a live demo this dataset holds no algorithm
+  // record for can be named and reasoned about instead of failing the check
+  // forever. These four cases are the whole contract, and three of them are
+  // FAILURES: a list that could only ever silence things would rot into a set
+  // of problems nobody can see.
+  it("subtracts a reviewed exclusion from missing, and nothing else", () => {
+    const result = diffDemoSlugs(
+      ["crypto-lab-aes-modes", "crypto-lab-noisy-parity"],
+      ["crypto-lab-aes-modes"],
+      { "crypto-lab-noisy-parity": "no LPN algorithm entry in this dataset" },
+    );
+
+    expect(result.missingFromLocal).toEqual([]);
+    expect(result.excluded).toEqual(["crypto-lab-noisy-parity"]);
+    expect(result.staleExclusions).toEqual([]);
+    expect(result.contradictoryExclusions).toEqual([]);
+  });
+
+  it("still reports a live slug that is neither attached nor excluded", () => {
+    const result = diffDemoSlugs(
+      ["crypto-lab-aes-modes", "crypto-lab-noisy-parity", "crypto-lab-brand-new"],
+      ["crypto-lab-aes-modes"],
+      { "crypto-lab-noisy-parity": "no LPN algorithm entry in this dataset" },
+    );
+
+    expect(result.missingFromLocal).toEqual(["crypto-lab-brand-new"]);
+  });
+
+  it("reports an exclusion for a demo that is no longer live", () => {
+    const result = diffDemoSlugs(
+      ["crypto-lab-aes-modes"],
+      ["crypto-lab-aes-modes"],
+      { "crypto-lab-retired": "it was excluded while it existed" },
+    );
+
+    expect(result.staleExclusions).toEqual(["crypto-lab-retired"]);
+    expect(result.excluded).toEqual([]);
+  });
+
+  it("reports a slug that is both excluded and attached", () => {
+    const result = diffDemoSlugs(
+      ["crypto-lab-aes-modes"],
+      ["crypto-lab-aes-modes"],
+      { "crypto-lab-aes-modes": "two answers for one slug" },
+    );
+
+    expect(result.contradictoryExclusions).toEqual(["crypto-lab-aes-modes"]);
   });
 });

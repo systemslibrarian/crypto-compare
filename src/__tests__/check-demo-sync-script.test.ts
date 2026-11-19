@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { describe, expect, it } from "vitest";
 import { ALGORITHM_DEMOS } from "@/data/demoResources";
+import { DEMO_EXCLUSIONS } from "@/data/demoExclusions";
 import { extractLocalSlugs } from "@/lib/demoSync";
 
 function runDemoSync(args: string[]) {
@@ -24,11 +25,15 @@ function htmlForSlugs(slugs: string[]) {
 describe("check-demo-sync script", () => {
   it("passes in strict mode when html snapshot matches local slugs", () => {
     const localSlugs = extractLocalSlugs(ALGORITHM_DEMOS).slugs;
+    // A reviewed exclusion is a LIVE demo that is deliberately not attached, so
+    // a synthetic live catalog has to carry it too. Built from the attached
+    // slugs alone it would assert that every exclusion is stale.
+    const liveSlugs = [...localSlugs, ...Object.keys(DEMO_EXCLUSIONS)];
     const dir = mkdtempSync(join(tmpdir(), "demo-sync-pass-"));
     const htmlPath = join(dir, "live.html");
 
     try {
-      writeFileSync(htmlPath, htmlForSlugs(localSlugs));
+      writeFileSync(htmlPath, htmlForSlugs(liveSlugs));
       const result = runDemoSync([`--live-html-path=${htmlPath}`, "--strict"]);
 
       expect(result.status).toBe(0);
@@ -40,6 +45,10 @@ describe("check-demo-sync script", () => {
 
   it("fails in strict mode when live html includes extra slug", () => {
     const localSlugs = extractLocalSlugs(ALGORITHM_DEMOS).slugs;
+    // A reviewed exclusion is a LIVE demo that is deliberately not attached, so
+    // a synthetic live catalog has to carry it too. Built from the attached
+    // slugs alone it would assert that every exclusion is stale.
+    const liveSlugs = [...localSlugs, ...Object.keys(DEMO_EXCLUSIONS)];
     const dir = mkdtempSync(join(tmpdir(), "demo-sync-fail-"));
     const htmlPath = join(dir, "live.html");
 
@@ -58,12 +67,16 @@ describe("check-demo-sync script", () => {
 
   it("writes report file with metadata fields", () => {
     const localSlugs = extractLocalSlugs(ALGORITHM_DEMOS).slugs;
+    // A reviewed exclusion is a LIVE demo that is deliberately not attached, so
+    // a synthetic live catalog has to carry it too. Built from the attached
+    // slugs alone it would assert that every exclusion is stale.
+    const liveSlugs = [...localSlugs, ...Object.keys(DEMO_EXCLUSIONS)];
     const dir = mkdtempSync(join(tmpdir(), "demo-sync-report-"));
     const htmlPath = join(dir, "live.html");
     const reportPath = join(dir, "report.json");
 
     try {
-      writeFileSync(htmlPath, htmlForSlugs(localSlugs));
+      writeFileSync(htmlPath, htmlForSlugs(liveSlugs));
       const result = runDemoSync([
         `--live-html-path=${htmlPath}`,
         "--json",
@@ -88,9 +101,10 @@ describe("check-demo-sync script", () => {
 
       expect(typeof report.generatedAt).toBe("string");
       expect(report.hasIssues).toBe(false);
-      expect(report.liveSlugs?.length).toBe(localSlugs.length);
+      // live is attached + excluded, so it is larger than the attached set
+      expect(report.liveSlugs?.length).toBe(liveSlugs.length);
       expect(report.localSlugs?.length).toBe(localSlugs.length);
-      expect(report.summary?.liveSlugCount).toBe(localSlugs.length);
+      expect(report.summary?.liveSlugCount).toBe(liveSlugs.length);
       expect(report.summary?.localSlugCount).toBe(localSlugs.length);
       expect(report.summary?.missingCount).toBe(0);
       expect(report.summary?.localOnlyCount).toBe(0);
@@ -102,11 +116,15 @@ describe("check-demo-sync script", () => {
 
   it("accepts custom timeout and retry flags", () => {
     const localSlugs = extractLocalSlugs(ALGORITHM_DEMOS).slugs;
+    // A reviewed exclusion is a LIVE demo that is deliberately not attached, so
+    // a synthetic live catalog has to carry it too. Built from the attached
+    // slugs alone it would assert that every exclusion is stale.
+    const liveSlugs = [...localSlugs, ...Object.keys(DEMO_EXCLUSIONS)];
     const dir = mkdtempSync(join(tmpdir(), "demo-sync-flags-"));
     const htmlPath = join(dir, "live.html");
 
     try {
-      writeFileSync(htmlPath, htmlForSlugs(localSlugs));
+      writeFileSync(htmlPath, htmlForSlugs(liveSlugs));
       const result = runDemoSync([
         `--live-html-path=${htmlPath}`,
         "--strict",

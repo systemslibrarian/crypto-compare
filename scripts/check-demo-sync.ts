@@ -14,6 +14,7 @@
  */
 
 import { ALGORITHM_DEMOS } from "../src/data/demoResources";
+import { DEMO_EXCLUSIONS } from "../src/data/demoExclusions";
 import { diffDemoSlugs, extractLiveSlugsFromHtml, extractLocalSlugs } from "../src/lib/demoSync";
 import { readFileSync, writeFileSync } from "node:fs";
 
@@ -94,6 +95,9 @@ type SyncResult = {
   localSlugs: string[];
   missingFromLocal: string[];
   onlyInLocal: string[];
+  excluded: string[];
+  staleExclusions: string[];
+  contradictoryExclusions: string[];
   invalidLocalUrls: Array<{ algorithmId: string; url: string }>;
 };
 
@@ -177,6 +181,27 @@ function printResult(result: SyncReport, options: CliOptions) {
     }
   }
 
+  if (result.excluded.length > 0) {
+    console.log(`\nExcluded by review (${result.excluded.length}) — live, deliberately not attached:`);
+    for (const slug of result.excluded) {
+      console.log(`  - ${slug}: ${DEMO_EXCLUSIONS[slug]}`);
+    }
+  }
+
+  if (result.staleExclusions.length > 0) {
+    console.log(`\nExclusions for demos that are no longer live (${result.staleExclusions.length}):`);
+    for (const slug of result.staleExclusions) {
+      console.log(`  - ${slug} — remove this line from src/data/demoExclusions.ts`);
+    }
+  }
+
+  if (result.contradictoryExclusions.length > 0) {
+    console.log(`\nBoth excluded and attached (${result.contradictoryExclusions.length}):`);
+    for (const slug of result.contradictoryExclusions) {
+      console.log(`  - ${slug} — remove it from one or the other`);
+    }
+  }
+
   if (result.onlyInLocal.length > 0) {
     console.log(`\nOnly in local (${result.onlyInLocal.length}):`);
     for (const slug of result.onlyInLocal) {
@@ -187,7 +212,9 @@ function printResult(result: SyncReport, options: CliOptions) {
   if (
     result.invalidLocalUrls.length === 0 &&
     result.missingFromLocal.length === 0 &&
-    result.onlyInLocal.length === 0
+    result.onlyInLocal.length === 0 &&
+    result.staleExclusions.length === 0 &&
+    result.contradictoryExclusions.length === 0
   ) {
     console.log("\nAll demo slugs are in sync with the live catalog.");
   }
@@ -212,13 +239,17 @@ async function main() {
     const options = parseCliOptions(rawArgs);
     const liveSlugs = await fetchLiveSlugs(options);
     const { slugs: localSlugs, invalidLocalUrls } = extractLocalSlugs(ALGORITHM_DEMOS);
-    const { missingFromLocal, onlyInLocal } = diffDemoSlugs(liveSlugs, localSlugs);
+    const { missingFromLocal, onlyInLocal, excluded, staleExclusions, contradictoryExclusions } =
+      diffDemoSlugs(liveSlugs, localSlugs, DEMO_EXCLUSIONS);
 
     const result: SyncResult = {
       liveSlugs,
       localSlugs,
       missingFromLocal,
       onlyInLocal,
+      excluded,
+      staleExclusions,
+      contradictoryExclusions,
       invalidLocalUrls,
     };
 

@@ -44,12 +44,40 @@ export function extractLocalSlugs(
   return { slugs: Array.from(slugs).sort(), invalidLocalUrls };
 }
 
-export function diffDemoSlugs(liveSlugs: string[], localSlugs: string[]) {
+/**
+ * `exclusions` maps a live slug to the reason it deliberately has no entry in
+ * ALGORITHM_DEMOS (see src/data/demoExclusions.ts).
+ *
+ * It subtracts from `missingFromLocal` and from nothing else. Two new ways to
+ * fail come with it, because an exclusion list that only ever silences things
+ * rots into a list of problems nobody can see any more:
+ *
+ *   staleExclusions         excluded, but no longer live — the reason is about
+ *                           a demo that is gone, so the line has to go too.
+ *   contradictoryExclusions excluded AND attached — two answers for one slug,
+ *                           and no way to tell which one was meant.
+ *
+ * Everything else is unchanged: a live slug that is neither attached nor
+ * excluded is still `missingFromLocal`, and a local slug that is not live is
+ * still `onlyInLocal`.
+ */
+export function diffDemoSlugs(
+  liveSlugs: string[],
+  localSlugs: string[],
+  exclusions: Record<string, string> = {},
+) {
   const liveSet = new Set(liveSlugs);
   const localSet = new Set(localSlugs);
+  const excludedSlugs = Object.keys(exclusions);
+  const excludedSet = new Set(excludedSlugs);
 
-  const missingFromLocal = liveSlugs.filter((slug) => !localSet.has(slug));
+  const missingFromLocal = liveSlugs.filter(
+    (slug) => !localSet.has(slug) && !excludedSet.has(slug),
+  );
   const onlyInLocal = localSlugs.filter((slug) => !liveSet.has(slug));
+  const excluded = excludedSlugs.filter((slug) => liveSet.has(slug));
+  const staleExclusions = excludedSlugs.filter((slug) => !liveSet.has(slug));
+  const contradictoryExclusions = excludedSlugs.filter((slug) => localSet.has(slug));
 
-  return { missingFromLocal, onlyInLocal };
+  return { missingFromLocal, onlyInLocal, excluded, staleExclusions, contradictoryExclusions };
 }
