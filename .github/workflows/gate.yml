@@ -1,0 +1,138 @@
+name: Gate
+
+# ONE definition of this lab's gate, called by the workflow a Dependabot bump
+# must clear and by the workflow that publishes. `needs:` cannot cross files,
+# so before this the deploy carried its own copy and nothing held the two
+# equal -- in this lab they had already drifted apart.
+#
+# A separate file rather than `workflow_call` on the CI workflow, because that
+# file's dependabot-auto-merge job holds contents: write, pull-requests: write
+# and actions: write, and a called workflow may not hold permissions above its
+# CALLER. Calling it from a deploy that holds contents: read fails the run at
+# startup before any job exists (measured: crypto-lab-key-exchange run
+# 44528331135, conclusion startup_failure).
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    # Repo-level test skip, deliberately NOT GitHub's `[skip ci]`. That marker is
+    # honoured by GitHub before any workflow is evaluated, so it suppresses the
+    # whole push -- including pages.yml. Five workflow-only commits carrying it
+    # left the site undeployed from 2026-08-19 while the legacy Jekyll builder,
+    # which ignores the marker, kept republishing the README over the app.
+    # `[skip tests]` skips only this gate; the deploy always runs.
+    # startsWith, not contains: the marker must open the subject line. contains
+    # matches anywhere, so merely naming the marker in a commit body fires it --
+    # the exact trap that made e338d8a skip its own gate.
+    # e2e and lighthouse `needs: build`, so skipping here cascades to them.
+    # Pull requests never skip -- dependabot-auto-merge depends on this gate.
+    if: >-
+      github.event_name != 'push' ||
+      !startsWith(github.event.head_commit.message, '[skip tests]')
+    runs-on: ubuntu-latest
+    # Measured 75s on 2026-09-09 (run 34331746207). The cap is a hang detector,
+    # not a performance budget: GitHub's default is 360 minutes, so a wedged
+    # npm ci or a build waiting on stdin burns six hours with nothing red.
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: "npm"
+      - name: Install
+        run: npm ci
+      # Production dependencies only. Dev-only advisories are reported weekly by
+      # .github/workflows/dev-audit.yml instead of blocking every pull request --
+      # see that file for why the scoping exists.
+      - name: Audit production dependencies
+        run: npm run audit:dependencies
+      - name: Type check
+        run: npm run type-check
+      - name: Validate data and demo sync
+        run: npm run validate:full
+      - name: Generate demo sync report
+        run: npm run check:demos:report
+      - name: Upload demo sync report
+        uses: actions/upload-artifact@v7
+        with:
+          name: demo-sync-report
+          path: demo-sync-report.json
+      - name: Test demo sync CLI
+        run: npm run test:demos
+      - name: Test
+        run: npm run test
+      - name: Lint
+        run: npm run lint
+      - name: Build
+        run: npm run build
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: build
+    # Measured 104s including the Chromium download; 20 leaves room for a cold
+    # browser cache without letting a hung Playwright run sit for hours.
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: "npm"
+      - name: Install
+        run: npm ci
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+      - name: Build
+        run: npm run build
+      - name: Run end-to-end tests
+        run: npm run test:e2e
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  lighthouse:
+    runs-on: ubuntu-latest
+    needs: build
+    # Measured 70s. The server implementation and dependencies are committed
+    # and lockfile-pinned; the cap still catches a failed startup or audit hang.
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: "npm"
+      - name: Install
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Serve and audit
+        run: |
+          npm run serve:static -- -l 3000 &
+          sleep 3
+          npx lighthouse http://localhost:3000 \
+            --chrome-flags="--headless --no-sandbox" \
+            --only-categories=accessibility,best-practices,performance \
+            --output=json --output-path=./lighthouse-report.json \
+            --quiet
+          npm run check:lighthouse -- lighthouse-report.json
+      - name: Upload Lighthouse report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: lighthouse-report
+          path: lighthouse-report.json
+          retention-days: 7
